@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "apple-docs": {
+      "command": "npx",
+      "args": ["-y", "@mweinbach/apple-docs-mcp@latest"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory", "/Users/sj/SaneApps/apps/SaneScript/.claude/memory.json"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "macos-automator": {
+      "command": "npx",
+      "args": ["-y", "@steipete/macos-automator-mcp@latest"]
+    }
+  }
+}

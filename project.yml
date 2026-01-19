@@ -1,0 +1,149 @@
+name: SaneScript
+options:
+  bundleIdPrefix: com.sanescript
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+
+settings:
+  DEAD_CODE_STRIPPING: YES
+  SWIFT_EMIT_LOC_STRINGS: YES
+  ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
+  configs:
+    Debug:
+      ENABLE_HARDENED_RUNTIME: NO
+    Release:
+      ENABLE_HARDENED_RUNTIME: YES
+  # Warnings
+  CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING: YES
+  CLANG_WARN_BOOL_CONVERSION: YES
+  CLANG_WARN_COMMA: YES
+  CLANG_WARN_CONSTANT_CONVERSION: YES
+  CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS: YES
+  CLANG_WARN_EMPTY_BODY: YES
+  CLANG_WARN_ENUM_CONVERSION: YES
+  CLANG_WARN_INFINITE_RECURSION: YES
+  CLANG_WARN_INT_CONVERSION: YES
+  CLANG_WARN_NON_LITERAL_NULL_CONVERSION: YES
+  CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF: YES
+  CLANG_WARN_OBJC_LITERAL_CONVERSION: YES
+  CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER: YES
+  CLANG_WARN_RANGE_LOOP_ANALYSIS: YES
+  CLANG_WARN_STRICT_PROTOTYPES: YES
+  CLANG_WARN_SUSPICIOUS_MOVE: YES
+  CLANG_WARN_UNREACHABLE_CODE: YES
+  CLANG_WARN__DUPLICATE_METHOD_MATCH: YES
+  ENABLE_STRICT_OBJC_MSGSEND: YES
+  GCC_NO_COMMON_BLOCKS: YES
+  GCC_WARN_64_TO_32_BIT_CONVERSION: YES
+  GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
+  GCC_WARN_UNDECLARED_SELECTOR: YES
+  GCC_WARN_UNINITIALIZED_AUTOS: YES_AGGRESSIVE
+  GCC_WARN_UNUSED_FUNCTION: YES
+  GCC_WARN_UNUSED_VARIABLE: YES
+
+schemes:
+  SaneScript:
+    build:
+      targets:
+        SaneScript: all
+        SaneScriptExtension: all
+        SaneScriptTests: [test]
+    test:
+      gatherCoverageData: true
+      targets:
+        - SaneScriptTests
+    run:
+      config: Debug
+    archive:
+      config: Release
+
+targets:
+  SaneScript:
+    type: application
+    platform: macOS
+    bundleId: com.sanescript.SaneScript
+    deploymentTarget:
+      macOS: "14.0"
+    sources:
+      - path: SaneScript
+    settings:
+      base:
+        INFOPLIST_FILE: SaneScript/Info.plist
+        PRODUCT_NAME: SaneScript
+        ENABLE_PREVIEWS: YES
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        ARCHS: arm64
+        VALID_ARCHS: arm64
+        DEVELOPMENT_TEAM: M78L6FXD48
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_INJECT_BASE_ENTITLEMENTS: YES
+        ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+      configs:
+        Debug:
+          CODE_SIGN_IDENTITY: "Apple Development"
+          CODE_SIGN_ENTITLEMENTS: SaneScript/SaneScript.debug.entitlements
+        Release:
+          CODE_SIGN_IDENTITY: "Developer ID Application: Stephan Joseph (M78L6FXD48)"
+          CODE_SIGN_ENTITLEMENTS: SaneScript/SaneScript.entitlements
+    dependencies:
+      - target: SaneScriptExtension
+        embed: true
+        codeSign: true
+        copyPhase:
+          destination: plugins
+
+  SaneScriptExtension:
+    type: app-extension
+    platform: macOS
+    bundleId: com.sanescript.SaneScript.FinderSync
+    deploymentTarget:
+      macOS: "14.0"
+    sources:
+      - path: SaneScriptExtension
+    settings:
+      base:
+        INFOPLIST_FILE: SaneScriptExtension/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.sanescript.SaneScript.FinderSync
+        PRODUCT_NAME: SaneScriptExtension
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        ARCHS: arm64
+        VALID_ARCHS: arm64
+        DEVELOPMENT_TEAM: M78L6FXD48
+        CODE_SIGN_STYLE: Manual
+        SKIP_INSTALL: YES
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks"
+      configs:
+        Debug:
+          CODE_SIGN_IDENTITY: "Apple Development"
+          CODE_SIGN_ENTITLEMENTS: SaneScriptExtension/SaneScriptExtension.debug.entitlements
+        Release:
+          CODE_SIGN_IDENTITY: "Developer ID Application: Stephan Joseph (M78L6FXD48)"
+          CODE_SIGN_ENTITLEMENTS: SaneScriptExtension/SaneScriptExtension.entitlements
+
+  SaneScriptTests:
+    type: bundle.unit-test
+    platform: macOS
+    bundleId: com.sanescript.SaneScriptTests
+    deploymentTarget:
+      macOS: "14.0"
+    sources:
+      - Tests
+    settings:
+      base:
+        DEAD_CODE_STRIPPING: NO
+        DEVELOPMENT_TEAM: M78L6FXD48
+        CODE_SIGN_STYLE: Manual
+        ENABLE_HARDENED_RUNTIME: NO
+        GENERATE_INFOPLIST_FILE: YES
+      configs:
+        Debug:
+          CODE_SIGN_IDENTITY: "Apple Development"
+        Release:
+          CODE_SIGN_IDENTITY: "Apple Development"
+    dependencies:
+      - target: SaneScript

@@ -1,0 +1,60 @@
+# Xcode
+*.xcodeproj
+*.xcworkspace
+xcuserdata/
+*.xccheckout
+*.moved-aside
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Build
+build/
+*.o
+*.LinkFileList
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.pbxuser
+
+# Dependencies
+Packages/
+.swiftpm/
+
+# CocoaPods
+Pods/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Ruby
+.bundle/
+vendor/bundle/
+Gemfile.lock
+
+# macOS
+.DS_Store
+*.swp
+*~.nib
+
+# Profiling
+*.profraw
+*.profdata
+
+# Claude Code
+.claude/state.json
+.claude/*.log
+.claude/*.jsonl
+.claude/memory.json
+.claude/circuit_breaker.json
+.claude/*_count.json
+.claude/*_history.json
+
+# Keep these
+!.claude/rules/
+!.claude/settings.json

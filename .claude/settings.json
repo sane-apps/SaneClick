@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(xcodebuild *)",
+      "Bash(xcrun *)",
+      "Bash(xcodegen *)",
+      "Bash(swift *)",
+      "Bash(open *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(ruby *)",
+      "Bash(killall *)",
+      "Bash(caffeinate *)",
+      "Bash(pkill *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)"
+    ],
+    "deny": []
+  },
+  "mcpPermissions": {
+    "allow": [
+      "mcp__memory__*",
+      "mcp__apple-docs__*",
+      "mcp__context7__*",
+      "mcp__github__*",
+      "mcp__XcodeBuildMCP__*",
+      "mcp__macos-automator__*"
+    ]
+  }
+}
