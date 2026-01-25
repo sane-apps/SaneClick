@@ -18,15 +18,15 @@
 | - Automator | ✓ | ✗ | ✓ | ✓ | ✗ |
 | - Shortcuts.app | ✗ | ✗ | ✗ | ✗ | ✗ |
 | **Organization** | | | | | |
-| - Categories/Groups | ✗ | ✗ | ✓ | ✓ | ✗ |
-| - File Type Filters | ✗ | ✗ | ✓ | ✓ | ✗ |
-| - Search Scripts | ✗ | ? | ✗ | ? | ✗ |
+| - Categories/Groups | ✓ | ✗ | ✓ | ✓ | ✗ |
+| - File Type Filters | ✓ | ✗ | ✓ | ✓ | ✗ |
+| - Search Scripts | ✓ | ? | ✗ | ? | ✗ |
 | **Execution** | | | | | |
-| - Keyboard Shortcuts | ✗ | ✓ | ✗ | ✗ | ✗ |
-| - Test Script Button | ✗ | ? | ✗ | ? | ✗ |
-| - Execution Feedback | ✗ | ? | ✗ | ? | ✗ |
+| - Keyboard Shortcuts | ✓ | ✓ | ✗ | ✗ | ✗ |
+| - Test Script Button | ✓ | ? | ✗ | ? | ✗ |
+| - Execution Feedback | ✓ | ? | ✗ | ? | ✗ |
 | **Data** | | | | | |
-| - Import/Export | ✗ | ? | ✓ (YAML) | ? | ✗ |
+| - Import/Export | ✓ | ? | ✓ (YAML) | ? | ✗ |
 | - System-wide Config | ✗ | ✗ | ✓ | ✗ | ✗ |
 | - Sync (iCloud) | ✗ | ? | ✗ | ✗ | ✗ |
 | **UI/UX** | | | | | |
@@ -253,14 +253,8 @@ struct Category: Identifiable, Codable {
 
 ## Next Actions
 
-1. [ ] Fix extension status detection (hardcoded "Enabled")
-2. [ ] Add delete confirmation dialog
-3. [ ] Add execution error feedback (alert)
-4. [ ] Write ScriptStore unit tests
-5. [ ] Write ScriptExecutor unit tests
-6. [ ] Implement File Type Filters
-7. [ ] Implement Script Categories
+See Phase 2 (Differentiation) above for next priorities.
 
 ---
 
-*Last Updated: 2026-01-19*
+*Last Updated: 2026-01-24*

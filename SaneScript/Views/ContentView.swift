@@ -1,10 +1,12 @@
 import SwiftUI
+import os.log
+
+private let logger = Logger(subsystem: "com.sanescript.SaneScript", category: "ContentView")
 
 struct ContentView: View {
     @Environment(ScriptStore.self) private var scriptStore
     @State private var selectedScript: Script?
     @State private var isAddingScript = false
-    @State private var extensionStatus: ExtensionStatus = .disabled
     @State private var showDeleteConfirmation = false
     @State private var scriptToDelete: Script?
     @State private var showExecutionResult = false
@@ -27,9 +29,6 @@ struct ContentView: View {
         .toolbar {
             toolbarContent
         }
-        .onAppear {
-            checkExtensionStatus()
-        }
         .onReceive(NotificationCenter.default.publisher(for: ScriptExecutor.executionCompletedNotification)) { notification in
             if let result = notification.userInfo?["result"] as? ScriptExecutionResult {
                 executionResult = result
@@ -38,6 +37,12 @@ struct ContentView: View {
                     showExecutionResult = true
                 }
             }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .importScriptsRequested)) { _ in
+            importScripts()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .exportAllScriptsRequested)) { _ in
+            exportAllScripts()
         }
         .alert("Script Error", isPresented: $showExecutionResult, presenting: executionResult) { _ in
             Button("OK", role: .cancel) {}
@@ -121,10 +126,6 @@ struct ContentView: View {
 
     private var sidebar: some View {
         List(selection: $selectedScript) {
-            if !extensionStatus.isUsable {
-                extensionWarning
-            }
-
             // User-created categories
             ForEach(scriptStore.categories) { category in
                 let scripts = filteredScripts(in: category)
@@ -248,41 +249,6 @@ struct ContentView: View {
         .padding()
     }
 
-    // MARK: - Extension Warning
-
-    private var extensionWarning: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Label(extensionStatus.statusText, systemImage: extensionStatus.icon)
-                .foregroundStyle(extensionStatus == .disabled ? .red : .orange)
-                .font(.headline)
-
-            Text(extensionStatus == .disabled
-                 ? "Enable the SaneScript extension in System Settings to use context menu items."
-                 : "The extension is enabled but Finder hasn't loaded it yet. Try restarting Finder.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            HStack {
-                Button("Open System Settings") {
-                    openExtensionSettings()
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
-
-                if extensionStatus == .enabledNotRunning {
-                    Button("Restart Finder") {
-                        restartFinder()
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                }
-            }
-        }
-        .padding()
-        .background((extensionStatus == .disabled ? Color.red : Color.orange).opacity(0.1), in: RoundedRectangle(cornerRadius: 8))
-        .accessibilityIdentifier("extensionWarning")
-    }
-
     // MARK: - Toolbar
 
     @ToolbarContentBuilder
@@ -306,79 +272,22 @@ struct ContentView: View {
                 Label("Add", systemImage: "plus")
             }
             .accessibilityIdentifier("addMenu")
+            .help("Add a new script or category")
         }
 
-        ToolbarItem(placement: .automatic) {
-            Menu {
-                Button {
-                    importScripts()
-                } label: {
-                    Label("Import Scripts...", systemImage: "square.and.arrow.down")
-                }
-                .keyboardShortcut("i", modifiers: .command)
-
-                Divider()
-
-                if let selectedScript = selectedScript {
-                    Button {
-                        exportScript(selectedScript)
-                    } label: {
-                        Label("Export Selected Script...", systemImage: "square.and.arrow.up")
-                    }
-                }
-
-                Button {
-                    exportAllScripts()
-                } label: {
-                    Label("Export All Scripts...", systemImage: "square.and.arrow.up.on.square")
-                }
-                .keyboardShortcut("e", modifiers: [.command, .shift])
-            } label: {
-                Label("Import/Export", systemImage: "arrow.up.arrow.down")
-            }
-            .accessibilityIdentifier("importExportMenu")
-        }
-
-        ToolbarItem(placement: .automatic) {
+        ToolbarItem(placement: .navigation) {
             Button {
-                checkExtensionStatus()
+                importScripts()
             } label: {
-                Label("Refresh", systemImage: "arrow.clockwise")
+                Label("Import", systemImage: "square.and.arrow.down")
             }
-            .accessibilityIdentifier("refreshButton")
+            .accessibilityIdentifier("importButton")
+            .help("Import scripts from a JSON file")
         }
+
     }
 
     // MARK: - Helpers
-
-    private func checkExtensionStatus() {
-        // Run on background thread to avoid blocking UI
-        Task.detached {
-            let status = ExtensionStatusService.checkStatus()
-            await MainActor.run {
-                extensionStatus = status
-            }
-        }
-    }
-
-    private func openExtensionSettings() {
-        if let url = URL(string: "x-apple.systempreferences:com.apple.ExtensionsPreferences") {
-            NSWorkspace.shared.open(url)
-        }
-    }
-
-    private func restartFinder() {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/killall")
-        process.arguments = ["Finder"]
-        try? process.run()
-
-        // Re-check status after a delay
-        Task {
-            try? await Task.sleep(for: .seconds(3))
-            checkExtensionStatus()
-        }
-    }
 
     private func duplicateScript(_ script: Script) {
         let newScript = Script(
@@ -404,18 +313,24 @@ struct ContentView: View {
     // MARK: - Import/Export
 
     private func importScripts() {
+        logger.info("importScripts() called - using NSOpenPanel")
+        // Use NSOpenPanel directly (workaround for .fileImporter not working with NavigationSplitView)
         let panel = NSOpenPanel()
         panel.allowedContentTypes = [.json]
-        panel.canChooseDirectories = false
         panel.allowsMultipleSelection = true
-        panel.message = "Select SaneScript export files to import"
+        panel.canChooseDirectories = false
+        panel.message = "Select script files to import"
+        panel.prompt = "Import"
 
-        guard panel.runModal() == .OK else { return }
+        guard panel.runModal() == .OK, !panel.urls.isEmpty else { return }
+        processImportedFiles(panel.urls)
+    }
 
+    private func processImportedFiles(_ urls: [URL]) {
         var importedCount = 0
         var skippedCount = 0
 
-        for url in panel.urls {
+        for url in urls {
             do {
                 let data = try Data(contentsOf: url)
 

@@ -35,6 +35,7 @@ struct SettingsView: View {
                         NSWorkspace.shared.open(url)
                     }
                 }
+                .help("Open System Settings to enable or disable the Finder extension")
             }
 
             Section("Scripts") {
@@ -67,7 +68,7 @@ struct SettingsView: View {
             Text("SaneScript")
                 .font(.title)
 
-            Text("Version 1.0.0")
+            Text("Version 1.0.1")
                 .foregroundStyle(.secondary)
 
             Text("Finder context menu customization for macOS")
@@ -78,11 +79,11 @@ struct SettingsView: View {
             Divider()
 
             HStack(spacing: 16) {
-                Link(destination: URL(string: "https://github.com/stephanjoseph/SaneScript")!) {
+                Link(destination: URL(string: "https://github.com/sane-apps/SaneScript")!) {
                     Label("GitHub", systemImage: "link")
                 }
 
-                Link(destination: URL(string: "https://sanescript.com")!) {
+                Link(destination: URL(string: "https://script.saneapps.com")!) {
                     Label("Website", systemImage: "globe")
                 }
             }

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaneScript - Custom Finder Context Menus for macOS</title>
+    <meta name="description" content="Add custom scripts to your Finder right-click menu. Run Bash, AppleScript, or Automator workflows on selected files. Free and open source.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="SaneScript - Custom Finder Context Menus">
+    <meta property="og:description" content="Add custom scripts to your Finder right-click menu. 100% local. No subscription.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://script.saneapps.com">
+
+    <style>
+        :root {
+            --navy: #1a2744;
+            --deep-navy: #0d1525;
+            --teal: #5fa8d3;
+            --silver: #a8b4c4;
+            --void: #0a0a0a;
+            --carbon: #141414;
+            --smoke: #222222;
+            --stone: #888888;
+            --cloud: #e5e5e5;
+            --white: #ffffff;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--void);
+            color: var(--cloud);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--smoke);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--navy), var(--deep-navy));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--teal);
+            font-size: 18px;
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        nav a {
+            color: var(--silver);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: var(--teal);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+
+        .hero-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--navy), var(--deep-navy));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 32px;
+            font-size: 56px;
+            color: var(--teal);
+            box-shadow: 0 0 60px rgba(95, 168, 211, 0.2);
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+
+        .tagline {
+            font-size: 20px;
+            color: var(--silver);
+            margin-bottom: 24px;
+        }
+
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-bottom: 32px;
+            font-size: 14px;
+            color: var(--stone);
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* CTA Buttons */
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--teal);
+            color: var(--void);
+        }
+
+        .btn-primary:hover {
+            background: #7bb8dc;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--carbon);
+            color: var(--cloud);
+            border: 1px solid var(--smoke);
+        }
+
+        .btn-secondary:hover {
+            background: var(--smoke);
+            border-color: var(--stone);
+        }
+
+        /* Sections */
+        section {
+            padding: 60px 0;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 24px;
+        }
+
+        /* The Problem */
+        .problem {
+            background: var(--carbon);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .problem h3 {
+            color: var(--warning);
+            font-size: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .problem p {
+            color: var(--silver);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        /* Barriers */
+        .barriers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .barrier {
+            background: var(--carbon);
+            border-radius: 12px;
+            padding: 24px;
+            border-left: 3px solid var(--error);
+        }
+
+        .barrier h4 {
+            color: var(--cloud);
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .barrier p {
+            color: var(--stone);
+            font-size: 14px;
+        }
+
+        /* Solution */
+        .solution {
+            background: linear-gradient(135deg, var(--navy), var(--deep-navy));
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid var(--teal);
+        }
+
+        .solution h3 {
+            color: var(--teal);
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .solution ul {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+
+        .solution li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--cloud);
+        }
+
+        .solution li::before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .solution-badges {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .solution-badge {
+            background: rgba(95, 168, 211, 0.1);
+            color: var(--teal);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .feature {
+            background: var(--carbon);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .feature h4 {
+            color: var(--white);
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .feature p {
+            color: var(--stone);
+            font-size: 14px;
+        }
+
+        /* Promise */
+        .promise {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .promise blockquote {
+            font-style: italic;
+            color: var(--silver);
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .promise cite {
+            color: var(--stone);
+            font-size: 14px;
+        }
+
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .pillar {
+            text-align: center;
+        }
+
+        .pillar-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .pillar h4 {
+            color: var(--white);
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .pillar p {
+            color: var(--stone);
+            font-size: 14px;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--smoke);
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--stone);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        footer a {
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 32px; }
+            .tagline { font-size: 16px; }
+            .trust-badges { flex-direction: column; gap: 8px; }
+            .pillars { grid-template-columns: 1fr; }
+            .barriers { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">
+                <span class="logo-icon">></span>
+                SaneScript
+            </a>
+            <nav>
+                <a href="https://github.com/sane-apps/SaneScript">GitHub</a>
+                <a href="https://github.com/sponsors/sane-apps">Sponsor</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-icon">></div>
+                <h1>SaneScript</h1>
+                <p class="tagline">Custom scripts in your Finder right-click menu</p>
+
+                <div class="trust-badges">
+                    <span class="trust-badge">🔒 No spying</span>
+                    <span class="trust-badge">💵 No subscription</span>
+                    <span class="trust-badge">🛠️ Actively maintained</span>
+                </div>
+
+                <div class="cta-buttons">
+                    <a href="https://github.com/sane-apps/SaneScript/releases/latest" class="btn btn-primary">
+                        ⬇ Download Free
+                    </a>
+                    <a href="https://github.com/sane-apps/SaneScript" class="btn btn-secondary">
+                        View Source
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="problem">
+                    <h3>⚠️ The Problem</h3>
+                    <p>Every time you right-click in Finder, you're stuck with Apple's limited context menu. Want to convert an image? Open in Terminal? Run a quick script? You have to leave Finder, open another app, navigate back to your file, and do it manually. Over and over.</p>
+                </div>
+
+                <div class="barriers">
+                    <div class="barrier">
+                        <h4>Barrier 1: DIY is Painful</h4>
+                        <p>macOS Services exist but require Automator knowledge. Folder Actions need AppleScript. Shell scripts mean Terminal commands. Most people give up before they start.</p>
+                    </div>
+                    <div class="barrier">
+                        <h4>Barrier 2: Alternatives Have Catches</h4>
+                        <p>The "easy" solutions cost $10-15, require subscriptions, or haven't been updated since 2019. Some are abandonware. Others are overkill for simple tasks.</p>
+                    </div>
+                </div>
+
+                <div class="solution">
+                    <h3>The Sane Solution</h3>
+                    <ul>
+                        <li>Add any script to your right-click menu in seconds</li>
+                        <li>Run Bash, AppleScript, or Automator workflows</li>
+                        <li>Filter by file type - show scripts only for images, code, etc.</li>
+                        <li>Organize with categories, search instantly</li>
+                        <li>Test scripts before saving them</li>
+                    </ul>
+                    <div class="solution-badges">
+                        <span class="solution-badge">100% Local</span>
+                        <span class="solution-badge">Free & Open Source</span>
+                        <span class="solution-badge">Native SwiftUI</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <h2>Features</h2>
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">📝</div>
+                        <h4>Three Script Types</h4>
+                        <p>Bash for shell commands, AppleScript for automation, Automator for workflows. Use what you know.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🎯</div>
+                        <h4>Smart Filtering</h4>
+                        <p>Scripts appear only for matching file types. Image scripts for images, code scripts for code.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📁</div>
+                        <h4>Categories</h4>
+                        <p>Organize scripts into groups. Keep your menu clean and find what you need fast.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🧪</div>
+                        <h4>Test Before Save</h4>
+                        <p>Run your script on real files before committing. See output, catch errors early.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📤</div>
+                        <h4>Import & Export</h4>
+                        <p>Share scripts as JSON. Back them up. Sync across Macs manually or via cloud storage.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">⌨️</div>
+                        <h4>Keyboard Shortcuts</h4>
+                        <p>Navigate entirely with keyboard. Cmd+N for new script, Cmd+Shift+N for category.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="promise">
+            <div class="container">
+                <blockquote>"For God has not given us a spirit of fear, but of power and of love and of a sound mind."</blockquote>
+                <cite>— 2 Timothy 1:7</cite>
+
+                <div class="pillars">
+                    <div class="pillar">
+                        <div class="pillar-icon">⚡</div>
+                        <h4>Power</h4>
+                        <p>Your scripts, your device. No cloud dependency. No data leaves your Mac.</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar">
+                        <div class="pillar-icon">❤️</div>
+                        <h4>Love</h4>
+                        <p>Built to serve you. No dark patterns, no upsells, no manipulation.</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-icon">🧠</div>
+                        <h4>Sound Mind</h4>
+                        <p>Calm, focused design. Does one thing well. No feature bloat.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Made with care by Mr. Sane</p>
+            <p>Part of the <a href="https://saneapps.com">Sane Apps</a> family</p>
+            <div class="footer-links">
+                <a href="https://github.com/sane-apps/SaneScript">GitHub</a>
+                <a href="https://github.com/sponsors/sane-apps">Sponsor</a>
+                <a href="/privacy.html">Privacy</a>
+            </div>
+            <p style="margin-top: 24px; font-style: italic; color: var(--stone);">"The worker is worthy of his wages." — 1 Timothy 5:18</p>
+        </div>
+    </footer>
+</body>
+</html>

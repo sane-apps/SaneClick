@@ -67,6 +67,8 @@ targets:
       macOS: "14.0"
     sources:
       - path: SaneScript
+        excludes:
+          - "**/*.md"
     settings:
       base:
         INFOPLIST_FILE: SaneScript/Info.plist
@@ -98,6 +100,7 @@ targets:
   SaneScriptExtension:
     type: app-extension
     platform: macOS
+    productType: com.apple.product-type.finder-sync-extension
     bundleId: com.sanescript.SaneScript.FinderSync
     deploymentTarget:
       macOS: "14.0"

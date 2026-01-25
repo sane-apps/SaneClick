@@ -88,6 +88,7 @@ struct ScriptEditorView: View {
                 }
             }
             .accessibilityIdentifier("scriptTypeSelector")
+            .help("Script type: Bash for shell commands, AppleScript for automation, Automator for workflows")
 
             Picker("Applies To", selection: $appliesTo) {
                 ForEach(AppliesTo.allCases, id: \.self) { target in
@@ -96,6 +97,7 @@ struct ScriptEditorView: View {
                 }
             }
             .accessibilityIdentifier("appliesToSelector")
+            .help("When to show this script: for files, folders, or when right-clicking the Finder background")
 
             if !scriptStore.categories.isEmpty {
                 Picker("Category", selection: $categoryId) {
@@ -110,6 +112,7 @@ struct ScriptEditorView: View {
 
             Toggle("Enabled", isOn: $isEnabled)
                 .accessibilityIdentifier("enabledToggle")
+                .help("When enabled, this script appears in the Finder context menu")
         }
     }
 
@@ -120,6 +123,7 @@ struct ScriptEditorView: View {
             TextField("File Extensions", text: $fileExtensionsText, prompt: Text("jpg, png, pdf (leave empty for all)"))
                 .textFieldStyle(.roundedBorder)
                 .accessibilityIdentifier("fileExtensionsField")
+                .help("Only show this script for files with these extensions (comma-separated)")
 
             if !fileExtensionsText.isEmpty {
                 Picker("Match Mode", selection: $extensionMatchMode) {
@@ -128,6 +132,7 @@ struct ScriptEditorView: View {
                     }
                 }
                 .accessibilityIdentifier("extensionMatchModeSelector")
+                .help("Any: show if at least one file matches. All: show only if all selected files match.")
             }
 
             Text("Only show this script when selected files match the extensions above. Separate multiple extensions with commas.")
