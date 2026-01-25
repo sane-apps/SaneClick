@@ -1,39 +1,41 @@
 # SaneScript Session Handoff
 
-**Date**: 2026-01-24
-**Session Focus**: Documentation audit + major fixes
+**Date**: 2026-01-24 (continued session)
+**Session Focus**: Release infrastructure setup
 
 ---
 
 ## Completed Work
 
-### Bug Fixes
-1. **FIXED BUG-001** - File picker now works. Root cause: `.fileImporter` on NavigationSplitView breaks modal presentation. Solution: Use NSOpenPanel directly.
-
-### Documentation
+### Previous Session (same day)
+1. **FIXED BUG-001** - File picker works via NSOpenPanel
 2. **Full 14-perspective docs audit** completed
-3. **Fixed version mismatch** - SettingsView now shows 1.0.1 (was 1.0.0)
-4. **Updated LICENSE copyright** - 2025 → 2026
-5. **Updated ROADMAP.md** - Competitive matrix now shows implemented features as ✓
-6. **Cleaned up ROADMAP.md Next Actions** - Removed stale duplicates
-7. **Added .help() tooltips** - 8 key controls now have tooltips
-8. **Created website** - `docs/index.html` with full marketing framework
-9. **Updated README.md** - Added Threat→Barrier→Solution→Promise framework
-10. **Added privacy page** - `docs/privacy.html`
+3. **Created website** - `docs/index.html` at script.saneapps.com
+4. **Added .help() tooltips** - 8 key controls
+5. **Created SaneColors.swift** - Brand color palette
 
-### Code Quality
-11. **Created SaneColors.swift** - Brand color palette for consistency
-12. **Fixed project.yml** - Excluded .md files from build to prevent conflicts
+### This Session - Release Infrastructure
+6. **Added Sparkle dependency** - project.yml now includes Sparkle 2.8.0
+7. **Created UpdateService.swift** - Wrapper for SPUStandardUpdaterController
+8. **Added "Check for Updates" button** - In SettingsView About tab
+9. **Generated EdDSA keypair** - Public key: `Sr8JFxaVIJ0bZfR0lmVBdCYFb+13DyuPYjfy4ivQ7/g=`
+10. **Created appcast.xml** - In docs/ for Sparkle auto-updates
+11. **Set up dist.saneapps.com** - DNS CNAME → sane-dist worker
+12. **Updated sane-dist worker** - Added sanescript to ALLOWED_APPS, deployed
+13. **Fixed Info.plist versions** - Now uses $(MARKETING_VERSION) and $(CURRENT_PROJECT_VERSION)
+14. **Fixed extension version mismatch** - Both targets now share version settings
 
 ---
 
-## Current State
+## Infrastructure Status
 
-- **Version**: 1.0.1 (build 2)
-- **Build**: ✅ Passes
-- All Phase 0 and Phase 1 features complete
-- Import/Export working (BUG-001 fixed)
-- Website ready for GitHub Pages
+| Component | Status | Details |
+|-----------|--------|---------|
+| **Sparkle** | ✅ Ready | EdDSA key in keychain, UpdateService.swift created |
+| **Distribution Worker** | ✅ Deployed | dist.saneapps.com routes to sane-dist |
+| **Appcast** | ✅ Created | docs/appcast.xml (needs signature after DMG build) |
+| **Website** | ✅ Live | script.saneapps.com via GitHub Pages |
+| **Build** | ✅ Passing | Clean debug build |
 
 ---
 
@@ -41,35 +43,83 @@
 
 | File | Changes |
 |------|---------|
-| `SaneScript/Views/ContentView.swift` | Fixed import using NSOpenPanel, added tooltips |
-| `SaneScript/Views/ScriptEditorView.swift` | Added 6 .help() tooltips |
-| `SaneScript/Views/SettingsView.swift` | Version 1.0.0 → 1.0.1, added tooltip |
-| `SaneScript/Theme/SaneColors.swift` | NEW - Brand color palette |
-| `LICENSE` | Copyright 2025 → 2026 |
-| `README.md` | Full rewrite with marketing framework |
-| `ROADMAP.md` | Updated competitive matrix, cleaned Next Actions |
-| `project.yml` | Excluded .md files from SaneScript target |
-| `docs/index.html` | NEW - Website with full marketing |
-| `docs/privacy.html` | NEW - Privacy policy |
+| `project.yml` | +Sparkle pkg, +info properties, +version settings |
+| `SaneScript/Services/UpdateService.swift` | NEW - Sparkle wrapper |
+| `SaneScript/Views/SettingsView.swift` | +Check for Updates button |
+| `SaneScript/Info.plist` | +SUPublicEDKey, version variables |
+| `SaneScriptExtension/Info.plist` | Version variables |
+| `docs/appcast.xml` | NEW - Sparkle feed |
+| `docs/CNAME` | script.saneapps.com |
+| `~/SaneApps/infra/sane-dist-worker/wrangler.toml` | +dist.saneapps.com route |
 
 ---
 
-## Next Session Priorities
+## Release Checklist (v1.0.1)
 
-1. **Deploy website** - Enable GitHub Pages on docs/ folder
-2. **Apply brand colors** - Replace .gray/.secondary with SaneColors in views
-3. **Release v1.0.1** - Tag and publish to GitHub Releases
+```
+[x] Sparkle configured (SUFeedURL, SUPublicEDKey)
+[x] UpdateService.swift created
+[x] Check for Updates UI added
+[x] appcast.xml skeleton created
+[x] Distribution worker deployed
+[x] Website live
+[ ] Build Release DMG
+[ ] Sign with Developer ID
+[ ] Notarize with Apple
+[ ] Staple notarization ticket
+[ ] Sign DMG with Sparkle EdDSA key
+[ ] Upload DMG to R2 bucket
+[ ] Update appcast.xml with signature + file size
+[ ] Set up Lemon Squeezy product ($5)
+[ ] Test Sparkle update flow
+```
+
+---
+
+## Key Files Reference
+
+| Purpose | Location |
+|---------|----------|
+| Sparkle public key | project.yml line 116, Info.plist |
+| Sparkle private key | macOS Keychain (auto-stored by generate_keys) |
+| Appcast | docs/appcast.xml |
+| Distribution | dist.saneapps.com/updates/SaneScript-{version}.dmg |
+| Website | script.saneapps.com (GitHub Pages from docs/) |
+| Release SOP | ~/SaneApps/infra/SaneProcess/templates/RELEASE_SOP.md |
+| Full bootstrap | ~/SaneApps/infra/SaneProcess/templates/FULL_PROJECT_BOOTSTRAP.md |
 
 ---
 
 ## Quick Commands
 
 ```bash
-# Build and run
-cd /Users/sj/SaneApps/apps/SaneScript
-xcodebuild -project SaneScript.xcodeproj -scheme SaneScript build
+# Build Release
+xcodebuild archive \
+  -project SaneScript.xcodeproj \
+  -scheme SaneScript \
+  -archivePath build/SaneScript.xcarchive \
+  -configuration Release
 
-# Test import (file picker now works!)
-open -a SaneScript
-# Click Import button in toolbar
+# Create DMG (after archive)
+hdiutil create -volname "SaneScript" \
+  -srcfolder "build/export/SaneScript.app" \
+  -ov -format UDZO \
+  "releases/SaneScript-1.0.1.dmg"
+
+# Notarize
+xcrun notarytool submit releases/SaneScript-1.0.1.dmg \
+  --keychain-profile "notarytool" --wait
+
+# Sign for Sparkle (after notarization)
+/path/to/sign_update releases/SaneScript-1.0.1.dmg
+
+# Upload to R2 (use Cloudflare API)
 ```
+
+---
+
+## Current State
+
+- **Version**: 1.0.1 (build 101)
+- **Build**: ✅ Debug passes, Release untested
+- **Ready for**: Release DMG build and distribution setup

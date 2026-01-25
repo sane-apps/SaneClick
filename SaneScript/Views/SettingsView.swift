@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(ScriptStore.self) private var scriptStore
+    @StateObject private var updateService = UpdateService.shared
 
     var body: some View {
         TabView {
@@ -91,6 +92,11 @@ struct SettingsView: View {
             Text("MIT License")
                 .font(.caption)
                 .foregroundStyle(.tertiary)
+
+            Button("Check for Updates") {
+                updateService.checkForUpdates()
+            }
+            .buttonStyle(.bordered)
         }
         .padding()
     }

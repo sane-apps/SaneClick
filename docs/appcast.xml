@@ -1,0 +1,30 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>SaneScript Changelog</title>
+        <item>
+            <title>1.0.1</title>
+            <pubDate>Fri, 24 Jan 2026 20:00:00 -0500</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description>
+                <![CDATA[
+                <h2>Initial Release</h2>
+                <ul>
+                    <li><strong>Custom Context Menus</strong>: Add scripts to your Finder right-click menu</li>
+                    <li><strong>Three Script Types</strong>: Bash, AppleScript, or Automator workflows</li>
+                    <li><strong>Smart Filtering</strong>: Scripts appear only for matching file types</li>
+                    <li><strong>Categories</strong>: Organize scripts into groups</li>
+                    <li><strong>Test Before Save</strong>: Run scripts on real files before committing</li>
+                    <li><strong>Import & Export</strong>: Share scripts as JSON</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneapps.com/updates/SaneScript-1.0.1.dmg"
+                       sparkle:version="101"
+                       sparkle:shortVersionString="1.0.1"
+                       length="1421307"
+                       type="application/x-apple-diskimage"
+                       sparkle:edSignature="E7ZG2AWg8CpY2kTi0YqtY7ELo+7DwlyDP66Pxyx5JT1asRlV5JWvdjCtYj6Zh+8JeKyg9edr5CwUlW3y+juTAw=="/>
+        </item>
+    </channel>
+</rss>

@@ -5,6 +5,11 @@ options:
     macOS: "14.0"
   xcodeVersion: "16.0"
 
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: 2.8.0
+
 settings:
   DEAD_CODE_STRIPPING: YES
   SWIFT_EMIT_LOC_STRINGS: YES
@@ -73,6 +78,8 @@ targets:
       base:
         INFOPLIST_FILE: SaneScript/Info.plist
         PRODUCT_NAME: SaneScript
+        MARKETING_VERSION: "1.0.1"
+        CURRENT_PROJECT_VERSION: "101"
         ENABLE_PREVIEWS: YES
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
@@ -96,6 +103,17 @@ targets:
         codeSign: true
         copyPhase:
           destination: plugins
+      - package: Sparkle
+    info:
+      path: SaneScript/Info.plist
+      properties:
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        LSApplicationCategoryType: "public.app-category.utilities"
+        SUFeedURL: "https://script.saneapps.com/appcast.xml"
+        SUEnableSystemProfiling: false
+        SUEnableAutomaticChecks: true
+        SUPublicEDKey: "Sr8JFxaVIJ0bZfR0lmVBdCYFb+13DyuPYjfy4ivQ7/g="
 
   SaneScriptExtension:
     type: app-extension
@@ -111,6 +129,8 @@ targets:
         INFOPLIST_FILE: SaneScriptExtension/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.sanescript.SaneScript.FinderSync
         PRODUCT_NAME: SaneScriptExtension
+        MARKETING_VERSION: "1.0.1"
+        CURRENT_PROJECT_VERSION: "101"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
         MACOSX_DEPLOYMENT_TARGET: "14.0"
