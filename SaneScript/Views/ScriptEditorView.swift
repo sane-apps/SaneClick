@@ -65,9 +65,9 @@ struct ScriptEditorView: View {
     // MARK: - General Section
 
     private var generalSection: some View {
-        Section("General") {
+        Section("Basic Info") {
             HStack {
-                TextField("Name", text: $name, prompt: Text("Script name"))
+                TextField("Name", text: $name, prompt: Text("Action name"))
                     .textFieldStyle(.roundedBorder)
                     .accessibilityIdentifier("scriptNameField")
 
@@ -88,20 +88,20 @@ struct ScriptEditorView: View {
                 }
             }
             .accessibilityIdentifier("scriptTypeSelector")
-            .help("Script type: Bash for shell commands, AppleScript for automation, Automator for workflows")
+            .help("Shell Command runs terminal commands, Mac Automation uses AppleScript")
 
-            Picker("Applies To", selection: $appliesTo) {
+            Picker("Show for", selection: $appliesTo) {
                 ForEach(AppliesTo.allCases, id: \.self) { target in
                     Label(target.rawValue, systemImage: target.icon)
                         .tag(target)
                 }
             }
             .accessibilityIdentifier("appliesToSelector")
-            .help("When to show this script: for files, folders, or when right-clicking the Finder background")
+            .help("When this action appears in your right-click menu")
 
             if !scriptStore.categories.isEmpty {
-                Picker("Category", selection: $categoryId) {
-                    Text("Uncategorized").tag(nil as UUID?)
+                Picker("Group", selection: $categoryId) {
+                    Text("None").tag(nil as UUID?)
                     ForEach(scriptStore.categories) { category in
                         Label(category.name, systemImage: category.icon)
                             .tag(category.id as UUID?)
@@ -110,32 +110,30 @@ struct ScriptEditorView: View {
                 .accessibilityIdentifier("categorySelector")
             }
 
-            Toggle("Enabled", isOn: $isEnabled)
+            Toggle("Active", isOn: $isEnabled)
                 .accessibilityIdentifier("enabledToggle")
-                .help("When enabled, this script appears in the Finder context menu")
+                .help("When active, this action appears in your right-click menu")
         }
     }
 
     // MARK: - File Filter Section
 
     private var fileFilterSection: some View {
-        Section("File Type Filter") {
-            TextField("File Extensions", text: $fileExtensionsText, prompt: Text("jpg, png, pdf (leave empty for all)"))
+        Section("Limit to File Types (Optional)") {
+            TextField("File types", text: $fileExtensionsText, prompt: Text("jpg, png, pdf — leave blank for all files"))
                 .textFieldStyle(.roundedBorder)
                 .accessibilityIdentifier("fileExtensionsField")
-                .help("Only show this script for files with these extensions (comma-separated)")
 
             if !fileExtensionsText.isEmpty {
-                Picker("Match Mode", selection: $extensionMatchMode) {
+                Picker("When to show", selection: $extensionMatchMode) {
                     ForEach(ExtensionMatchMode.allCases, id: \.self) { mode in
                         Text(mode.rawValue).tag(mode)
                     }
                 }
                 .accessibilityIdentifier("extensionMatchModeSelector")
-                .help("Any: show if at least one file matches. All: show only if all selected files match.")
             }
 
-            Text("Only show this script when selected files match the extensions above. Separate multiple extensions with commas.")
+            Text("Leave blank to show for all files. Or enter file types separated by commas.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -144,13 +142,13 @@ struct ScriptEditorView: View {
     // MARK: - Script Section
 
     private var scriptSection: some View {
-        Section("Script Content") {
+        Section("Code") {
             if type == .automator {
                 HStack {
-                    TextField("Workflow Path", text: $content, prompt: Text("Path to .workflow file"))
+                    TextField("Automator file", text: $content, prompt: Text("Select a .workflow file"))
                         .textFieldStyle(.roundedBorder)
 
-                    Button("Browse") {
+                    Button("Browse...") {
                         browseForWorkflow()
                     }
                 }
@@ -170,11 +168,11 @@ struct ScriptEditorView: View {
     private var helpText: String {
         switch type {
         case .bash:
-            return "Selected file paths are passed as arguments ($1, $2, etc.) or $@ for all."
+            return "The selected files are passed as $1, $2, etc. Use $@ for all files."
         case .applescript:
-            return "File paths are passed as argv. Use 'item 1 of argv' etc."
+            return "Files are passed as argv. Access with 'item 1 of argv'."
         case .automator:
-            return "File paths are passed via standard input."
+            return "Files are passed as input to the workflow."
         }
     }
 

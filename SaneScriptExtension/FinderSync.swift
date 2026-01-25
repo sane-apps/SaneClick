@@ -1,12 +1,35 @@
+//
+//  FinderSync.swift
+//  SaneScriptExtension
+//
+//  Finder Sync Extension for SaneClick
+//
+
 import Cocoa
 import FinderSync
 
+/// Execution request written to App Group container for host app to process
+struct ExecutionRequest: Codable {
+    let scriptId: UUID
+    let paths: [String]
+    let timestamp: Date
+    let requestId: UUID  // Unique ID to prevent duplicate processing
+
+    init(scriptId: UUID, paths: [String], timestamp: Date = Date(), requestId: UUID = UUID()) {
+        self.scriptId = scriptId
+        self.paths = paths
+        self.timestamp = timestamp
+        self.requestId = requestId
+    }
+}
+
 class FinderSync: FIFinderSync {
 
-    /// Shared file location via App Group container
+    /// Scripts available for current menu
+    private var currentScripts: [ExtensionScript] = []
+
     private var scriptsFileURL: URL {
         guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.sanescript.app") else {
-            // Fallback to regular app support (won't work in sandbox, but useful for debugging)
             let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
             return appSupport.appendingPathComponent("SaneScript/scripts.json")
         }
@@ -16,10 +39,24 @@ class FinderSync: FIFinderSync {
     override init() {
         super.init()
 
-        // Watch all directories
-        FIFinderSyncController.default().directoryURLs = [URL(fileURLWithPath: "/")]
+        let finderSync = FIFinderSyncController.default()
+        if let mountedVolumes = FileManager.default.mountedVolumeURLs(
+            includingResourceValuesForKeys: nil,
+            options: [.skipHiddenVolumes]
+        ) {
+            finderSync.directoryURLs = Set(mountedVolumes)
+        }
 
-        // Listen for script changes from the host app
+        NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didMountNotification,
+            object: nil,
+            queue: .main
+        ) { notification in
+            if let volumeURL = notification.userInfo?[NSWorkspace.volumeURLUserInfoKey] as? URL {
+                FIFinderSyncController.default().directoryURLs.insert(volumeURL)
+            }
+        }
+
         DistributedNotificationCenter.default().addObserver(
             self,
             selector: #selector(scriptsDidChange),
@@ -32,9 +69,7 @@ class FinderSync: FIFinderSync {
         DistributedNotificationCenter.default().removeObserver(self)
     }
 
-    @objc private func scriptsDidChange() {
-        // Scripts have been updated - menu will rebuild on next request
-    }
+    @objc private func scriptsDidChange() {}
 
     // MARK: - Context Menu
 
@@ -47,97 +82,88 @@ class FinderSync: FIFinderSync {
         let applicableScripts = scripts.filter { script in
             guard script.isEnabled else { return false }
 
-            // First check menu kind compatibility
             let menuKindMatch: Bool
             switch menuKind {
             case .contextualMenuForItems:
-                menuKindMatch = script.appliesTo == "All Items" ||
+                menuKindMatch = script.appliesTo == "Files & Folders" ||
                                 script.appliesTo == "Files Only" ||
                                 script.appliesTo == "Folders Only"
             case .contextualMenuForContainer:
-                menuKindMatch = script.appliesTo == "Folder Background" ||
-                                script.appliesTo == "All Items"
+                menuKindMatch = script.appliesTo == "Inside Folder" ||
+                                script.appliesTo == "Files & Folders"
             case .contextualMenuForSidebar:
                 menuKindMatch = script.appliesTo == "Folders Only" ||
-                                script.appliesTo == "All Items"
+                                script.appliesTo == "Files & Folders"
             default:
                 menuKindMatch = false
             }
 
             guard menuKindMatch else { return false }
-
-            // Then check file extension filter
             return script.matchesFiles(selectedURLs)
         }
 
-        for script in applicableScripts {
-            let item = NSMenuItem(
-                title: script.name,
-                action: #selector(executeScript(_:)),
-                keyEquivalent: ""
-            )
-            item.representedObject = script.id.uuidString
+        self.currentScripts = applicableScripts
+        for (index, script) in applicableScripts.enumerated() {
+            let item = NSMenuItem(title: script.name, action: #selector(executeScript(_:)), keyEquivalent: "")
+            item.tag = index
             item.image = NSImage(systemSymbolName: script.icon, accessibilityDescription: script.name)
             menu.addItem(item)
         }
 
-        // Add separator and settings link if we have scripts
         if !applicableScripts.isEmpty {
             menu.addItem(.separator())
         }
 
-        let settingsItem = NSMenuItem(
-            title: "Open SaneScript...",
-            action: #selector(openMainApp),
-            keyEquivalent: ""
-        )
+        let settingsItem = NSMenuItem(title: "Open SaneClick...", action: #selector(openMainApp), keyEquivalent: "")
         settingsItem.image = NSImage(systemSymbolName: "gearshape", accessibilityDescription: "Settings")
         menu.addItem(settingsItem)
 
         return menu
     }
 
-    @objc private func executeScript(_ sender: NSMenuItem) {
-        guard let scriptIdString = sender.representedObject as? String,
-              let items = FIFinderSyncController.default().selectedItemURLs() else {
+    @objc func executeScript(_ sender: AnyObject?) {
+        guard let menuItem = sender as? NSMenuItem else { return }
+
+        let tag = menuItem.tag
+        guard tag >= 0, tag < currentScripts.count else { return }
+        let script = currentScripts[tag]
+
+        guard let items = FIFinderSyncController.default().selectedItemURLs() else { return }
+        let paths = items.map { $0.path }
+
+        guard let containerURL = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.sanescript.app"
+        ) else { return }
+
+        let pendingURL = containerURL.appendingPathComponent("pending_execution.json")
+        let request = ExecutionRequest(scriptId: script.id, paths: paths, timestamp: Date())
+
+        do {
+            let data = try JSONEncoder().encode(request)
+            try data.write(to: pendingURL, options: .atomic)
+        } catch {
             return
         }
 
-        let paths = items.map { $0.path }
-
-        // Encode paths to send to host app
-        guard let pathsData = try? JSONEncoder().encode(paths) else { return }
-
-        // Send execution request to host app
         DistributedNotificationCenter.default().postNotificationName(
             NSNotification.Name("com.sanescript.executeScript"),
             object: nil,
-            userInfo: [
-                "scriptId": scriptIdString,
-                "paths": pathsData
-            ],
+            userInfo: nil,
             deliverImmediately: true
         )
 
-        // Also launch the host app to ensure it's running
         launchHostApp()
     }
 
-    @objc private func openMainApp() {
+    @objc func openMainApp() {
         launchHostApp()
     }
 
     private func launchHostApp() {
-        let appBundleId = "com.sanescript.SaneScript"
-        if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: appBundleId) {
-            NSWorkspace.shared.openApplication(
-                at: appURL,
-                configuration: NSWorkspace.OpenConfiguration()
-            )
+        if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.sanescript.SaneScript") {
+            NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration())
         }
     }
-
-    // MARK: - Script Loading
 
     private func loadScripts() -> [ExtensionScript] {
         guard FileManager.default.fileExists(atPath: scriptsFileURL.path),
@@ -149,10 +175,8 @@ class FinderSync: FIFinderSync {
     }
 }
 
-// MARK: - Script Model (Extension-local copy)
+// MARK: - Script Model
 
-/// Lightweight script model for the extension
-/// Must match the main app's Script model structure
 struct ExtensionScript: Codable {
     let id: UUID
     var name: String
@@ -178,19 +202,17 @@ struct ExtensionScript: Codable {
         isEnabled = try container.decode(Bool.self, forKey: .isEnabled)
         icon = try container.decode(String.self, forKey: .icon)
         appliesTo = try container.decode(String.self, forKey: .appliesTo)
-        // Handle missing keys for backwards compatibility
         fileExtensions = try container.decodeIfPresent([String].self, forKey: .fileExtensions) ?? []
         extensionMatchMode = try container.decodeIfPresent(String.self, forKey: .extensionMatchMode) ?? "Any file matches"
         categoryId = try container.decodeIfPresent(UUID.self, forKey: .categoryId)
     }
 
-    /// Check if this script matches the given file URLs
     func matchesFiles(_ urls: [URL]) -> Bool {
         guard !fileExtensions.isEmpty else { return true }
 
         let fileURLs = urls.filter { !$0.hasDirectoryPath }
         guard !fileURLs.isEmpty else {
-            return appliesTo == "Folders Only" || appliesTo == "All Items"
+            return appliesTo == "Folders Only" || appliesTo == "Files & Folders"
         }
 
         let normalizedExtensions = Set(fileExtensions.map { $0.lowercased().trimmingCharacters(in: CharacterSet(charactersIn: ".")) })

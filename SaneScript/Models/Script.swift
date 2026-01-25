@@ -68,16 +68,16 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
 
 /// How to match file extensions
 enum ExtensionMatchMode: String, Codable, CaseIterable, Sendable {
-    case any = "Any file matches"
-    case all = "All files match"
+    case any = "Show if any selected file matches"
+    case all = "Show only if all selected files match"
 
     var description: String { rawValue }
 }
 
 /// Type of script to execute
 enum ScriptType: String, Codable, CaseIterable, Sendable {
-    case bash = "Bash"
-    case applescript = "AppleScript"
+    case bash = "Shell Command"
+    case applescript = "Mac Automation"
     case automator = "Automator Workflow"
 
     var icon: String {
@@ -91,10 +91,10 @@ enum ScriptType: String, Codable, CaseIterable, Sendable {
 
 /// What the script applies to
 enum AppliesTo: String, Codable, CaseIterable, Sendable {
-    case allItems = "All Items"
+    case allItems = "Files & Folders"
     case filesOnly = "Files Only"
     case foldersOnly = "Folders Only"
-    case container = "Folder Background"
+    case container = "Inside Folder"
 
     var icon: String {
         switch self {

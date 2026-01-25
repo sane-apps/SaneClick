@@ -1,5 +1,8 @@
 import Foundation
 import Observation
+import os.log
+
+private let storeLogger = Logger(subsystem: "com.sanescript.SaneScript", category: "ScriptStore")
 
 /// Manages script configurations with file-based persistence
 @Observable
@@ -9,6 +12,9 @@ final class ScriptStore: Sendable {
 
     private(set) var scripts: [Script] = []
     private(set) var categories: [ScriptCategory] = []
+
+    /// Whether there was an error loading data (shown in UI)
+    private(set) var loadError: String?
 
     /// Shared file location via App Group container (accessible by both app and extension)
     private static var containerURL: URL? {
@@ -102,41 +108,113 @@ final class ScriptStore: Sendable {
     private func loadScripts() {
         let fileURL = Self.scriptsFileURL
 
-        guard FileManager.default.fileExists(atPath: fileURL.path),
-              let data = try? Data(contentsOf: fileURL),
-              let decoded = try? JSONDecoder().decode([Script].self, from: data) else {
-            // Create default scripts on first launch
+        // First launch - no file exists
+        guard FileManager.default.fileExists(atPath: fileURL.path) else {
+            storeLogger.info("No scripts file found, creating defaults")
             scripts = createDefaultScripts()
             saveScripts()
             return
         }
-        scripts = decoded
+
+        // Try to read the file
+        let data: Data
+        do {
+            data = try Data(contentsOf: fileURL)
+        } catch {
+            storeLogger.error("Failed to read scripts file: \(error.localizedDescription)")
+            loadError = "Could not read scripts file: \(error.localizedDescription)"
+            scripts = []  // Don't overwrite with defaults - preserve broken file for recovery
+            return
+        }
+
+        // Try to decode
+        do {
+            scripts = try JSONDecoder().decode([Script].self, from: data)
+            loadError = nil
+            storeLogger.info("Loaded \(self.scripts.count) scripts")
+        } catch {
+            storeLogger.error("Failed to decode scripts: \(error.localizedDescription)")
+            // Save corrupted file for recovery
+            let backupURL = fileURL.deletingPathExtension().appendingPathExtension("corrupted.json")
+            try? FileManager.default.removeItem(at: backupURL)  // Remove old backup
+            try? FileManager.default.copyItem(at: fileURL, to: backupURL)
+            loadError = "Scripts file corrupted. Backup saved to: \(backupURL.lastPathComponent)"
+            scripts = []  // Don't overwrite - let user decide
+        }
     }
 
     private func saveScripts() {
         let fileURL = Self.scriptsFileURL
 
-        guard let data = try? JSONEncoder().encode(scripts) else { return }
-        try? data.write(to: fileURL, options: .atomic)
+        // Encode data first - fail fast if encoding fails
+        let data: Data
+        do {
+            data = try JSONEncoder().encode(scripts)
+        } catch {
+            storeLogger.error("Failed to encode scripts: \(error.localizedDescription)")
+            return
+        }
+
+        // Create backup of existing file before overwriting
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            let backupURL = fileURL.deletingPathExtension().appendingPathExtension("backup.json")
+            try? FileManager.default.removeItem(at: backupURL)
+            try? FileManager.default.copyItem(at: fileURL, to: backupURL)
+        }
+
+        // Write atomically
+        do {
+            try data.write(to: fileURL, options: .atomic)
+            storeLogger.info("Saved \(self.scripts.count) scripts")
+        } catch {
+            storeLogger.error("CRITICAL: Failed to save scripts: \(error.localizedDescription)")
+            // Consider: restore from backup? For now, log the error
+            // The user's data is safe in the backup file
+        }
     }
 
     private func loadCategories() {
         let fileURL = Self.categoriesFileURL
 
-        guard FileManager.default.fileExists(atPath: fileURL.path),
-              let data = try? Data(contentsOf: fileURL),
-              let decoded = try? JSONDecoder().decode([ScriptCategory].self, from: data) else {
+        guard FileManager.default.fileExists(atPath: fileURL.path) else {
             categories = []
             return
         }
-        categories = decoded
+
+        do {
+            let data = try Data(contentsOf: fileURL)
+            categories = try JSONDecoder().decode([ScriptCategory].self, from: data)
+            storeLogger.info("Loaded \(self.categories.count) categories")
+        } catch {
+            storeLogger.error("Failed to load categories: \(error.localizedDescription)")
+            categories = []
+        }
     }
 
     private func saveCategories() {
         let fileURL = Self.categoriesFileURL
 
-        guard let data = try? JSONEncoder().encode(categories) else { return }
-        try? data.write(to: fileURL, options: .atomic)
+        let data: Data
+        do {
+            data = try JSONEncoder().encode(categories)
+        } catch {
+            storeLogger.error("Failed to encode categories: \(error.localizedDescription)")
+            return
+        }
+
+        // Backup existing file
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            let backupURL = fileURL.deletingPathExtension().appendingPathExtension("backup.json")
+            try? FileManager.default.removeItem(at: backupURL)
+            try? FileManager.default.copyItem(at: fileURL, to: backupURL)
+        }
+
+        do {
+            try data.write(to: fileURL, options: .atomic)
+            storeLogger.info("Saved \(self.categories.count) categories")
+        } catch {
+            storeLogger.error("Failed to save categories: \(error.localizedDescription)")
+        }
     }
 
     private func notifyExtension() {

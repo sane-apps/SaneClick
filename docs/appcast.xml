@@ -1,7 +1,29 @@
 <?xml version="1.0" standalone="yes"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
-        <title>SaneScript Changelog</title>
+        <title>SaneClick Changelog</title>
+        <item>
+            <title>1.0.2</title>
+            <pubDate>Sat, 25 Jan 2026 12:00:00 -0500</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description>
+                <![CDATA[
+                <h2>What's New in 1.0.2</h2>
+                <ul>
+                    <li><strong>50+ Actions</strong>: Curated library of Finder context menu actions</li>
+                    <li><strong>Security Hardening</strong>: Safe shell patterns for all library scripts</li>
+                    <li><strong>Rebrand to SaneClick</strong>: Fresh identity, same great functionality</li>
+                    <li><strong>Script Testing</strong>: Test scripts before saving</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.0.2.dmg"
+                       sparkle:version="102"
+                       sparkle:shortVersionString="1.0.2"
+                       length="1421307"
+                       type="application/x-apple-diskimage"
+                       sparkle:edSignature="E7ZG2AWg8CpY2kTi0YqtY7ELo+7DwlyDP66Pxyx5JT1asRlV5JWvdjCtYj6Zh+8JeKyg9edr5CwUlW3y+juTAw=="/>
+        </item>
         <item>
             <title>1.0.1</title>
             <pubDate>Fri, 24 Jan 2026 20:00:00 -0500</pubDate>
@@ -15,7 +37,6 @@
                     <li><strong>Smart Filtering</strong>: Scripts appear only for matching file types</li>
                     <li><strong>Categories</strong>: Organize scripts into groups</li>
                     <li><strong>Test Before Save</strong>: Run scripts on real files before committing</li>
-                    <li><strong>Import & Export</strong>: Share scripts as JSON</li>
                 </ul>
                 ]]>
             </description>

@@ -183,7 +183,16 @@ struct ScriptTests {
 
     @Test("ExtensionMatchMode has correct raw values")
     func extensionMatchModeRawValues() {
-        #expect(ExtensionMatchMode.any.rawValue == "Any file matches")
-        #expect(ExtensionMatchMode.all.rawValue == "All files match")
+        #expect(ExtensionMatchMode.any.rawValue == "Show if any selected file matches")
+        #expect(ExtensionMatchMode.all.rawValue == "Show only if all selected files match")
+    }
+
+    @Test("AppliesTo has correct raw values for extension compatibility")
+    func appliesToRawValues() {
+        // These raw values must match what FinderSync.swift expects
+        #expect(AppliesTo.allItems.rawValue == "Files & Folders")
+        #expect(AppliesTo.filesOnly.rawValue == "Files Only")
+        #expect(AppliesTo.foldersOnly.rawValue == "Folders Only")
+        #expect(AppliesTo.container.rawValue == "Inside Folder")
     }
 }

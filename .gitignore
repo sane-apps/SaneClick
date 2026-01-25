@@ -58,3 +58,30 @@ Gemfile.lock
 # Keep these
 !.claude/rules/
 !.claude/settings.json
+
+# Claude Memory Plugin
+.claude-mem/
+.claude/plugins/
+.claude/skills/
+.claude/plans/
+.claude/state.json.lock
+
+# Node/Wrangler
+node_modules/
+.wrangler/
+
+# External directories (symlinks or misplaced)
+Desktop/
+Dev/
+SaneApps/
+SaneHosts/
+meta/
+
+# Build artifacts
+releases/
+
+# Local scripts
+scripts/
+
+# Misc
+Untitled.txt

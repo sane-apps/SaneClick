@@ -1,4 +1,7 @@
 import Foundation
+import os.log
+
+private let executorLogger = Logger(subsystem: "com.sanescript.SaneScript", category: "ScriptExecutor")
 
 /// Result of script execution for UI feedback
 struct ScriptExecutionResult: Sendable {
@@ -17,8 +20,24 @@ struct ScriptExecutionResult: Sendable {
     }
 }
 
+/// Execution request passed via file from extension to host app
+/// (DistributedNotificationCenter strips userInfo between processes)
+struct ExecutionRequest: Codable {
+    let scriptId: UUID
+    let paths: [String]
+    let timestamp: Date
+    let requestId: UUID  // Unique ID to prevent duplicate processing
+
+    init(scriptId: UUID, paths: [String], timestamp: Date = Date(), requestId: UUID = UUID()) {
+        self.scriptId = scriptId
+        self.paths = paths
+        self.timestamp = timestamp
+        self.requestId = requestId
+    }
+}
+
 /// Executes scripts with selected file paths
-actor ScriptExecutor {
+final class ScriptExecutor: @unchecked Sendable {
     static let shared = ScriptExecutor()
 
     /// Published execution results for UI to observe
@@ -27,29 +46,225 @@ actor ScriptExecutor {
     /// Notification posted when execution completes
     static let executionCompletedNotification = Notification.Name("com.sanescript.executionCompleted")
 
+    /// File-based IPC: extension writes here, host app reads
+    private static var pendingExecutionURL: URL? {
+        guard let containerURL = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.sanescript.app"
+        ) else {
+            return nil
+        }
+        return containerURL.appendingPathComponent("pending_execution.json")
+    }
+
+    /// Lock file for cross-process synchronization
+    private static var lockFileURL: URL? {
+        guard let containerURL = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.sanescript.app"
+        ) else {
+            return nil
+        }
+        return containerURL.appendingPathComponent(".execution.lock")
+    }
+
+    private var fileWatchSource: DispatchSourceFileSystemObject?
+    private var fileWatchFd: Int32 = -1  // Track fd for cleanup
+    private let queue = DispatchQueue(label: "com.sanescript.executor", qos: .userInitiated)
+
+    /// Track recently processed request IDs to prevent duplicates
+    private var processedRequestIds = Set<UUID>()
+    private let processedIdsLock = NSLock()
+
+    /// Maximum age for processed request IDs (10 seconds)
+    private let maxProcessedIdAge: TimeInterval = 10
+
     private init() {
-        // Listen for execution requests from the extension
+        NSLog("[ScriptExecutor] Initializing with file-based IPC")
+        executorLogger.info("Initializing ScriptExecutor")
+
+        // Listen for execution signal from extension (notification is just a trigger)
         DistributedNotificationCenter.default().addObserver(
             forName: NSNotification.Name("com.sanescript.executeScript"),
             object: nil,
             queue: .main
-        ) { [weak self] notification in
-            // Extract values before entering async context
-            guard let userInfo = notification.userInfo,
-                  let scriptIdString = userInfo["scriptId"] as? String,
-                  let scriptId = UUID(uuidString: scriptIdString),
-                  let pathsData = userInfo["paths"] as? Data,
-                  let paths = try? JSONDecoder().decode([String].self, from: pathsData) else {
+        ) { [weak self] _ in
+            NSLog("[ScriptExecutor] Received executeScript signal, checking for pending request file...")
+            self?.processPendingExecution()
+        }
+
+        // Also check on startup for any pending requests, and set up file watcher
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.processPendingExecution()
+            self?.setupFileWatcher()
+        }
+    }
+
+    /// Set up a file system watcher for the pending execution file
+    private func setupFileWatcher() {
+        // Cancel any existing watcher first to prevent fd leak
+        if let existingSource = fileWatchSource {
+            existingSource.cancel()
+            fileWatchSource = nil
+        }
+
+        guard let containerURL = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.sanescript.app"
+        ) else {
+            NSLog("[ScriptExecutor] Cannot set up file watcher: no App Group container")
+            return
+        }
+
+        let containerPath = containerURL.path
+        let fd = open(containerPath, O_EVTONLY)
+        guard fd >= 0 else {
+            NSLog("[ScriptExecutor] Cannot open container directory for watching")
+            return
+        }
+
+        // Track fd for cleanup
+        fileWatchFd = fd
+
+        let source = DispatchSource.makeFileSystemObjectSource(
+            fileDescriptor: fd,
+            eventMask: .write,
+            queue: queue  // Use serial queue to prevent concurrent processing
+        )
+
+        source.setEventHandler { [weak self] in
+            NSLog("[ScriptExecutor] File system change detected in container")
+            self?.processPendingExecutionLocked()  // Already on queue, call directly
+        }
+
+        source.setCancelHandler { [weak self] in
+            if let watchFd = self?.fileWatchFd, watchFd >= 0 {
+                close(watchFd)
+                self?.fileWatchFd = -1
+            }
+        }
+
+        source.resume()
+        fileWatchSource = source
+        NSLog("[ScriptExecutor] File watcher set up for: \(containerPath)")
+    }
+
+    deinit {
+        // Clean up file watcher
+        fileWatchSource?.cancel()
+        fileWatchSource = nil
+    }
+
+    /// Process pending execution request from file with proper locking
+    private func processPendingExecution() {
+        // Process on serial queue to prevent concurrent access from multiple triggers
+        queue.async { [weak self] in
+            self?.processPendingExecutionLocked()
+        }
+    }
+
+    /// Actual processing with file locking - must be called on queue
+    private func processPendingExecutionLocked() {
+        guard let pendingURL = Self.pendingExecutionURL,
+              let lockURL = Self.lockFileURL else {
+            NSLog("[ScriptExecutor] No pending execution URL (App Group not available)")
+            return
+        }
+
+        // Create lock file if needed
+        if !FileManager.default.fileExists(atPath: lockURL.path) {
+            FileManager.default.createFile(atPath: lockURL.path, contents: nil)
+        }
+
+        // Open lock file for exclusive locking
+        let lockFd = open(lockURL.path, O_RDWR | O_CREAT, 0o644)
+        guard lockFd >= 0 else {
+            NSLog("[ScriptExecutor] Failed to open lock file")
+            return
+        }
+        defer { close(lockFd) }
+
+        // Try to acquire exclusive lock (non-blocking)
+        guard flock(lockFd, LOCK_EX | LOCK_NB) == 0 else {
+            // Another process holds the lock, skip this attempt
+            return
+        }
+        defer { flock(lockFd, LOCK_UN) }
+
+        // Now we hold the exclusive lock - safe to read and delete
+        guard FileManager.default.fileExists(atPath: pendingURL.path) else {
+            return // No pending request
+        }
+
+        NSLog("[ScriptExecutor] Found pending execution file at: \(pendingURL.path)")
+
+        do {
+            let data = try Data(contentsOf: pendingURL)
+
+            // Delete the file immediately while holding lock
+            try? FileManager.default.removeItem(at: pendingURL)
+
+            // Decode request - handle missing requestId for backward compatibility
+            let request: ExecutionRequest
+            if let decoded = try? JSONDecoder().decode(ExecutionRequest.self, from: data) {
+                request = decoded
+            } else {
+                // Legacy format without requestId - decode manually
+                struct LegacyRequest: Codable {
+                    let scriptId: UUID
+                    let paths: [String]
+                    let timestamp: Date
+                }
+                let legacy = try JSONDecoder().decode(LegacyRequest.self, from: data)
+                request = ExecutionRequest(scriptId: legacy.scriptId, paths: legacy.paths, timestamp: legacy.timestamp)
+            }
+
+            // Check for duplicate request
+            processedIdsLock.lock()
+            let alreadyProcessed = processedRequestIds.contains(request.requestId)
+            if !alreadyProcessed {
+                processedRequestIds.insert(request.requestId)
+            }
+            processedIdsLock.unlock()
+
+            if alreadyProcessed {
+                NSLog("[ScriptExecutor] Ignoring duplicate request: \(request.requestId)")
                 return
             }
 
-            Task { @MainActor in
-                // Find the script and execute
-                if let script = ScriptStore.shared.scripts.first(where: { $0.id == scriptId }) {
-                    await self?.execute(script: script, withPaths: paths)
+            // Ignore stale requests (older than 10 seconds)
+            if Date().timeIntervalSince(request.timestamp) > maxProcessedIdAge {
+                NSLog("[ScriptExecutor] Ignoring stale request from \(request.timestamp)")
+                return
+            }
+
+            NSLog("[ScriptExecutor] Processing request: scriptId=\(request.scriptId), requestId=\(request.requestId), paths=\(request.paths)")
+
+            // Find and execute the script on main thread
+            DispatchQueue.main.async {
+                if let script = ScriptStore.shared.scripts.first(where: { $0.id == request.scriptId }) {
+                    NSLog("[ScriptExecutor] Found script: \(script.name), executing...")
+                    Task {
+                        await self.execute(script: script, withPaths: request.paths)
+                    }
+                } else {
+                    NSLog("[ScriptExecutor] Script not found for id: \(request.scriptId)")
                 }
             }
+
+            // Clean up old processed IDs periodically
+            self.cleanupOldProcessedIds()
+        } catch {
+            NSLog("[ScriptExecutor] Failed to process pending execution: \(error)")
         }
+    }
+
+    /// Remove processed request IDs older than maxProcessedIdAge
+    private func cleanupOldProcessedIds() {
+        // Simple cleanup: if we have too many IDs, clear them all
+        // (A more sophisticated approach would track timestamps per ID)
+        processedIdsLock.lock()
+        if processedRequestIds.count > 100 {
+            processedRequestIds.removeAll()
+        }
+        processedIdsLock.unlock()
     }
 
     /// Execute a script with the given file paths
@@ -90,7 +305,8 @@ actor ScriptExecutor {
     private func executeBash(content: String, paths: [String]) async -> Result<String, ScriptError> {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/bin/bash")
-        process.arguments = ["-c", content] + paths
+        // Note: with bash -c, first arg after script becomes $0, so we add "bash" as placeholder
+        process.arguments = ["-c", content, "bash"] + paths
 
         let outputPipe = Pipe()
         let errorPipe = Pipe()

@@ -1,8 +1,8 @@
-# SaneScript
+# SaneClick
 
-> Custom scripts in your Finder right-click menu
+> 50+ ready-to-use actions for your Finder right-click menu
 
-![SaneScript Main Window](docs/screenshots/main-window.png)
+![SaneClick Main Window](docs/screenshots/main-window.png)
 
 **🔒 No spying · 💵 No subscription · 🛠️ Actively maintained**
 
@@ -24,15 +24,15 @@ The "easy" solutions cost $10-15, require subscriptions, or haven't been updated
 
 ## The Sane Solution
 
-SaneScript puts your scripts directly in Finder's context menu. Simple to set up, simple to use.
+SaneClick gives you **50+ ready-to-use actions** — no scripting required. Browse by category, toggle on what you need, done.
 
-- **Three Script Types**: Bash, AppleScript, Automator workflows
-- **Smart Filtering**: Show scripts only for specific file types
-- **Categories**: Organize scripts into groups
-- **Test Before Save**: Run scripts on files before committing
-- **Import/Export**: Share scripts as JSON
+- **Curated Library**: 50+ pre-built actions organized by category
+- **One-Click Install**: Toggle actions on/off instantly
+- **Smart Filtering**: Actions appear only for matching file types
+- **Custom Scripts**: Power users can write Bash, AppleScript, or Automator workflows
+- **Categories**: Essentials, Files & Folders, Images & Media, Coding, Advanced
 
-**100% local. Free and open source. We never see your data.**
+**$5 for the signed DMG. Build from source for free. 100% local. We never see your data.**
 
 ---
 
@@ -40,13 +40,13 @@ SaneScript puts your scripts directly in Finder's context menu. Simple to set up
 
 | Feature | Description |
 |---------|-------------|
-| **Script Types** | Bash, AppleScript, and Automator workflows |
-| **File Type Filters** | Show scripts only for specific file extensions |
-| **Script Categories** | Organize scripts into custom groups |
-| **Test Scripts** | Run scripts on selected files before saving |
+| **50+ Pre-built Actions** | Copy paths, convert images, open in Terminal, and more |
+| **5 Categories** | Essentials, Files & Folders, Images & Media, Coding, Advanced |
+| **Smart Filtering** | Actions appear only for matching file types |
+| **One-Click Install** | Toggle actions on/off instantly |
+| **Custom Scripts** | Write Bash, AppleScript, or Automator workflows |
+| **Test Before Save** | Run scripts on files before committing |
 | **Import/Export** | Share scripts as JSON files |
-| **Search** | Filter scripts by name or content |
-| **Keyboard Shortcuts** | Full keyboard navigation (Cmd+N, Cmd+Shift+N) |
 
 ---
 
@@ -60,16 +60,16 @@ SaneScript puts your scripts directly in Finder's context menu. Simple to set up
 
 ## Installation
 
-### Download
+### Buy the DMG ($5)
 
-[Download the latest release](https://github.com/sane-apps/SaneScript/releases/latest) and move `SaneScript.app` to Applications.
+[Buy SaneClick](https://sane.lemonsqueezy.com/buy/saneclick) — Signed, notarized, ready to use. Supports sustainable open source development.
 
-### Build from Source
+### Build from Source (Free)
 
 ```bash
 # Clone the repository
-git clone https://github.com/sane-apps/SaneScript.git
-cd SaneScript
+git clone https://github.com/sane-apps/SaneClick.git
+cd SaneClick
 
 # Generate Xcode project
 xcodegen generate
@@ -80,9 +80,9 @@ xcodebuild -project SaneScript.xcodeproj -scheme SaneScript build
 
 ### Enable the Extension
 
-1. Open SaneScript
+1. Open SaneClick
 2. Go to **System Settings > Privacy & Security > Extensions > Finder**
-3. Enable **SaneScript**
+3. Enable **SaneClick**
 
 ---
 
@@ -107,7 +107,7 @@ xcodebuild -project SaneScript.xcodeproj -scheme SaneScript build
 ## Architecture
 
 ```
-SaneScript/
+SaneClick/
 ├── SaneScript/              # Host app (settings UI)
 │   ├── Models/              # Script, Category models
 │   ├── Services/            # ScriptExecutor, ScriptStore

@@ -23,32 +23,32 @@ struct SettingsView: View {
 
     private var generalTab: some View {
         Form {
-            Section("Finder Extension") {
+            Section("Right-Click Menu") {
                 HStack {
-                    Text("Extension Status")
+                    Text("Status")
                     Spacer()
-                    Text("Enabled")
+                    Text("Active")
                         .foregroundStyle(.green)
                 }
 
-                Button("Open Extension Settings") {
+                Button("Open System Settings") {
                     if let url = URL(string: "x-apple.systempreferences:com.apple.ExtensionsPreferences") {
                         NSWorkspace.shared.open(url)
                     }
                 }
-                .help("Open System Settings to enable or disable the Finder extension")
+                .help("Enable or disable SaneClick in System Settings")
             }
 
-            Section("Scripts") {
+            Section("Your Actions") {
                 HStack {
-                    Text("Total Scripts")
+                    Text("Total actions")
                     Spacer()
                     Text("\(scriptStore.scripts.count)")
                         .foregroundStyle(.secondary)
                 }
 
                 HStack {
-                    Text("Enabled Scripts")
+                    Text("Active actions")
                     Spacer()
                     Text("\(scriptStore.enabledScripts.count)")
                         .foregroundStyle(.secondary)
@@ -62,17 +62,17 @@ struct SettingsView: View {
 
     private var aboutTab: some View {
         VStack(spacing: 20) {
-            Image(systemName: "terminal.fill")
+            Image(systemName: "cursorarrow.click.2")
                 .font(.system(size: 64))
                 .foregroundStyle(.teal)
 
-            Text("SaneScript")
+            Text("SaneClick")
                 .font(.title)
 
-            Text("Version 1.0.1")
+            Text("Version 1.0.2")
                 .foregroundStyle(.secondary)
 
-            Text("Finder context menu customization for macOS")
+            Text("Add custom actions to your right-click menu")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -80,11 +80,11 @@ struct SettingsView: View {
             Divider()
 
             HStack(spacing: 16) {
-                Link(destination: URL(string: "https://github.com/sane-apps/SaneScript")!) {
+                Link(destination: URL(string: "https://github.com/sane-apps/SaneClick")!) {
                     Label("GitHub", systemImage: "link")
                 }
 
-                Link(destination: URL(string: "https://script.saneapps.com")!) {
+                Link(destination: URL(string: "https://saneclick.com")!) {
                     Label("Website", systemImage: "globe")
                 }
             }

@@ -4,6 +4,28 @@
 
 ---
 
+## Sane Philosophy
+
+```
+┌─────────────────────────────────────────────────────┐
+│           BEFORE YOU SHIP, ASK:                     │
+│                                                     │
+│  1. Does this REDUCE fear or create it?             │
+│  2. Power: Does user have control?                  │
+│  3. Love: Does this help people?                    │
+│  4. Sound Mind: Is this clear and calm?             │
+│                                                     │
+│  Grandma test: Would her life be better?            │
+│                                                     │
+│  "Not fear, but power, love, sound mind"            │
+│  — 2 Timothy 1:7                                    │
+└─────────────────────────────────────────────────────┘
+```
+
+→ Full philosophy: `~/SaneApps/meta/Brand/NORTH_STAR.md`
+
+---
+
 ## Project Location
 
 | Path | Description |
@@ -136,7 +158,22 @@ If automation can't find it → UX is broken → fix design first.
 ## Session Start Checklist
 
 1. `caffeinate -d -i -m -s &` - Prevent sleep
-2. Kill stale processes
+2. Kill orphaned Claude processes: `pkill -f 'claude.*--resume' 2>/dev/null || true`
 3. Read `RESEARCH.md` if unfamiliar
 4. Set XcodeBuildMCP defaults
 5. Use subagents for heavy work, verify their output
+
+---
+
+## Memory Management
+
+MacBook Air has limited RAM. Orphaned Claude subagents can accumulate and cause OOM kills.
+
+**Check memory:** `top -l 1 -o MEM | head -12`
+
+**Kill orphans:** `pkill -f 'claude.*--resume'`
+
+**Warning signs:**
+- Free RAM < 1GB
+- Multiple `2.1.19` processes in top
+- Heavy swap activity (check vm_stat)

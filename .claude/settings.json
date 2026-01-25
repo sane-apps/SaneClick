@@ -23,12 +23,68 @@
   },
   "mcpPermissions": {
     "allow": [
-      "mcp__memory__*",
       "mcp__apple-docs__*",
       "mcp__context7__*",
       "mcp__github__*",
       "mcp__XcodeBuildMCP__*",
       "mcp__macos-automator__*"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f ~/SaneApps/infra/SaneProcess/scripts/hooks/session_start.rb ] && ruby ~/SaneApps/infra/SaneProcess/scripts/hooks/session_start.rb || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f ~/SaneApps/infra/SaneProcess/scripts/hooks/saneprompt.rb ] && ruby ~/SaneApps/infra/SaneProcess/scripts/hooks/saneprompt.rb || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f ~/SaneApps/infra/SaneProcess/scripts/hooks/sanetools.rb ] && ruby ~/SaneApps/infra/SaneProcess/scripts/hooks/sanetools.rb || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f ~/SaneApps/infra/SaneProcess/scripts/hooks/sanetrack.rb ] && ruby ~/SaneApps/infra/SaneProcess/scripts/hooks/sanetrack.rb || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f ~/SaneApps/infra/SaneProcess/scripts/hooks/sanestop.rb ] && ruby ~/SaneApps/infra/SaneProcess/scripts/hooks/sanestop.rb || true",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   }
 }

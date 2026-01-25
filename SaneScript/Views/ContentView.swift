@@ -3,433 +3,422 @@ import os.log
 
 private let logger = Logger(subsystem: "com.sanescript.SaneScript", category: "ContentView")
 
+/// Main view - sidebar with categories, detail with scripts
+/// Mirrors SaneHosts design: organized sections, clear primary action
 struct ContentView: View {
     @Environment(ScriptStore.self) private var scriptStore
-    @State private var selectedScript: Script?
-    @State private var isAddingScript = false
+    @State private var selectedCategory: ScriptLibrary.ScriptCategory? = .universal
+    @State private var showLibrary = false
+    @State private var showCustomScriptEditor = false
+    @State private var showMoreOptions = false
+    @State private var editingScript: Script?
     @State private var showDeleteConfirmation = false
     @State private var scriptToDelete: Script?
-    @State private var showExecutionResult = false
-    @State private var executionResult: ScriptExecutionResult?
-    @State private var isAddingScriptCategory = false
-    @State private var editingScriptCategory: ScriptCategory?
-    @State private var showDeleteScriptCategoryConfirmation = false
-    @State private var categoryToDelete: ScriptCategory?
-    @State private var showImportError = false
-    @State private var importErrorMessage = ""
-    @State private var searchText = ""
 
     var body: some View {
         NavigationSplitView {
             sidebar
+                .navigationSplitViewColumnWidth(min: 220, ideal: 250, max: 300)
         } detail: {
-            detailView
-        }
-        .navigationTitle("SaneScript")
-        .toolbar {
-            toolbarContent
-        }
-        .onReceive(NotificationCenter.default.publisher(for: ScriptExecutor.executionCompletedNotification)) { notification in
-            if let result = notification.userInfo?["result"] as? ScriptExecutionResult {
-                executionResult = result
-                // Only show alert for failures
-                if !result.success {
-                    showExecutionResult = true
-                }
+            ZStack {
+                Color.saneNavy.opacity(0.3)
+                    .ignoresSafeArea()
+                detailView
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: .importScriptsRequested)) { _ in
-            importScripts()
+        .navigationTitle("SaneClick")
+        .sheet(isPresented: $showLibrary) {
+            ScriptLibraryView()
+                .environment(scriptStore)
         }
-        .onReceive(NotificationCenter.default.publisher(for: .exportAllScriptsRequested)) { _ in
-            exportAllScripts()
-        }
-        .alert("Script Error", isPresented: $showExecutionResult, presenting: executionResult) { _ in
-            Button("OK", role: .cancel) {}
-        } message: { result in
-            Text("\"\(result.scriptName)\" failed:\n\(result.error ?? "Unknown error")")
-        }
-        .alert("Import Result", isPresented: $showImportError) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text(importErrorMessage)
-        }
-        .sheet(isPresented: $isAddingScript) {
+        .sheet(isPresented: $showCustomScriptEditor) {
             ScriptEditorView(script: nil) { newScript in
                 scriptStore.addScript(newScript)
             }
         }
-        .sheet(isPresented: $isAddingScriptCategory) {
-            ScriptCategoryEditorView(category: nil) { newScriptCategory in
-                scriptStore.addScriptCategory(newScriptCategory)
-            }
-        }
-        .sheet(item: $editingScriptCategory) { category in
-            ScriptCategoryEditorView(category: category) { updatedScriptCategory in
-                scriptStore.updateScriptCategory(updatedScriptCategory)
+        .sheet(item: $editingScript) { script in
+            ScriptEditorView(script: script) { updatedScript in
+                scriptStore.updateScript(updatedScript)
             }
         }
         .confirmationDialog(
-            "Delete ScriptCategory",
-            isPresented: $showDeleteScriptCategoryConfirmation,
-            presenting: categoryToDelete
-        ) { category in
-            Button("Delete \"\(category.name)\"", role: .destructive) {
-                scriptStore.deleteScriptCategory(category)
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: { category in
-            Text("Are you sure you want to delete \"\(category.name)\"? Scripts in this category will become uncategorized.")
-        }
-        .confirmationDialog(
-            "Delete Script",
+            "Remove Action",
             isPresented: $showDeleteConfirmation,
             presenting: scriptToDelete
         ) { script in
-            Button("Delete \"\(script.name)\"", role: .destructive) {
+            Button("Remove \"\(script.name)\"", role: .destructive) {
                 scriptStore.deleteScript(script)
-                if selectedScript?.id == script.id {
-                    selectedScript = nil
-                }
             }
             Button("Cancel", role: .cancel) {}
         } message: { script in
-            Text("Are you sure you want to delete \"\(script.name)\"? This cannot be undone.")
+            Text("Remove \"\(script.name)\" from your right-click menu?")
         }
     }
 
     // MARK: - Sidebar
 
-    /// Scripts filtered by search text
-    private var filteredScripts: [Script] {
-        guard !searchText.isEmpty else { return scriptStore.scripts }
-        return scriptStore.scripts.filter { script in
-            script.name.localizedCaseInsensitiveContains(searchText) ||
-            script.type.rawValue.localizedCaseInsensitiveContains(searchText) ||
-            script.content.localizedCaseInsensitiveContains(searchText)
-        }
-    }
-
-    /// Filter scripts in a specific category by search
-    private func filteredScripts(in category: ScriptCategory?) -> [Script] {
-        let categoryScripts = category == nil
-            ? scriptStore.uncategorizedScripts
-            : scriptStore.scripts(in: category)
-
-        guard !searchText.isEmpty else { return categoryScripts }
-        return categoryScripts.filter { script in
-            script.name.localizedCaseInsensitiveContains(searchText) ||
-            script.type.rawValue.localizedCaseInsensitiveContains(searchText) ||
-            script.content.localizedCaseInsensitiveContains(searchText)
-        }
-    }
-
     private var sidebar: some View {
-        List(selection: $selectedScript) {
-            // User-created categories
-            ForEach(scriptStore.categories) { category in
-                let scripts = filteredScripts(in: category)
-                if !scripts.isEmpty || searchText.isEmpty {
-                    Section {
-                        ForEach(scripts) { script in
-                            scriptRow(for: script)
-                        }
-                    } header: {
-                        categoryHeader(for: category)
+        List(selection: $selectedCategory) {
+            // Quick Actions section
+            Section {
+                // Primary action: Browse Library
+                QuickActionRow(
+                    title: "Browse Library",
+                    subtitle: "50+ ready-to-use actions",
+                    icon: "books.vertical.fill",
+                    color: .saneTeal
+                ) {
+                    showLibrary = true
+                }
+
+                // More options (collapsed by default)
+                Button {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showMoreOptions.toggle()
+                    }
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 11, weight: .semibold))
+                            .rotationEffect(.degrees(showMoreOptions ? 90 : 0))
+                        Text("More Options")
+                            .font(.system(size: 13, weight: .medium))
+                    }
+                    .foregroundStyle(Color.saneTeal.opacity(0.8))
+                    .padding(.vertical, 6)
+                }
+                .buttonStyle(.plain)
+
+                if showMoreOptions {
+                    QuickActionRow(
+                        title: "Write Custom Action",
+                        subtitle: "For advanced users",
+                        icon: "terminal",
+                        color: .orange
+                    ) {
+                        showCustomScriptEditor = true
                     }
                 }
-            }
-
-            // Uncategorized scripts
-            let uncategorized = filteredScripts(in: nil)
-            if !uncategorized.isEmpty || searchText.isEmpty {
-                Section("Uncategorized") {
-                    ForEach(uncategorized) { script in
-                        scriptRow(for: script)
-                    }
+            } header: {
+                HStack(spacing: 6) {
+                    Image(systemName: "bolt.fill")
+                        .font(.system(size: 12, weight: .semibold))
+                    Text("QUICK ACTIONS")
+                        .font(.system(size: 11, weight: .bold))
                 }
+                .foregroundStyle(.primary)
             }
 
-            // Show "no results" when searching
-            if !searchText.isEmpty && filteredScripts.isEmpty {
-                Text("No scripts match \"\(searchText)\"")
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity)
-                    .padding()
+            // Categories section
+            Section {
+                ForEach(ScriptLibrary.ScriptCategory.allCases, id: \.self) { category in
+                    let libraryCount = ScriptLibrary.scripts(for: category).count
+                    let installedScripts = scriptsForCategory(category)
+                    let activeCount = installedScripts.filter { $0.isEnabled }.count
+
+                    CategoryRow(
+                        category: category,
+                        totalCount: libraryCount,
+                        activeCount: activeCount
+                    )
+                    .tag(category)
+                }
+            } header: {
+                HStack(spacing: 6) {
+                    Image(systemName: "square.stack.fill")
+                        .font(.system(size: 12, weight: .semibold))
+                    Text("YOUR ACTIONS")
+                        .font(.system(size: 11, weight: .bold))
+                }
+                .foregroundStyle(.primary)
             }
         }
         .listStyle(.sidebar)
-        .frame(minWidth: 200)
-        .searchable(text: $searchText, prompt: "Search scripts")
-        .accessibilityIdentifier("scriptList")
     }
 
-    private func scriptRow(for script: Script) -> some View {
-        ScriptRow(script: script)
-            .tag(script)
-            .contextMenu {
-                if !scriptStore.categories.isEmpty {
-                    Menu("Move to ScriptCategory") {
-                        Button("Uncategorized") {
-                            moveScriptToScriptCategory(script, category: nil)
-                        }
-                        Divider()
-                        ForEach(scriptStore.categories) { category in
-                            Button(category.name) {
-                                moveScriptToScriptCategory(script, category: category)
-                            }
-                        }
-                    }
-                    Divider()
-                }
-                Button("Duplicate") {
-                    duplicateScript(script)
-                }
-                Divider()
-                Button("Delete", role: .destructive) {
-                    scriptToDelete = script
-                    showDeleteConfirmation = true
-                }
-            }
-    }
-
-    private func categoryHeader(for category: ScriptCategory) -> some View {
-        HStack {
-            Image(systemName: category.icon)
-            Text(category.name)
-        }
-        .contextMenu {
-            Button("Edit ScriptCategory") {
-                editingScriptCategory = category
-            }
-            Divider()
-            Button("Delete ScriptCategory", role: .destructive) {
-                categoryToDelete = category
-                showDeleteScriptCategoryConfirmation = true
-            }
-        }
-    }
-
-    // MARK: - Detail
+    // MARK: - Detail View
 
     @ViewBuilder
     private var detailView: some View {
-        if let script = selectedScript {
-            ScriptEditorView(script: script) { updatedScript in
-                scriptStore.updateScript(updatedScript)
-            }
+        if let category = selectedCategory {
+            // Always show ALL library scripts for this category
+            categoryDetail(category: category)
         } else {
             emptyState
         }
     }
 
-    private var emptyState: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "terminal")
-                .font(.system(size: 48))
-                .foregroundStyle(.secondary)
-
-            Text("Select a Script")
-                .font(.title2)
-                .foregroundStyle(.secondary)
-
-            Text("Choose a script from the sidebar or create a new one.")
-                .font(.body)
-                .foregroundStyle(.tertiary)
-                .multilineTextAlignment(.center)
-
-            Button {
-                isAddingScript = true
-            } label: {
-                Label("Add Script", systemImage: "plus")
-            }
-            .buttonStyle(.borderedProminent)
-            .accessibilityIdentifier("addScriptButtonEmpty")
+    /// Get semantic color for category
+    private func colorForCategory(_ category: ScriptLibrary.ScriptCategory) -> Color {
+        switch category.colorName {
+        case "blue": return .blue
+        case "green": return Color(red: 0.13, green: 0.77, blue: 0.37)
+        case "pink": return .pink
+        case "purple": return .purple
+        case "orange": return .orange
+        default: return .blue
         }
-        .padding()
     }
 
-    // MARK: - Toolbar
+    private func categoryDetail(category: ScriptLibrary.ScriptCategory) -> some View {
+        let categoryColor = colorForCategory(category)
+        let libraryScripts = ScriptLibrary.scripts(for: category)
+        let installedScripts = scriptsForCategory(category)
+        let activeCount = installedScripts.filter { $0.isEnabled }.count
+        let allEnabled = activeCount == libraryScripts.count && activeCount > 0
 
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
-            Menu {
-                Button {
-                    isAddingScript = true
-                } label: {
-                    Label("New Script", systemImage: "plus")
-                }
-                .keyboardShortcut("n", modifiers: .command)
+        return ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                // Category header with semantic color
+                HStack {
+                    Image(systemName: category.icon)
+                        .font(.title)
+                        .foregroundStyle(categoryColor)
 
-                Button {
-                    isAddingScriptCategory = true
-                } label: {
-                    Label("New Category", systemImage: "folder.badge.plus")
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(category.rawValue)
+                            .font(.title2)
+                            .fontWeight(.bold)
+
+                        // Active count in green (success), total available
+                        HStack(spacing: 4) {
+                            Text("\(activeCount)")
+                                .foregroundStyle(activeCount > 0 ? Color(red: 0.13, green: 0.77, blue: 0.37) : Color.saneSilver)
+                            Text("of \(libraryScripts.count) enabled")
+                                .foregroundStyle(Color.saneSilver)
+                        }
+                        .font(.subheadline)
+                    }
+
+                    Spacer()
+
+                    // Enable/Disable All toggle
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Toggle("", isOn: Binding(
+                            get: { allEnabled },
+                            set: { enableAll in
+                                toggleAllScripts(in: category, enable: enableAll)
+                            }
+                        ))
+                        .toggleStyle(.switch)
+                        .labelsHidden()
+                        .tint(categoryColor)
+
+                        Text(allEnabled ? "All On" : "Enable All")
+                            .font(.caption)
+                            .foregroundStyle(Color.saneSilver)
+                    }
                 }
-                .keyboardShortcut("n", modifiers: [.command, .shift])
-            } label: {
-                Label("Add", systemImage: "plus")
+                .padding(.bottom, 8)
+
+                // Show ALL library scripts for this category
+                ForEach(libraryScripts, id: \.name) { libraryScript in
+                    let installedScript = installedScripts.first { $0.name == libraryScript.name }
+                    let isInstalled = installedScript != nil
+                    let isEnabled = installedScript?.isEnabled ?? false
+
+                    LibraryScriptRow(
+                        libraryScript: libraryScript,
+                        isInstalled: isInstalled,
+                        isEnabled: isEnabled,
+                        categoryColor: categoryColor,
+                        onToggle: { newValue in
+                            handleScriptToggle(
+                                libraryScript: libraryScript,
+                                installedScript: installedScript,
+                                enable: newValue
+                            )
+                        }
+                    )
+                }
             }
-            .accessibilityIdentifier("addMenu")
-            .help("Add a new script or category")
+            .padding(24)
         }
+    }
 
-        ToolbarItem(placement: .navigation) {
+    /// Handle toggle: add script if enabling and not installed, or toggle existing
+    private func handleScriptToggle(libraryScript: ScriptLibrary.LibraryScript, installedScript: Script?, enable: Bool) {
+        if enable {
+            if let script = installedScript {
+                // Already installed, just enable
+                if !script.isEnabled {
+                    var updated = script
+                    updated.isEnabled = true
+                    scriptStore.updateScript(updated)
+                }
+            } else {
+                // Not installed, add it enabled
+                let newScript = Script(
+                    name: libraryScript.name,
+                    type: libraryScript.type,
+                    content: libraryScript.content,
+                    isEnabled: true,
+                    icon: libraryScript.icon,
+                    appliesTo: libraryScript.appliesTo,
+                    fileExtensions: libraryScript.fileExtensions
+                )
+                scriptStore.addScript(newScript)
+            }
+        } else {
+            // Disabling - just disable, don't remove
+            if let script = installedScript, script.isEnabled {
+                var updated = script
+                updated.isEnabled = false
+                scriptStore.updateScript(updated)
+            }
+        }
+    }
+
+    /// Enable or disable all scripts in a category
+    private func toggleAllScripts(in category: ScriptLibrary.ScriptCategory, enable: Bool) {
+        let libraryScripts = ScriptLibrary.scripts(for: category)
+        let installedScripts = scriptsForCategory(category)
+
+        for libraryScript in libraryScripts {
+            let installedScript = installedScripts.first { $0.name == libraryScript.name }
+            handleScriptToggle(libraryScript: libraryScript, installedScript: installedScript, enable: enable)
+        }
+    }
+
+    private var emptyState: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "cursorarrow.click.2")
+                .font(.system(size: 56))
+                .foregroundStyle(Color.saneTeal)
+
+            Text("Welcome to SaneClick")
+                .font(.title2)
+                .fontWeight(.semibold)
+
+            Text("Add actions to your Finder right-click menu from our curated library.")
+                .font(.body)
+                .foregroundStyle(Color.saneSilver)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: 300)
+
             Button {
-                importScripts()
+                showLibrary = true
             } label: {
-                Label("Import", systemImage: "square.and.arrow.down")
+                Label("Browse Library", systemImage: "books.vertical.fill")
+                    .font(.headline)
             }
-            .accessibilityIdentifier("importButton")
-            .help("Import scripts from a JSON file")
+            .buttonStyle(.borderedProminent)
+            .tint(.saneTeal)
+            .controlSize(.large)
         }
-
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     // MARK: - Helpers
 
-    private func duplicateScript(_ script: Script) {
-        let newScript = Script(
-            name: "\(script.name) Copy",
-            type: script.type,
-            content: script.content,
-            isEnabled: script.isEnabled,
-            icon: script.icon,
-            appliesTo: script.appliesTo,
-            fileExtensions: script.fileExtensions,
-            extensionMatchMode: script.extensionMatchMode,
-            categoryId: script.categoryId
-        )
-        scriptStore.addScript(newScript)
+    private func scriptsForCategory(_ category: ScriptLibrary.ScriptCategory) -> [Script] {
+        // Map library category to installed scripts by matching names
+        let libraryScriptNames = Set(ScriptLibrary.scripts(for: category).map { $0.name })
+        return scriptStore.scripts.filter { libraryScriptNames.contains($0.name) }
     }
 
-    private func moveScriptToScriptCategory(_ script: Script, category: ScriptCategory?) {
-        var updatedScript = script
-        updatedScript.categoryId = category?.id
-        scriptStore.updateScript(updatedScript)
+    private func toggleScript(_ script: Script) {
+        var updated = script
+        updated.isEnabled.toggle()
+        scriptStore.updateScript(updated)
     }
+}
 
-    // MARK: - Import/Export
+// MARK: - Quick Action Row
 
-    private func importScripts() {
-        logger.info("importScripts() called - using NSOpenPanel")
-        // Use NSOpenPanel directly (workaround for .fileImporter not working with NavigationSplitView)
-        let panel = NSOpenPanel()
-        panel.allowedContentTypes = [.json]
-        panel.allowsMultipleSelection = true
-        panel.canChooseDirectories = false
-        panel.message = "Select script files to import"
-        panel.prompt = "Import"
+struct QuickActionRow: View {
+    let title: String
+    let subtitle: String
+    let icon: String
+    let color: Color
+    let action: () -> Void
 
-        guard panel.runModal() == .OK, !panel.urls.isEmpty else { return }
-        processImportedFiles(panel.urls)
-    }
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .font(.title3)
+                    .foregroundStyle(color)
+                    .frame(width: 24)
 
-    private func processImportedFiles(_ urls: [URL]) {
-        var importedCount = 0
-        var skippedCount = 0
-
-        for url in urls {
-            do {
-                let data = try Data(contentsOf: url)
-
-                // Try to decode as array of scripts first
-                if let scripts = try? JSONDecoder().decode([Script].self, from: data) {
-                    for script in scripts {
-                        // Check for duplicates by name
-                        if scriptStore.scripts.contains(where: { $0.name == script.name }) {
-                            skippedCount += 1
-                        } else {
-                            // Create new script with new ID to avoid conflicts
-                            let newScript = Script(
-                                name: script.name,
-                                type: script.type,
-                                content: script.content,
-                                isEnabled: script.isEnabled,
-                                icon: script.icon,
-                                appliesTo: script.appliesTo,
-                                fileExtensions: script.fileExtensions,
-                                extensionMatchMode: script.extensionMatchMode,
-                                categoryId: nil // Don't import category associations
-                            )
-                            scriptStore.addScript(newScript)
-                            importedCount += 1
-                        }
-                    }
-                } else if let script = try? JSONDecoder().decode(Script.self, from: data) {
-                    // Single script
-                    if scriptStore.scripts.contains(where: { $0.name == script.name }) {
-                        skippedCount += 1
-                    } else {
-                        let newScript = Script(
-                            name: script.name,
-                            type: script.type,
-                            content: script.content,
-                            isEnabled: script.isEnabled,
-                            icon: script.icon,
-                            appliesTo: script.appliesTo,
-                            fileExtensions: script.fileExtensions,
-                            extensionMatchMode: script.extensionMatchMode,
-                            categoryId: nil
-                        )
-                        scriptStore.addScript(newScript)
-                        importedCount += 1
-                    }
-                } else {
-                    throw NSError(domain: "SaneScript", code: 1, userInfo: [
-                        NSLocalizedDescriptionKey: "Invalid file format"
-                    ])
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.body)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.primary)
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
-            } catch {
-                importErrorMessage = "Failed to import \(url.lastPathComponent): \(error.localizedDescription)"
-                showImportError = true
-                return
+
+                Spacer()
             }
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
+        .padding(.vertical, 4)
+    }
+}
 
-        if skippedCount > 0 {
-            importErrorMessage = "Imported \(importedCount) script(s). Skipped \(skippedCount) duplicate(s)."
-            showImportError = true
+// MARK: - Category Row
+
+struct CategoryRow: View {
+    let category: ScriptLibrary.ScriptCategory
+    let totalCount: Int
+    let activeCount: Int
+
+    /// Semantic colors (from SaneApps Brand Guidelines):
+    /// - Blue: Essential/primary features
+    /// - Green: Safe/file management (also success state)
+    /// - Pink: Creative/visual
+    /// - Purple: Technical/developer
+    /// - Orange: Warning/advanced (be careful)
+    private var categoryColor: Color {
+        switch category.colorName {
+        case "blue": return .blue
+        case "green": return Color(red: 0.13, green: 0.77, blue: 0.37) // Brand success green
+        case "pink": return .pink
+        case "purple": return .purple
+        case "orange": return .orange
+        default: return .blue
         }
     }
 
-    private func exportScript(_ script: Script) {
-        let panel = NSSavePanel()
-        panel.allowedContentTypes = [.json]
-        panel.nameFieldStringValue = "\(script.name).json"
-        panel.message = "Export script"
+    /// Success green for active count
+    private let successGreen = Color(red: 0.13, green: 0.77, blue: 0.37)
 
-        guard panel.runModal() == .OK, let url = panel.url else { return }
+    var body: some View {
+        HStack(spacing: 12) {
+            // Icon always uses category's semantic color
+            Image(systemName: category.icon)
+                .font(.body)
+                .foregroundStyle(categoryColor)
+                .frame(width: 24)
 
-        do {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-            let data = try encoder.encode(script)
-            try data.write(to: url)
-        } catch {
-            importErrorMessage = "Failed to export: \(error.localizedDescription)"
-            showImportError = true
+            VStack(alignment: .leading, spacing: 2) {
+                Text(category.rawValue)
+                    .font(.body)
+                    .foregroundStyle(.primary)
+
+                // Active count in green (success state)
+                Text("\(activeCount) active")
+                    .font(.caption)
+                    .foregroundStyle(activeCount > 0 ? successGreen : .secondary)
+            }
+
+            Spacer()
+
+            // Count badge shows total available scripts in category
+            Text("\(totalCount)")
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundStyle(categoryColor)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 3)
+                .background(categoryColor.opacity(0.15))
+                .clipShape(Capsule())
         }
-    }
-
-    private func exportAllScripts() {
-        let panel = NSSavePanel()
-        panel.allowedContentTypes = [.json]
-        panel.nameFieldStringValue = "SaneScript-export.json"
-        panel.message = "Export all scripts"
-
-        guard panel.runModal() == .OK, let url = panel.url else { return }
-
-        do {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-            let data = try encoder.encode(scriptStore.scripts)
-            try data.write(to: url)
-        } catch {
-            importErrorMessage = "Failed to export: \(error.localizedDescription)"
-            showImportError = true
-        }
+        .padding(.vertical, 4)
     }
 }
 
@@ -437,33 +426,147 @@ struct ContentView: View {
 
 struct ScriptRow: View {
     let script: Script
+    let categoryColor: Color
+    let onToggle: () -> Void
+    let onEdit: () -> Void
+    let onDelete: () -> Void
+
+    @State private var isHovered = false
+
+    /// Success green for enabled state (from brand guidelines)
+    private let successGreen = Color(red: 0.13, green: 0.77, blue: 0.37)
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 14) {
+            // Icon - green when enabled (success), gray when disabled
             Image(systemName: script.icon)
-                .foregroundStyle(script.isEnabled ? .teal : .secondary)
-                .frame(width: 20)
+                .font(.title3)
+                .foregroundStyle(script.isEnabled ? successGreen : Color.saneSilver)
+                .frame(width: 36, height: 36)
+                .background(script.isEnabled ? successGreen.opacity(0.15) : Color.saneSmoke)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
 
+            // Name and status
             VStack(alignment: .leading, spacing: 2) {
                 Text(script.name)
                     .font(.body)
-                    .foregroundStyle(script.isEnabled ? .primary : .secondary)
+                    .fontWeight(.medium)
+                    .foregroundStyle(script.isEnabled ? Color.saneCloud : Color.saneSilver)
 
-                Text(script.type.rawValue)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                // Show file type filter if set, otherwise show status
+                if !script.fileExtensions.isEmpty {
+                    Text(script.fileExtensions.joined(separator: ", "))
+                        .font(.caption)
+                        .foregroundStyle(Color.saneSilver)
+                }
             }
 
             Spacer()
 
-            if !script.isEnabled {
-                Image(systemName: "pause.circle")
-                    .foregroundStyle(.secondary)
-                    .font(.caption)
+            // Toggle - green tint for success state
+            Toggle("", isOn: Binding(
+                get: { script.isEnabled },
+                set: { _ in onToggle() }
+            ))
+            .toggleStyle(.switch)
+            .labelsHidden()
+            .tint(successGreen)
+        }
+        .padding(14)
+        .background {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.saneCarbon)
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(isHovered ? categoryColor.opacity(0.5) : Color.saneSmoke, lineWidth: 1)
+        }
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.15)) {
+                isHovered = hovering
             }
         }
-        .padding(.vertical, 4)
-        .accessibilityIdentifier("scriptRow_\(script.id.uuidString)")
+        .contextMenu {
+            Button {
+                onEdit()
+            } label: {
+                Label("Edit", systemImage: "pencil")
+            }
+
+            Divider()
+
+            Button(role: .destructive) {
+                onDelete()
+            } label: {
+                Label("Remove", systemImage: "trash")
+            }
+        }
+    }
+}
+
+// MARK: - Library Script Row
+
+/// Shows a library script with toggle - auto-adds when enabled, removes when disabled
+struct LibraryScriptRow: View {
+    let libraryScript: ScriptLibrary.LibraryScript
+    let isInstalled: Bool
+    let isEnabled: Bool
+    let categoryColor: Color
+    let onToggle: (Bool) -> Void  // Pass new state: true = enable (add if needed), false = disable
+
+    @State private var isHovered = false
+
+    /// Success green for enabled state
+    private let successGreen = Color(red: 0.13, green: 0.77, blue: 0.37)
+
+    var body: some View {
+        HStack(spacing: 14) {
+            // Icon - green when enabled, gray when disabled
+            Image(systemName: libraryScript.icon)
+                .font(.title3)
+                .foregroundStyle(isEnabled ? successGreen : Color.saneSilver)
+                .frame(width: 36, height: 36)
+                .background(isEnabled ? successGreen.opacity(0.15) : Color.saneSmoke)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+
+            // Name and description
+            VStack(alignment: .leading, spacing: 2) {
+                Text(libraryScript.name)
+                    .font(.body)
+                    .fontWeight(.medium)
+                    .foregroundStyle(isEnabled ? Color.saneCloud : Color.saneSilver)
+
+                Text(libraryScript.description)
+                    .font(.caption)
+                    .foregroundStyle(Color.saneSilver)
+                    .lineLimit(1)
+            }
+
+            Spacer()
+
+            // Always show toggle - consistent UI for all scripts
+            Toggle("", isOn: Binding(
+                get: { isEnabled },
+                set: { newValue in onToggle(newValue) }
+            ))
+            .toggleStyle(.switch)
+            .labelsHidden()
+            .tint(successGreen)
+        }
+        .padding(14)
+        .background {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.saneCarbon)
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(isHovered ? categoryColor.opacity(0.5) : Color.saneSmoke, lineWidth: 1)
+        }
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.15)) {
+                isHovered = hovering
+            }
+        }
     }
 }
 

@@ -16,6 +16,7 @@
 6. [Architecture Decisions](#architecture-decisions)
 7. [Testing Strategy](#testing-strategy)
 8. [Lessons Learned](#lessons-learned)
+9. [Known Bugs](#known-bugs)
 
 ---
 
@@ -402,6 +403,67 @@ stateDiagram-v2
 
 ---
 
+## Finder Extension Debugging
+
+### Verification Commands
+
+```bash
+# Check extension registration (SOURCE OF TRUTH)
+# + means enabled, - means disabled
+pluginkit -m -v -p com.apple.FinderSync
+
+# Check if extension process is running
+pgrep -l SaneScriptExtension
+
+# Check what's in the app bundle
+ls -la /Applications/SaneScript.app/Contents/PlugIns/
+
+# Check Info.plist in built extension
+defaults read /Applications/SaneScript.app/Contents/PlugIns/SaneScriptExtension.appex/Contents/Info.plist NSExtension
+```
+
+### Common Issues
+
+| Issue | Symptom | Fix |
+|-------|---------|-----|
+| Extension not registered | No output from pluginkit | Run: `pluginkit -a /path/to/Extension.appex` |
+| Extension disabled | `-` prefix in pluginkit | Run: `pluginkit -e use -i <bundle-id>` |
+| System Settings wrong category | Shows "File Provider" | **Known bug** - pluginkit is source of truth, ignore UI |
+| Extension not loading | No process running | Restart Finder: `killall Finder` |
+| Stale registration | Old path in pluginkit | Unregister: `pluginkit -r /old/path.appex` then re-add |
+
+### Nuclear Reset (Last Resort)
+
+```bash
+# 1. Unregister extension
+pluginkit -e ignore -i com.sanescript.SaneScript.FinderSync
+pluginkit -r /Applications/SaneScript.app/Contents/PlugIns/SaneScriptExtension.appex
+
+# 2. Kill processes
+killall SaneScriptExtension 2>/dev/null || true
+killall SaneScript 2>/dev/null || true
+
+# 3. Reset Launch Services (optional, takes time)
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+
+# 4. Delete and reinstall app
+rm -rf /Applications/SaneScript.app
+cp -R /path/to/fresh/build/SaneScript.app /Applications/
+
+# 5. Re-register extension
+pluginkit -a /Applications/SaneScript.app/Contents/PlugIns/SaneScriptExtension.appex
+pluginkit -e use -i com.sanescript.SaneScript.FinderSync
+
+# 6. Restart Finder
+killall Finder
+```
+
+### Key Insight
+
+**System Settings may show extension under wrong category (e.g., "File Provider") due to macOS cache issues.** This is a known bug in macOS Sequoia. Always use `pluginkit -m -v -p com.apple.FinderSync` as the authoritative source - if it shows the extension with `+`, it's working regardless of what System Settings displays.
+
+---
+
 ## Lessons Learned
 
 ### From Memory MCP (SaneApps patterns)
@@ -424,6 +486,96 @@ stateDiagram-v2
 2. **Affordance > decoration** - If it looks clickable, it must be
 3. **Consistency reduces cognitive load** - Same icon = same action
 4. **Cultural neutrality** - Avoid region-specific symbols
+
+---
+
+## Known Bugs
+
+### BUG-001: File Picker Dialog Not Appearing (Import Scripts)
+
+**Status**: OPEN
+**Severity**: Critical
+**Date Identified**: 2026-01-19
+
+#### Description
+
+The Import Scripts functionality does not display a file picker dialog when triggered. The function is confirmed to be called (via debug alert and logs), but neither NSOpenPanel nor SwiftUI's `.fileImporter` modifier displays the dialog.
+
+#### Reproduction Steps
+
+1. Launch SaneScript
+2. Click File > Import Scripts... (or press Cmd+O)
+3. Expected: File picker dialog appears
+4. Actual: Nothing happens, no dialog appears
+
+#### Root Cause Analysis
+
+- **Confirmed NOT the cause**: Function not being called (debug alert proved function executes)
+- **Suspected**: Window style or SwiftUI view hierarchy issue
+- **Suspected**: `.hiddenTitleBar` window style interfering with modal presentation
+
+#### Attempts to Fix
+
+| Attempt | Approach | Result |
+|---------|----------|--------|
+| 1 | `NSOpenPanel.runModal()` | Dialog not shown |
+| 2 | `DispatchQueue.main.async { panel.runModal() }` | Dialog not shown |
+| 3 | `panel.begin { }` completion handler | Dialog not shown |
+| 4 | `panel.beginSheetModal(for: window)` | Logs show window found, method called, but no sheet |
+| 5 | SwiftUI `.fileImporter` modifier with `@State` | State changes to true, dialog not shown |
+| 6 | Added delay before setting state | Dialog not shown |
+| 7 | Changed toolbar button from Menu to direct Button | Dialog not shown |
+| 8 | Disabled `.hiddenTitleBar` window style | Testing... |
+| 9 | Changed toolbar placement from `.automatic` to `.navigation` | Testing... |
+
+#### Environment
+
+- macOS 15 (Sequoia)
+- SwiftUI app with NavigationSplitView
+- WindowGroup with `.hiddenTitleBar` (now temporarily disabled)
+
+#### Reference Code
+
+**Current ContentView.swift toolbar:**
+```swift
+ToolbarItem(placement: .navigation) {
+    Button {
+        showFileImporter = true
+    } label: {
+        Label("Import", systemImage: "square.and.arrow.down")
+    }
+}
+
+// Modifier on body
+.fileImporter(
+    isPresented: $showFileImporter,
+    allowedContentTypes: [.json],
+    allowsMultipleSelection: true
+) { result in
+    // Handle result
+}
+```
+
+**AppCommands triggering via NotificationCenter:**
+```swift
+Button("Import Scripts...") {
+    NotificationCenter.default.post(name: .importScriptsRequested, object: nil)
+}
+.keyboardShortcut("o", modifiers: .command)
+```
+
+#### Similar Issues Found
+
+- GitHub pattern from Kyome22/LegoArtSwift showed using `beginSheetModal(for:)` but this also didn't work
+- Other SwiftUI apps with hidden title bars may have similar issues
+
+#### Next Steps to Try
+
+1. Remove all NotificationCenter indirection - call panel directly from button
+2. Try `NSApp.runModal(for:)` approach
+3. Check if window needs to be key window
+4. Try DocumentGroup instead of WindowGroup
+5. Check Console for SwiftUI errors or warnings
 
 ---
 

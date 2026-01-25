@@ -20,9 +20,9 @@ struct ScriptCategoryEditorView: View {
 
     var body: some View {
         Form {
-            Section("ScriptCategory Details") {
+            Section("Group Details") {
                 HStack {
-                    TextField("Name", text: $name, prompt: Text("ScriptCategory name"))
+                    TextField("Name", text: $name, prompt: Text("Group name"))
                         .textFieldStyle(.roundedBorder)
                         .accessibilityIdentifier("categoryNameField")
 
@@ -43,7 +43,7 @@ struct ScriptCategoryEditorView: View {
                         .foregroundStyle(.teal)
                         .frame(width: 20)
 
-                    Text(name.isEmpty ? "New ScriptCategory" : name)
+                    Text(name.isEmpty ? "New Group" : name)
                         .font(.headline)
 
                     Spacer()
