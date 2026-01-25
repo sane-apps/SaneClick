@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaneScript - Custom Finder Context Menus for macOS</title>
-    <meta name="description" content="Add custom scripts to your Finder right-click menu. Run Bash, AppleScript, or Automator workflows on selected files. Free and open source.">
+    <title>SaneClick - Supercharge Your Finder Right-Click Menu</title>
+    <meta name="description" content="50+ ready-to-use actions for your Finder right-click menu. Copy paths, open in Terminal, convert images, and more. Free for macOS.">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="SaneScript - Custom Finder Context Menus">
-    <meta property="og:description" content="Add custom scripts to your Finder right-click menu. 100% local. No subscription.">
+    <meta property="og:title" content="SaneClick - Supercharge Your Finder Right-Click Menu">
+    <meta property="og:description" content="50+ ready-to-use actions. One click to add. 100% local. No subscription.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://script.saneapps.com">
+    <meta property="og:url" content="https://saneclick.com">
 
     <style>
         :root {
@@ -27,6 +27,12 @@
             --success: #22c55e;
             --warning: #f59e0b;
             --error: #ef4444;
+            /* Category colors */
+            --blue: #3b82f6;
+            --green: #22c55e;
+            --pink: #ec4899;
+            --purple: #a855f7;
+            --orange: #f97316;
         }
 
         * {
@@ -80,7 +86,7 @@
             align-items: center;
             justify-content: center;
             color: var(--teal);
-            font-size: 18px;
+            font-size: 16px;
         }
 
         nav {
@@ -198,56 +204,52 @@
             font-weight: 600;
             color: var(--white);
             margin-bottom: 24px;
+            text-align: center;
         }
 
-        /* The Problem */
-        .problem {
-            background: var(--carbon);
-            border-radius: 16px;
-            padding: 40px;
-            margin-bottom: 40px;
-        }
-
-        .problem h3 {
-            color: var(--warning);
-            font-size: 18px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .problem p {
-            color: var(--silver);
-            font-size: 16px;
-            line-height: 1.7;
-        }
-
-        /* Barriers */
-        .barriers {
+        /* Categories */
+        .categories {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
             margin-bottom: 40px;
         }
 
-        .barrier {
+        .category {
             background: var(--carbon);
             border-radius: 12px;
-            padding: 24px;
-            border-left: 3px solid var(--error);
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--smoke);
+            transition: all 0.2s;
         }
 
-        .barrier h4 {
-            color: var(--cloud);
-            font-size: 16px;
-            margin-bottom: 12px;
+        .category:hover {
+            border-color: var(--stone);
+            transform: translateY(-2px);
         }
 
-        .barrier p {
-            color: var(--stone);
+        .category-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .category h4 {
+            color: var(--white);
             font-size: 14px;
+            margin-bottom: 4px;
         }
+
+        .category p {
+            color: var(--stone);
+            font-size: 12px;
+        }
+
+        .category.blue .category-icon { color: var(--blue); }
+        .category.green .category-icon { color: var(--green); }
+        .category.pink .category-icon { color: var(--pink); }
+        .category.purple .category-icon { color: var(--purple); }
+        .category.orange .category-icon { color: var(--orange); }
 
         /* Solution */
         .solution {
@@ -262,11 +264,15 @@
             color: var(--teal);
             font-size: 20px;
             margin-bottom: 16px;
+            text-align: center;
         }
 
         .solution ul {
             list-style: none;
             margin-bottom: 24px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .solution li {
@@ -287,6 +293,7 @@
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .solution-badge {
@@ -405,7 +412,7 @@
             .tagline { font-size: 16px; }
             .trust-badges { flex-direction: column; gap: 8px; }
             .pillars { grid-template-columns: 1fr; }
-            .barriers { grid-template-columns: 1fr; }
+            .categories { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -413,11 +420,11 @@
     <header>
         <div class="container">
             <a href="/" class="logo">
-                <span class="logo-icon">></span>
-                SaneScript
+                <span class="logo-icon">🖱️</span>
+                SaneClick
             </a>
             <nav>
-                <a href="https://github.com/sane-apps/SaneScript">GitHub</a>
+                <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
                 <a href="https://github.com/sponsors/sane-apps">Sponsor</a>
             </nav>
         </div>
@@ -426,21 +433,21 @@
     <main>
         <section class="hero">
             <div class="container">
-                <div class="hero-icon">></div>
-                <h1>SaneScript</h1>
-                <p class="tagline">Custom scripts in your Finder right-click menu</p>
+                <div class="hero-icon">🖱️</div>
+                <h1>SaneClick</h1>
+                <p class="tagline">50+ ready-to-use actions for your Finder right-click menu</p>
 
                 <div class="trust-badges">
-                    <span class="trust-badge">🔒 No spying</span>
-                    <span class="trust-badge">💵 No subscription</span>
-                    <span class="trust-badge">🛠️ Actively maintained</span>
+                    <span class="trust-badge">🔒 100% local</span>
+                    <span class="trust-badge">💵 Free forever</span>
+                    <span class="trust-badge">⚡ One-click install</span>
                 </div>
 
                 <div class="cta-buttons">
-                    <a href="https://github.com/sane-apps/SaneScript/releases/latest" class="btn btn-primary">
+                    <a href="https://github.com/sane-apps/SaneClick/releases/latest" class="btn btn-primary">
                         ⬇ Download Free
                     </a>
-                    <a href="https://github.com/sane-apps/SaneScript" class="btn btn-secondary">
+                    <a href="https://github.com/sane-apps/SaneClick" class="btn btn-secondary">
                         View Source
                     </a>
                 </div>
@@ -449,35 +456,50 @@
 
         <section>
             <div class="container">
-                <div class="problem">
-                    <h3>⚠️ The Problem</h3>
-                    <p>Every time you right-click in Finder, you're stuck with Apple's limited context menu. Want to convert an image? Open in Terminal? Run a quick script? You have to leave Finder, open another app, navigate back to your file, and do it manually. Over and over.</p>
-                </div>
-
-                <div class="barriers">
-                    <div class="barrier">
-                        <h4>Barrier 1: DIY is Painful</h4>
-                        <p>macOS Services exist but require Automator knowledge. Folder Actions need AppleScript. Shell scripts mean Terminal commands. Most people give up before they start.</p>
+                <h2>Browse by Category</h2>
+                <div class="categories">
+                    <div class="category blue">
+                        <div class="category-icon">⭐</div>
+                        <h4>Essentials</h4>
+                        <p>10 scripts</p>
                     </div>
-                    <div class="barrier">
-                        <h4>Barrier 2: Alternatives Have Catches</h4>
-                        <p>The "easy" solutions cost $10-15, require subscriptions, or haven't been updated since 2019. Some are abandonware. Others are overkill for simple tasks.</p>
+                    <div class="category green">
+                        <div class="category-icon">📁</div>
+                        <h4>Files & Folders</h4>
+                        <p>8 scripts</p>
+                    </div>
+                    <div class="category pink">
+                        <div class="category-icon">🖼️</div>
+                        <h4>Images & Media</h4>
+                        <p>10 scripts</p>
+                    </div>
+                    <div class="category purple">
+                        <div class="category-icon">💻</div>
+                        <h4>Coding</h4>
+                        <p>11 scripts</p>
+                    </div>
+                    <div class="category orange">
+                        <div class="category-icon">🔧</div>
+                        <h4>Advanced</h4>
+                        <p>10 scripts</p>
                     </div>
                 </div>
 
                 <div class="solution">
-                    <h3>The Sane Solution</h3>
+                    <h3>Why SaneClick?</h3>
                     <ul>
-                        <li>Add any script to your right-click menu in seconds</li>
-                        <li>Run Bash, AppleScript, or Automator workflows</li>
-                        <li>Filter by file type - show scripts only for images, code, etc.</li>
-                        <li>Organize with categories, search instantly</li>
-                        <li>Test scripts before saving them</li>
+                        <li>Browse 50+ curated actions - no coding required</li>
+                        <li>Toggle actions on/off with one click</li>
+                        <li>Enable entire categories at once</li>
+                        <li>Write custom scripts if you want (optional)</li>
+                        <li>All actions run 100% locally on your Mac</li>
                     </ul>
                     <div class="solution-badges">
-                        <span class="solution-badge">100% Local</span>
-                        <span class="solution-badge">Free & Open Source</span>
-                        <span class="solution-badge">Native SwiftUI</span>
+                        <span class="solution-badge">Copy Paths</span>
+                        <span class="solution-badge">Open in Terminal</span>
+                        <span class="solution-badge">Convert Images</span>
+                        <span class="solution-badge">Show Hidden Files</span>
+                        <span class="solution-badge">And 46 more...</span>
                     </div>
                 </div>
             </div>
@@ -488,34 +510,34 @@
                 <h2>Features</h2>
                 <div class="features">
                     <div class="feature">
-                        <div class="feature-icon">📝</div>
-                        <h4>Three Script Types</h4>
-                        <p>Bash for shell commands, AppleScript for automation, Automator for workflows. Use what you know.</p>
+                        <div class="feature-icon">📚</div>
+                        <h4>Curated Library</h4>
+                        <p>50+ ready-to-use actions organized by category. No scripting knowledge needed.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🎚️</div>
+                        <h4>Simple Toggles</h4>
+                        <p>Enable or disable any action with a single toggle. Enable entire categories at once.</p>
                     </div>
                     <div class="feature">
                         <div class="feature-icon">🎯</div>
                         <h4>Smart Filtering</h4>
-                        <p>Scripts appear only for matching file types. Image scripts for images, code scripts for code.</p>
+                        <p>Actions appear only for matching file types. Image tools for images, code tools for code.</p>
                     </div>
                     <div class="feature">
-                        <div class="feature-icon">📁</div>
-                        <h4>Categories</h4>
-                        <p>Organize scripts into groups. Keep your menu clean and find what you need fast.</p>
+                        <div class="feature-icon">✏️</div>
+                        <h4>Custom Scripts</h4>
+                        <p>Power users can write Bash, AppleScript, or Automator workflows.</p>
                     </div>
                     <div class="feature">
-                        <div class="feature-icon">🧪</div>
-                        <h4>Test Before Save</h4>
-                        <p>Run your script on real files before committing. See output, catch errors early.</p>
+                        <div class="feature-icon">🔒</div>
+                        <h4>Privacy First</h4>
+                        <p>Everything runs locally. No cloud, no accounts, no data collection.</p>
                     </div>
                     <div class="feature">
-                        <div class="feature-icon">📤</div>
-                        <h4>Import & Export</h4>
-                        <p>Share scripts as JSON. Back them up. Sync across Macs manually or via cloud storage.</p>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon">⌨️</div>
-                        <h4>Keyboard Shortcuts</h4>
-                        <p>Navigate entirely with keyboard. Cmd+N for new script, Cmd+Shift+N for category.</p>
+                        <div class="feature-icon">🆓</div>
+                        <h4>Free & Open Source</h4>
+                        <p>MIT licensed. Use it, modify it, share it. No strings attached.</p>
                     </div>
                 </div>
             </div>
@@ -530,10 +552,9 @@
                     <div class="pillar">
                         <div class="pillar-icon">⚡</div>
                         <h4>Power</h4>
-                        <p>Your scripts, your device. No cloud dependency. No data leaves your Mac.</p>
+                        <p>Your actions, your device. No cloud dependency. No data leaves your Mac.</p>
                     </div>
                     <div class="pillar">
-                        <div class="pillar">
                         <div class="pillar-icon">❤️</div>
                         <h4>Love</h4>
                         <p>Built to serve you. No dark patterns, no upsells, no manipulation.</p>
@@ -553,7 +574,7 @@
             <p>Made with care by Mr. Sane</p>
             <p>Part of the <a href="https://saneapps.com">Sane Apps</a> family</p>
             <div class="footer-links">
-                <a href="https://github.com/sane-apps/SaneScript">GitHub</a>
+                <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
                 <a href="https://github.com/sponsors/sane-apps">Sponsor</a>
                 <a href="/privacy.html">Privacy</a>
             </div>
