@@ -20,9 +20,9 @@
             <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.0.2.dmg"
                        sparkle:version="102"
                        sparkle:shortVersionString="1.0.2"
-                       length="1421307"
+                       length="1543583"
                        type="application/x-apple-diskimage"
-                       sparkle:edSignature="E7ZG2AWg8CpY2kTi0YqtY7ELo+7DwlyDP66Pxyx5JT1asRlV5JWvdjCtYj6Zh+8JeKyg9edr5CwUlW3y+juTAw=="/>
+                       sparkle:edSignature="4MaodZ/WJJXs7y4PSxe+hrdDtaWUPOzGF9ZSfV+0Ut7IPSL0fDvjfufyvpSjwg0TPB3/uq4/BKAsMjOsYoVZAA=="/>
         </item>
         <item>
             <title>1.0.1</title>
