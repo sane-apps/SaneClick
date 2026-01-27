@@ -100,7 +100,7 @@ SaneScript/
 │   └── Info.plist           # Extension config
 ├── Tests/                   # Unit tests
 ├── Resources/               # Assets, entitlements
-├── docs/                    # GitHub Pages, appcast
+├── docs/                    # Cloudflare Pages, appcast
 ├── RESEARCH.md              # All research + state machine
 ├── project.yml              # XcodeGen config
 └── CLAUDE.md                # This file
