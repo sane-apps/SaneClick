@@ -110,10 +110,10 @@ targets:
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         LSApplicationCategoryType: "public.app-category.utilities"
-        SUFeedURL: "https://saneclick.com/appcast.xml"
+        SUFeedURL: "https://sanescript.com/appcast.xml"
         SUEnableSystemProfiling: false
         SUEnableAutomaticChecks: true
-        SUPublicEDKey: "Sr8JFxaVIJ0bZfR0lmVBdCYFb+13DyuPYjfy4ivQ7/g="
+        SUPublicEDKey: "7Pl/8cwfb2vm4Dm65AByslkMCScLJ9tbGlwGGx81qYU="
 
   SaneScriptExtension:
     type: app-extension

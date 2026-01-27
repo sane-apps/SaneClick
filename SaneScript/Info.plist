@@ -25,8 +25,8 @@
 	<key>SUEnableSystemProfiling</key>
 	<false/>
 	<key>SUFeedURL</key>
-	<string>https://saneclick.com/appcast.xml</string>
+	<string>https://sanescript.com/appcast.xml</string>
 	<key>SUPublicEDKey</key>
-	<string>Sr8JFxaVIJ0bZfR0lmVBdCYFb+13DyuPYjfy4ivQ7/g=</string>
+	<string>7Pl/8cwfb2vm4Dm65AByslkMCScLJ9tbGlwGGx81qYU=</string>
 </dict>
 </plist>
