@@ -25,9 +25,9 @@ final class ScriptStore: Sendable {
         guard let containerURL = containerURL else {
             // Fallback to regular app support
             let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-            let saneScriptDir = appSupport.appendingPathComponent("SaneClick", isDirectory: true)
-            try? FileManager.default.createDirectory(at: saneScriptDir, withIntermediateDirectories: true)
-            return saneScriptDir.appendingPathComponent("scripts.json")
+            let saneClickDir = appSupport.appendingPathComponent("SaneClick", isDirectory: true)
+            try? FileManager.default.createDirectory(at: saneClickDir, withIntermediateDirectories: true)
+            return saneClickDir.appendingPathComponent("scripts.json")
         }
         return containerURL.appendingPathComponent("scripts.json")
     }
@@ -35,9 +35,9 @@ final class ScriptStore: Sendable {
     private static var categoriesFileURL: URL {
         guard let containerURL = containerURL else {
             let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-            let saneScriptDir = appSupport.appendingPathComponent("SaneClick", isDirectory: true)
-            try? FileManager.default.createDirectory(at: saneScriptDir, withIntermediateDirectories: true)
-            return saneScriptDir.appendingPathComponent("categories.json")
+            let saneClickDir = appSupport.appendingPathComponent("SaneClick", isDirectory: true)
+            try? FileManager.default.createDirectory(at: saneClickDir, withIntermediateDirectories: true)
+            return saneClickDir.appendingPathComponent("categories.json")
         }
         return containerURL.appendingPathComponent("categories.json")
     }

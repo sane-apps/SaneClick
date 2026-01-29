@@ -4,5 +4,9 @@
 <dict>
     <key>com.apple.security.app-sandbox</key>
     <false/>
+    <key>com.apple.security.application-groups</key>
+    <array>
+        <string>M78L6FXD48.group.com.saneclick.app</string>
+    </array>
 </dict>
 </plist>
