@@ -9,19 +9,19 @@
 ## Security Model
 
 ### App Sandbox
-SaneScript uses a Finder Extension architecture:
+SaneClick uses a Finder Extension architecture:
 - Main app is sandboxed
 - Finder extension has limited entitlements
 - Scripts execute in user context (not elevated)
 
 ### Script Execution
-SaneScript runs user-defined scripts on files:
+SaneClick runs user-defined scripts on files:
 - Scripts run with the user's permissions
 - No elevated privileges are used
 - Scripts have access to files selected in Finder
 
 ### Code Signing
-- Signed with Developer ID: Stephan Joseph (M78L6FXD48)
+- Signed with Developer ID: MrSaneApps (M78L6FXD48)
 - Notarized by Apple
 - Hardened runtime enabled
 
@@ -65,8 +65,8 @@ Security researchers who report valid vulnerabilities will be:
 
 2. **Verify code signature**
    ```bash
-   codesign -dv --verbose=4 /Applications/SaneScript.app
-   # Should show: Developer ID Application: Stephan Joseph (M78L6FXD48)
+   codesign -dv --verbose=4 /Applications/SaneClick.app
+   # Should show: Developer ID Application: MrSaneApps (M78L6FXD48)
    ```
 
 3. **Keep the app updated**
@@ -80,7 +80,7 @@ Security researchers who report valid vulnerabilities will be:
 ## Known Security Considerations
 
 ### Script Execution Risks
-SaneScript executes user-defined scripts. A malicious script could:
+SaneClick executes user-defined scripts. A malicious script could:
 - Delete or modify files
 - Access sensitive data
 - Execute arbitrary commands

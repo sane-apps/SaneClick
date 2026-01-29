@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct SaneScriptApp: App {
+struct SaneClickApp: App {
     @State private var scriptStore = ScriptStore.shared
     @State private var showWelcome = OnboardingHelper.needsOnboarding
 

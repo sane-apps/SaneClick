@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import SaneScript
+@testable import SaneClick
 
 struct ExtensionStatusTests {
 

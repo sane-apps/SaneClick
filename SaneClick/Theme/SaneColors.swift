@@ -35,9 +35,9 @@ extension Color {
     /// Cloud - Primary text
     static let saneCloud = Color(red: 0.898, green: 0.898, blue: 0.898) // #e5e5e5
 
-    // MARK: - App Accent (SaneScript)
+    // MARK: - App Accent (SaneClick)
 
-    /// SaneScript accent - Terminal teal (matches brand teal)
+    /// SaneClick accent - Terminal teal (matches brand teal)
     static let saneAccent = Color(red: 0.373, green: 0.659, blue: 0.827) // #5fa8d3
 
     // MARK: - Semantic Colors

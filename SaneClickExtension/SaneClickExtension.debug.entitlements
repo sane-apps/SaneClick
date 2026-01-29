@@ -8,7 +8,7 @@
     <true/>
     <key>com.apple.security.application-groups</key>
     <array>
-        <string>M78L6FXD48.group.com.sanescript.app</string>
+        <string>M78L6FXD48.group.com.saneclick.app</string>
     </array>
 </dict>
 </plist>

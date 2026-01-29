@@ -4,7 +4,7 @@
         <title>SaneClick Changelog</title>
         <item>
             <title>1.0.2</title>
-            <pubDate>Sat, 25 Jan 2026 12:00:00 -0500</pubDate>
+            <pubDate>Thu, 29 Jan 2026 02:25:33 -0500</pubDate>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <description>
                 <![CDATA[
@@ -17,12 +17,12 @@
                 </ul>
                 ]]>
             </description>
-            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.0.2.dmg"
+            <enclosure url="https://dist.saneclick.com/SaneClick-1.0.2.dmg"
                        sparkle:version="102"
                        sparkle:shortVersionString="1.0.2"
-                       length="1543583"
+                       length="1548166"
                        type="application/x-apple-diskimage"
-                       sparkle:edSignature="4MaodZ/WJJXs7y4PSxe+hrdDtaWUPOzGF9ZSfV+0Ut7IPSL0fDvjfufyvpSjwg0TPB3/uq4/BKAsMjOsYoVZAA=="/>
+                       sparkle:edSignature="S7jw+x39FddrzDq8Csc07kVC0y069WsiN9PtJ5AoIIWGRPPG429yi9bBsRKsu+QFtD9SbOh80q8u76IO+vzjAQ=="/>
         </item>
         <item>
             <title>1.0.1</title>
@@ -40,7 +40,7 @@
                 </ul>
                 ]]>
             </description>
-            <enclosure url="https://dist.saneapps.com/updates/SaneScript-1.0.1.dmg"
+            <enclosure url="https://dist.saneapps.com/updates/SaneClick-1.0.1.dmg"
                        sparkle:version="101"
                        sparkle:shortVersionString="1.0.1"
                        length="1421307"

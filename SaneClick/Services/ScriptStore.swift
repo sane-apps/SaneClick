@@ -2,7 +2,7 @@ import Foundation
 import Observation
 import os.log
 
-private let storeLogger = Logger(subsystem: "com.sanescript.SaneScript", category: "ScriptStore")
+private let storeLogger = Logger(subsystem: "com.saneclick.SaneClick", category: "ScriptStore")
 
 /// Manages script configurations with file-based persistence
 @Observable
@@ -18,14 +18,14 @@ final class ScriptStore: Sendable {
 
     /// Shared file location via App Group container (accessible by both app and extension)
     private static var containerURL: URL? {
-        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.sanescript.app")
+        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.saneclick.app")
     }
 
     private static var scriptsFileURL: URL {
         guard let containerURL = containerURL else {
             // Fallback to regular app support
             let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-            let saneScriptDir = appSupport.appendingPathComponent("SaneScript", isDirectory: true)
+            let saneScriptDir = appSupport.appendingPathComponent("SaneClick", isDirectory: true)
             try? FileManager.default.createDirectory(at: saneScriptDir, withIntermediateDirectories: true)
             return saneScriptDir.appendingPathComponent("scripts.json")
         }
@@ -35,7 +35,7 @@ final class ScriptStore: Sendable {
     private static var categoriesFileURL: URL {
         guard let containerURL = containerURL else {
             let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-            let saneScriptDir = appSupport.appendingPathComponent("SaneScript", isDirectory: true)
+            let saneScriptDir = appSupport.appendingPathComponent("SaneClick", isDirectory: true)
             try? FileManager.default.createDirectory(at: saneScriptDir, withIntermediateDirectories: true)
             return saneScriptDir.appendingPathComponent("categories.json")
         }
@@ -220,7 +220,7 @@ final class ScriptStore: Sendable {
     private func notifyExtension() {
         // Notify the Finder Sync Extension that scripts have changed
         DistributedNotificationCenter.default().postNotificationName(
-            NSNotification.Name("com.sanescript.scriptsChanged"),
+            NSNotification.Name("com.saneclick.scriptsChanged"),
             object: nil,
             userInfo: nil,
             deliverImmediately: true

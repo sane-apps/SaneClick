@@ -1,7 +1,7 @@
 import SwiftUI
 import os.log
 
-private let logger = Logger(subsystem: "com.sanescript.SaneScript", category: "ContentView")
+private let logger = Logger(subsystem: "com.saneclick.SaneClick", category: "ContentView")
 
 /// Main view - sidebar with categories, detail with scripts
 /// Mirrors SaneHosts design: organized sections, clear primary action

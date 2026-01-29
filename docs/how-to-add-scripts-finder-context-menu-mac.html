@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Add Custom Scripts to Mac Right-Click Menu (Hard vs Easy Mode)</title>
+    <meta name="description" content="Learn how to run Bash, Python, or AppleScript files directly from the Finder context menu. A comparison of Automator Service vs SaneClick.">
+
+    <style>
+        :root {
+            --navy: #1a2744;
+            --deep-navy: #0d1525;
+            --teal: #5fa8d3;
+            --silver: #a8b4c4;
+            --void: #0a0a0a;
+            --carbon: #141414;
+            --smoke: #222222;
+            --stone: #888888;
+            --cloud: #e5e5e5;
+            --white: #ffffff;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--void);
+            color: var(--cloud);
+            line-height: 1.6;
+            font-size: 18px;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+
+        /* Header */
+        header { padding: 16px 0; border-bottom: 1px solid var(--smoke); margin-bottom: 60px; }
+        header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { color: var(--white); text-decoration: none; font-weight: 600; font-size: 18px; display: flex; align-items: center; gap: 8px;}
+        
+        article h1 { font-size: 42px; line-height: 1.2; color: var(--white); margin-bottom: 24px; }
+        article h2 { font-size: 28px; color: var(--white); margin: 48px 0 16px; border-bottom: 1px solid var(--smoke); padding-bottom: 8px;}
+        article p { margin-bottom: 24px; color: var(--silver); }
+        
+        /* Comparison Cards */
+        .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 40px 0; }
+        @media (max-width: 600px) { .comparison { grid-template-columns: 1fr; } }
+
+        .option-card {
+            background: var(--carbon);
+            border: 1px solid var(--smoke);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .option-card h3 { color: var(--white); margin-bottom: 16px; font-size: 20px; }
+        
+        .winner-card {
+            border-color: var(--teal);
+            background: linear-gradient(180deg, rgba(95, 168, 211, 0.1) 0%, var(--carbon) 100%);
+        }
+
+        .step-list { list-style: none; margin: 0; }
+        .step-list li {
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            font-size: 16px;
+            color: var(--silver);
+        }
+        
+        .icon { flex-shrink: 0; width: 24px; text-align: center; }
+        .icon-check { color: var(--success); }
+        .icon-x { color: var(--error); }
+        .icon-num { color: var(--stone); font-weight: bold; }
+
+        code {
+            background: var(--smoke);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: var(--teal);
+        }
+
+        .cta-box {
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--teal);
+            color: var(--void);
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: translateY(-1px); background: #7bb8dc; }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">SaneClick</a>
+            <a href="/guides.html" style="color: var(--silver); text-decoration: none;">Guides</a>
+        </div>
+    </header>
+
+    <article class="container">
+        <h1>How to Add Custom Scripts to Mac Right-Click Menu</h1>
+        <p>You have a shell script (`.sh`) or a Python script that you use constantly. Opening Terminal, navigating to the folder, and typing the command is tedious. You want to just <strong>right-click a file and run it</strong>.</p>
+
+        <p>Here are the two ways to do it on macOS: the "Hard Way" (Apple's built-in Automator) and the "Sane Way" (SaneClick).</p>
+
+        <div class="comparison">
+            <!-- Option 1 -->
+            <div class="option-card">
+                <h3>Option 1: The Hard Way (Automator)</h3>
+                <p>Free, built-in, but fragile and complex.</p>
+                <ul class="step-list">
+                    <li><span class="icon icon-num">1</span> <div>Open <strong>Automator</strong> app</div></li>
+                    <li><span class="icon icon-num">2</span> <div>Create a new "Quick Action"</div></li>
+                    <li><span class="icon icon-num">3</span> <div>Set "Workflow receives current" to "files or folders" in "Finder"</div></li>
+                    <li><span class="icon icon-num">4</span> <div>Drag in "Run Shell Script" action</div></li>
+                    <li><span class="icon icon-num">5</span> <div>Change "Pass input" to "as arguments"</div></li>
+                    <li><span class="icon icon-num">6</span> <div>Paste your script code (hope you handle spaces in filenames correctly!)</div></li>
+                    <li><span class="icon icon-num">7</span> <div>Save it with a specific name</div></li>
+                    <li><span class="icon icon-num">8</span> <div>Go to System Settings > Privacy > Extensions to enable it</div></li>
+                </ul>
+                <p style="margin-top: 16px; font-size: 14px; color: var(--stone);"><em>Result: A slow, buried menu item that often fails silently.</em></p>
+            </div>
+
+            <!-- Option 2 -->
+            <div class="option-card winner-card">
+                <h3>Option 3: The Sane Way (SaneClick)</h3>
+                <p>Fast, robust, designed for developers.</p>
+                <ul class="step-list">
+                    <li><span class="icon icon-check">✓</span> <div><strong>Click "+"</strong> and paste your script</div></li>
+                    <li><span class="icon icon-check">✓</span> <div><strong>Instant access</strong> in right-click menu</div></li>
+                    <li><span class="icon icon-check">✓</span> <div><strong>Smart filters:</strong> Only show for specific file types (e.g. .jpg, .ts)</div></li>
+                    <li><span class="icon icon-check">✓</span> <div><strong>Safe Execution:</strong> Handles file paths properly automatically</div></li>
+                    <li><span class="icon icon-check">✓</span> <div><strong>No Subscriptions:</strong> One-time $5 payment</div></li>
+                </ul>
+                <div class="cta-box">
+                    <a href="https://sane.lemonsqueezy.com/buy/saneclick" class="btn">Get SaneClick - $5</a>
+                </div>
+            </div>
+        </div>
+
+        <h2>Why Automator Fails for Power Users</h2>
+        <p>Automator is powerful, but it wasn't built for speed. "Quick Actions" are often slow to load, and debugging them is a nightmare. If your script fails, nothing happens. SaneClick gives you instant feedback and output logs.</p>
+
+        <h2>Conclusion</h2>
+        <p>If you have one script you use once a month, Automator is fine. If you live in your file system and want a fast, customized workflow, <strong>SaneClick</strong> is the tool you've been waiting for.</p>
+
+    </article>
+</body>
+</html>

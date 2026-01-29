@@ -1,4 +1,4 @@
-# SaneScript - Claude Code Instructions
+# SaneClick - Claude Code Instructions
 
 > Finder context menu customization for macOS
 
@@ -30,8 +30,8 @@
 
 | Path | Description |
 |------|-------------|
-| **This project** | `~/SaneApps/apps/SaneScript/` |
-| **Save outputs** | `~/SaneApps/apps/SaneScript/outputs/` |
+| **This project** | `~/SaneApps/apps/SaneClick/` |
+| **Save outputs** | `~/SaneApps/apps/SaneClick/outputs/` |
 | **Screenshots** | `~/Desktop/Screenshots/` (label with project prefix) |
 | **Research doc** | `RESEARCH.md` (single source of truth) |
 | **Shared UI** | `~/SaneApps/infra/SaneUI/` |
@@ -60,8 +60,8 @@ Set these at session start:
 
 ```
 mcp__XcodeBuildMCP__session-set-defaults:
-  projectPath: ~/SaneApps/apps/SaneScript/SaneScript.xcodeproj
-  scheme: SaneScript
+  projectPath: ~/SaneApps/apps/SaneClick/SaneClick.xcodeproj
+  scheme: SaneClick
   arch: arm64
 ```
 
@@ -76,10 +76,10 @@ Then use: `build_macos`, `test_macos`, `build_run_macos`
 xcodegen generate
 
 # Build
-xcodebuild -project SaneScript.xcodeproj -scheme SaneScript -configuration Debug build
+xcodebuild -project SaneClick.xcodeproj -scheme SaneClick -configuration Debug build
 
 # Run tests
-xcodebuild -project SaneScript.xcodeproj -scheme SaneScript test
+xcodebuild -project SaneClick.xcodeproj -scheme SaneClick test
 
 # Or use XcodeBuildMCP after setting defaults
 ```
@@ -89,13 +89,13 @@ xcodebuild -project SaneScript.xcodeproj -scheme SaneScript test
 ## Project Structure
 
 ```
-SaneScript/
-├── SaneScript/              # Host app (settings UI)
+SaneClick/
+├── SaneClick/              # Host app (settings UI)
 │   ├── App/                 # App entry, AppDelegate
 │   ├── Models/              # Script, Category models
 │   ├── Services/            # ScriptExecutor, ConfigStore
 │   └── Views/               # SwiftUI views
-├── SaneScriptExtension/     # Finder Sync Extension
+├── SaneClickExtension/     # Finder Sync Extension
 │   ├── FinderSync.swift     # FIFinderSync subclass
 │   └── Info.plist           # Extension config
 ├── Tests/                   # Unit tests
@@ -112,17 +112,17 @@ SaneScript/
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| FinderSync | SaneScriptExtension/ | Provides context menu items |
-| ScriptStore | SaneScript/Services/ | Manages script configs |
-| ScriptExecutor | SaneScript/Services/ | Runs scripts safely |
-| ContentView | SaneScript/Views/ | Main settings UI |
+| FinderSync | SaneClickExtension/ | Provides context menu items |
+| ScriptStore | SaneClick/Services/ | Manages script configs |
+| ScriptExecutor | SaneClick/Services/ | Runs scripts safely |
+| ContentView | SaneClick/Views/ | Main settings UI |
 
 ---
 
 ## Critical Implementation Notes
 
 1. **Extension bundle must be inside app bundle** - Build system handles this
-2. **App Group required** - `group.com.sanescript.app` for shared data
+2. **App Group required** - `group.com.saneclick.app` for shared data
 3. **User must enable extension** - System Settings > Privacy & Security > Extensions > Finder
 4. **Don't cache menus** - Rebuild `NSMenu` on each `menu(for:)` call
 5. **Script execution in host app** - Extension sends notification, app executes
@@ -134,7 +134,7 @@ SaneScript/
 Always update `RESEARCH.md` with findings. Before implementing:
 
 1. Check `RESEARCH.md` → API section
-2. Search memory MCP: `project: "SaneScript"`
+2. Search memory MCP: `project: "SaneClick"`
 3. Apple docs: `mcp__apple-docs__`
 4. GitHub: `mcp__github__search_code`
 5. Context7: `mcp__context7__query-docs`

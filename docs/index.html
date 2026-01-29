@@ -3,608 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaneClick - Supercharge Your Finder Right-Click Menu</title>
-    <meta name="description" content="50+ ready-to-use actions for your Finder right-click menu. Copy paths, open in Terminal, convert images, and more. $5 for macOS.">
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="SaneClick - Supercharge Your Finder Right-Click Menu">
-    <meta property="og:description" content="50+ ready-to-use actions. One click to add. 100% local. No subscription.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://saneclick.com">
+    <title>SaneClick - Bring Sanity to Your Mac's Right-Click Menu</title>
+    <meta name="description" content="Stop fighting Finder. Run scripts, convert files, and automate your Mac directly from the right-click menu. 50+ actions, 100% private.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --navy: #1a2744;
-            --deep-navy: #0d1525;
-            --teal: #5fa8d3;
-            --silver: #a8b4c4;
-            --void: #0a0a0a;
-            --carbon: #141414;
-            --smoke: #222222;
-            --stone: #888888;
-            --cloud: #e5e5e5;
-            --white: #ffffff;
-            --success: #22c55e;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            /* Category colors */
-            --blue: #3b82f6;
-            --green: #22c55e;
-            --pink: #ec4899;
-            --purple: #a855f7;
-            --orange: #f97316;
+            --bg-primary: #08080c;
+            --bg-secondary: #0f0f16;
+            --bg-card: #16161f;
+            --accent: #4f8ffa;
+            --accent-soft: #4a90b5;
+            --accent-glow: rgba(95, 168, 211, 0.25);
+            --accent-subtle: rgba(95, 168, 211, 0.08);
+            --text-primary: #f5f5f8;
+            --text-secondary: #c0c0d0;
+            --text-muted: #a0a0b0;
+            --success: #34d399;
+            --success-soft: rgba(52, 211, 153, 0.15);
+            --border: #252530;
+            --border-subtle: #1e1e28;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
-            background: var(--void);
-            color: var(--cloud);
-            line-height: 1.6;
-            font-size: 16px;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 24px;
+        .gradient-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 15% 10%, rgba(95, 168, 211, 0.12) 0%, transparent 45%),
+                        radial-gradient(ellipse at 85% 90%, rgba(52, 211, 153, 0.06) 0%, transparent 45%),
+                        var(--bg-primary);
+            z-index: -1;
         }
 
-        /* Header */
-        header {
-            padding: 16px 0;
-            border-bottom: 1px solid var(--smoke);
-        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
-        header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 18px;
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--navy), var(--deep-navy));
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--teal);
-            font-size: 16px;
-        }
-
+        /* Navigation */
         nav {
-            display: flex;
-            gap: 24px;
+            padding: 20px 0; position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(20px);
+            z-index: 100; border-bottom: 1px solid var(--border);
         }
-
-        nav a {
-            color: var(--silver);
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        nav a:hover {
-            color: var(--teal);
-        }
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 1.25rem; text-decoration: none; color: var(--text-primary); }
+        .logo img { width: 32px; height: 32px; border-radius: 8px; }
+        .logo-family { font-size: 0.85rem; color: var(--text-muted); font-weight: 400; margin-left: 12px; padding-left: 12px; border-left: 1px solid var(--border); text-decoration: none; }
+        
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; }
+        .nav-links a:hover { color: var(--text-primary); }
 
         /* Hero */
-        .hero {
-            padding: 80px 0 60px;
-            text-align: center;
+        .hero.container { padding: 220px 24px 100px !important; text-align: center; }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.75rem, 7vw, 4.5rem); font-weight: 600; margin-bottom: 24px; letter-spacing: -0.03em; line-height: 1.1; }
+        .hero h1 em { font-style: italic; color: var(--accent); }
+        .hero .subtitle { font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 48px; }
+
+        .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+        .btn { padding: 16px 32px; border-radius: 14px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 10px; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%); color: white; box-shadow: 0 4px 24px var(--accent-glow); padding: 18px 48px; font-size: 1.1rem; }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 40px var(--accent-glow); }
+        
+        .trust-badges { display: flex; gap: 24px; justify-content: center; color: var(--text-muted); font-size: 1.1rem; margin-bottom: 60px; }
+
+        /* Interactive Demo */
+        .demo-box {
+            max-width: 600px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 24px; padding: 80px 40px; position: relative; cursor: pointer;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .demo-box:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+        .file-icon { 
+            width: 120px; height: 140px; 
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); 
+            border-radius: 12px; margin: 0 auto; position: relative;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px;
+        }
+        .file-icon::before {
+            content: ''; position: absolute; top: 0; right: 0; 
+            width: 40px; height: 40px; background: rgba(255,255,255,0.3);
+            clip-path: polygon(0 0, 0% 100%, 100% 100%);
+            border-radius: 0 0 0 8px;
+        }
+        .file-icon::after {
+            content: '📸'; position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 40px; opacity: 0.8;
         }
 
-        .hero-icon {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, var(--navy), var(--deep-navy));
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 32px;
-            font-size: 56px;
-            color: var(--teal);
-            box-shadow: 0 0 60px rgba(95, 168, 211, 0.2);
+        .file-label {
+            background: rgba(0,0,0,0.3); padding: 6px 14px; border-radius: 6px;
+            font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: bold; color: #fff;
+            backdrop-filter: blur(4px); border: 0.5px solid rgba(255,255,255,0.2);
         }
-
-        h1 {
-            font-size: 48px;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 16px;
+        
+        .mock-menu {
+            position: absolute; top: 60px; left: 55%; background: rgba(30, 30, 32, 0.98); 
+            backdrop-filter: blur(20px); border-radius: 12px;
+            width: 260px; box-shadow: 0 25px 60px rgba(0,0,0,0.7); border: 0.5px solid rgba(255,255,255,0.15);
+            padding: 8px; display: none; z-index: 10; opacity: 0; transform: translateY(-10px); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        .mock-menu.active { display: block; opacity: 1; transform: translateY(0); }
+        .menu-item { padding: 10px 14px; font-size: 14px; color: #fff; display: flex; align-items: center; justify-content: space-between; border-radius: 8px; transition: background 0.1s; }
+        .menu-item:hover { background: #007aff; }
+        .menu-sep { height: 1px; background: rgba(255,255,255,0.1); margin: 8px 6px; }
+        .menu-item.sane { color: var(--accent); font-weight: 600; }
+        .menu-item .shortcut { opacity: 0.4; font-size: 12px; font-weight: 400; }
 
-        .tagline {
-            font-size: 20px;
-            color: var(--silver);
-            margin-bottom: 24px;
+        /* Comparison */
+        .comparison { padding: 100px 0; }
+        .comparison-table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+        .comparison-table th, .comparison-table td { padding: 20px; text-align: center; border-bottom: 1px solid var(--border); }
+        .highlight-col { background: rgba(95, 168, 211, 0.05); color: var(--accent); }
+        .check { color: var(--success); font-weight: bold; }
+
+        /* Philosophy Section */
+        .philosophy { padding: 80px 0; text-align: center; border-top: 1px solid var(--border-subtle); }
+        .philosophy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 32px; margin-top: 40px; }
+        .philosophy-card { background: var(--bg-card); padding: 32px; border-radius: 20px; border: 1px solid var(--border-subtle); }
+        .emoji { font-size: 2.5rem; display: block; margin-bottom: 16px; }
+
+        /* Sustainability Card */
+        .sustainability { padding: 80px 0; }
+        .sustainability-card {
+            background: linear-gradient(160deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            border: 1px solid var(--border-subtle); border-radius: 28px; padding: 60px;
+            max-width: 800px; margin: 0 auto; position: relative; text-align: center;
         }
-
-        /* Trust Badges */
-        .trust-badges {
-            display: flex;
-            gap: 24px;
-            justify-content: center;
-            margin-bottom: 32px;
-            font-size: 14px;
-            color: var(--stone);
+        .sustainability-options { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
+        .sustainability-option { 
+            text-align: left; border: 1px solid var(--border); padding: 24px; border-radius: 16px; 
+            text-decoration: none; color: inherit; transition: all 0.3s;
         }
+        .sustainability-option:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .sustainability-option.featured { background: var(--accent-subtle); border-color: var(--accent); }
+        .sustainability-option h4 { font-size: 1rem; margin-bottom: 8px; color: var(--text-primary); }
+        .sustainability-option p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
 
-        .trust-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        footer { padding: 60px 0; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); }
+        footer a { color: var(--accent); text-decoration: none; }
 
-        /* CTA Buttons */
-        .cta-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 14px 28px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: var(--teal);
-            color: var(--void);
-        }
-
-        .btn-primary:hover {
-            background: #7bb8dc;
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background: var(--carbon);
-            color: var(--cloud);
-            border: 1px solid var(--smoke);
-        }
-
-        .btn-secondary:hover {
-            background: var(--smoke);
-            border-color: var(--stone);
-        }
-
-        /* Sections */
-        section {
-            padding: 60px 0;
-        }
-
-        h2 {
-            font-size: 28px;
-            font-weight: 600;
-            color: var(--white);
-            margin-bottom: 24px;
-            text-align: center;
-        }
-
-        /* Categories */
-        .categories {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 16px;
-            margin-bottom: 40px;
-        }
-
-        .category {
-            background: var(--carbon);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid var(--smoke);
-            transition: all 0.2s;
-        }
-
-        .category:hover {
-            border-color: var(--stone);
-            transform: translateY(-2px);
-        }
-
-        .category-icon {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        .category h4 {
-            color: var(--white);
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-
-        .category p {
-            color: var(--stone);
-            font-size: 12px;
-        }
-
-        .category.blue .category-icon { color: var(--blue); }
-        .category.green .category-icon { color: var(--green); }
-        .category.pink .category-icon { color: var(--pink); }
-        .category.purple .category-icon { color: var(--purple); }
-        .category.orange .category-icon { color: var(--orange); }
-
-        /* Solution */
-        .solution {
-            background: linear-gradient(135deg, var(--navy), var(--deep-navy));
-            border-radius: 16px;
-            padding: 40px;
-            margin-bottom: 40px;
-            border: 1px solid var(--teal);
-        }
-
-        .solution h3 {
-            color: var(--teal);
-            font-size: 20px;
-            margin-bottom: 16px;
-            text-align: center;
-        }
-
-        .solution ul {
-            list-style: none;
-            margin-bottom: 24px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .solution li {
-            padding: 8px 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--cloud);
-        }
-
-        .solution li::before {
-            content: "✓";
-            color: var(--success);
-            font-weight: bold;
-        }
-
-        .solution-badges {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .solution-badge {
-            background: rgba(95, 168, 211, 0.1);
-            color: var(--teal);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-
-        /* Features */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
-        }
-
-        .feature {
-            background: var(--carbon);
-            border-radius: 12px;
-            padding: 24px;
-        }
-
-        .feature-icon {
-            font-size: 32px;
-            margin-bottom: 16px;
-        }
-
-        .feature h4 {
-            color: var(--white);
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-
-        .feature p {
-            color: var(--stone);
-            font-size: 14px;
-        }
-
-        /* Promise */
-        .promise {
-            text-align: center;
-            padding: 60px 0;
-        }
-
-        .promise blockquote {
-            font-style: italic;
-            color: var(--silver);
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-
-        .promise cite {
-            color: var(--stone);
-            font-size: 14px;
-        }
-
-        .pillars {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-top: 40px;
-        }
-
-        .pillar {
-            text-align: center;
-        }
-
-        .pillar-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-
-        .pillar h4 {
-            color: var(--white);
-            font-size: 16px;
-            margin-bottom: 8px;
-        }
-
-        .pillar p {
-            color: var(--stone);
-            font-size: 14px;
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid var(--smoke);
-            padding: 40px 0;
-            text-align: center;
-        }
-
-        footer p {
-            color: var(--stone);
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        footer a {
-            color: var(--teal);
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-            justify-content: center;
-            margin-top: 16px;
-        }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 32px; }
-            .tagline { font-size: 16px; }
-            .trust-badges { flex-direction: column; gap: 8px; }
-            .pillars { grid-template-columns: 1fr; }
-            .categories { grid-template-columns: repeat(2, 1fr); }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero { padding-top: 120px; }
+            .mock-menu { left: 5%; width: 90%; }
+            .sustainability-options { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <header>
+    <div class="gradient-bg"></div>
+
+    <nav>
         <div class="container">
             <a href="/" class="logo">
-                <img src="images/icon.png" alt="SaneClick" class="logo-icon" style="width: 32px; height: 32px; border-radius: 6px;">
+                <img src="images/icon.png" alt="SaneClick">
                 SaneClick
             </a>
-            <nav>
-                <a href="https://saneapps.com">Sane Apps</a>
+            <a href="https://saneapps.com" class="logo-family">Part of the SaneApps family</a>
+            <div class="nav-links">
+                <a href="/guides.html">Guides</a>
+                <a href="#features">Features</a>
                 <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
-                <a href="https://sane.lemonsqueezy.com/buy/saneclick" style="color: var(--teal); font-weight: 500;">Buy $5</a>
-            </nav>
+                <a href="#" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem;">Buy $5</a>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <main>
-        <section class="hero">
-            <div class="container">
-                <div class="hero-icon"><img src="images/icon.png" alt="SaneClick" style="width: 120px; height: 120px; border-radius: 24px;"></div>
-                <h1>SaneClick</h1>
-                <p class="tagline">50+ ready-to-use actions for your Finder right-click menu</p>
+    <section class="hero">
+        <div class="container">
+            <h1 class="animate-in">Bring <em>Sanity</em> to your Right-Click</h1>
+            <p class="subtitle animate-in">Stop fighting Finder. Run scripts, convert files, and automate your Mac—directly from the menu.</p>
+            
+            <div class="cta-buttons animate-in">
+                <a href="#" class="btn btn-primary">Coming Soon</a>
+            </div>
 
-                <div class="trust-badges">
-                    <span class="trust-badge">🔒 No spying</span>
-                    <span class="trust-badge">💵 No subscription</span>
-                    <span class="trust-badge">🛠️ Actively maintained</span>
+            <div class="trust-badges animate-in">
+                <span>🔒 No Spying</span>
+                <span>💵 No Subscription</span>
+                <span>🛠️ Actively Maintained</span>
+            </div>
+
+            <div class="demo-box animate-in" onclick="toggleMenu()">
+                <div class="file-icon">
+                    <span class="file-label">DESIGN_FINAL.PNG</span>
                 </div>
+                <p style="margin-top: 32px; color: var(--text-muted); font-size: 1rem; font-weight: 500;">Click the design asset to see SaneClick in action</p>
+                
+                <div class="mock-menu" id="mockMenu">
+                    <div class="menu-item">Open <span class="shortcut">⌘O</span></div>
+                    <div class="menu-item">Move to Trash <span class="shortcut">⌘⌫</span></div>
+                    <div class="menu-sep"></div>
+                    <div class="menu-item sane"><span>⚡ Open in Terminal</span></div>
+                    <div class="menu-item sane"><span>💻 Open in VS Code</span></div>
+                    <div class="menu-sep"></div>
+                    <div class="menu-item sane"><span>🖼️ Resize Image (800px)</span></div>
+                    <div class="menu-item sane"><span>🔄 Convert to WebP</span></div>
+                    <div class="menu-sep"></div>
+                    <div class="menu-item sane"><span>📝 Copy as Markdown Link</span></div>
+                    <div class="menu-item sane"><span>☁️ Upload to Cloudflare R2</span></div>
+                    <div class="menu-sep"></div>
+                    <div class="menu-item sane"><span>🛠️ Run Custom Script...</span></div>
+                    <div class="menu-sep"></div>
+                    <div class="menu-item">Get Info <span class="shortcut">⌘I</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                <div class="cta-buttons">
-                    <a href="https://sane.lemonsqueezy.com/buy/saneclick" class="btn btn-primary">
-                        🛒 Buy DMG — $5
+    <section class="comparison" id="features">
+        <div class="container">
+            <h2 style="text-align:center; font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 40px;">The Sane Way to Automate</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th class="highlight-col">SaneClick</th>
+                        <th>Automator</th>
+                        <th>Shortcuts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Setup Speed</td>
+                        <td class="highlight-col">Instant</td>
+                        <td>Very Slow</td>
+                        <td>Slow</td>
+                    </tr>
+                    <tr>
+                        <td>50+ Pre-built Actions</td>
+                        <td class="highlight-col"><span class="check">✓</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                    </tr>
+                    <tr>
+                        <td>Smart File Filtering</td>
+                        <td class="highlight-col"><span class="check">✓</span></td>
+                        <td>Limited</td>
+                        <td>Limited</td>
+                    </tr>
+                    <tr>
+                        <td>Custom Bash/Python</td>
+                        <td class="highlight-col"><span class="check">✓</span></td>
+                        <td>Complex</td>
+                        <td>Hidden</td>
+                    </tr>
+                    <tr>
+                        <td>Privacy (Local Only)</td>
+                        <td class="highlight-col"><span class="check">✓</span></td>
+                        <td><span class="check">✓</span></td>
+                        <td>Cloud-tied</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="philosophy">
+        <div class="container">
+            <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem;">Built for a Sound Mind</h2>
+            <p style="font-style: italic; color: var(--text-muted); margin-top: 10px;">"For God has not given us a spirit of fear, but of power and of love and of a sound mind." — 2 Timothy 1:7</p>
+            <div class="philosophy-grid">
+                <div class="philosophy-card">
+                    <span class="emoji">⚡</span>
+                    <h3>Power</h3>
+                    <p>Execute complex scripts with one click. No Terminal required.</p>
+                </div>
+                <div class="philosophy-card">
+                    <span class="emoji">❤️</span>
+                    <h3>Love</h3>
+                    <p>Designed to be useful, not to extract data. Your privacy is our priority.</p>
+                </div>
+                <div class="philosophy-card">
+                    <span class="emoji">🧠</span>
+                    <h3>Sound Mind</h3>
+                    <p>Clean up your workflow. Focus on the task, not the tool.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="sustainability">
+        <div class="container">
+            <div class="sustainability-card">
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 2.25rem; margin-bottom: 20px;">Open Source ≠ Free</h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 30px;">"Free" software usually leads to developer burnout or sold data. SaneClick is sustainable: open source code, but a $5 DMG to support development.</p>
+                <div class="sustainability-options">
+                    <a href="https://github.com/sane-apps/SaneClick" class="sustainability-option">
+                        <h4>Build It Yourself</h4>
+                        <p>Clone the repo. MIT Licensed. Build from source for free.</p>
                     </a>
-                    <a href="https://github.com/sane-apps/SaneClick" class="btn btn-secondary">
-                        🔧 Build from Source (Free)
+                    <a href="#" class="sustainability-option featured">
+                        <h4>Buy the DMG — $5</h4>
+                        <p>Get a signed, notarized, ready-to-use DMG and support development.</p>
                     </a>
                 </div>
-                <p style="margin-top: 16px; font-size: 14px; color: var(--stone);">
-                    Open source. $5 supports sustainable development.<br>
-                    <a href="https://github.com/sponsors/stephanjoseph" style="color: var(--teal);">GitHub Sponsors</a> · <a href="#crypto" style="color: var(--teal);">Crypto</a>
-                </p>
             </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <h2>Browse by Category</h2>
-                <div class="categories">
-                    <div class="category blue">
-                        <div class="category-icon">⭐</div>
-                        <h4>Essentials</h4>
-                        <p>10 scripts</p>
-                    </div>
-                    <div class="category green">
-                        <div class="category-icon">📁</div>
-                        <h4>Files & Folders</h4>
-                        <p>8 scripts</p>
-                    </div>
-                    <div class="category pink">
-                        <div class="category-icon">🖼️</div>
-                        <h4>Images & Media</h4>
-                        <p>10 scripts</p>
-                    </div>
-                    <div class="category purple">
-                        <div class="category-icon">💻</div>
-                        <h4>Coding</h4>
-                        <p>11 scripts</p>
-                    </div>
-                    <div class="category orange">
-                        <div class="category-icon">🔧</div>
-                        <h4>Advanced</h4>
-                        <p>10 scripts</p>
-                    </div>
-                </div>
-
-                <div class="solution">
-                    <h3>Why SaneClick?</h3>
-                    <ul>
-                        <li>Browse 50+ curated actions - no coding required</li>
-                        <li>Toggle actions on/off with one click</li>
-                        <li>Enable entire categories at once</li>
-                        <li>Write custom scripts if you want (optional)</li>
-                        <li>All actions run 100% locally on your Mac</li>
-                    </ul>
-                    <div class="solution-badges">
-                        <span class="solution-badge">Copy Paths</span>
-                        <span class="solution-badge">Open in Terminal</span>
-                        <span class="solution-badge">Convert Images</span>
-                        <span class="solution-badge">Show Hidden Files</span>
-                        <span class="solution-badge">And 46 more...</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <h2>Features</h2>
-                <div class="features">
-                    <div class="feature">
-                        <div class="feature-icon">📚</div>
-                        <h4>Curated Library</h4>
-                        <p>50+ ready-to-use actions organized by category. No scripting knowledge needed.</p>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon">🎚️</div>
-                        <h4>Simple Toggles</h4>
-                        <p>Enable or disable any action with a single toggle. Enable entire categories at once.</p>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon">🎯</div>
-                        <h4>Smart Filtering</h4>
-                        <p>Actions appear only for matching file types. Image tools for images, code tools for code.</p>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon">✏️</div>
-                        <h4>Custom Scripts</h4>
-                        <p>Power users can write Bash, AppleScript, or Automator workflows.</p>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon">🔒</div>
-                        <h4>Privacy First</h4>
-                        <p>Everything runs locally. No cloud, no accounts, no data collection.</p>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon">💚</div>
-                        <h4>Open Source</h4>
-                        <p>MIT licensed. Build from source free, or buy the DMG to support sustainable open source.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="promise">
-            <div class="container">
-                <blockquote>"For God has not given us a spirit of fear, but of power and of love and of a sound mind."</blockquote>
-                <cite>— 2 Timothy 1:7</cite>
-
-                <div class="pillars">
-                    <div class="pillar">
-                        <div class="pillar-icon">⚡</div>
-                        <h4>Power</h4>
-                        <p>Your actions, your device. No cloud dependency. No data leaves your Mac.</p>
-                    </div>
-                    <div class="pillar">
-                        <div class="pillar-icon">❤️</div>
-                        <h4>Love</h4>
-                        <p>Built to serve you. No dark patterns, no upsells, no manipulation.</p>
-                    </div>
-                    <div class="pillar">
-                        <div class="pillar-icon">🧠</div>
-                        <h4>Sound Mind</h4>
-                        <p>Calm, focused design. Does one thing well. No feature bloat.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
     <footer>
         <div class="container">
-            <p>Made with care by Mr. Sane</p>
-            <p>Part of the <a href="https://saneapps.com">Sane Apps</a> family</p>
-            <div class="footer-links">
-                <a href="https://sane.lemonsqueezy.com/buy/saneclick">Buy $5</a>
+            <p>Made with care by Mr. Sane &bull; Part of the <a href="https://saneapps.com">SaneApps</a> family</p>
+            <div style="margin-top: 20px; display: flex; gap: 20px; justify-content: center;">
+                <a href="/guides.html">Guides</a>
                 <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
-                <a href="https://github.com/sponsors/stephanjoseph">Sponsor</a>
                 <a href="/privacy.html">Privacy</a>
             </div>
-
-            <div id="crypto" style="margin-top: 32px; padding: 24px; background: var(--carbon); border-radius: 12px; max-width: 500px; margin-left: auto; margin-right: auto;">
-                <p style="margin-bottom: 16px; color: var(--silver);">Prefer crypto?</p>
-                <div style="display: flex; flex-direction: column; gap: 8px; font-family: monospace; font-size: 12px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span style="color: #F7931A;">BTC</span>
-                        <code style="background: var(--smoke); padding: 4px 8px; border-radius: 4px; color: var(--cloud);">3Go9nJu3dj2qaa4EAYXrTsTf5AnhcrPQke</code>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span style="color: #9945FF;">SOL</span>
-                        <code style="background: var(--smoke); padding: 4px 8px; border-radius: 4px; color: var(--cloud);">FBvU83GUmwEYk3HMwZh3GBorGvrVVWSPb8VLCKeLiWZZ</code>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span style="color: #F4B728;">ZEC</span>
-                        <code style="background: var(--smoke); padding: 4px 8px; border-radius: 4px; color: var(--cloud);">t1PaQ7LSoRDVvXLaQTWmy5tKUAiKxuE9hBN</code>
-                    </div>
-                </div>
-            </div>
-
-            <p style="margin-top: 24px; font-style: italic; color: var(--stone);">"The worker is worthy of his wages." — 1 Timothy 5:18</p>
+            <p style="font-size: 0.8rem; margin-top: 20px;">&copy; 2026 SaneClick. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mockMenu');
+            menu.classList.toggle('active');
+        }
+        window.onclick = function(event) {
+            if (!event.target.closest('.demo-box')) {
+                document.getElementById('mockMenu').classList.remove('active');
+            }
+        }
+    </script>
 </body>
 </html>

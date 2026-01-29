@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaneClick Guides - Master Your macOS Context Menu</title>
+    <meta name="description" content="Tutorials and guides for customizing the Finder context menu on macOS. Learn how to add scripts, automator workflows, and more.">
+
+    <style>
+        :root {
+            --navy: #1a2744;
+            --deep-navy: #0d1525;
+            --teal: #5fa8d3;
+            --silver: #a8b4c4;
+            --void: #0a0a0a;
+            --carbon: #141414;
+            --smoke: #222222;
+            --stone: #888888;
+            --cloud: #e5e5e5;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--void);
+            color: var(--cloud);
+            line-height: 1.6;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+        header { padding: 16px 0; border-bottom: 1px solid var(--smoke); }
+        header .container { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo {
+            display: flex; align-items: center; gap: 12px;
+            color: var(--white); text-decoration: none; font-weight: 600; font-size: 18px;
+        }
+        .logo-icon {
+            width: 32px; height: 32px; background: linear-gradient(135deg, var(--navy), var(--deep-navy));
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            color: var(--teal); font-size: 16px;
+        }
+
+        nav { display: flex; gap: 24px; }
+        nav a { color: var(--silver); text-decoration: none; font-size: 14px; }
+        nav a:hover { color: var(--teal); }
+
+        header.header { padding: 220px 24px 80px !important; text-align: center; }
+        h1 { font-size: 40px; color: var(--white); margin-bottom: 16px; }
+        .tagline { color: var(--silver); font-size: 18px; margin-bottom: 40px; }
+
+        .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 80px;
+        }
+
+        .guide-card {
+            background: var(--carbon);
+            border: 1px solid var(--smoke);
+            border-radius: 12px;
+            padding: 24px;
+            text-decoration: none;
+            color: var(--cloud);
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .guide-card:hover {
+            border-color: var(--teal);
+            transform: translateY(-2px);
+        }
+
+        .guide-title {
+            color: var(--white);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .guide-desc {
+            color: var(--stone);
+            font-size: 14px;
+            flex-grow: 1;
+        }
+
+        .read-more {
+            margin-top: 16px;
+            color: var(--teal);
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        footer { border-top: 1px solid var(--smoke); padding: 40px 0; text-align: center; color: var(--stone); font-size: 14px; }
+        footer a { color: var(--teal); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">
+                <div class="logo-icon">S</div>
+                SaneClick
+            </a>
+            <nav>
+                <a href="/">Home</a>
+                <a href="https://sane.lemonsqueezy.com/buy/saneclick" style="color: var(--teal);">Buy $5</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Guides & Tutorials</h1>
+            <p class="tagline">Learn how to customize your Mac without the complexity.</p>
+        </section>
+
+        <div class="guides-grid">
+            <a href="how-to-add-scripts-finder-context-menu-mac.html" class="guide-card">
+                <div class="guide-title">How to Add Custom Scripts to Mac Right-Click Menu</div>
+                <div class="guide-desc">Stop opening Terminal. Run your scripts directly from Finder. We compare Automator (Hard) vs SaneClick (Easy).</div>
+                <div class="read-more">Read Guide →</div>
+            </a>
+            <!-- Add more guides here -->
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Part of the <a href="https://saneapps.com">Sane Apps</a> family.</p>
+        </div>
+    </footer>
+</body>
+</html>

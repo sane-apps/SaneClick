@@ -21,9 +21,9 @@
 | #7904 | 8:09 AM | ✅ | Download Link Changed to Custom Distribution CDN | ~389 |
 | #7897 | 8:06 AM | ✅ | GitHub Pages CNAME Updated to saneclick.com Domain | ~389 |
 | #7896 | " | 🔵 | CNAME File Points to Old script.saneapps.com Domain | ~269 |
-| #7894 | " | ✅ | Website Rebranded from SaneScript to SaneClick with Library-First Messaging | ~507 |
+| #7894 | " | ✅ | Website Rebranded from SaneClick to SaneClick with Library-First Messaging | ~507 |
 | #7893 | 7:50 AM | ✅ | Privacy Policy Updated with SaneClick Rebrand | ~362 |
 | #7892 | " | 🔵 | Privacy Policy Emphasizes Zero Data Collection and Local-Only Operation | ~518 |
 | #7891 | 7:49 AM | 🟣 | Complete Marketing Website Created for SaneClick Launch | ~715 |
-| #7890 | " | 🔵 | Existing Marketing Website for SaneScript at script.saneapps.com | ~580 |
+| #7890 | " | 🔵 | Existing Marketing Website for SaneClick at script.saneapps.com | ~580 |
 </claude-mem-context>

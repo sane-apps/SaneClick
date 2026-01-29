@@ -1,6 +1,6 @@
 //
 //  FinderSync.swift
-//  SaneScriptExtension
+//  SaneClickExtension
 //
 //  Finder Sync Extension for SaneClick
 //
@@ -29,9 +29,9 @@ class FinderSync: FIFinderSync {
     private var currentScripts: [ExtensionScript] = []
 
     private var scriptsFileURL: URL {
-        guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.sanescript.app") else {
+        guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.saneclick.app") else {
             let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-            return appSupport.appendingPathComponent("SaneScript/scripts.json")
+            return appSupport.appendingPathComponent("SaneClick/scripts.json")
         }
         return containerURL.appendingPathComponent("scripts.json")
     }
@@ -60,7 +60,7 @@ class FinderSync: FIFinderSync {
         DistributedNotificationCenter.default().addObserver(
             self,
             selector: #selector(scriptsDidChange),
-            name: NSNotification.Name("com.sanescript.scriptsChanged"),
+            name: NSNotification.Name("com.saneclick.scriptsChanged"),
             object: nil
         )
     }
@@ -74,7 +74,7 @@ class FinderSync: FIFinderSync {
     // MARK: - Context Menu
 
     override func menu(for menuKind: FIMenuKind) -> NSMenu {
-        let menu = NSMenu(title: "SaneScript")
+        let menu = NSMenu(title: "SaneClick")
 
         let scripts = loadScripts()
         let selectedURLs = FIFinderSyncController.default().selectedItemURLs() ?? []
@@ -132,7 +132,7 @@ class FinderSync: FIFinderSync {
         let paths = items.map { $0.path }
 
         guard let containerURL = FileManager.default.containerURL(
-            forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.sanescript.app"
+            forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.saneclick.app"
         ) else { return }
 
         let pendingURL = containerURL.appendingPathComponent("pending_execution.json")
@@ -146,7 +146,7 @@ class FinderSync: FIFinderSync {
         }
 
         DistributedNotificationCenter.default().postNotificationName(
-            NSNotification.Name("com.sanescript.executeScript"),
+            NSNotification.Name("com.saneclick.executeScript"),
             object: nil,
             userInfo: nil,
             deliverImmediately: true
@@ -160,7 +160,7 @@ class FinderSync: FIFinderSync {
     }
 
     private func launchHostApp() {
-        if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.sanescript.SaneScript") {
+        if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.saneclick.SaneClick") {
             NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration())
         }
     }

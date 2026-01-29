@@ -2,7 +2,7 @@
 
 **Last updated: January 19, 2026**
 
-SaneScript is designed with privacy as a core principle. This document explains how the app handles your data.
+SaneClick is designed with privacy as a core principle. This document explains how the app handles your data.
 
 ## Our Philosophy
 
@@ -32,12 +32,12 @@ SaneScript is designed with privacy as a core principle. This document explains 
 
 ## Third-Party Services
 
-SaneScript uses no third-party services, SDKs, or analytics.
+SaneClick uses no third-party services, SDKs, or analytics.
 
 ## Auto-Updates
 
-When enabled, SaneScript checks for updates via Sparkle framework:
-- Connects to `sanescript.com/appcast.xml`
+When enabled, SaneClick checks for updates via Sparkle framework:
+- Connects to `saneclick.com/appcast.xml`
 - Only checks for version information
 - No personal data transmitted
 
@@ -50,22 +50,22 @@ You have full control:
 
 ## Complete Uninstall
 
-To remove all SaneScript data:
+To remove all SaneClick data:
 ```bash
 # Remove application
-rm -rf /Applications/SaneScript.app
+rm -rf /Applications/SaneClick.app
 
 # Remove preferences
-defaults delete com.sanescript.app
+defaults delete com.saneclick.SaneClick
 
 # Remove application data
-rm -rf ~/Library/Application\ Support/SaneScript
-rm -rf ~/Library/Caches/com.sanescript.app
+rm -rf ~/Library/Application\ Support/SaneClick
+rm -rf ~/Library/Caches/com.saneclick.SaneClick
 ```
 
 ## Contact
 
-Questions about privacy? Open an issue on [GitHub](https://github.com/sane-apps/SaneScript/issues).
+Questions about privacy? Open an issue on [GitHub](https://github.com/sane-apps/SaneClick/issues).
 
 ## Changes
 

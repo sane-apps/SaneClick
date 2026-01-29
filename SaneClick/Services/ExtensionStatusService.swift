@@ -4,7 +4,7 @@ import Foundation
 enum ExtensionStatusService {
 
     /// Bundle identifier of the Finder Sync extension
-    static let extensionBundleId = "com.sanescript.SaneScript.FinderSync"
+    static let extensionBundleId = "com.saneclick.SaneClick.FinderSync"
 
     /// Check if the extension is registered and enabled
     static func isExtensionEnabled() -> Bool {
@@ -24,7 +24,7 @@ enum ExtensionStatusService {
             let output = String(data: data, encoding: .utf8) ?? ""
 
             // pluginkit outputs "+" prefix for enabled extensions
-            // Example: "+    com.sanescript.SaneScript.FinderSync(1.0.1)"
+            // Example: "+    com.saneclick.SaneClick.FinderSync(1.0.1)"
             return output.contains("+") && output.contains(extensionBundleId)
         } catch {
             return false
@@ -37,7 +37,7 @@ enum ExtensionStatusService {
         let pipe = Pipe()
 
         process.executableURL = URL(fileURLWithPath: "/usr/bin/pgrep")
-        process.arguments = ["-f", "SaneScriptExtension"]
+        process.arguments = ["-f", "SaneClickExtension"]
         process.standardOutput = pipe
         process.standardError = pipe
 

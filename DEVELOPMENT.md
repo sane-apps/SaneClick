@@ -1,4 +1,4 @@
-# SaneScript Development Guide (SOP)
+# SaneClick Development Guide (SOP)
 
 **Version 1.0** | Last updated: 2026-01-20
 
@@ -40,7 +40,7 @@ Real failures from past sessions. Don't repeat them.
 | **Deleted "unused" file** | Periphery said unused, but ServiceContainer needed it | Grep before delete |
 | **Extension not loading** | Changed extension target but didn't rebuild host app | Rebuild both targets |
 | **Finder menu stale** | Cached menu items from previous session | Don't cache menus - rebuild on each `menu(for:)` call |
-| **App Group mismatch** | Extension couldn't read shared data | Verify `group.com.sanescript.app` in both targets |
+| **App Group mismatch** | Extension couldn't read shared data | Verify `group.com.saneclick.app` in both targets |
 
 <!-- ADD PROJECT-SPECIFIC BURNS ABOVE -->
 
@@ -55,7 +55,7 @@ Real failures from past sessions. Don't repeat them.
 **New to this project? Start here:**
 
 1. **Read Rule #0 first** (Section "The Rules") - It's about HOW to use all other rules
-2. **All files stay in project** - NEVER write files outside `~/SaneApps/apps/SaneScript/` unless user explicitly requests it
+2. **All files stay in project** - NEVER write files outside `~/SaneApps/apps/SaneClick/` unless user explicitly requests it
 3. **Use XcodeBuildMCP for build/test** - Set session defaults, then use `build_macos`, `test_macos`
 4. **Self-rate after every task** - Rate yourself 1-10 on SOP adherence (see Self-Rating section)
 
@@ -73,8 +73,8 @@ mcp__XcodeBuildMCP__build_run_macos  # Build + launch
 **XcodeBuildMCP Session Defaults (set at session start):**
 ```
 mcp__XcodeBuildMCP__session-set-defaults:
-  projectPath: ~/SaneApps/apps/SaneScript/SaneScript.xcodeproj
-  scheme: SaneScript
+  projectPath: ~/SaneApps/apps/SaneClick/SaneClick.xcodeproj
+  scheme: SaneClick
   arch: arm64
 ```
 
@@ -95,7 +95,7 @@ WRONG: "Let me just code this real quick..."
 
 ### #1: STAY IN YOUR LANE
 
-✅ DO: Save all files inside `~/SaneApps/apps/SaneScript/`
+✅ DO: Save all files inside `~/SaneApps/apps/SaneClick/`
 ❌ DON'T: Create files outside project without asking
 
 ### #2: VERIFY BEFORE YOU TRY
@@ -130,7 +130,7 @@ WRONG: "Let me just code this real quick..."
 
 ```bash
 # Kill any running instance
-killall SaneScript 2>/dev/null || true
+killall SaneClick 2>/dev/null || true
 
 # Build and run
 mcp__XcodeBuildMCP__build_run_macos
@@ -319,7 +319,7 @@ Approve?
 
 [Rule #6: FULL CYCLE] - Verify fixes:
   - `mcp__XcodeBuildMCP__test_macos`
-  - `killall SaneScript`
+  - `killall SaneClick`
   - `mcp__XcodeBuildMCP__build_run_macos`
   - Manual: [specific check]
 
@@ -333,13 +333,13 @@ Approve?
 ## Project Structure
 
 ```
-SaneScript/
-├── SaneScript/              # Host app (settings UI)
+SaneClick/
+├── SaneClick/              # Host app (settings UI)
 │   ├── App/                 # App entry, AppDelegate
 │   ├── Models/              # Script, Category models
 │   ├── Services/            # ScriptExecutor, ScriptStore
 │   └── Views/               # SwiftUI views
-├── SaneScriptExtension/     # Finder Sync Extension (CRITICAL)
+├── SaneClickExtension/     # Finder Sync Extension (CRITICAL)
 │   ├── FinderSync.swift     # FIFinderSync subclass
 │   └── Info.plist           # Extension config
 ├── Tests/                   # Unit tests
@@ -359,7 +359,7 @@ SaneScript/
 | Aspect | Requirement |
 |--------|-------------|
 | Bundle location | Extension bundle MUST be inside host app bundle |
-| App Group | `group.com.sanescript.app` for shared UserDefaults |
+| App Group | `group.com.saneclick.app` for shared UserDefaults |
 | User enablement | Users must manually enable in System Settings > Extensions > Finder |
 | Menu caching | NEVER cache menus - rebuild `NSMenu` on each `menu(for:)` call |
 | Script execution | Extension sends notification → host app executes script |
@@ -376,10 +376,10 @@ SaneScript/
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| FinderSync | SaneScriptExtension/FinderSync.swift | Provides context menu items in Finder |
-| ScriptStore | SaneScript/Services/ScriptStore.swift | Manages script configurations |
-| ScriptExecutor | SaneScript/Services/ScriptExecutor.swift | Runs scripts safely |
-| ContentView | SaneScript/Views/ContentView.swift | Main settings UI |
+| FinderSync | SaneClickExtension/FinderSync.swift | Provides context menu items in Finder |
+| ScriptStore | SaneClick/Services/ScriptStore.swift | Manages script configurations |
+| ScriptExecutor | SaneClick/Services/ScriptExecutor.swift | Runs scripts safely |
+| ContentView | SaneClick/Views/ContentView.swift | Main settings UI |
 
 ---
 
@@ -416,6 +416,6 @@ If automation can't find it → UX is broken → fix design first.
 
 1. Set XcodeBuildMCP session defaults (see Quick Start)
 2. Read `RESEARCH.md` if unfamiliar with Finder Sync API
-3. Search memory MCP: `project: "SaneScript"`
-4. Kill stale processes: `killall SaneScript 2>/dev/null || true`
+3. Search memory MCP: `project: "SaneClick"`
+4. Kill stale processes: `killall SaneClick 2>/dev/null || true`
 5. Use subagents for heavy work, verify their output

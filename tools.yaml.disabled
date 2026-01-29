@@ -1,0 +1,14 @@
+tools:
+  project-info:
+    kind: exec
+    description: Display basic information about the SaneClick project
+    command: |
+      echo "Project: SaneClick"
+      echo "Location: $(pwd)"
+      echo "Files: $(find . -type f -not -path '*/.*' | wc -l)"
+      echo "XcodeGen: $(which xcodegen)"
+
+  generate-project:
+    kind: exec
+    description: Regenerate the Xcode project using xcodegen
+    command: xcodegen generate

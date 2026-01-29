@@ -1,7 +1,7 @@
 import Foundation
 import os.log
 
-private let executorLogger = Logger(subsystem: "com.sanescript.SaneScript", category: "ScriptExecutor")
+private let executorLogger = Logger(subsystem: "com.saneclick.SaneClick", category: "ScriptExecutor")
 
 /// Result of script execution for UI feedback
 struct ScriptExecutionResult: Sendable {
@@ -44,12 +44,12 @@ final class ScriptExecutor: @unchecked Sendable {
     @MainActor static var lastResult: ScriptExecutionResult?
 
     /// Notification posted when execution completes
-    static let executionCompletedNotification = Notification.Name("com.sanescript.executionCompleted")
+    static let executionCompletedNotification = Notification.Name("com.saneclick.executionCompleted")
 
     /// File-based IPC: extension writes here, host app reads
     private static var pendingExecutionURL: URL? {
         guard let containerURL = FileManager.default.containerURL(
-            forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.sanescript.app"
+            forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.saneclick.app"
         ) else {
             return nil
         }
@@ -59,7 +59,7 @@ final class ScriptExecutor: @unchecked Sendable {
     /// Lock file for cross-process synchronization
     private static var lockFileURL: URL? {
         guard let containerURL = FileManager.default.containerURL(
-            forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.sanescript.app"
+            forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.saneclick.app"
         ) else {
             return nil
         }
@@ -68,7 +68,7 @@ final class ScriptExecutor: @unchecked Sendable {
 
     private var fileWatchSource: DispatchSourceFileSystemObject?
     private var fileWatchFd: Int32 = -1  // Track fd for cleanup
-    private let queue = DispatchQueue(label: "com.sanescript.executor", qos: .userInitiated)
+    private let queue = DispatchQueue(label: "com.saneclick.executor", qos: .userInitiated)
 
     /// Track recently processed request IDs to prevent duplicates
     private var processedRequestIds = Set<UUID>()
@@ -83,7 +83,7 @@ final class ScriptExecutor: @unchecked Sendable {
 
         // Listen for execution signal from extension (notification is just a trigger)
         DistributedNotificationCenter.default().addObserver(
-            forName: NSNotification.Name("com.sanescript.executeScript"),
+            forName: NSNotification.Name("com.saneclick.executeScript"),
             object: nil,
             queue: .main
         ) { [weak self] _ in
@@ -107,7 +107,7 @@ final class ScriptExecutor: @unchecked Sendable {
         }
 
         guard let containerURL = FileManager.default.containerURL(
-            forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.sanescript.app"
+            forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.saneclick.app"
         ) else {
             NSLog("[ScriptExecutor] Cannot set up file watcher: no App Group container")
             return

@@ -2,7 +2,7 @@ import Foundation
 import Sparkle
 import os.log
 
-private let logger = Logger(subsystem: "com.sanescript.SaneScript", category: "UpdateService")
+private let logger = Logger(subsystem: "com.saneclick.SaneClick", category: "UpdateService")
 
 /// Wrapper around Sparkle's SPUStandardUpdaterController.
 /// Handles app updates securely and privately.

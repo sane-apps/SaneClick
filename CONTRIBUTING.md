@@ -1,12 +1,12 @@
-# Contributing to SaneScript
+# Contributing to SaneClick
 
-Thanks for your interest in contributing to SaneScript!
+Thanks for your interest in contributing to SaneClick!
 
 ---
 
-## What is SaneScript?
+## What is SaneClick?
 
-SaneScript adds custom context menu scripts to Finder. Create Bash, AppleScript, or Automator workflows that appear when you right-click files.
+SaneClick adds custom context menu scripts to Finder. Create Bash, AppleScript, or Automator workflows that appear when you right-click files.
 
 **Part of the Sane Apps family** - See [saneapps.com](https://saneapps.com)
 
@@ -16,15 +16,15 @@ SaneScript adds custom context menu scripts to Finder. Create Bash, AppleScript,
 
 ```bash
 # Clone the repo
-git clone https://github.com/sane-apps/SaneScript.git
-cd SaneScript
+git clone https://github.com/sane-apps/SaneClick.git
+cd SaneClick
 
 # Generate Xcode project
 xcodegen generate
 
 # Build and test
-xcodebuild -project SaneScript.xcodeproj -scheme SaneScript build
-xcodebuild -project SaneScript.xcodeproj -scheme SaneScript test
+xcodebuild -project SaneClick.xcodeproj -scheme SaneClick build
+xcodebuild -project SaneClick.xcodeproj -scheme SaneClick test
 ```
 
 ---
@@ -40,12 +40,12 @@ xcodebuild -project SaneScript.xcodeproj -scheme SaneScript test
 ### Architecture
 
 ```
-SaneScript/
-├── SaneScript/              # Host app (settings UI)
+SaneClick/
+├── SaneClick/              # Host app (settings UI)
 │   ├── Models/              # Script, Category models
 │   ├── Services/            # ScriptExecutor, ScriptStore
 │   └── Views/               # SwiftUI views
-├── SaneScriptExtension/     # Finder Sync Extension
+├── SaneClickExtension/     # Finder Sync Extension
 └── Tests/                   # Unit tests
 ```
 
@@ -84,9 +84,9 @@ SaneScript/
 
 ## Testing the Extension
 
-1. Build and run SaneScript from Xcode
+1. Build and run SaneClick from Xcode
 2. Enable the extension: System Settings > Privacy & Security > Extensions > Finder
-3. Create a test script in SaneScript
+3. Create a test script in SaneClick
 4. Right-click a file in Finder to verify
 
 ---

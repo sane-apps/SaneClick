@@ -1,12 +1,1 @@
-tools:
-  - name: project-info
-    description: Display basic information about the SaneScript project
-    command: |
-      echo "Project: SaneScript"
-      echo "Location: $(pwd)"
-      echo "Files: $(find . -type f -not -path '*/.*' | wc -l)"
-      echo "XcodeGen: $(which xcodegen)"
-
-  - name: generate-project
-    description: Regenerate the Xcode project using xcodegen
-    command: xcodegen generate
+tools: {}

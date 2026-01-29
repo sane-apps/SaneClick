@@ -1,4 +1,4 @@
-# SaneScript Research Document
+# SaneClick Research Document
 
 > **Single Source of Truth** - All research findings, API documentation, and architectural decisions.
 >
@@ -22,7 +22,7 @@
 
 ## Project Overview
 
-**SaneScript** - Finder context menu customization for macOS
+**SaneClick** - Finder context menu customization for macOS
 
 **Problem**: macOS lacks easy customization of Finder's right-click context menu. Users want to run custom scripts on selected files/folders.
 
@@ -98,7 +98,7 @@ override func menu(for menuKind: FIMenuKind) -> NSMenu {
 <!-- App Group for shared data between app and extension -->
 <key>com.apple.security.application-groups</key>
 <array>
-    <string>group.com.sanescript.app</string>
+    <string>group.com.saneclick.app</string>
 </array>
 ```
 
@@ -194,7 +194,7 @@ FinderEx/
 | Drag handle | Can be reordered | Grip lines (≡) |
 | Toggle | Can be on/off | Switch appearance |
 
-### Icon Choices for SaneScript
+### Icon Choices for SaneClick
 
 | Action | SF Symbol | Rationale |
 |--------|-----------|-----------|
@@ -413,13 +413,13 @@ stateDiagram-v2
 pluginkit -m -v -p com.apple.FinderSync
 
 # Check if extension process is running
-pgrep -l SaneScriptExtension
+pgrep -l SaneClickExtension
 
 # Check what's in the app bundle
-ls -la /Applications/SaneScript.app/Contents/PlugIns/
+ls -la /Applications/SaneClick.app/Contents/PlugIns/
 
 # Check Info.plist in built extension
-defaults read /Applications/SaneScript.app/Contents/PlugIns/SaneScriptExtension.appex/Contents/Info.plist NSExtension
+defaults read /Applications/SaneClick.app/Contents/PlugIns/SaneClickExtension.appex/Contents/Info.plist NSExtension
 ```
 
 ### Common Issues
@@ -436,23 +436,23 @@ defaults read /Applications/SaneScript.app/Contents/PlugIns/SaneScriptExtension.
 
 ```bash
 # 1. Unregister extension
-pluginkit -e ignore -i com.sanescript.SaneScript.FinderSync
-pluginkit -r /Applications/SaneScript.app/Contents/PlugIns/SaneScriptExtension.appex
+pluginkit -e ignore -i com.saneclick.SaneClick.FinderSync
+pluginkit -r /Applications/SaneClick.app/Contents/PlugIns/SaneClickExtension.appex
 
 # 2. Kill processes
-killall SaneScriptExtension 2>/dev/null || true
-killall SaneScript 2>/dev/null || true
+killall SaneClickExtension 2>/dev/null || true
+killall SaneClick 2>/dev/null || true
 
 # 3. Reset Launch Services (optional, takes time)
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 
 # 4. Delete and reinstall app
-rm -rf /Applications/SaneScript.app
-cp -R /path/to/fresh/build/SaneScript.app /Applications/
+rm -rf /Applications/SaneClick.app
+cp -R /path/to/fresh/build/SaneClick.app /Applications/
 
 # 5. Re-register extension
-pluginkit -a /Applications/SaneScript.app/Contents/PlugIns/SaneScriptExtension.appex
-pluginkit -e use -i com.sanescript.SaneScript.FinderSync
+pluginkit -a /Applications/SaneClick.app/Contents/PlugIns/SaneClickExtension.appex
+pluginkit -e use -i com.saneclick.SaneClick.FinderSync
 
 # 6. Restart Finder
 killall Finder
@@ -503,7 +503,7 @@ The Import Scripts functionality does not display a file picker dialog when trig
 
 #### Reproduction Steps
 
-1. Launch SaneScript
+1. Launch SaneClick
 2. Click File > Import Scripts... (or press Cmd+O)
 3. Expected: File picker dialog appears
 4. Actual: Nothing happens, no dialog appears

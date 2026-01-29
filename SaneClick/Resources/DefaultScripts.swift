@@ -1,6 +1,6 @@
 import Foundation
 
-/// Curated library of pre-built scripts for SaneScript
+/// Curated library of pre-built scripts for SaneClick
 /// Organized by category for easy browsing and installation
 enum ScriptLibrary {
 
@@ -157,7 +157,7 @@ enum ScriptLibrary {
             else
                 find "$(dirname "$1")" -name '.DS_Store' -type f -delete
             fi
-            osascript -e 'display notification "Cleaned up .DS_Store files" with title "SaneScript"'
+            osascript -e 'display notification "Cleaned up .DS_Store files" with title "SaneClick"'
             """,
             icon: "trash",
             appliesTo: .foldersOnly,
@@ -231,7 +231,7 @@ enum ScriptLibrary {
             for f in "$@"; do
                 chmod +x -- "$f"
             done
-            osascript -e 'display notification "File(s) made executable" with title "SaneScript"'
+            osascript -e 'display notification "File(s) made executable" with title "SaneClick"'
             """,
             icon: "gearshape.2",
             appliesTo: .filesOnly,
@@ -257,7 +257,7 @@ enum ScriptLibrary {
                 git add .
                 git commit -m "Initial commit"
             )
-            osascript -e 'display notification "Git repository initialized" with title "SaneScript"'
+            osascript -e 'display notification "Git repository initialized" with title "SaneClick"'
             """,
             icon: "arrow.triangle.branch",
             appliesTo: .foldersOnly,
@@ -300,7 +300,7 @@ enum ScriptLibrary {
             type: .bash,
             content: """
             (cd "$1" && npm install)
-            osascript -e 'display notification "npm install complete" with title "SaneScript"'
+            osascript -e 'display notification "npm install complete" with title "SaneClick"'
             """,
             icon: "shippingbox",
             appliesTo: .foldersOnly,
@@ -316,7 +316,7 @@ enum ScriptLibrary {
                 TEMP=$(mktemp)
                 jq '.' -- "$f" > "$TEMP" && mv -f -- "$TEMP" "$f"
             done
-            osascript -e 'display notification "JSON formatted" with title "SaneScript"'
+            osascript -e 'display notification "JSON formatted" with title "SaneClick"'
             """,
             icon: "curlybraces",
             appliesTo: .filesOnly,
@@ -332,7 +332,7 @@ enum ScriptLibrary {
                 BASENAME="${f%.*}"
                 jq -c '.' "$f" > "${BASENAME}.min.json"
             done
-            osascript -e 'display notification "JSON minified" with title "SaneScript"'
+            osascript -e 'display notification "JSON minified" with title "SaneClick"'
             """,
             icon: "arrow.down.right.and.arrow.up.left",
             appliesTo: .filesOnly,
@@ -363,7 +363,7 @@ enum ScriptLibrary {
             type: .bash,
             content: """
             base64 -i "$1" | tr -d '\\n' | pbcopy
-            osascript -e 'display notification "Base64 copied to clipboard" with title "SaneScript"'
+            osascript -e 'display notification "Base64 copied to clipboard" with title "SaneClick"'
             """,
             icon: "doc.text",
             appliesTo: .filesOnly,
@@ -394,7 +394,7 @@ enum ScriptLibrary {
         LibraryScript(
             name: "Create .gitignore",
             type: .bash,
-            content: "cat > \"$1/.gitignore\" << 'EOF'\n# macOS\n.DS_Store\n.AppleDouble\n.LSOverride\n\n# Node\nnode_modules/\nnpm-debug.log*\n\n# Python\n__pycache__/\n*.py[cod]\n.env\nvenv/\n\n# Swift\n.build/\nDerivedData/\n*.xcuserstate\n\n# IDE\n.idea/\n.vscode/\n*.swp\nEOF\nosascript -e 'display notification \".gitignore created\" with title \"SaneScript\"'",
+            content: "cat > \"$1/.gitignore\" << 'EOF'\n# macOS\n.DS_Store\n.AppleDouble\n.LSOverride\n\n# Node\nnode_modules/\nnpm-debug.log*\n\n# Python\n__pycache__/\n*.py[cod]\n.env\nvenv/\n\n# Swift\n.build/\nDerivedData/\n*.xcuserstate\n\n# IDE\n.idea/\n.vscode/\n*.swp\nEOF\nosascript -e 'display notification \".gitignore created\" with title \"SaneClick\"'",
             icon: "doc.badge.gearshape",
             appliesTo: .foldersOnly,
             fileExtensions: [],
@@ -427,7 +427,7 @@ enum ScriptLibrary {
                 BASENAME="${f%.*}"
                 sips -s format png -- "$f" --out "${BASENAME}.png"
             done
-            osascript -e 'display notification "Converted to PNG" with title "SaneScript"'
+            osascript -e 'display notification "Converted to PNG" with title "SaneClick"'
             """,
             icon: "photo",
             appliesTo: .filesOnly,
@@ -443,7 +443,7 @@ enum ScriptLibrary {
                 BASENAME="${f%.*}"
                 sips -s format jpeg -s formatOptions 85 -- "$f" --out "${BASENAME}.jpg"
             done
-            osascript -e 'display notification "Converted to JPEG" with title "SaneScript"'
+            osascript -e 'display notification "Converted to JPEG" with title "SaneClick"'
             """,
             icon: "photo.fill",
             appliesTo: .filesOnly,
@@ -459,7 +459,7 @@ enum ScriptLibrary {
                 BASENAME="${f%.*}"
                 sips -s format jpeg -- "$f" --out "${BASENAME}.jpg"
             done
-            osascript -e 'display notification "HEIC converted to JPEG" with title "SaneScript"'
+            osascript -e 'display notification "HEIC converted to JPEG" with title "SaneClick"'
             """,
             icon: "iphone",
             appliesTo: .filesOnly,
@@ -476,7 +476,7 @@ enum ScriptLibrary {
                 NEW_W=$((W / 2))
                 sips --resampleWidth $NEW_W -- "$f"
             done
-            osascript -e 'display notification "Images resized to 50%" with title "SaneScript"'
+            osascript -e 'display notification "Images resized to 50%" with title "SaneClick"'
             """,
             icon: "arrow.down.right.and.arrow.up.left",
             appliesTo: .filesOnly,
@@ -491,7 +491,7 @@ enum ScriptLibrary {
             for f in "$@"; do
                 sips --resampleWidth 1920 -- "$f"
             done
-            osascript -e 'display notification "Images resized to 1920px width" with title "SaneScript"'
+            osascript -e 'display notification "Images resized to 1920px width" with title "SaneClick"'
             """,
             icon: "rectangle.expand.vertical",
             appliesTo: .filesOnly,
@@ -508,7 +508,7 @@ enum ScriptLibrary {
                 EXT="${f##*.}"
                 sips -Z 256 -- "$f" --out "${BASENAME}_thumb.${EXT}"
             done
-            osascript -e 'display notification "Thumbnails created" with title "SaneScript"'
+            osascript -e 'display notification "Thumbnails created" with title "SaneClick"'
             """,
             icon: "photo.on.rectangle",
             appliesTo: .filesOnly,
@@ -526,7 +526,7 @@ enum ScriptLibrary {
                 TEMP=$(mktemp).$EXT
                 sips -s format ${EXT,,} -- "$f" --out "$TEMP" 2>/dev/null && mv -f -- "$TEMP" "$f"
             done
-            osascript -e 'display notification "Photo info removed" with title "SaneScript"'
+            osascript -e 'display notification "Photo info removed" with title "SaneClick"'
             """,
             icon: "eye.slash",
             appliesTo: .filesOnly,
@@ -565,7 +565,7 @@ enum ScriptLibrary {
             for f in "$@"; do
                 sips -r 90 -- "$f"
             done
-            osascript -e 'display notification "Images rotated" with title "SaneScript"'
+            osascript -e 'display notification "Images rotated" with title "SaneClick"'
             """,
             icon: "rotate.right",
             appliesTo: .filesOnly,
@@ -586,7 +586,7 @@ enum ScriptLibrary {
                 NEW_W=$((W / 2))
                 sips --resampleWidth $NEW_W -- "$f"
             done
-            osascript -e 'display notification "Created @2x versions" with title "SaneScript"'
+            osascript -e 'display notification "Created @2x versions" with title "SaneClick"'
             """,
             icon: "square.2.layers.3d",
             appliesTo: .filesOnly,
@@ -643,7 +643,7 @@ enum ScriptLibrary {
                     zip -r -- "${NAME}.zip" "$NAME"
                 )
             done
-            osascript -e 'display notification "ZIP created" with title "SaneScript"'
+            osascript -e 'display notification "ZIP created" with title "SaneClick"'
             """,
             icon: "doc.zipper",
             appliesTo: .allItems,
@@ -658,7 +658,7 @@ enum ScriptLibrary {
             for f in "$@"; do
                 unzip -n -- "$f" -d "$(dirname -- "$f")"
             done
-            osascript -e 'display notification "Extracted" with title "SaneScript"'
+            osascript -e 'display notification "Extracted" with title "SaneClick"'
             """,
             icon: "arrow.up.doc",
             appliesTo: .filesOnly,
@@ -678,7 +678,7 @@ enum ScriptLibrary {
                     tar -czvf "${NAME}.tar.gz" -- "$NAME"
                 )
             done
-            osascript -e 'display notification "TAR.GZ created" with title "SaneScript"'
+            osascript -e 'display notification "TAR.GZ created" with title "SaneClick"'
             """,
             icon: "archivebox",
             appliesTo: .allItems,
@@ -693,7 +693,7 @@ enum ScriptLibrary {
             for f in "$@"; do
                 chflags uchg -- "$f"
             done
-            osascript -e 'display notification "File(s) locked" with title "SaneScript"'
+            osascript -e 'display notification "File(s) locked" with title "SaneClick"'
             """,
             icon: "lock",
             appliesTo: .filesOnly,
@@ -708,7 +708,7 @@ enum ScriptLibrary {
             for f in "$@"; do
                 chflags nouchg -- "$f"
             done
-            osascript -e 'display notification "File(s) unlocked" with title "SaneScript"'
+            osascript -e 'display notification "File(s) unlocked" with title "SaneClick"'
             """,
             icon: "lock.open",
             appliesTo: .filesOnly,
@@ -726,7 +726,7 @@ enum ScriptLibrary {
                     rm -P -- "$f"
                 fi
             done
-            osascript -e 'display notification "Securely deleted" with title "SaneScript"'
+            osascript -e 'display notification "Securely deleted" with title "SaneClick"'
             """,
             icon: "trash.slash",
             appliesTo: .filesOnly,
@@ -763,9 +763,9 @@ enum ScriptLibrary {
             PIDS=$(lsof -- "$1" 2>/dev/null | awk 'NR>1 {print $2}' | sort -u)
             if [ -n "$PIDS" ]; then
                 echo "$PIDS" | xargs kill -9
-                osascript -e 'display notification "Processes killed" with title "SaneScript"'
+                osascript -e 'display notification "Processes killed" with title "SaneClick"'
             else
-                osascript -e 'display notification "No processes using this file" with title "SaneScript"'
+                osascript -e 'display notification "No processes using this file" with title "SaneClick"'
             fi
             """,
             icon: "xmark.circle",
@@ -807,7 +807,7 @@ enum ScriptLibrary {
             for f in "$@"; do
                 mv -n -- "$f" "$DIR/$FOLDER_NAME/"
             done
-            osascript -e 'display notification "Items moved to new folder" with title "SaneScript"'
+            osascript -e 'display notification "Items moved to new folder" with title "SaneClick"'
             """,
             icon: "folder.fill.badge.plus",
             appliesTo: .allItems,
@@ -824,7 +824,7 @@ enum ScriptLibrary {
                 find . -mindepth 2 -type f -exec mv -n -- {} . \\;
                 find . -type d -empty -delete
             )
-            osascript -e 'display notification "Folder flattened" with title "SaneScript"'
+            osascript -e 'display notification "Folder flattened" with title "SaneClick"'
             """,
             icon: "arrow.up.to.line",
             appliesTo: .foldersOnly,
@@ -846,7 +846,7 @@ enum ScriptLibrary {
                     fi
                 done
             )
-            osascript -e 'display notification "Files organized by extension" with title "SaneScript"'
+            osascript -e 'display notification "Files organized by extension" with title "SaneClick"'
             """,
             icon: "folder.badge.gearshape",
             appliesTo: .foldersOnly,
@@ -868,7 +868,7 @@ enum ScriptLibrary {
                     fi
                 done
             )
-            osascript -e 'display notification "Files organized by date" with title "SaneScript"'
+            osascript -e 'display notification "Files organized by date" with title "SaneClick"'
             """,
             icon: "calendar",
             appliesTo: .foldersOnly,
@@ -890,7 +890,7 @@ enum ScriptLibrary {
                     COUNT=$((COUNT + 1))
                 fi
             done
-            osascript -e 'display notification "Files renamed" with title "SaneScript"'
+            osascript -e 'display notification "Files renamed" with title "SaneClick"'
             """,
             icon: "textformat.123",
             appliesTo: .filesOnly,
@@ -912,7 +912,7 @@ enum ScriptLibrary {
                     fi
                 fi
             done
-            osascript -e 'display notification "Filenames lowercased" with title "SaneScript"'
+            osascript -e 'display notification "Filenames lowercased" with title "SaneClick"'
             """,
             icon: "textformat.abc",
             appliesTo: .filesOnly,
@@ -932,7 +932,7 @@ enum ScriptLibrary {
                     mv -n -- "$f" "$DIR/$NEWNAME"
                 fi
             done
-            osascript -e 'display notification "Spaces replaced" with title "SaneScript"'
+            osascript -e 'display notification "Spaces replaced" with title "SaneClick"'
             """,
             icon: "underscore",
             appliesTo: .allItems,

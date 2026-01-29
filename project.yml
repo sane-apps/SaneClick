@@ -1,6 +1,6 @@
-name: SaneScript
+name: SaneClick
 options:
-  bundleIdPrefix: com.sanescript
+  bundleIdPrefix: com.saneclick
   deploymentTarget:
     macOS: "14.0"
   xcodeVersion: "16.0"
@@ -48,36 +48,37 @@ settings:
   GCC_WARN_UNUSED_VARIABLE: YES
 
 schemes:
-  SaneScript:
+  SaneClick:
     build:
       targets:
-        SaneScript: all
-        SaneScriptExtension: all
-        SaneScriptTests: [test]
+        SaneClick: all
+        SaneClickExtension: all
+        SaneClickTests: [test]
     test:
       gatherCoverageData: true
       targets:
-        - SaneScriptTests
+        - SaneClickTests
     run:
       config: Debug
     archive:
       config: Release
 
 targets:
-  SaneScript:
+  SaneClick:
     type: application
     platform: macOS
-    bundleId: com.sanescript.SaneScript
+    bundleId: com.saneclick.SaneClick
     deploymentTarget:
       macOS: "14.0"
     sources:
-      - path: SaneScript
+      - path: SaneClick
         excludes:
           - "**/*.md"
     settings:
       base:
-        INFOPLIST_FILE: SaneScript/Info.plist
-        PRODUCT_NAME: SaneScript
+        INFOPLIST_FILE: SaneClick/Info.plist
+        PRODUCT_NAME: SaneClick
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         MARKETING_VERSION: "1.0.2"
         CURRENT_PROJECT_VERSION: "102"
         ENABLE_PREVIEWS: YES
@@ -93,42 +94,42 @@ targets:
       configs:
         Debug:
           CODE_SIGN_IDENTITY: "Apple Development"
-          CODE_SIGN_ENTITLEMENTS: SaneScript/SaneScript.debug.entitlements
+          CODE_SIGN_ENTITLEMENTS: SaneClick/SaneClick.debug.entitlements
         Release:
-          CODE_SIGN_IDENTITY: "Developer ID Application: Stephan Joseph (M78L6FXD48)"
-          CODE_SIGN_ENTITLEMENTS: SaneScript/SaneScript.entitlements
+          CODE_SIGN_IDENTITY: "Developer ID Application"
+          CODE_SIGN_ENTITLEMENTS: SaneClick/SaneClick.entitlements
     dependencies:
-      - target: SaneScriptExtension
+      - target: SaneClickExtension
         embed: true
         codeSign: true
         copyPhase:
           destination: plugins
       - package: Sparkle
     info:
-      path: SaneScript/Info.plist
+      path: SaneClick/Info.plist
       properties:
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         LSApplicationCategoryType: "public.app-category.utilities"
-        SUFeedURL: "https://sanescript.com/appcast.xml"
+        SUFeedURL: "https://saneclick.com/appcast.xml"
         SUEnableSystemProfiling: false
         SUEnableAutomaticChecks: true
         SUPublicEDKey: "7Pl/8cwfb2vm4Dm65AByslkMCScLJ9tbGlwGGx81qYU="
 
-  SaneScriptExtension:
+  SaneClickExtension:
     type: app-extension
     platform: macOS
     productType: com.apple.product-type.finder-sync-extension
-    bundleId: com.sanescript.SaneScript.FinderSync
+    bundleId: com.saneclick.SaneClick.FinderSync
     deploymentTarget:
       macOS: "14.0"
     sources:
-      - path: SaneScriptExtension
+      - path: SaneClickExtension
     settings:
       base:
-        INFOPLIST_FILE: SaneScriptExtension/Info.plist
-        PRODUCT_BUNDLE_IDENTIFIER: com.sanescript.SaneScript.FinderSync
-        PRODUCT_NAME: SaneScriptExtension
+        INFOPLIST_FILE: SaneClickExtension/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.saneclick.SaneClick.FinderSync
+        PRODUCT_NAME: SaneClickExtension
         MARKETING_VERSION: "1.0.2"
         CURRENT_PROJECT_VERSION: "102"
         SWIFT_VERSION: "6.0"
@@ -143,15 +144,15 @@ targets:
       configs:
         Debug:
           CODE_SIGN_IDENTITY: "Apple Development"
-          CODE_SIGN_ENTITLEMENTS: SaneScriptExtension/SaneScriptExtension.debug.entitlements
+          CODE_SIGN_ENTITLEMENTS: SaneClickExtension/SaneClickExtension.debug.entitlements
         Release:
-          CODE_SIGN_IDENTITY: "Developer ID Application: Stephan Joseph (M78L6FXD48)"
-          CODE_SIGN_ENTITLEMENTS: SaneScriptExtension/SaneScriptExtension.entitlements
+          CODE_SIGN_IDENTITY: "Developer ID Application"
+          CODE_SIGN_ENTITLEMENTS: SaneClickExtension/SaneClickExtension.entitlements
 
-  SaneScriptTests:
+  SaneClickTests:
     type: bundle.unit-test
     platform: macOS
-    bundleId: com.sanescript.SaneScriptTests
+    bundleId: com.saneclick.SaneClickTests
     deploymentTarget:
       macOS: "14.0"
     sources:
@@ -169,4 +170,4 @@ targets:
         Release:
           CODE_SIGN_IDENTITY: "Apple Development"
     dependencies:
-      - target: SaneScript
+      - target: SaneClick

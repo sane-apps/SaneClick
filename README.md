@@ -75,7 +75,7 @@ cd SaneClick
 xcodegen generate
 
 # Build
-xcodebuild -project SaneScript.xcodeproj -scheme SaneScript build
+xcodebuild -project SaneClick.xcodeproj -scheme SaneClick build
 ```
 
 ### Enable the Extension
@@ -108,12 +108,12 @@ xcodebuild -project SaneScript.xcodeproj -scheme SaneScript build
 
 ```
 SaneClick/
-├── SaneScript/              # Host app (settings UI)
+├── SaneClick/              # Host app (settings UI)
 │   ├── Models/              # Script, Category models
 │   ├── Services/            # ScriptExecutor, ScriptStore
 │   ├── Views/               # SwiftUI views
 │   └── Theme/               # Brand colors
-├── SaneScriptExtension/     # Finder Sync Extension
+├── SaneClickExtension/     # Finder Sync Extension
 │   └── FinderSync.swift     # Context menu provider
 ├── Tests/                   # Unit tests
 └── docs/                    # Website

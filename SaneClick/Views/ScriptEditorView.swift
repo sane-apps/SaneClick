@@ -307,7 +307,7 @@ struct ScriptEditorView: View {
         case .applescript:
             return try await runAppleScriptTest(paths: paths)
         case .automator:
-            throw NSError(domain: "SaneScript", code: 1, userInfo: [
+            throw NSError(domain: "SaneClick", code: 1, userInfo: [
                 NSLocalizedDescriptionKey: "Automator workflows cannot be tested from the editor"
             ])
         }
@@ -334,7 +334,7 @@ struct ScriptEditorView: View {
         let errorOutput = String(data: errorData, encoding: .utf8) ?? ""
 
         if process.terminationStatus != 0 {
-            throw NSError(domain: "SaneScript", code: Int(process.terminationStatus), userInfo: [
+            throw NSError(domain: "SaneClick", code: Int(process.terminationStatus), userInfo: [
                 NSLocalizedDescriptionKey: errorOutput.isEmpty ? "Script exited with code \(process.terminationStatus)" : errorOutput
             ])
         }
@@ -369,7 +369,7 @@ struct ScriptEditorView: View {
         let errorOutput = String(data: errorData, encoding: .utf8) ?? ""
 
         if process.terminationStatus != 0 {
-            throw NSError(domain: "SaneScript", code: Int(process.terminationStatus), userInfo: [
+            throw NSError(domain: "SaneClick", code: Int(process.terminationStatus), userInfo: [
                 NSLocalizedDescriptionKey: errorOutput.isEmpty ? "AppleScript exited with code \(process.terminationStatus)" : errorOutput
             ])
         }
