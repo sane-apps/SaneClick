@@ -1,0 +1,34 @@
+# SaneScript Outreach Configuration
+# Target: Users frustrated with complex, broken, or expensive Finder context menu tools
+
+competitors:
+  # Direct Open Source Competitors
+  - "zerodivisi0n/FinderMenu"
+  - "RoadToDream/SzContext"
+  - "wflixu/RClick"
+  - "samiyuru/custom-finder-right-click-menu"
+  
+  # Popular/Related Tools (Watch for "alternative to X" queries)
+  - "fikovnik/ShiftIt" # Window management, but similar audience
+  - "rxhanson/Rectangle" # Window management, overlapping user base
+  - "linearmouse/linearmouse" # Mouse customization
+
+search_terms:
+  # Problems
+  - "finder context menu custom script"
+  - "run shell script from finder right click"
+  - "automator quick action not showing"
+  - "add terminal command to finder menu"
+  - "macos right click menu slow"
+  - "remove items from finder context menu"
+  
+  # Alternatives
+  - "alternative to Service Station"
+  - "alternative to iRightMouse"
+  - "better than Automator"
+  - "fast scripts finder"
+  
+  # Feature Requests (that we have)
+  - "finder extension script runner"
+  - "execute bash script finder selection"
+  - "finder context menu submenu"
