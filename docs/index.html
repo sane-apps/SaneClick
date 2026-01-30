@@ -281,6 +281,36 @@
         .more-apps-hub a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
         .more-apps-hub a:hover { color: var(--accent); }
 
+        .crypto-section { padding: 60px 0; border-top: 1px solid var(--border-subtle); }
+        .crypto-card {
+            max-width: 700px; margin: 0 auto; background: linear-gradient(145deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            border: 1px solid var(--border); border-radius: 20px; padding: 40px; text-align: center;
+        }
+        .crypto-card h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 8px; }
+        .crypto-subtitle { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 28px; }
+        .crypto-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .crypto-item { display: flex; align-items: center; gap: 12px; }
+        .crypto-logo { flex-shrink: 0; border-radius: 50%; }
+        .crypto-addr {
+            background: var(--bg-primary); padding: 8px 12px; border-radius: 6px; font-size: 0.85rem;
+            color: var(--text-secondary); cursor: pointer; flex-grow: 1; text-align: left; word-break: break-all;
+            border: 1px solid transparent; transition: all 0.2s;
+        }
+        .crypto-addr:hover { color: var(--accent); border-color: var(--accent); }
+        .crypto-btc:hover .crypto-addr { background: rgba(247, 147, 26, 0.2); color: #F7931A; border-color: #F7931A; }
+        .crypto-sol:hover .crypto-addr { background: rgba(153, 69, 255, 0.2); color: #9945FF; border-color: #9945FF; }
+        .crypto-zec:hover .crypto-addr { background: rgba(244, 183, 40, 0.2); color: #F4B728; border-color: #F4B728; }
+        .crypto-hint { font-size: 0.9rem; color: var(--accent); font-weight: 500; margin-bottom: 24px; }
+        .crypto-how {
+            background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: 12px;
+            padding: 20px 24px; text-align: left; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;
+        }
+        .crypto-how strong { color: var(--text-primary); }
+        .crypto-how ol { margin: 12px 0 0; padding-left: 20px; }
+        .crypto-how li { margin-bottom: 6px; }
+        .crypto-how a { color: var(--accent); text-decoration: none; }
+        .crypto-how a:hover { text-decoration: underline; }
+
         /* Footer */
         footer {
             padding: 60px 0 40px;
@@ -542,6 +572,38 @@
         </div>
     </section>
 
+    <section class="crypto-section">
+        <div class="container">
+            <div class="crypto-card">
+                <h3>Pay with Crypto</h3>
+                <p class="crypto-subtitle">Prefer privacy-first payments? Send $5 in any of these:</p>
+                <div class="crypto-grid">
+                    <div class="crypto-item crypto-btc">
+                        <img class="crypto-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/btc.svg" alt="BTC" width="24" height="24">
+                        <code class="crypto-addr" onclick="copyToClipboard(this)">3Go9nJu3dj2qaa4EAYXrTsTf5AnhcrPQke</code>
+                    </div>
+                    <div class="crypto-item crypto-sol">
+                        <img class="crypto-logo" src="https://cryptologos.cc/logos/solana-sol-logo.svg" alt="SOL" width="24" height="24">
+                        <code class="crypto-addr" onclick="copyToClipboard(this)">FBvU83GUmwEYk3HMwZh3GBorGvrVVWSPb8VLCKeLiWZZ</code>
+                    </div>
+                    <div class="crypto-item crypto-zec">
+                        <img class="crypto-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/zec.svg" alt="ZEC" width="24" height="24">
+                        <code class="crypto-addr" onclick="copyToClipboard(this)">t1PaQ7LSoRDVvXLaQTWmy5tKUAiKxuE9hBN</code>
+                    </div>
+                </div>
+                <p class="crypto-hint">Click any address to copy</p>
+                <div class="crypto-how">
+                    <strong>How it works:</strong>
+                    <ol>
+                        <li>Send $5 (or more) to any address above</li>
+                        <li>Email <a href="mailto:hi@saneapps.com">hi@saneapps.com</a> with your transaction ID or screenshot</li>
+                        <li>We'll verify and reply with your download link</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer>
         <div class="container">
             <p style="font-style: italic; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 20px; opacity: 0.85;">"For God has not given us a spirit of fear, but of power, love, and a sound mind." — 2 Timothy 1:7</p>
@@ -575,6 +637,14 @@
             if (!event.target.closest('.demo-box')) {
                 document.getElementById('mockMenu').classList.remove('active');
             }
+        }
+        // Copy crypto address to clipboard
+        function copyToClipboard(el) {
+            navigator.clipboard.writeText(el.textContent);
+            var orig = el.textContent;
+            el.textContent = 'Copied!';
+            el.style.color = 'var(--success)';
+            setTimeout(function() { el.textContent = orig; el.style.color = ''; }, 1500);
         }
     </script>
     <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
