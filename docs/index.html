@@ -4,12 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SaneClick - Bring Sanity to Your Mac's Right-Click Menu</title>
-    <meta name="description" content="Stop fighting Finder. Run scripts, convert files, and automate your Mac directly from the right-click menu. 50+ actions, 100% private.">
-    
+    <meta name="description" content="Stop fighting Finder. Run scripts, convert files, and automate your Mac directly from the right-click menu. 50+ actions, 100% private. $5.">
+    <meta name="keywords" content="Finder context menu, right-click menu Mac, macOS automation, Mac scripts, Finder extension, custom right-click, Automator alternative, Mac productivity, context menu customization">
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <link rel="apple-touch-icon" href="images/icon.png">
+    <link rel="canonical" href="https://saneclick.com/">
+    <meta name="theme-color" content="#4f8ffa">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://saneclick.com/">
+    <meta property="og:title" content="SaneClick - Bring Sanity to Your Mac's Right-Click Menu">
+    <meta property="og:description" content="Run scripts, convert files, and automate your Mac directly from the right-click menu. 50+ actions, 100% private.">
+    <meta property="og:image" content="https://saneclick.com/images/og-image.png">
+    <meta property="og:site_name" content="SaneClick">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SaneClick - Bring Sanity to Your Mac's Right-Click Menu">
+    <meta name="twitter:description" content="Run scripts, convert files, and automate your Mac directly from the right-click menu. 50+ actions, 100% private.">
+    <meta name="twitter:image" content="https://saneclick.com/images/og-image.png">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "SaneClick",
+      "description": "Bring sanity to your Mac's right-click menu. Run scripts, convert files, and automate your Mac directly from Finder. 50+ pre-built actions, 100% private.",
+      "operatingSystem": "macOS",
+      "applicationCategory": "UtilitiesApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "5",
+        "priceCurrency": "USD"
+      },
+      "softwareVersion": "1.0.2",
+      "featureList": [
+        "50+ Pre-built Actions",
+        "Custom Bash/Python Scripts",
+        "Smart File Filtering",
+        "Finder Context Menu Integration",
+        "100% On-Device Privacy",
+        "Open Source (MIT)"
+      ],
+      "downloadUrl": "https://sanebar.lemonsqueezy.com/checkout/buy/679dbd1d-b808-44e7-98c8-8e679b592e93",
+      "image": "https://saneclick.com/images/icon.png"
+    }
+    </script>
 
     <style>
         :root {
@@ -17,9 +64,9 @@
             --bg-secondary: #0f0f16;
             --bg-card: #16161f;
             --accent: #4f8ffa;
-            --accent-soft: #4a90b5;
-            --accent-glow: rgba(95, 168, 211, 0.25);
-            --accent-subtle: rgba(95, 168, 211, 0.08);
+            --accent-soft: #3b7ce8;
+            --accent-glow: rgba(79, 143, 250, 0.25);
+            --accent-subtle: rgba(79, 143, 250, 0.08);
             --text-primary: #f5f5f8;
             --text-secondary: #c0c0d0;
             --text-muted: #a0a0b0;
@@ -37,16 +84,56 @@
             color: var(--text-primary);
             line-height: 1.7;
             overflow-x: hidden;
+            font-weight: 400;
+            letter-spacing: -0.01em;
         }
 
+        /* Gradient background with noise */
         .gradient-bg {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(ellipse at 15% 10%, rgba(95, 168, 211, 0.12) 0%, transparent 45%),
-                        radial-gradient(ellipse at 85% 90%, rgba(52, 211, 153, 0.06) 0%, transparent 45%),
-                        var(--bg-primary);
+            background:
+                radial-gradient(ellipse at 15% 10%, rgba(79, 143, 250, 0.12) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 90%, rgba(52, 211, 153, 0.06) 0%, transparent 45%),
+                radial-gradient(ellipse at 50% 50%, rgba(20, 20, 30, 1) 0%, var(--bg-primary) 100%);
             z-index: -1;
         }
+
+        .gradient-bg::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
 
         .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
@@ -54,29 +141,44 @@
         nav {
             padding: 20px 0; position: fixed; top: 0; left: 0; right: 0;
             background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 100; border-bottom: 1px solid var(--border);
         }
         nav .container { display: flex; justify-content: space-between; align-items: center; }
         .logo { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 1.25rem; text-decoration: none; color: var(--text-primary); }
         .logo img { width: 32px; height: 32px; border-radius: 8px; }
-        .logo-family { font-size: 0.85rem; color: var(--text-muted); font-weight: 400; margin-left: 12px; padding-left: 12px; border-left: 1px solid var(--border); text-decoration: none; }
-        
+        .logo-family { font-size: 0.85rem; color: var(--text-muted); font-weight: 400; margin-left: 12px; margin-right: auto; padding-left: 12px; border-left: 1px solid var(--border); text-decoration: none; transition: color 0.2s; }
+        .logo-family:hover { color: var(--accent); }
+
         .nav-links { display: flex; gap: 32px; align-items: center; }
-        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
         .nav-links a:hover { color: var(--text-primary); }
+        .nav-links a.btn-primary { color: #ffffff; }
+        .nav-links a.btn-primary:hover { color: #ffffff; }
+        .btn-donate { padding: 10px 20px !important; color: #ffffff !important; display: inline-flex; align-items: center; }
+        .btn-donate svg { margin-right: 6px; }
 
         /* Hero */
-        .hero.container { padding: 220px 24px 100px !important; text-align: center; }
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.75rem, 7vw, 4.5rem); font-weight: 600; margin-bottom: 24px; letter-spacing: -0.03em; line-height: 1.1; }
+        .hero { padding: 180px 0 100px; text-align: center; }
+        .hero h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2.75rem, 7vw, 4.5rem); font-weight: 600; margin-bottom: 24px; letter-spacing: -0.03em; line-height: 1.1; }
         .hero h1 em { font-style: italic; color: var(--accent); }
-        .hero .subtitle { font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 48px; }
+        .hero .subtitle { font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 48px; font-weight: 400; line-height: 1.8; }
 
         .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
-        .btn { padding: 16px 32px; border-radius: 14px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 10px; }
-        .btn-primary { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%); color: white; box-shadow: 0 4px 24px var(--accent-glow); padding: 18px 48px; font-size: 1.1rem; }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 40px var(--accent-glow); }
-        
-        .trust-badges { display: flex; gap: 24px; justify-content: center; color: var(--text-muted); font-size: 1.1rem; margin-bottom: 60px; }
+        .btn { padding: 16px 32px; border-radius: 14px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: inline-flex; align-items: center; gap: 10px; letter-spacing: 0.01em; }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+            color: #ffffff; font-weight: 600;
+            box-shadow: 0 4px 24px var(--accent-glow), 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 18px 48px; font-size: 1.1rem;
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 40px var(--accent-glow), 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15); filter: brightness(1.05); }
+
+        .trust-badges { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; color: var(--text-muted); font-size: 1.1rem; margin-bottom: 60px; }
+        .trust-badges span, .trust-badges a { display: flex; align-items: center; gap: 6px; }
+        .trust-badges a { color: inherit; text-decoration: none; transition: color 0.2s; }
+        .trust-badges a:hover { color: var(--accent); }
 
         /* Interactive Demo */
         .demo-box {
@@ -87,21 +189,21 @@
         }
         .demo-box:hover { border-color: var(--accent); transform: translateY(-2px); }
 
-        .file-icon { 
-            width: 120px; height: 140px; 
-            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); 
+        .file-icon {
+            width: 120px; height: 140px;
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
             border-radius: 12px; margin: 0 auto; position: relative;
             box-shadow: 0 15px 30px rgba(0,0,0,0.4);
             display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px;
         }
         .file-icon::before {
-            content: ''; position: absolute; top: 0; right: 0; 
+            content: ''; position: absolute; top: 0; right: 0;
             width: 40px; height: 40px; background: rgba(255,255,255,0.3);
             clip-path: polygon(0 0, 0% 100%, 100% 100%);
             border-radius: 0 0 0 8px;
         }
         .file-icon::after {
-            content: '📸'; position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%);
+            content: '\1F4F8'; position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%);
             font-size: 40px; opacity: 0.8;
         }
 
@@ -110,9 +212,9 @@
             font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: bold; color: #fff;
             backdrop-filter: blur(4px); border: 0.5px solid rgba(255,255,255,0.2);
         }
-        
+
         .mock-menu {
-            position: absolute; top: 60px; left: 55%; background: rgba(30, 30, 32, 0.98); 
+            position: absolute; top: 60px; left: 55%; background: rgba(30, 30, 32, 0.98);
             backdrop-filter: blur(20px); border-radius: 12px;
             width: 260px; box-shadow: 0 25px 60px rgba(0,0,0,0.7); border: 0.5px solid rgba(255,255,255,0.15);
             padding: 8px; display: none; z-index: 10; opacity: 0; transform: translateY(-10px); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -126,27 +228,33 @@
 
         /* Comparison */
         .comparison { padding: 100px 0; }
+        .section-title { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 600; text-align: center; margin-bottom: 20px; letter-spacing: -0.02em; line-height: 1.2; }
+        .section-subtitle { text-align: center; color: var(--text-secondary); font-size: 1.1rem; max-width: 540px; margin: 0 auto 64px; line-height: 1.7; }
         .comparison-table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
         .comparison-table th, .comparison-table td { padding: 20px; text-align: center; border-bottom: 1px solid var(--border); }
-        .highlight-col { background: rgba(95, 168, 211, 0.05); color: var(--accent); }
+        .comparison-table th { background: var(--bg-secondary); font-weight: 600; font-size: 0.95rem; color: var(--text-secondary); }
+        .comparison-table th.highlight-col { background: linear-gradient(180deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); color: var(--accent); }
+        .comparison-table td.highlight-col { background: rgba(59, 130, 246, 0.05); }
+        .highlight-col { color: var(--accent); }
         .check { color: var(--success); font-weight: bold; }
 
         /* Philosophy Section */
         .philosophy { padding: 80px 0; text-align: center; border-top: 1px solid var(--border-subtle); }
         .philosophy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 32px; margin-top: 40px; }
-        .philosophy-card { background: var(--bg-card); padding: 32px; border-radius: 20px; border: 1px solid var(--border-subtle); }
+        .philosophy-card { background: var(--bg-card); padding: 32px; border-radius: 20px; border: 1px solid var(--border-subtle); transition: all 0.3s; }
+        .philosophy-card:hover { border-color: var(--accent); transform: translateY(-4px); }
         .emoji { font-size: 2.5rem; display: block; margin-bottom: 16px; }
 
         /* Sustainability Card */
-        .sustainability { padding: 80px 0; }
+        .sustainability { padding: 80px 0; border-top: 1px solid var(--border-subtle); }
         .sustainability-card {
             background: linear-gradient(160deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
             border: 1px solid var(--border-subtle); border-radius: 28px; padding: 60px;
             max-width: 800px; margin: 0 auto; position: relative; text-align: center;
         }
         .sustainability-options { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
-        .sustainability-option { 
-            text-align: left; border: 1px solid var(--border); padding: 24px; border-radius: 16px; 
+        .sustainability-option {
+            text-align: left; border: 1px solid var(--border); padding: 24px; border-radius: 16px;
             text-decoration: none; color: inherit; transition: all 0.3s;
         }
         .sustainability-option:hover { border-color: var(--accent); transform: translateY(-2px); }
@@ -154,14 +262,74 @@
         .sustainability-option h4 { font-size: 1rem; margin-bottom: 8px; color: var(--text-primary); }
         .sustainability-option p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
 
-        footer { padding: 60px 0; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); }
-        footer a { color: var(--accent); text-decoration: none; }
+        /* Cross-Sell Section */
+        .more-apps {
+            padding: 80px 0;
+            background: linear-gradient(180deg, transparent, rgba(79, 143, 250, 0.03));
+        }
+        .more-apps-subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 48px; font-size: 1.1rem; }
+        .more-apps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 900px; margin: 0 auto; }
+        .app-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; text-decoration: none; color: inherit; transition: all 0.3s ease; display: block; }
+        .app-card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); }
+        .app-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+        .app-card-icon { width: 48px; height: 48px; border-radius: 12px; object-fit: contain; }
+        .app-card-name { font-size: 1.2rem; font-weight: 600; }
+        .app-card-tagline { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin-bottom: 16px; }
+        .app-card-cta { color: var(--accent); font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+        .app-card:hover .app-card-cta { gap: 10px; }
+        .more-apps-hub { text-align: center; margin-top: 40px; }
+        .more-apps-hub a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+        .more-apps-hub a:hover { color: var(--accent); }
 
+        /* Footer */
+        footer {
+            padding: 60px 0 40px;
+            border-top: 1px solid var(--border-subtle);
+            text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.2));
+        }
+        .footer-privacy { font-size: 1.05rem; margin-bottom: 28px; letter-spacing: 0.02em; }
+        .footer-privacy strong { color: var(--accent); font-weight: 600; }
+        .footer-links { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--accent); }
+        .footer-copy { color: var(--text-secondary); font-size: 0.95rem; }
+
+        /* Hamburger Menu */
+        .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; z-index: 200; color: var(--text-primary); }
+        .hamburger svg { display: block; }
+
+        .mobile-nav {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(8, 8, 12, 0.97); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            z-index: 150; padding: 80px 32px 40px; overflow-y: auto; flex-direction: column;
+        }
+        .mobile-nav.open { display: flex; }
+        .mobile-nav a { display: block; padding: 16px 0; color: var(--text-primary); text-decoration: none; font-size: 1.1rem; font-weight: 500; border-bottom: 1px solid var(--border); transition: color 0.2s; }
+        .mobile-nav a:active { color: var(--accent); }
+        .mobile-nav-section { padding: 20px 0 8px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+        .mobile-nav-section:first-child { padding-top: 0; }
+        .mobile-nav .mobile-nav-cta {
+            display: flex; margin-top: 24px; padding: 16px 28px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+            color: #fff !important; font-weight: 600; border-radius: 12px; text-align: center;
+            justify-content: center; border-bottom: none; box-shadow: 0 4px 16px var(--accent-glow);
+        }
+        .mobile-nav-close { position: absolute; top: 20px; right: 24px; background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 8px; font-size: 1.5rem; line-height: 1; z-index: 200; }
+
+        /* Responsive */
         @media (max-width: 768px) {
+            .hamburger { display: block; }
             .nav-links { display: none; }
-            .hero { padding-top: 120px; }
+            .logo-family { display: none; }
+            .hero { padding: 120px 0 60px; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 300px; justify-content: center; }
             .mock-menu { left: 5%; width: 90%; }
             .sustainability-options { grid-template-columns: 1fr; }
+            .footer-links { flex-direction: column; gap: 12px; align-items: center; }
+            section { padding-top: 48px !important; padding-bottom: 48px !important; }
+            .hero { padding-top: 110px !important; }
         }
     </style>
 </head>
@@ -179,48 +347,68 @@
                 <a href="/guides.html">Guides</a>
                 <a href="#features">Features</a>
                 <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
-                <a href="#" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem;">Buy $5</a>
+                <a href="https://sanebar.lemonsqueezy.com/checkout/buy/679dbd1d-b808-44e7-98c8-8e679b592e93?embed=1" class="lemonsqueezy-button btn btn-primary btn-donate">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    Donate
+                </a>
             </div>
+            <button class="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
         </div>
     </nav>
 
+    <div id="mobileNav" class="mobile-nav">
+        <button class="mobile-nav-close" onclick="toggleMobileNav()" aria-label="Close menu">&times;</button>
+        <p class="mobile-nav-section">Navigation</p>
+        <a href="#features" onclick="toggleMobileNav()">Features</a>
+        <a href="/guides.html" onclick="toggleMobileNav()">Guides</a>
+        <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
+        <a href="/privacy.html" onclick="toggleMobileNav()">Privacy</a>
+        <p class="mobile-nav-section">More SaneApps</p>
+        <a href="https://sanebar.com">SaneBar &mdash; Menu Bar Manager</a>
+        <a href="https://saneclip.com">SaneClip &mdash; Clipboard Manager</a>
+        <a href="https://saneapps.com">See all SaneApps &rarr;</a>
+        <a href="https://sanebar.lemonsqueezy.com/checkout/buy/679dbd1d-b808-44e7-98c8-8e679b592e93?embed=1" class="lemonsqueezy-button mobile-nav-cta">Buy SaneClick &mdash; $5</a>
+    </div>
+
     <section class="hero">
         <div class="container">
-            <h1 class="animate-in">Bring <em>Sanity</em> to your Right-Click</h1>
-            <p class="subtitle animate-in">Stop fighting Finder. Run scripts, convert files, and automate your Mac—directly from the menu.</p>
-            
-            <div class="cta-buttons animate-in">
-                <a href="#" class="btn btn-primary">Coming Soon</a>
+            <h1 class="animate-in delay-2">Bring <em>Sanity</em> to your Right-Click</h1>
+            <p class="subtitle animate-in delay-3">Stop fighting Finder. Run scripts, convert files, and automate your Mac—directly from the menu.</p>
+
+            <div class="trust-badges animate-in delay-3">
+                <span>&#128274; No Spying</span>
+                <span>&#128181; No Subscription</span>
+                <a href="https://forums.basehub.com/sane-apps/SaneClick/1" target="_blank" rel="noopener">&#128737;&#65039; Provably private (Audit)</a>
             </div>
 
-            <div class="trust-badges animate-in">
-                <span>🔒 No Spying</span>
-                <span>💵 No Subscription</span>
-                <span>🛠️ Actively Maintained</span>
+            <div class="cta-buttons animate-in delay-4">
+                <a href="https://sanebar.lemonsqueezy.com/checkout/buy/679dbd1d-b808-44e7-98c8-8e679b592e93?embed=1" class="lemonsqueezy-button btn btn-primary">Buy SaneClick — $5</a>
             </div>
 
-            <div class="demo-box animate-in" onclick="toggleMenu()">
+            <div class="demo-box animate-in delay-5" onclick="toggleMenu()">
                 <div class="file-icon">
                     <span class="file-label">DESIGN_FINAL.PNG</span>
                 </div>
                 <p style="margin-top: 32px; color: var(--text-muted); font-size: 1rem; font-weight: 500;">Click the design asset to see SaneClick in action</p>
-                
+
                 <div class="mock-menu" id="mockMenu">
-                    <div class="menu-item">Open <span class="shortcut">⌘O</span></div>
-                    <div class="menu-item">Move to Trash <span class="shortcut">⌘⌫</span></div>
+                    <div class="menu-item">Open <span class="shortcut">&#8984;O</span></div>
+                    <div class="menu-item">Move to Trash <span class="shortcut">&#8984;&#9003;</span></div>
                     <div class="menu-sep"></div>
-                    <div class="menu-item sane"><span>⚡ Open in Terminal</span></div>
-                    <div class="menu-item sane"><span>💻 Open in VS Code</span></div>
+                    <div class="menu-item sane"><span>&#9889; Open in Terminal</span></div>
+                    <div class="menu-item sane"><span>&#128187; Open in VS Code</span></div>
                     <div class="menu-sep"></div>
-                    <div class="menu-item sane"><span>🖼️ Resize Image (800px)</span></div>
-                    <div class="menu-item sane"><span>🔄 Convert to WebP</span></div>
+                    <div class="menu-item sane"><span>&#128444;&#65039; Resize Image (800px)</span></div>
+                    <div class="menu-item sane"><span>&#128260; Convert to WebP</span></div>
                     <div class="menu-sep"></div>
-                    <div class="menu-item sane"><span>📝 Copy as Markdown Link</span></div>
-                    <div class="menu-item sane"><span>☁️ Upload to Cloudflare R2</span></div>
+                    <div class="menu-item sane"><span>&#128221; Copy as Markdown Link</span></div>
+                    <div class="menu-item sane"><span>&#9729;&#65039; Upload to Cloudflare R2</span></div>
                     <div class="menu-sep"></div>
-                    <div class="menu-item sane"><span>🛠️ Run Custom Script...</span></div>
+                    <div class="menu-item sane"><span>&#128295; Run Custom Script...</span></div>
                     <div class="menu-sep"></div>
-                    <div class="menu-item">Get Info <span class="shortcut">⌘I</span></div>
+                    <div class="menu-item">Get Info <span class="shortcut">&#8984;I</span></div>
                 </div>
             </div>
         </div>
@@ -228,7 +416,8 @@
 
     <section class="comparison" id="features">
         <div class="container">
-            <h2 style="text-align:center; font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 40px;">The Sane Way to Automate</h2>
+            <h2 class="section-title">The Sane Way to Automate</h2>
+            <p class="section-subtitle">Why fight with Automator when you can just right-click?</p>
             <table class="comparison-table">
                 <thead>
                     <tr>
@@ -247,26 +436,26 @@
                     </tr>
                     <tr>
                         <td>50+ Pre-built Actions</td>
-                        <td class="highlight-col"><span class="check">✓</span></td>
-                        <td><span class="cross">✗</span></td>
-                        <td><span class="cross">✗</span></td>
+                        <td class="highlight-col"><span class="check">&#10003;</span></td>
+                        <td><span class="cross">&#10007;</span></td>
+                        <td><span class="cross">&#10007;</span></td>
                     </tr>
                     <tr>
                         <td>Smart File Filtering</td>
-                        <td class="highlight-col"><span class="check">✓</span></td>
+                        <td class="highlight-col"><span class="check">&#10003;</span></td>
                         <td>Limited</td>
                         <td>Limited</td>
                     </tr>
                     <tr>
                         <td>Custom Bash/Python</td>
-                        <td class="highlight-col"><span class="check">✓</span></td>
+                        <td class="highlight-col"><span class="check">&#10003;</span></td>
                         <td>Complex</td>
                         <td>Hidden</td>
                     </tr>
                     <tr>
                         <td>Privacy (Local Only)</td>
-                        <td class="highlight-col"><span class="check">✓</span></td>
-                        <td><span class="check">✓</span></td>
+                        <td class="highlight-col"><span class="check">&#10003;</span></td>
+                        <td><span class="check">&#10003;</span></td>
                         <td>Cloud-tied</td>
                     </tr>
                 </tbody>
@@ -274,23 +463,31 @@
         </div>
     </section>
 
+    <section style="padding: 0 0 20px; text-align: center;">
+        <div class="container">
+            <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 700px; margin: 0 auto; padding: 20px 24px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; line-height: 1.6;">
+                <strong style="color: var(--text-secondary);">Known Limitation:</strong> The "Import Scripts" feature (File &gt; Import) is affected by a <a href="https://developer.apple.com/forums/thread/679565" target="_blank" rel="noopener" style="color: var(--accent);">macOS system dialog bug</a> where SwiftUI's file picker <a href="https://fpposchmann.de/fileexporter-and-fileimporter-wont-work-inside-a-menu-in-swiftui/" target="_blank" rel="noopener" style="color: var(--accent);">fails to appear when triggered from a menu command</a>. You can still add scripts directly through the app&mdash;just click "+" and paste your code. We're tracking this and will ship a fix once Apple resolves the underlying <a href="https://www.hackingwithswift.com/forums/swiftui/fileexporter-fileimporter-from-macos-file-menu/10532" target="_blank" rel="noopener" style="color: var(--accent);">framework behavior</a>.
+            </p>
+        </div>
+    </section>
+
     <section class="philosophy">
         <div class="container">
-            <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem;">Built for a Sound Mind</h2>
+            <h2 class="section-title">Built for a Sound Mind</h2>
             <p style="font-style: italic; color: var(--text-muted); margin-top: 10px;">"For God has not given us a spirit of fear, but of power and of love and of a sound mind." — 2 Timothy 1:7</p>
             <div class="philosophy-grid">
                 <div class="philosophy-card">
-                    <span class="emoji">⚡</span>
+                    <span class="emoji">&#9889;</span>
                     <h3>Power</h3>
                     <p>Execute complex scripts with one click. No Terminal required.</p>
                 </div>
                 <div class="philosophy-card">
-                    <span class="emoji">❤️</span>
+                    <span class="emoji">&#10084;&#65039;</span>
                     <h3>Love</h3>
                     <p>Designed to be useful, not to extract data. Your privacy is our priority.</p>
                 </div>
                 <div class="philosophy-card">
-                    <span class="emoji">🧠</span>
+                    <span class="emoji">&#129504;</span>
                     <h3>Sound Mind</h3>
                     <p>Clean up your workflow. Focus on the task, not the tool.</p>
                 </div>
@@ -301,14 +498,14 @@
     <section class="sustainability">
         <div class="container">
             <div class="sustainability-card">
-                <h2 style="font-family: 'Playfair Display', serif; font-size: 2.25rem; margin-bottom: 20px;">Open Source ≠ Free</h2>
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 2.25rem; margin-bottom: 20px;">Open Source &#8800; Free</h2>
                 <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 30px;">"Free" software usually leads to developer burnout or sold data. SaneClick is sustainable: open source code, but a $5 DMG to support development.</p>
                 <div class="sustainability-options">
                     <a href="https://github.com/sane-apps/SaneClick" class="sustainability-option">
                         <h4>Build It Yourself</h4>
                         <p>Clone the repo. MIT Licensed. Build from source for free.</p>
                     </a>
-                    <a href="#" class="sustainability-option featured">
+                    <a href="https://sanebar.lemonsqueezy.com/checkout/buy/679dbd1d-b808-44e7-98c8-8e679b592e93?embed=1" class="lemonsqueezy-button sustainability-option featured">
                         <h4>Buy the DMG — $5</h4>
                         <p>Get a signed, notarized, ready-to-use DMG and support development.</p>
                     </a>
@@ -317,21 +514,61 @@
         </div>
     </section>
 
+    <section class="more-apps">
+        <div class="container">
+            <h2 class="section-title">More from SaneApps</h2>
+            <p class="more-apps-subtitle">Privacy-first Mac utilities that don't suck</p>
+            <div class="more-apps-grid">
+                <a href="https://sanebar.com" class="app-card">
+                    <div class="app-card-header">
+                        <img src="images/sanebar-icon.png" alt="SaneBar" class="app-card-icon">
+                        <div class="app-card-name">SaneBar</div>
+                    </div>
+                    <p class="app-card-tagline">Hide menu bar clutter, lock sensitive icons behind Touch ID, and find any app instantly.</p>
+                    <span class="app-card-cta">Learn more &rarr;</span>
+                </a>
+                <a href="https://saneclip.com" class="app-card">
+                    <div class="app-card-header">
+                        <img src="images/saneclip-icon.png" alt="SaneClip" class="app-card-icon">
+                        <div class="app-card-name">SaneClip</div>
+                    </div>
+                    <p class="app-card-tagline">Clipboard history that never leaves your Mac. Touch ID protection, instant search, text transforms.</p>
+                    <span class="app-card-cta">Learn more &rarr;</span>
+                </a>
+            </div>
+            <div class="more-apps-hub">
+                <a href="https://saneapps.com">See all apps at saneapps.com &rarr;</a>
+            </div>
+        </div>
+    </section>
+
     <footer>
         <div class="container">
-            <p>Made with care by Mr. Sane &bull; Part of the <a href="https://saneapps.com">SaneApps</a> family</p>
-            <div style="margin-top: 20px; display: flex; gap: 20px; justify-content: center;">
+            <p style="font-style: italic; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 20px; opacity: 0.85;">"For God has not given us a spirit of fear, but of power, love, and a sound mind." — 2 Timothy 1:7</p>
+            <p class="footer-privacy"><strong>0% Telemetry</strong>. <strong>0% Spying</strong>. <strong>100% On-Device</strong>.</p>
+            <div class="footer-links">
                 <a href="/guides.html">Guides</a>
                 <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
                 <a href="/privacy.html">Privacy</a>
+                <a href="https://github.com/sane-apps/SaneClick/issues">Help</a>
+                <a href="https://github.com/sane-apps/SaneClick/blob/main/LICENSE">MIT License</a>
             </div>
-            <p style="font-size: 0.8rem; margin-top: 20px;">&copy; 2026 SaneClick. All rights reserved.</p>
+            <p class="footer-copy">Made with care by Mr. Sane &nbsp;&bull;&nbsp; &copy; 2026 SaneClick</p>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 12px;">"Built for a Sound Mind" &middot; <a href="https://saneapps.com" style="color: var(--text-secondary);">saneapps.com</a></p>
         </div>
     </footer>
 
     <script>
+        // Mobile Nav Toggle
+        function toggleMobileNav() {
+            var nav = document.getElementById('mobileNav');
+            nav.classList.toggle('open');
+            document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+        }
+
+        // Demo Menu Toggle
         function toggleMenu() {
-            const menu = document.getElementById('mockMenu');
+            var menu = document.getElementById('mockMenu');
             menu.classList.toggle('active');
         }
         window.onclick = function(event) {
@@ -340,5 +577,6 @@
             }
         }
     </script>
+    <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
 </body>
 </html>

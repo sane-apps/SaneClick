@@ -4,106 +4,230 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - SaneClick</title>
+    <meta name="description" content="SaneClick privacy policy. Zero data collection. Everything runs on your Mac.">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <link rel="apple-touch-icon" href="images/icon.png">
+    <link rel="canonical" href="https://saneclick.com/privacy">
+    <meta name="theme-color" content="#4f8ffa">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://saneclick.com/privacy">
+    <meta property="og:title" content="Privacy Policy - SaneClick">
+    <meta property="og:description" content="SaneClick collects zero data. Everything happens on your Mac.">
+    <meta property="og:image" content="https://saneclick.com/images/og-image.png">
+    <meta property="og:site_name" content="SaneClick">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Privacy Policy - SaneClick">
+    <meta name="twitter:description" content="SaneClick collects zero data. Everything happens on your Mac.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --void: #0a0a0a;
-            --carbon: #141414;
-            --smoke: #222222;
-            --stone: #888888;
-            --cloud: #e5e5e5;
-            --white: #ffffff;
-            --teal: #5fa8d3;
+            --bg-primary: #08080c;
+            --bg-secondary: #0f0f16;
+            --bg-card: #16161f;
+            --accent: #4f8ffa;
+            --accent-soft: #3b7ce8;
+            --accent-glow: rgba(79, 143, 250, 0.25);
+            --accent-subtle: rgba(79, 143, 250, 0.08);
+            --text-primary: #f5f5f8;
+            --text-secondary: #c0c0d0;
+            --text-muted: #a0a0b0;
+            --border: #252530;
+            --border-subtle: #1e1e28;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-            background: var(--void);
-            color: var(--cloud);
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             line-height: 1.7;
             font-size: 16px;
-            padding: 40px 24px;
-            max-width: 700px;
-            margin: 0 auto;
+            overflow-x: hidden;
+            font-weight: 400;
+            letter-spacing: -0.01em;
         }
 
+        .gradient-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse at 15% 10%, rgba(79, 143, 250, 0.12) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 90%, rgba(52, 211, 153, 0.06) 0%, transparent 45%),
+                radial-gradient(ellipse at 50% 50%, rgba(20, 20, 30, 1) 0%, var(--bg-primary) 100%);
+            z-index: -1;
+        }
+
+        .gradient-bg::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        .container { max-width: 700px; margin: 0 auto; padding: 0 24px; }
+
+        /* Navigation */
+        nav {
+            padding: 20px 0; position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 100; border-bottom: 1px solid var(--border);
+        }
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 1.25rem; text-decoration: none; color: var(--text-primary); }
+        .logo img { width: 32px; height: 32px; border-radius: 8px; }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text-primary); }
+
+        /* Content */
+        .content { padding-top: 120px; padding-bottom: 80px; }
+
         h1 {
-            color: var(--white);
-            font-size: 32px;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(2rem, 5vw, 2.5rem);
             margin-bottom: 8px;
+            letter-spacing: -0.02em;
         }
 
         .updated {
-            color: var(--stone);
+            color: var(--text-muted);
             font-size: 14px;
             margin-bottom: 40px;
         }
 
         h2 {
-            color: var(--white);
-            font-size: 20px;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.25rem;
             margin-top: 32px;
             margin-bottom: 16px;
+            letter-spacing: -0.01em;
         }
 
         p, li {
-            color: var(--cloud);
+            color: var(--text-secondary);
             margin-bottom: 16px;
         }
 
-        ul {
-            padding-left: 24px;
-        }
+        ul { padding-left: 24px; }
 
-        a {
-            color: var(--teal);
-            text-decoration: none;
-        }
+        a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--text-primary); }
 
-        a:hover {
-            text-decoration: underline;
-        }
+        strong { color: var(--text-primary); }
 
         .back {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             margin-top: 40px;
             padding: 12px 24px;
-            background: var(--carbon);
-            border-radius: 8px;
-            color: var(--cloud);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .back:hover { border-color: var(--accent); color: var(--text-primary); transform: translateY(-2px); }
+
+        /* Footer */
+        footer {
+            padding: 60px 0 40px;
+            border-top: 1px solid var(--border-subtle);
+            text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.2));
+        }
+        .footer-privacy { font-size: 1.05rem; margin-bottom: 28px; letter-spacing: 0.02em; }
+        .footer-privacy strong { color: var(--accent); font-weight: 600; }
+        .footer-links { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--accent); }
+        .footer-copy { color: var(--text-secondary); font-size: 0.95rem; }
+
+        @media (max-width: 768px) {
+            .content { padding-top: 100px; }
+            .footer-links { flex-direction: column; gap: 12px; align-items: center; }
         }
     </style>
 </head>
 <body>
-    <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: January 24, 2026</p>
+    <div class="gradient-bg"></div>
 
-    <h2>The Short Version</h2>
-    <p>SaneClick collects <strong>zero data</strong>. Everything happens on your Mac. We never see your scripts, your files, or anything else.</p>
+    <nav>
+        <div class="container">
+            <a href="/" class="logo">
+                <img src="images/icon.png" alt="SaneClick">
+                SaneClick
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/guides.html">Guides</a>
+            </div>
+        </div>
+    </nav>
 
-    <h2>Data Collection</h2>
-    <p>SaneClick does not collect, transmit, or store any personal data. Specifically:</p>
-    <ul>
-        <li><strong>No analytics</strong> - We don't track how you use the app</li>
-        <li><strong>No telemetry</strong> - No crash reports or usage data are sent</li>
-        <li><strong>No network requests</strong> - The app works entirely offline</li>
-        <li><strong>No cloud sync</strong> - Your scripts stay on your device</li>
-    </ul>
+    <div class="content container">
+        <h1>Privacy Policy</h1>
+        <p class="updated">Last updated: January 24, 2026</p>
 
-    <h2>Local Storage</h2>
-    <p>SaneClick stores your scripts and settings locally on your Mac in the app's container. This data never leaves your device unless you explicitly export it.</p>
+        <h2>The Short Version</h2>
+        <p>SaneClick collects <strong>zero data</strong>. Everything happens on your Mac. We never see your scripts, your files, or anything else.</p>
 
-    <h2>Finder Extension</h2>
-    <p>The Finder Sync Extension accesses file paths only when you right-click to show the context menu. These paths are passed to your scripts but are never stored or transmitted anywhere.</p>
+        <h2>Data Collection</h2>
+        <p>SaneClick does not collect, transmit, or store any personal data. Specifically:</p>
+        <ul>
+            <li><strong>No analytics</strong> &mdash; We don't track how you use the app</li>
+            <li><strong>No telemetry</strong> &mdash; No crash reports or usage data are sent</li>
+            <li><strong>No network requests</strong> &mdash; The app works entirely offline</li>
+            <li><strong>No cloud sync</strong> &mdash; Your scripts stay on your device</li>
+        </ul>
 
-    <h2>Script Execution</h2>
-    <p>Scripts you create run locally on your Mac with your user permissions. SaneClick does not modify, monitor, or log script execution beyond showing you the output.</p>
+        <h2>Local Storage</h2>
+        <p>SaneClick stores your scripts and settings locally on your Mac in the app's container. This data never leaves your device unless you explicitly export it.</p>
 
-    <h2>Updates</h2>
-    <p>SaneClick checks for updates via GitHub Releases. This is a standard HTTPS request to github.com and does not transmit any personal information.</p>
+        <h2>Finder Extension</h2>
+        <p>The Finder Sync Extension accesses file paths only when you right-click to show the context menu. These paths are passed to your scripts but are never stored or transmitted anywhere.</p>
 
-    <h2>Contact</h2>
-    <p>Questions? Email <a href="mailto:hi@saneapps.com">hi@saneapps.com</a></p>
+        <h2>Script Execution</h2>
+        <p>Scripts you create run locally on your Mac with your user permissions. SaneClick does not modify, monitor, or log script execution beyond showing you the output.</p>
 
-    <a href="/" class="back">← Back to SaneClick</a>
+        <h2>Updates</h2>
+        <p>SaneClick checks for updates via <a href="https://sparkle-project.org/">Sparkle</a>, the standard macOS update framework. Update checks are made to <code style="background: var(--bg-card); padding: 2px 8px; border-radius: 6px; font-family: 'SF Mono', Monaco, monospace; font-size: 0.9em; color: var(--accent); border: 1px solid var(--border);">saneclick.com/appcast.xml</code> over HTTPS. This request does not transmit any personal information.</p>
+
+        <h2>Contact</h2>
+        <p>Questions? Email <a href="mailto:hi@saneapps.com">hi@saneapps.com</a></p>
+
+        <a href="/" class="back">&larr; Back to SaneClick</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p style="font-style: italic; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 20px; opacity: 0.85;">"For God has not given us a spirit of fear, but of power, love, and a sound mind." &mdash; 2 Timothy 1:7</p>
+            <p class="footer-privacy"><strong>0% Telemetry</strong>. <strong>0% Spying</strong>. <strong>100% On-Device</strong>.</p>
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/guides.html">Guides</a>
+                <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
+                <a href="https://github.com/sane-apps/SaneClick/issues">Help</a>
+                <a href="https://github.com/sane-apps/SaneClick/blob/main/LICENSE">MIT License</a>
+            </div>
+            <p class="footer-copy">Made with care by Mr. Sane &nbsp;&bull;&nbsp; &copy; 2026 SaneClick</p>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 12px;">"Built for a Sound Mind" &middot; <a href="https://saneapps.com" style="color: var(--text-secondary);">saneapps.com</a></p>
+        </div>
+    </footer>
 </body>
 </html>
