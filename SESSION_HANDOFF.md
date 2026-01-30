@@ -1,4 +1,35 @@
-# Session Handoff - January 29, 2026
+# Session Handoff - January 30, 2026
+
+## Release Script Audit Fix (Jan 30)
+
+### What Changed
+Cross-project audit found `release.sh` was missing `<description>` tag in appcast template and had GitHub Releases upload instructions instead of Cloudflare R2.
+
+### Round 1 Fixes
+- Added `<description><![CDATA[...]]></description>` to appcast heredoc template
+- Changed upload instructions to R2: `npx wrangler r2 object put sanebar-downloads/updates/...`
+- Added `.meta` file output (VERSION, BUILD, SHA256, SIZE, SIGNATURE)
+- Added FILE_SIZE to release info output
+
+### Round 2 Fixes (Feature Parity)
+- Added SUPublicEDKey/SUFeedURL verification (reads built Info.plist before shipping)
+- Replaced hdiutil-only with create-dmg + hdiutil fallback
+
+### Round 3 Fixes (Deep Verification)
+- Moved FILE_SIZE outside `if [ -n "$SIGNATURE" ]` block (was scoped inside but used outside)
+
+### Live Testing (Jan 30)
+- SaneClick-1.0.2.dmg (1.7MB) signed with Sparkle EdDSA key → 88-char base64 signature PASS
+- Full appcast XML rendered with correct `sparkle:version` (numeric BUILD_NUMBER) and `sparkle:shortVersionString` (semantic VERSION)
+- No leading spaces in attribute values (heredoc confirmed clean)
+
+### The Rule
+- `sparkle:version` = BUILD_NUMBER (numeric) -- was already correct
+- `sparkle:shortVersionString` = VERSION (semantic) -- was already correct
+- Always use heredoc, never echo for appcast templates -- was already correct
+- URL: `https://dist.saneclick.com/updates/SaneClick-{version}.dmg`
+
+---
 
 ## 🚀 SaneClick Status Update
 - **Identity Protected:** All tracked project files (`LICENSE`, `SECURITY.md`, `PRIVACY.md`) now use **MrSaneApps** alias.

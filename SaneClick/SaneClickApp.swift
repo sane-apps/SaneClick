@@ -1,4 +1,5 @@
 import SwiftUI
+import FinderSync
 
 @main
 struct SaneClickApp: App {
@@ -8,6 +9,13 @@ struct SaneClickApp: App {
     init() {
         // Initialize ScriptExecutor to register notification listener for extension requests
         _ = ScriptExecutor.shared
+
+        // Prompt user to enable Finder extension if not already enabled
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            if !FIFinderSyncController.isExtensionEnabled {
+                FIFinderSyncController.showExtensionManagementInterface()
+            }
+        }
     }
 
     var body: some Scene {

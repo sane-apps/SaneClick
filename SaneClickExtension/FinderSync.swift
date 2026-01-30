@@ -7,6 +7,9 @@
 
 import Cocoa
 import FinderSync
+import os.log
+
+private let logger = Logger(subsystem: "com.saneclick.SaneClick.FinderSync", category: "FinderSync")
 
 /// Execution request written to App Group container for host app to process
 struct ExecutionRequest: Codable {
@@ -38,6 +41,7 @@ class FinderSync: FIFinderSync {
 
     override init() {
         super.init()
+        logger.info("FinderSync extension init() called")
 
         let finderSync = FIFinderSyncController.default()
         if let mountedVolumes = FileManager.default.mountedVolumeURLs(
@@ -45,6 +49,10 @@ class FinderSync: FIFinderSync {
             options: [.skipHiddenVolumes]
         ) {
             finderSync.directoryURLs = Set(mountedVolumes)
+            logger.info("Set directoryURLs to \(mountedVolumes.count) volumes")
+        } else {
+            finderSync.directoryURLs = [URL(fileURLWithPath: "/")]
+            logger.warning("mountedVolumeURLs returned nil, using root /")
         }
 
         NSWorkspace.shared.notificationCenter.addObserver(
@@ -74,6 +82,7 @@ class FinderSync: FIFinderSync {
     // MARK: - Context Menu
 
     override func menu(for menuKind: FIMenuKind) -> NSMenu {
+        logger.info("menu(for:) called with menuKind: \(String(describing: menuKind))")
         let menu = NSMenu(title: "SaneClick")
 
         let scripts = loadScripts()
@@ -106,7 +115,7 @@ class FinderSync: FIFinderSync {
         for (index, script) in applicableScripts.enumerated() {
             let item = NSMenuItem(title: script.name, action: #selector(executeScript(_:)), keyEquivalent: "")
             item.tag = index
-            item.image = NSImage(systemSymbolName: script.icon, accessibilityDescription: script.name)
+            item.image = tintedSFSymbol(name: script.icon, accessibilityDescription: script.name)
             menu.addItem(item)
         }
 
@@ -115,7 +124,7 @@ class FinderSync: FIFinderSync {
         }
 
         let settingsItem = NSMenuItem(title: "Open SaneClick...", action: #selector(openMainApp), keyEquivalent: "")
-        settingsItem.image = NSImage(systemSymbolName: "gearshape", accessibilityDescription: "Settings")
+        settingsItem.image = tintedSFSymbol(name: "gearshape", accessibilityDescription: "Settings")
         menu.addItem(settingsItem)
 
         return menu
@@ -173,6 +182,28 @@ class FinderSync: FIFinderSync {
         }
         return scripts
     }
+
+    /// Render an SF Symbol as a tinted bitmap image.
+    /// Finder forces template rendering on NSMenuItem images, so we rasterize
+    /// with a palette color configuration to produce a non-template bitmap.
+    private func tintedSFSymbol(name: String, accessibilityDescription: String?) -> NSImage? {
+        guard let symbol = NSImage(systemSymbolName: name, accessibilityDescription: accessibilityDescription) else {
+            return nil
+        }
+
+        // Apply palette color so the symbol renders with a specific color
+        let config = NSImage.SymbolConfiguration(paletteColors: [.controlAccentColor])
+        guard let colored = symbol.withSymbolConfiguration(config) else { return nil }
+
+        // Rasterize into a bitmap so Finder cannot re-template it
+        let size = NSSize(width: 16, height: 16)
+        let bitmap = NSImage(size: size, flipped: false) { rect in
+            colored.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1.0)
+            return true
+        }
+        bitmap.isTemplate = false
+        return bitmap
+    }
 }
 
 // MARK: - Script Model
@@ -217,7 +248,7 @@ struct ExtensionScript: Codable {
 
         let normalizedExtensions = Set(fileExtensions.map { $0.lowercased().trimmingCharacters(in: CharacterSet(charactersIn: ".")) })
 
-        if extensionMatchMode == "All files match" {
+        if extensionMatchMode == "Show only if all selected files match" {
             return fileURLs.allSatisfy { url in
                 normalizedExtensions.contains(url.pathExtension.lowercased())
             }
