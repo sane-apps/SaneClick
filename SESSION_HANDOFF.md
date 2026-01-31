@@ -1,53 +1,47 @@
 # Session Handoff - January 30, 2026
 
-## Release Script Audit Fix (Jan 30)
+## Latest Session: Org Audit & Website Fixes (Jan 30, evening)
 
-### What Changed
-Cross-project audit found `release.sh` was missing `<description>` tag in appcast template and had GitHub Releases upload instructions instead of Cloudflare R2.
+### Website Changes (all committed & pushed)
+- **Known limitation disclosure** on saneclick.com with 3 embedded Apple bug proof links
+- **Crypto payment section** added to SaneClick with BTC, ETH, SOL, ZEC + "How it works" flow (email tx proof → get DMG)
+- **ETH address added** across ALL sites (was on saneapps.com only, missing from SaneBar, SaneClip, SaneClick, SaneHosts)
+- **SaneHosts crypto section** — had CSS but no HTML, now complete
 
-### Round 1 Fixes
-- Added `<description><![CDATA[...]]></description>` to appcast heredoc template
-- Changed upload instructions to R2: `npx wrangler r2 object put sanebar-downloads/updates/...`
-- Added `.meta` file output (VERSION, BUILD, SHA256, SIZE, SIGNATURE)
-- Added FILE_SIZE to release info output
+### Org-Wide Fixes (all committed & pushed)
+- **Signing identity** — removed hardcoded `"Stephan Joseph"` from SaneBar, SaneClip, SaneSync, SaneVideo project.yml. All now use generic `"Developer ID Application"`
+- **Sister apps lists** — replaced "SaneScript" with "SaneClick" in SaneBar, SaneHosts, SaneVideo, SaneSync, SaneAI CLAUDE.md files
+- **Deleted duplicates** — `~/CLAUDE.md` (duplicate of `~/.claude/CLAUDE.md`), `~/SaneApps/infra/sane-skills/` (orphaned), `SaneClip/homebrew/`
 
-### Round 2 Fixes (Feature Parity)
-- Added SUPublicEDKey/SUFeedURL verification (reads built Info.plist before shipping)
-- Replaced hdiutil-only with create-dmg + hdiutil fallback
+### Model Strategy (updated in skills)
+- All subagent skills (`/critic`, `/sane-audit`, `/docs-audit`) now use **Sonnet** instead of Haiku
+- Strategy: Opus for main session (planning/decisions), Sonnet for all subagents, Gemini Flash for memory
+- "Haiku reads, Sonnet works, Opus decides"
 
-### Round 3 Fixes (Deep Verification)
-- Moved FILE_SIZE outside `if [ -n "$SIGNATURE" ]` block (was scoped inside but used outside)
+### Maintenance
+- **SaneVideo lefthook** — installed 132 Ruby gems via `bundle install` (was failing on push)
+- **SaneAI remote** — switched from SSH to HTTPS to match other repos
+- **SaneClick uncommitted changes** — committed entitlements fix (host sandbox OFF, extension sandbox ON) and rebranded app/extension code
+- **Screenshots folder** cleared
 
-### Live Testing (Jan 30)
-- SaneClick-1.0.2.dmg (1.7MB) signed with Sparkle EdDSA key → 88-char base64 signature PASS
-- Full appcast XML rendered with correct `sparkle:version` (numeric BUILD_NUMBER) and `sparkle:shortVersionString` (semantic VERSION)
-- No leading spaces in attribute values (heredoc confirmed clean)
+### Crypto Payment Flow (NO automation exists)
+- Websites explain: send crypto → email hi@saneapps.com with tx proof → manual verification → send download link
+- No automated crypto verification in sane-email-automation — would need a new handler if desired
 
-### The Rule
-- `sparkle:version` = BUILD_NUMBER (numeric) -- was already correct
-- `sparkle:shortVersionString` = VERSION (semantic) -- was already correct
-- Always use heredoc, never echo for appcast templates -- was already correct
-- URL: `https://dist.saneclick.com/updates/SaneClick-{version}.dmg`
+## Verification
+- All repos clean (no uncommitted changes)
+- No orphaned processes
+- 6.1 GB RAM available
+- All pushes successful
 
----
+## Next Steps
+1. **Video Demos** — film real usage videos for all products
+2. **SaneClick Guides** — expand library (currently 1 guide)
+3. **Crypto automation** — optional: build email handler for transaction verification
+4. **SaneVideo lefthook** — Ruby gems installed but verify `lefthook install -f` runs clean
 
-## 🚀 SaneClick Status Update
-- **Identity Protected:** All tracked project files (`LICENSE`, `SECURITY.md`, `PRIVACY.md`) now use **MrSaneApps** alias.
-- **Generic Signing:** Build configuration (`project.yml`, `release.sh`) now uses generic `"Developer ID Application"` string. Xcode resolves the correct certificate via Team ID (`M78L6FXD48`). No real name is hardcoded in the repo.
-- **Rebranding Complete:** Finished the transition from `SaneScript` to `SaneClick`. Updated all internal bundle IDs, App Groups (`group.com.saneclick.app`), and notification names.
-- **MCP Fixed:** Resolved `mcp_toolbox` connection error by disabling incompatible `tools.yaml` shell commands and providing a minimal valid configuration.
-
-## ✅ Verification
-- **Builds:** `xcodegen generate` and `xcodebuild` successful with generic signing.
-- **Tests:** 61/61 unit tests passed (100%).
-- **IPC:** Verified App Group consistency between host and extension.
-
-## 🛠️ Next Steps
-1. **LemonSqueezy:** Create SaneClick product ($5) and update the checkout link in `docs/index.html`.
-2. **Video Demos:** Film real usage videos for all products to replace animated/mock demos.
-3. **SaneClick Guides:** Expand the library to match SaneClip's depth (5+ guides).
-4. **Final Folder Rename:** Consider renaming the root folder to `SaneClick` now that rebranding is solid.
-
-## 📝 Critical Note
-- **Git Identity:** Always use `MrSaneApps` for commits in this and related projects.
-- **Signing Rule:** Use generic `"Developer ID Application"` in all SaneApps projects to protect identity.
+## Critical Rules
+- **Signing:** Generic `"Developer ID Application"` everywhere (Xcode resolves via Team ID)
+- **Model strategy:** Sonnet for subagents, Opus for main, Gemini Flash for memory
+- **Skills are global:** `~/.claude/skills/` is single source of truth, never duplicate into projects
+- **One Sparkle key:** `7Pl/8cwfb2vm4Dm65AByslkMCScLJ9tbGlwGGx81qYU=` for ALL SaneApps
