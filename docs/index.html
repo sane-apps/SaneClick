@@ -6,6 +6,10 @@
     <title>SaneClick — Manage Your Mac's Right-Click Menu</title>
     <meta name="description" content="Stop fighting Finder. Run scripts, convert files, and automate your Mac directly from the right-click menu. 50+ actions, 100% private. $5.">
     <meta name="keywords" content="Finder context menu, right-click menu Mac, macOS automation, Mac scripts, Finder extension, custom right-click, Automator alternative, Mac productivity, context menu customization">
+    <meta name="author" content="Stephan Joseph">
+    <meta name="robots" content="index, follow">
+    <meta name="apple-mobile-web-app-title" content="SaneClick">
+    <meta name="application-name" content="SaneClick">
     <link rel="icon" type="image/png" href="images/icon.png">
     <link rel="apple-touch-icon" href="images/icon.png">
     <link rel="canonical" href="https://saneclick.com/">
@@ -20,6 +24,7 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="SaneClick">
+    <meta property="og:locale" content="en_US">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
@@ -27,6 +32,7 @@
     <meta name="twitter:description" content="Run scripts, convert files, and automate your Mac directly from the right-click menu. 50+ actions, 100% private.">
     <meta name="twitter:image" content="https://saneclick.com/images/og-image.png">
     <meta name="twitter:site" content="@saneapps">
+    <meta name="twitter:url" content="https://saneclick.com/">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,7 +63,26 @@
         "Open Source (MIT)"
       ],
       "downloadUrl": "https://sanebar.lemonsqueezy.com/checkout/buy/679dbd1d-b808-44e7-98c8-8e679b592e93",
-      "image": "https://saneclick.com/images/icon.png"
+      "image": "https://saneclick.com/images/icon.png",
+      "author": {
+        "@type": "Person",
+        "name": "Stephan Joseph",
+        "url": "https://github.com/sane-apps"
+      }
+    }
+    </script>
+
+    <!-- Structured Data - Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "SaneClick",
+      "url": "https://saneclick.com",
+      "logo": "https://saneclick.com/images/icon.png",
+      "sameAs": [
+        "https://github.com/sane-apps/SaneClick"
+      ]
     }
     </script>
 
@@ -265,13 +290,26 @@
         .sustainability-option h4 { font-size: 1rem; margin-bottom: 8px; color: var(--text-primary); }
         .sustainability-option p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
 
+        /* Support Section */
+        .support { padding: 80px 0; text-align: center; border-top: 1px solid var(--border-subtle); }
+        .support-subtitle { color: var(--text-secondary); max-width: 500px; margin: 0 auto 32px; font-size: 1rem; line-height: 1.8; }
+        .github-sponsor-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #21262d; color: #f0f6fc; padding: 14px 32px;
+            border-radius: 12px; font-weight: 600; text-decoration: none;
+            border: 1px solid #30363d; transition: all 0.3s; font-size: 1rem;
+        }
+        .github-sponsor-btn:hover {
+            background: #30363d; border-color: #8b949e; transform: translateY(-2px);
+        }
+
         /* Cross-Sell Section */
         .more-apps {
             padding: 80px 0;
             background: linear-gradient(180deg, transparent, rgba(79, 143, 250, 0.03));
         }
         .more-apps-subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 48px; font-size: 1.1rem; }
-        .more-apps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 900px; margin: 0 auto; }
+        .more-apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1000px; margin: 0 auto; }
         .app-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; text-decoration: none; color: inherit; transition: all 0.3s ease; display: block; }
         .app-card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); }
         .app-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
@@ -361,6 +399,7 @@
             .btn { width: 100%; max-width: 300px; justify-content: center; }
             .mock-menu { left: 5%; width: 90%; }
             .sustainability-options { grid-template-columns: 1fr; }
+            .more-apps-grid { grid-template-columns: 1fr; }
             .footer-links { flex-direction: column; gap: 12px; align-items: center; }
             section { padding-top: 48px !important; padding-bottom: 48px !important; }
             .hero { padding-top: 110px !important; }
@@ -548,6 +587,23 @@
         </div>
     </section>
 
+    <section class="support" id="support">
+        <div class="container">
+            <h2 class="section-title">Support SaneClick</h2>
+            <p class="section-subtitle support-subtitle">
+                I build apps because I love building things that work well.<br>
+                If SaneClick saves you time, consider supporting development.<br><br>
+                <span>Thank you. — Mr. Sane</span>
+            </p>
+            <a href="https://github.com/sponsors/MrSaneApps" class="btn btn-primary github-sponsor-btn" target="_blank" rel="noopener">
+                <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor" style="margin-right: 8px;">
+                    <path d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.565 20.565 0 008 13.393a20.561 20.561 0 003.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 01-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5zM8 14.25l-.345.666-.002-.001-.006-.003-.018-.01a7.643 7.643 0 01-.31-.17 22.075 22.075 0 01-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.08 22.08 0 01-3.744 2.584l-.018.01-.006.003h-.002L8 14.25z"/>
+                </svg>
+                Sponsor on GitHub
+            </a>
+        </div>
+    </section>
+
     <section class="more-apps">
         <div class="container">
             <h2 class="section-title">More from SaneApps</h2>
@@ -567,6 +623,14 @@
                         <div class="app-card-name">SaneClip</div>
                     </div>
                     <p class="app-card-tagline">Clipboard history that never leaves your Mac. Touch ID protection, instant search, text transforms.</p>
+                    <span class="app-card-cta">Learn more &rarr;</span>
+                </a>
+                <a href="https://sanehosts.com" class="app-card">
+                    <div class="app-card-header">
+                        <img src="images/sanehosts-icon.png" alt="SaneHosts" class="app-card-icon">
+                        <div class="app-card-name">SaneHosts</div>
+                    </div>
+                    <p class="app-card-tagline">Block ads, trackers, and data collectors at the system level. No Terminal. No commands. Works in every app.</p>
                     <span class="app-card-cta">Learn more &rarr;</span>
                 </a>
             </div>
@@ -621,7 +685,10 @@
                 <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
                 <a href="/privacy.html">Privacy</a>
                 <a href="https://github.com/sane-apps/SaneClick/issues">Help</a>
+                <a href="mailto:hi@saneapps.com">Contact</a>
                 <a href="https://github.com/sane-apps/SaneClick/blob/main/LICENSE">MIT License</a>
+                <a href="https://github.com/sponsors/MrSaneApps"><svg height="12" viewBox="0 0 16 16" width="12" fill="#ea4aaa" style="vertical-align: -1px; margin-right: 3px;"><path d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.565 20.565 0 008 13.393a20.561 20.561 0 003.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 01-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5zM8 14.25l-.345.666-.002-.001-.006-.003-.018-.01a7.643 7.643 0 01-.31-.17 22.075 22.075 0 01-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.08 22.08 0 01-3.744 2.584l-.018.01-.006.003h-.002L8 14.25z"/></svg>Sponsor</a>
+                <a href="https://saneapps.com">SaneApps</a>
             </div>
             <p class="footer-copy">Made with care by Mr. Sane &nbsp;&bull;&nbsp; &copy; 2026 SaneClick</p>
             <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 12px;">"Built for a Sound Mind" &middot; <a href="https://saneapps.com" style="color: var(--text-secondary);">saneapps.com</a></p>
