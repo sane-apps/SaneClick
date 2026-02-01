@@ -147,7 +147,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## License
 
-MIT License - See [LICENSE](LICENSE) for details.
+GPL v3 — see [LICENSE](LICENSE) for details.
 
 ---
 
