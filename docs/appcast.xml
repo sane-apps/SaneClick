@@ -17,10 +17,10 @@
                 </ul>
                 ]]>
             </description>
-            <enclosure url="https://dist.saneclick.com/SaneClick-1.0.2.dmg"
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.0.2.dmg"
                        sparkle:version="102"
                        sparkle:shortVersionString="1.0.2"
-                       length="1548166"
+                       length="1421307"
                        type="application/x-apple-diskimage"
                        sparkle:edSignature="S7jw+x39FddrzDq8Csc07kVC0y069WsiN9PtJ5AoIIWGRPPG429yi9bBsRKsu+QFtD9SbOh80q8u76IO+vzjAQ=="/>
         </item>
