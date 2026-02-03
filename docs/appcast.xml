@@ -20,32 +20,9 @@
             <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.0.2.dmg"
                        sparkle:version="102"
                        sparkle:shortVersionString="1.0.2"
-                       length="1421307"
+                       length="1366033"
                        type="application/x-apple-diskimage"
-                       sparkle:edSignature="S7jw+x39FddrzDq8Csc07kVC0y069WsiN9PtJ5AoIIWGRPPG429yi9bBsRKsu+QFtD9SbOh80q8u76IO+vzjAQ=="/>
-        </item>
-        <item>
-            <title>1.0.1</title>
-            <pubDate>Fri, 24 Jan 2026 20:00:00 -0500</pubDate>
-            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <description>
-                <![CDATA[
-                <h2>Initial Release</h2>
-                <ul>
-                    <li><strong>Custom Context Menus</strong>: Add scripts to your Finder right-click menu</li>
-                    <li><strong>Three Script Types</strong>: Bash, AppleScript, or Automator workflows</li>
-                    <li><strong>Smart Filtering</strong>: Scripts appear only for matching file types</li>
-                    <li><strong>Categories</strong>: Organize scripts into groups</li>
-                    <li><strong>Test Before Save</strong>: Run scripts on real files before committing</li>
-                </ul>
-                ]]>
-            </description>
-            <enclosure url="https://dist.saneapps.com/updates/SaneClick-1.0.1.dmg"
-                       sparkle:version="101"
-                       sparkle:shortVersionString="1.0.1"
-                       length="1421307"
-                       type="application/x-apple-diskimage"
-                       sparkle:edSignature="E7ZG2AWg8CpY2kTi0YqtY7ELo+7DwlyDP66Pxyx5JT1asRlV5JWvdjCtYj6Zh+8JeKyg9edr5CwUlW3y+juTAw=="/>
+                       sparkle:edSignature="Rg8wUzXXktrZjt3COniRGcOmnHiQx7qfpE2RgXM9RkpGdW2hpNKpJiVBUWc5dlY4uXcNVvQVT8oHvxd+Yd0+Cw=="/>
         </item>
     </channel>
 </rss>

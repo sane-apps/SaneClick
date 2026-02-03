@@ -53,8 +53,9 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 ## Requirements
 
 - macOS 14.0+
+- Apple Silicon (arm64) only
 - Xcode 16.0+ (for building from source)
-- XcodeGen (for project generation)
+- XcodeGen (project generation; SaneMaster runs it for you)
 
 ---
 
@@ -63,6 +64,7 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 ### Buy the DMG ($5)
 
 [Buy SaneClick](https://sane.lemonsqueezy.com/buy/saneclick) — Signed, notarized, ready to use. Supports sustainable open source development.
+DMGs are hosted on Cloudflare (not attached to GitHub releases).
 
 ### Build from Source (Free)
 
@@ -71,12 +73,13 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 git clone https://github.com/sane-apps/SaneClick.git
 cd SaneClick
 
-# Generate Xcode project
-xcodegen generate
+# Build + test (preferred)
+./scripts/SaneMaster.rb verify
 
-# Build
-xcodebuild -project SaneClick.xcodeproj -scheme SaneClick build
+# Launch
+./scripts/SaneMaster.rb launch
 ```
+SaneMaster runs XcodeGen when needed; only run `xcodegen generate` manually if you add files and want to refresh immediately.
 
 ### Enable the Extension
 
@@ -105,6 +108,8 @@ xcodebuild -project SaneClick.xcodeproj -scheme SaneClick build
 ---
 
 ## Architecture
+
+See [ARCHITECTURE.md](../ARCHITECTURE.md) for the full system overview and state machines.
 
 ```
 SaneClick/

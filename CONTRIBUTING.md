@@ -19,12 +19,11 @@ SaneClick adds custom context menu scripts to Finder. Create Bash, AppleScript, 
 git clone https://github.com/sane-apps/SaneClick.git
 cd SaneClick
 
-# Generate Xcode project
-xcodegen generate
+# Build + test (preferred)
+./scripts/SaneMaster.rb verify
 
-# Build and test
-xcodebuild -project SaneClick.xcodeproj -scheme SaneClick build
-xcodebuild -project SaneClick.xcodeproj -scheme SaneClick test
+# Launch
+./scripts/SaneMaster.rb launch
 ```
 
 ---
@@ -34,8 +33,9 @@ xcodebuild -project SaneClick.xcodeproj -scheme SaneClick test
 ### Requirements
 
 - **macOS 14.0+** (Sonoma or later)
+- **Apple Silicon (arm64) only**
 - **Xcode 16+**
-- **XcodeGen** (`brew install xcodegen`)
+- **XcodeGen** (`brew install xcodegen`) — SaneMaster runs it when needed
 
 ### Architecture
 
@@ -84,7 +84,7 @@ SaneClick/
 
 ## Testing the Extension
 
-1. Build and run SaneClick from Xcode
+1. Build and run with `./scripts/SaneMaster.rb launch`
 2. Enable the extension: System Settings > Privacy & Security > Extensions > Finder
 3. Create a test script in SaneClick
 4. Right-click a file in Finder to verify

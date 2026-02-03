@@ -1,6 +1,6 @@
 # SaneClick Development Guide (SOP)
 
-**Version 1.0** | Last updated: 2026-01-20
+**Version 1.0** | Last updated: 2026-02-02
 
 > **SINGLE SOURCE OF TRUTH** for all Developers and AI Agents.
 
@@ -40,7 +40,7 @@ Real failures from past sessions. Don't repeat them.
 | **Deleted "unused" file** | Periphery said unused, but ServiceContainer needed it | Grep before delete |
 | **Extension not loading** | Changed extension target but didn't rebuild host app | Rebuild both targets |
 | **Finder menu stale** | Cached menu items from previous session | Don't cache menus - rebuild on each `menu(for:)` call |
-| **App Group mismatch** | Extension couldn't read shared data | Verify `group.com.saneclick.app` in both targets |
+| **App Group mismatch** | Extension couldn't read shared data | Verify `M78L6FXD48.group.com.saneclick.app` in both targets |
 
 <!-- ADD PROJECT-SPECIFIC BURNS ABOVE -->
 
@@ -56,26 +56,17 @@ Real failures from past sessions. Don't repeat them.
 
 1. **Read Rule #0 first** (Section "The Rules") - It's about HOW to use all other rules
 2. **All files stay in project** - NEVER write files outside `~/SaneApps/apps/SaneClick/` unless user explicitly requests it
-3. **Use XcodeBuildMCP for build/test** - Set session defaults, then use `build_macos`, `test_macos`
+3. **Use SaneMaster.rb for build/test** - `./scripts/SaneMaster.rb verify`, never raw `xcodebuild`
 4. **Self-rate after every task** - Rate yourself 1-10 on SOP adherence (see Self-Rating section)
 
-Bootstrap runs automatically via SessionStart hook. If it fails, check XcodeBuildMCP defaults.
+If bootstrap fails, run `./scripts/SaneMaster.rb doctor`.
 
 **Key Commands:**
 ```bash
-xcodegen generate                    # Regenerate project after new files
-# Then use XcodeBuildMCP:
-mcp__XcodeBuildMCP__build_macos      # Build
-mcp__XcodeBuildMCP__test_macos       # Test
-mcp__XcodeBuildMCP__build_run_macos  # Build + launch
-```
-
-**XcodeBuildMCP Session Defaults (set at session start):**
-```
-mcp__XcodeBuildMCP__session-set-defaults:
-  projectPath: ~/SaneApps/apps/SaneClick/SaneClick.xcodeproj
-  scheme: SaneClick
-  arch: arm64
+./scripts/SaneMaster.rb verify       # Build + test
+./scripts/SaneMaster.rb test_mode    # Kill → Build → Launch → Logs
+./scripts/SaneMaster.rb launch       # Launch app
+./scripts/SaneMaster.rb logs --follow  # Stream logs
 ```
 
 ---
@@ -118,10 +109,10 @@ WRONG: "Let me just code this real quick..."
 ✅ DO: Fix all test failures before claiming done
 ❌ DON'T: Ship with failing tests
 
-### #5: XCODEBUILDMCP OR DISASTER
+### #5: SANEMASTER OR DISASTER
 
-✅ DO: Use XcodeBuildMCP for all build/test operations
-❌ DON'T: Use raw xcodebuild without session defaults
+✅ DO: Use `./scripts/SaneMaster.rb` for all build/test operations
+❌ DON'T: Use raw xcodebuild commands
 
 ### #6: BUILD, KILL, LAUNCH, LOG
 
@@ -133,7 +124,7 @@ WRONG: "Let me just code this real quick..."
 killall SaneClick 2>/dev/null || true
 
 # Build and run
-mcp__XcodeBuildMCP__build_run_macos
+./scripts/SaneMaster.rb test_mode
 ```
 
 ### #7: NO TEST? NO REST
@@ -161,7 +152,7 @@ mcp__XcodeBuildMCP__build_run_macos
 
 ### #11: TOOL BROKE? FIX THE YOKE
 
-✅ DO: If XcodeBuildMCP fails, check session defaults first
+✅ DO: If SaneMaster fails, fix the tool/config
 ❌ DON'T: Work around broken tools
 
 ### #12: TALK WHILE I WALK
@@ -227,7 +218,7 @@ After research, present findings in this format:
 ...
 
 ### Verification
-- [ ] XcodeBuildMCP test_macos passes
+- [ ] `./scripts/SaneMaster.rb verify` passes
 - [ ] Manual test: [specific check]
 ```
 
@@ -312,15 +303,15 @@ Approve?
 
 ### Steps
 
-[Rule #5: USE XCODEBUILDMCP] - Clean build with `mcp__XcodeBuildMCP__clean`
+[Rule #5: SANEMASTER OR DISASTER] - Clean build with `./scripts/SaneMaster.rb clean`
 
 [Rule #7: TESTS FOR FIXES] - Create tests:
   - Tests/[TestFile].swift: `test[FeatureName]()`
 
 [Rule #6: FULL CYCLE] - Verify fixes:
-  - `mcp__XcodeBuildMCP__test_macos`
+  - `./scripts/SaneMaster.rb verify`
   - `killall SaneClick`
-  - `mcp__XcodeBuildMCP__build_run_macos`
+  - `./scripts/SaneMaster.rb test_mode`
   - Manual: [specific check]
 
 [Rule #4: GREEN BEFORE DONE] - All tests pass before claiming complete
@@ -359,7 +350,7 @@ SaneClick/
 | Aspect | Requirement |
 |--------|-------------|
 | Bundle location | Extension bundle MUST be inside host app bundle |
-| App Group | `group.com.saneclick.app` for shared UserDefaults |
+| App Group | `M78L6FXD48.group.com.saneclick.app` for shared storage |
 | User enablement | Users must manually enable in System Settings > Extensions > Finder |
 | Menu caching | NEVER cache menus - rebuild `NSMenu` on each `menu(for:)` call |
 | Script execution | Extension sends notification → host app executes script |
@@ -388,7 +379,7 @@ SaneClick/
 | Problem | Fix |
 |---------|-----|
 | Ghost beeps / no launch | `xcodegen generate` |
-| Phantom build errors | `mcp__XcodeBuildMCP__clean` then rebuild |
+| Phantom build errors | `./scripts/SaneMaster.rb clean` then rebuild |
 | "File not found" after new file | `xcodegen generate` |
 | Tests failing mysteriously | Clean build, then test |
 | Extension not showing in Finder | Check System Settings > Extensions > Finder |
@@ -414,7 +405,7 @@ If automation can't find it → UX is broken → fix design first.
 
 ## Session Start Checklist
 
-1. Set XcodeBuildMCP session defaults (see Quick Start)
+1. Run `./scripts/SaneMaster.rb bootstrap` (if available) or `./scripts/SaneMaster.rb doctor`
 2. Read `RESEARCH.md` if unfamiliar with Finder Sync API
 3. Search memory MCP: `project: "SaneClick"`
 4. Kill stale processes: `killall SaneClick 2>/dev/null || true`
