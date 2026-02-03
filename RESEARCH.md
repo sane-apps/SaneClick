@@ -2,7 +2,7 @@
 
 > **Single Source of Truth** - All research findings, API documentation, and architectural decisions.
 >
-> Last Updated: 2026-01-18
+> Last Updated: 2026-02-03
 
 ---
 
@@ -493,13 +493,13 @@ killall Finder
 
 ### BUG-001: File Picker Dialog Not Appearing (Import Scripts)
 
-**Status**: OPEN
+**Status**: MITIGATED (2026-02-03)
 **Severity**: Critical
 **Date Identified**: 2026-01-19
 
 #### Description
 
-The Import Scripts functionality does not display a file picker dialog when triggered. The function is confirmed to be called (via debug alert and logs), but neither NSOpenPanel nor SwiftUI's `.fileImporter` modifier displays the dialog.
+The Import Scripts functionality did not display a file picker dialog when triggered from a menu command. The function was confirmed to be called (via debug alert and logs), but neither NSOpenPanel nor SwiftUI's `.fileImporter` modifier displayed the dialog.
 
 #### Reproduction Steps
 
@@ -568,6 +568,11 @@ Button("Import Scripts...") {
 
 - GitHub pattern from Kyome22/LegoArtSwift showed using `beginSheetModal(for:)` but this also didn't work
 - Other SwiftUI apps with hidden title bars may have similar issues
+
+#### Workaround Implemented
+
+- File > Import now opens a dedicated Import window with a "Choose JSON File" button.
+- File picker is triggered from the window button (not directly from the menu command).
 
 #### Next Steps to Try
 

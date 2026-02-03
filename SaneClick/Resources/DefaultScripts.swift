@@ -12,8 +12,37 @@ enum ScriptLibrary {
         let icon: String
         let appliesTo: AppliesTo
         let fileExtensions: [String]
+        let extensionMatchMode: ExtensionMatchMode
+        let minSelection: Int
+        let maxSelection: Int?
         let category: ScriptCategory
         let description: String
+
+        init(
+            name: String,
+            type: ScriptType,
+            content: String,
+            icon: String,
+            appliesTo: AppliesTo,
+            fileExtensions: [String],
+            extensionMatchMode: ExtensionMatchMode = .all,
+            minSelection: Int = 1,
+            maxSelection: Int? = nil,
+            category: ScriptCategory,
+            description: String
+        ) {
+            self.name = name
+            self.type = type
+            self.content = content
+            self.icon = icon
+            self.appliesTo = appliesTo
+            self.fileExtensions = fileExtensions
+            self.extensionMatchMode = extensionMatchMode
+            self.minSelection = minSelection
+            self.maxSelection = maxSelection
+            self.category = category
+            self.description = description
+        }
 
         /// Convert to a Script model
         func toScript() -> Script {
@@ -23,7 +52,10 @@ enum ScriptLibrary {
                 content: content,
                 icon: icon,
                 appliesTo: appliesTo,
-                fileExtensions: fileExtensions
+                fileExtensions: fileExtensions,
+                extensionMatchMode: extensionMatchMode,
+                minSelection: minSelection,
+                maxSelection: maxSelection
             )
         }
     }
@@ -75,6 +107,11 @@ enum ScriptLibrary {
         }
     }
 
+    private static let imageExtensions = [
+        "jpg", "jpeg", "png", "heic", "tiff", "gif", "bmp", "webp"
+    ]
+
+
     // MARK: - Universal Scripts
 
     static let universalScripts: [LibraryScript] = [
@@ -95,6 +132,7 @@ enum ScriptLibrary {
             icon: "textformat",
             appliesTo: .allItems,
             fileExtensions: [],
+            maxSelection: 1,
             category: .universal,
             description: "Copy just the filename to clipboard"
         ),
@@ -111,6 +149,7 @@ enum ScriptLibrary {
             icon: "terminal",
             appliesTo: .allItems,
             fileExtensions: [],
+            maxSelection: 1,
             category: .universal,
             description: "Open Terminal at this location"
         ),
@@ -127,6 +166,7 @@ enum ScriptLibrary {
             icon: "doc.badge.plus",
             appliesTo: .allItems,
             fileExtensions: [],
+            maxSelection: 1,
             category: .universal,
             description: "Create a new empty text file"
         ),
@@ -162,6 +202,7 @@ enum ScriptLibrary {
             icon: "trash",
             appliesTo: .foldersOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .universal,
             description: "Clean up hidden Mac system files in folder"
         ),
@@ -205,6 +246,7 @@ enum ScriptLibrary {
             icon: "info.circle",
             appliesTo: .filesOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .universal,
             description: "Show file size, dates, and permissions"
         ),
@@ -221,6 +263,7 @@ enum ScriptLibrary {
             icon: "folder.badge.questionmark",
             appliesTo: .allItems,
             fileExtensions: [],
+            maxSelection: 1,
             category: .universal,
             description: "Reveal item in a new Finder window"
         ),
@@ -262,6 +305,7 @@ enum ScriptLibrary {
             icon: "arrow.triangle.branch",
             appliesTo: .foldersOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .developer,
             description: "Initialize git repo with README and .gitignore"
         ),
@@ -305,6 +349,7 @@ enum ScriptLibrary {
             icon: "shippingbox",
             appliesTo: .foldersOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .developer,
             description: "Run npm install in folder"
         ),
@@ -368,6 +413,7 @@ enum ScriptLibrary {
             icon: "doc.text",
             appliesTo: .filesOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .developer,
             description: "Encode file to base64 and copy"
         ),
@@ -388,6 +434,7 @@ enum ScriptLibrary {
             icon: "number.square",
             appliesTo: .foldersOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .developer,
             description: "Count lines in source files"
         ),
@@ -398,6 +445,7 @@ enum ScriptLibrary {
             icon: "doc.badge.gearshape",
             appliesTo: .foldersOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .developer,
             description: "Create comprehensive .gitignore"
         ),
@@ -411,6 +459,7 @@ enum ScriptLibrary {
             icon: "network",
             appliesTo: .foldersOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .developer,
             description: "Start local HTTP server on port 8000"
         )
@@ -431,7 +480,7 @@ enum ScriptLibrary {
             """,
             icon: "photo",
             appliesTo: .filesOnly,
-            fileExtensions: ["jpg", "jpeg", "heic", "tiff", "gif", "bmp"],
+            fileExtensions: imageExtensions,
             category: .designer,
             description: "Convert image to PNG format"
         ),
@@ -447,7 +496,7 @@ enum ScriptLibrary {
             """,
             icon: "photo.fill",
             appliesTo: .filesOnly,
-            fileExtensions: ["png", "heic", "tiff", "gif", "bmp"],
+            fileExtensions: imageExtensions,
             category: .designer,
             description: "Convert image to JPEG (85% quality)"
         ),
@@ -463,7 +512,7 @@ enum ScriptLibrary {
             """,
             icon: "iphone",
             appliesTo: .filesOnly,
-            fileExtensions: ["heic", "HEIC"],
+            fileExtensions: ["heic"],
             category: .designer,
             description: "Convert iPhone HEIC photos to JPEG"
         ),
@@ -480,7 +529,7 @@ enum ScriptLibrary {
             """,
             icon: "arrow.down.right.and.arrow.up.left",
             appliesTo: .filesOnly,
-            fileExtensions: ["jpg", "jpeg", "png", "heic", "tiff"],
+            fileExtensions: imageExtensions,
             category: .designer,
             description: "Resize image to half size"
         ),
@@ -495,7 +544,7 @@ enum ScriptLibrary {
             """,
             icon: "rectangle.expand.vertical",
             appliesTo: .filesOnly,
-            fileExtensions: ["jpg", "jpeg", "png", "heic", "tiff"],
+            fileExtensions: imageExtensions,
             category: .designer,
             description: "Resize image width to 1920px (Full HD)"
         ),
@@ -512,7 +561,7 @@ enum ScriptLibrary {
             """,
             icon: "photo.on.rectangle",
             appliesTo: .filesOnly,
-            fileExtensions: ["jpg", "jpeg", "png", "heic", "tiff"],
+            fileExtensions: imageExtensions,
             category: .designer,
             description: "Create 256px thumbnail version"
         ),
@@ -530,7 +579,7 @@ enum ScriptLibrary {
             """,
             icon: "eye.slash",
             appliesTo: .filesOnly,
-            fileExtensions: ["jpg", "jpeg", "png", "tiff"],
+            fileExtensions: imageExtensions,
             category: .designer,
             description: "Remove location and camera info from photos"
         ),
@@ -554,7 +603,7 @@ enum ScriptLibrary {
             """,
             icon: "ruler",
             appliesTo: .filesOnly,
-            fileExtensions: ["jpg", "jpeg", "png", "heic", "tiff", "gif", "bmp"],
+            fileExtensions: imageExtensions,
             category: .designer,
             description: "Show image width and height"
         ),
@@ -569,7 +618,7 @@ enum ScriptLibrary {
             """,
             icon: "rotate.right",
             appliesTo: .filesOnly,
-            fileExtensions: ["jpg", "jpeg", "png", "tiff"],
+            fileExtensions: imageExtensions,
             category: .designer,
             description: "Rotate image 90 degrees clockwise"
         ),
@@ -614,6 +663,7 @@ enum ScriptLibrary {
             icon: "number.circle",
             appliesTo: .filesOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .powerUser,
             description: "Get file's unique fingerprint (MD5)"
         ),
@@ -628,6 +678,7 @@ enum ScriptLibrary {
             icon: "lock.shield",
             appliesTo: .filesOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .powerUser,
             description: "Get file's unique fingerprint (SHA256)"
         ),
@@ -753,6 +804,7 @@ enum ScriptLibrary {
             icon: "01.square",
             appliesTo: .filesOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .powerUser,
             description: "See raw data inside the file"
         ),
@@ -771,6 +823,7 @@ enum ScriptLibrary {
             icon: "xmark.circle",
             appliesTo: .filesOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .powerUser,
             description: "Close any apps that have this file open"
         )
@@ -829,6 +882,7 @@ enum ScriptLibrary {
             icon: "arrow.up.to.line",
             appliesTo: .foldersOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .organization,
             description: "Move all nested files to root folder"
         ),
@@ -851,6 +905,7 @@ enum ScriptLibrary {
             icon: "folder.badge.gearshape",
             appliesTo: .foldersOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .organization,
             description: "Sort files into folders by extension"
         ),
@@ -873,6 +928,7 @@ enum ScriptLibrary {
             icon: "calendar",
             appliesTo: .foldersOnly,
             fileExtensions: [],
+            maxSelection: 1,
             category: .organization,
             description: "Sort files into YYYY-MM folders"
         ),

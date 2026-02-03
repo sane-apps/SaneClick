@@ -115,4 +115,87 @@ struct ScriptStoreTests {
         store.deleteScript(enabled)
         store.deleteScript(disabled)
     }
+
+    // MARK: - Import / Export Tests
+
+    @Test("Import scripts adds new actions")
+    func importScriptsAddsNewActions() async {
+        let store = createTestStore()
+        let uniqueName = "Import Test \(UUID().uuidString)"
+        let script = Script(name: uniqueName, type: .bash, content: "echo import")
+
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("saneclick-import-\(UUID().uuidString).json")
+
+        do {
+            let data = try JSONEncoder().encode([script])
+            try data.write(to: tempURL)
+
+            let summary = try store.importScripts(from: tempURL, mode: .skipDuplicates)
+            #expect(summary.added == 1)
+            #expect(store.scripts.contains(where: { $0.name == uniqueName }))
+        } catch {
+            #expect(Bool(false))
+        }
+
+        if let added = store.scripts.first(where: { $0.name == uniqueName }) {
+            store.deleteScript(added)
+        }
+        try? FileManager.default.removeItem(at: tempURL)
+    }
+
+    @Test("Import scripts replaces duplicates by name when requested")
+    func importScriptsReplacesDuplicates() async {
+        let store = createTestStore()
+        let name = "Import Replace \(UUID().uuidString)"
+        let original = Script(name: name, type: .bash, content: "echo original")
+        store.addScript(original)
+
+        let incoming = Script(name: name, type: .bash, content: "echo replaced")
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("saneclick-import-\(UUID().uuidString).json")
+
+        do {
+            let data = try JSONEncoder().encode([incoming])
+            try data.write(to: tempURL)
+
+            let summary = try store.importScripts(from: tempURL, mode: .replaceDuplicates)
+            #expect(summary.updated == 1)
+            let updated = store.scripts.first(where: { $0.name == name })
+            #expect(updated?.content == "echo replaced")
+            #expect(updated?.id == original.id)
+        } catch {
+            #expect(Bool(false))
+        }
+
+        if let updated = store.scripts.first(where: { $0.name == name }) {
+            store.deleteScript(updated)
+        }
+        try? FileManager.default.removeItem(at: tempURL)
+    }
+
+    @Test("Export scripts writes a bundle")
+    func exportScriptsWritesBundle() async {
+        let store = createTestStore()
+        let name = "Export Test \(UUID().uuidString)"
+        let script = Script(name: name, type: .bash, content: "echo export")
+        store.addScript(script)
+
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("saneclick-export-\(UUID().uuidString).json")
+
+        do {
+            try store.exportScripts(to: tempURL)
+            let data = try Data(contentsOf: tempURL)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let bundle = try decoder.decode(ScriptExportBundle.self, from: data)
+            #expect(bundle.scripts.contains(where: { $0.name == name }))
+        } catch {
+            #expect(Bool(false))
+        }
+
+        store.deleteScript(script)
+        try? FileManager.default.removeItem(at: tempURL)
+    }
 }

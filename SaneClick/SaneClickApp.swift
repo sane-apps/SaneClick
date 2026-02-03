@@ -7,6 +7,16 @@ struct SaneClickApp: App {
     @State private var showWelcome = OnboardingHelper.needsOnboarding
 
     init() {
+        AppPreferences.registerDefaults()
+
+        // Menu bar icon + Dock visibility
+        DispatchQueue.main.async {
+            Task { @MainActor in
+                MenuBarController.shared.setEnabled(AppPreferences.showMenuBarIcon)
+                ActivationPolicyManager.applyPolicy(showDockIcon: AppPreferences.showDockIcon)
+            }
+        }
+
         // Initialize ScriptExecutor to register notification listener for extension requests
         _ = ScriptExecutor.shared
 
@@ -42,6 +52,12 @@ struct SaneClickApp: App {
 
 struct AppCommands: Commands {
     var body: some Commands {
+        CommandGroup(after: .appInfo) {
+            Button("Check for Updates...") {
+                UpdateService.shared.checkForUpdates()
+            }
+        }
+
         CommandGroup(after: .newItem) {
             Button("Import Scripts...") {
                 NotificationCenter.default.post(name: .importScriptsRequested, object: nil)

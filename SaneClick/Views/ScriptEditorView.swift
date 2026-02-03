@@ -14,6 +14,9 @@ struct ScriptEditorView: View {
     @State private var appliesTo: AppliesTo
     @State private var fileExtensionsText: String
     @State private var extensionMatchMode: ExtensionMatchMode
+    @State private var minSelection: Int
+    @State private var maxSelection: Int
+    @State private var limitSelection: Bool
     @State private var categoryId: UUID?
     @State private var showingIconPicker = false
     @State private var showingTestOutput = false
@@ -35,6 +38,9 @@ struct ScriptEditorView: View {
         _appliesTo = State(initialValue: script?.appliesTo ?? .allItems)
         _fileExtensionsText = State(initialValue: script?.fileExtensions.joined(separator: ", ") ?? "")
         _extensionMatchMode = State(initialValue: script?.extensionMatchMode ?? .any)
+        _minSelection = State(initialValue: script?.minSelection ?? 1)
+        _maxSelection = State(initialValue: script?.maxSelection ?? 1)
+        _limitSelection = State(initialValue: script?.maxSelection != nil)
         _categoryId = State(initialValue: script?.categoryId)
     }
 
@@ -42,6 +48,7 @@ struct ScriptEditorView: View {
         Form {
             generalSection
             fileFilterSection
+            selectionFilterSection
             scriptSection
             previewSection
         }
@@ -136,6 +143,48 @@ struct ScriptEditorView: View {
             Text("Leave blank to show for all files. Or enter file types separated by commas.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+        }
+    }
+
+    // MARK: - Selection Filter Section
+
+    private var selectionFilterSection: some View {
+        Section("Selection Count (Optional)") {
+            Stepper(value: $minSelection, in: 0...99) {
+                HStack {
+                    Text("Minimum selected")
+                    Spacer()
+                    Text("\(minSelection)")
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Toggle("Limit maximum", isOn: $limitSelection)
+
+            if limitSelection {
+                Stepper(value: $maxSelection, in: minSelection...99) {
+                    HStack {
+                        Text("Maximum selected")
+                        Spacer()
+                        Text("\(maxSelection)")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+
+            Text("Use this to show actions only for single files or larger selections.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .onChange(of: minSelection) { _, newValue in
+            if limitSelection, maxSelection < newValue {
+                maxSelection = newValue
+            }
+        }
+        .onChange(of: limitSelection) { _, enabled in
+            if enabled, maxSelection < minSelection {
+                maxSelection = minSelection
+            }
         }
     }
 
@@ -254,6 +303,8 @@ struct ScriptEditorView: View {
             appliesTo: appliesTo,
             fileExtensions: extensions,
             extensionMatchMode: extensionMatchMode,
+            minSelection: minSelection,
+            maxSelection: limitSelection ? maxSelection : nil,
             categoryId: categoryId
         )
         onSave(script)

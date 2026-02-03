@@ -3,6 +3,11 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(ScriptStore.self) private var scriptStore
     @StateObject private var updateService = UpdateService.shared
+    @AppStorage(AppPreferences.showActionNotificationsKey) private var showActionNotifications = true
+    @AppStorage(AppPreferences.showMenuBarIconKey) private var showMenuBarIcon = true
+    @AppStorage(AppPreferences.showDockIconKey) private var showDockIcon = true
+    @State private var extensionStatus = ExtensionStatusService.checkStatus()
+    @State private var isCheckingStatus = false
 
     var body: some View {
         TabView {
@@ -27,8 +32,8 @@ struct SettingsView: View {
                 HStack {
                     Text("Status")
                     Spacer()
-                    Text("Active")
-                        .foregroundStyle(.green)
+                    Label(extensionStatus.statusText, systemImage: extensionStatus.icon)
+                        .foregroundStyle(statusColor)
                 }
 
                 Button("Open System Settings") {
@@ -37,6 +42,20 @@ struct SettingsView: View {
                     }
                 }
                 .help("Enable or disable SaneClick in System Settings")
+
+                HStack(spacing: 12) {
+                    Button("Refresh Status") {
+                        refreshExtensionStatus()
+                    }
+                    .disabled(isCheckingStatus)
+
+                    if extensionStatus == .enabledNotRunning {
+                        Button("Restart Finder") {
+                            FinderControl.restartFinder()
+                            refreshExtensionStatus()
+                        }
+                    }
+                }
             }
 
             Section("Your Actions") {
@@ -54,8 +73,38 @@ struct SettingsView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+
+            Section("App Visibility") {
+                Toggle("Show menu bar icon", isOn: $showMenuBarIcon)
+                    .help("Keep SaneClick available in your menu bar")
+
+                Toggle("Show app in Dock", isOn: $showDockIcon)
+                    .help("Show SaneClick in the Dock and Cmd+Tab")
+
+                Text("If you hide both, open SaneClick from Applications.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Section("Notifications") {
+                Toggle("Show action confirmations", isOn: $showActionNotifications)
+                    .help("Show a notification when an action finishes")
+            }
         }
         .formStyle(.grouped)
+        .onAppear {
+            refreshExtensionStatus()
+        }
+        .onChange(of: showMenuBarIcon) { _, newValue in
+            Task { @MainActor in
+                MenuBarController.shared.setEnabled(newValue)
+            }
+        }
+        .onChange(of: showDockIcon) { _, newValue in
+            Task { @MainActor in
+                ActivationPolicyManager.applyPolicy(showDockIcon: newValue)
+            }
+        }
     }
 
     // MARK: - About Tab
@@ -69,7 +118,7 @@ struct SettingsView: View {
             Text("SaneClick")
                 .font(.title)
 
-            Text("Version 1.0.2")
+            Text("Version \(appVersion)")
                 .foregroundStyle(.secondary)
 
             Text("Add custom actions to your right-click menu")
@@ -99,6 +148,33 @@ struct SettingsView: View {
             .buttonStyle(.bordered)
         }
         .padding()
+    }
+
+    private var appVersion: String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        return version ?? "Unknown"
+    }
+
+    private var statusColor: Color {
+        switch extensionStatus {
+        case .active:
+            return .green
+        case .enabledNotRunning:
+            return .orange
+        case .disabled:
+            return .red
+        }
+    }
+
+    private func refreshExtensionStatus() {
+        isCheckingStatus = true
+        DispatchQueue.global(qos: .userInitiated).async {
+            let status = ExtensionStatusService.checkStatus()
+            DispatchQueue.main.async {
+                extensionStatus = status
+                isCheckingStatus = false
+            }
+        }
     }
 }
 

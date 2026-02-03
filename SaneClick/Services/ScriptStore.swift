@@ -4,6 +4,52 @@ import os.log
 
 private let storeLogger = Logger(subsystem: "com.saneclick.SaneClick", category: "ScriptStore")
 
+enum ScriptImportMode: String, CaseIterable, Sendable {
+    case skipDuplicates
+    case replaceDuplicates
+
+    var title: String {
+        switch self {
+        case .skipDuplicates: return "Skip duplicates"
+        case .replaceDuplicates: return "Replace duplicates"
+        }
+    }
+
+    var detail: String {
+        switch self {
+        case .skipDuplicates: return "Keep existing actions if names match"
+        case .replaceDuplicates: return "Overwrite existing actions with same name"
+        }
+    }
+}
+
+struct ScriptImportSummary: Sendable {
+    let added: Int
+    let updated: Int
+    let skipped: Int
+    let categoriesAdded: Int
+
+    var totalProcessed: Int {
+        added + updated + skipped
+    }
+}
+
+struct ScriptExportBundle: Codable, Sendable {
+    var schemaVersion: Int
+    var app: String?
+    var exportedAt: Date?
+    var scripts: [Script]
+    var categories: [ScriptCategory]
+
+    init(scripts: [Script], categories: [ScriptCategory]) {
+        self.schemaVersion = 1
+        self.app = "SaneClick"
+        self.exportedAt = Date()
+        self.scripts = scripts
+        self.categories = categories
+    }
+}
+
 /// Manages script configurations with file-based persistence
 @Observable
 @MainActor
@@ -132,6 +178,7 @@ final class ScriptStore: Sendable {
             scripts = try JSONDecoder().decode([Script].self, from: data)
             loadError = nil
             storeLogger.info("Loaded \(self.scripts.count) scripts")
+            applyLibraryDefaultsIfNeeded()
         } catch {
             storeLogger.error("Failed to decode scripts: \(error.localizedDescription)")
             // Save corrupted file for recovery
@@ -170,6 +217,50 @@ final class ScriptStore: Sendable {
             storeLogger.error("CRITICAL: Failed to save scripts: \(error.localizedDescription)")
             // Consider: restore from backup? For now, log the error
             // The user's data is safe in the backup file
+        }
+    }
+
+    private func applyLibraryDefaultsIfNeeded() {
+        let libraryByName = Dictionary(uniqueKeysWithValues: ScriptLibrary.allScripts.map { ($0.name, $0) })
+        var updatedScripts = scripts
+        var didUpdateAny = false
+
+        for index in updatedScripts.indices {
+            let script = updatedScripts[index]
+            guard let library = libraryByName[script.name] else { continue }
+            guard script.type == library.type, script.content == library.content else { continue }
+
+            var updated = script
+            var didUpdateScript = false
+
+            if script.fileExtensions.isEmpty, !library.fileExtensions.isEmpty {
+                updated.fileExtensions = library.fileExtensions
+                didUpdateScript = true
+            }
+
+            if script.extensionMatchMode == .any, library.extensionMatchMode != .any {
+                updated.extensionMatchMode = library.extensionMatchMode
+                didUpdateScript = true
+            }
+
+            if script.minSelection == 1, script.maxSelection == nil {
+                if library.minSelection != 1 || library.maxSelection != nil {
+                    updated.minSelection = library.minSelection
+                    updated.maxSelection = library.maxSelection
+                    didUpdateScript = true
+                }
+            }
+
+            if didUpdateScript {
+                updatedScripts[index] = updated
+                didUpdateAny = true
+            }
+        }
+
+        if didUpdateAny {
+            scripts = updatedScripts
+            saveScripts()
+            notifyExtension()
         }
     }
 
@@ -215,6 +306,147 @@ final class ScriptStore: Sendable {
         } catch {
             storeLogger.error("Failed to save categories: \(error.localizedDescription)")
         }
+    }
+
+    // MARK: - Import / Export
+
+    func exportScripts(to url: URL) throws {
+        let bundle = ScriptExportBundle(scripts: scripts, categories: categories)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        encoder.dateEncodingStrategy = .iso8601
+
+        let data = try encoder.encode(bundle)
+        try data.write(to: url, options: .atomic)
+    }
+
+    func importScripts(from url: URL, mode: ScriptImportMode) throws -> ScriptImportSummary {
+        let data = try Data(contentsOf: url)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+
+        let scriptsToImport: [Script]
+        let categoriesToImport: [ScriptCategory]
+
+        if let bundle = try? decoder.decode(ScriptExportBundle.self, from: data) {
+            scriptsToImport = bundle.scripts
+            categoriesToImport = bundle.categories
+        } else {
+            scriptsToImport = try decoder.decode([Script].self, from: data)
+            categoriesToImport = []
+        }
+
+        var categoriesAdded = 0
+        var existingById = Dictionary(uniqueKeysWithValues: categories.map { ($0.id, $0) })
+        var existingByName = Dictionary(uniqueKeysWithValues: categories.map { ($0.name.lowercased(), $0) })
+        var categoryIdMap: [UUID: UUID] = [:]
+
+        if !categoriesToImport.isEmpty {
+            for category in categoriesToImport {
+                if category.id == ScriptCategory.uncategorized.id {
+                    continue
+                }
+
+                if let existing = existingById[category.id] {
+                    categoryIdMap[category.id] = existing.id
+                    continue
+                }
+
+                if let existing = existingByName[category.name.lowercased()] {
+                    categoryIdMap[category.id] = existing.id
+                    continue
+                }
+
+                categories.append(category)
+                existingById[category.id] = category
+                existingByName[category.name.lowercased()] = category
+                categoryIdMap[category.id] = category.id
+                categoriesAdded += 1
+            }
+
+            if categoriesAdded > 0 {
+                saveCategories()
+            }
+        }
+
+        var added = 0
+        var updated = 0
+        var skipped = 0
+
+        var indexById = [UUID: Int]()
+        var indexByName = [String: Int]()
+
+        for (index, script) in scripts.enumerated() {
+            indexById[script.id] = index
+            indexByName[script.name.lowercased()] = index
+        }
+
+        for script in scriptsToImport {
+            var incoming = script
+            if let categoryId = incoming.categoryId {
+                if categoryId == ScriptCategory.uncategorized.id {
+                    incoming.categoryId = nil
+                } else if let mapped = categoryIdMap[categoryId] {
+                    incoming.categoryId = mapped
+                } else if existingById[categoryId] == nil {
+                    incoming.categoryId = nil
+                }
+            }
+
+            if let index = indexById[incoming.id] {
+                if mode == .replaceDuplicates {
+                    scripts[index] = incoming
+                    updated += 1
+                } else {
+                    skipped += 1
+                }
+                continue
+            }
+
+            if let index = indexByName[incoming.name.lowercased()] {
+                if mode == .replaceDuplicates {
+                    let existingId = scripts[index].id
+                    let replacement = Script(
+                        id: existingId,
+                        name: incoming.name,
+                        type: incoming.type,
+                        content: incoming.content,
+                        isEnabled: incoming.isEnabled,
+                        icon: incoming.icon,
+                        appliesTo: incoming.appliesTo,
+                        fileExtensions: incoming.fileExtensions,
+                        extensionMatchMode: incoming.extensionMatchMode,
+                        minSelection: incoming.minSelection,
+                        maxSelection: incoming.maxSelection,
+                        categoryId: incoming.categoryId
+                    )
+                    scripts[index] = replacement
+                    indexByName[replacement.name.lowercased()] = index
+                    updated += 1
+                } else {
+                    skipped += 1
+                }
+                continue
+            }
+
+            scripts.append(incoming)
+            let newIndex = scripts.count - 1
+            indexById[incoming.id] = newIndex
+            indexByName[incoming.name.lowercased()] = newIndex
+            added += 1
+        }
+
+        if added > 0 || updated > 0 {
+            saveScripts()
+            notifyExtension()
+        }
+
+        return ScriptImportSummary(
+            added: added,
+            updated: updated,
+            skipped: skipped,
+            categoriesAdded: categoriesAdded
+        )
     }
 
     private func notifyExtension() {

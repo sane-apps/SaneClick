@@ -37,7 +37,7 @@ mcps:
   - apple-docs
   - context7
   - github
-  - XcodeBuildMCP
+  - xcode
 
 website: true
 website_domain: saneclick.com

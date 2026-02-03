@@ -14,6 +14,8 @@ struct ScriptTests {
         #expect(script.isEnabled == true)
         #expect(script.icon == "terminal")
         #expect(script.appliesTo == .allItems)
+        #expect(script.minSelection == 1)
+        #expect(script.maxSelection == nil)
     }
 
     @Test("Script model is Codable")
@@ -36,6 +38,8 @@ struct ScriptTests {
         #expect(decoded.isEnabled == original.isEnabled)
         #expect(decoded.icon == original.icon)
         #expect(decoded.appliesTo == original.appliesTo)
+        #expect(decoded.minSelection == original.minSelection)
+        #expect(decoded.maxSelection == original.maxSelection)
     }
 
     @Test("ScriptType has correct icons")
@@ -162,6 +166,20 @@ struct ScriptTests {
         // Directory URL (trailing slash convention for test)
         let folderURL = URL(fileURLWithPath: "/test/folder", isDirectory: true)
         #expect(foldersOnlyScript.matchesFiles([folderURL]) == true)
+    }
+
+    @Test("Selection count filter respects min and max")
+    func selectionCountFilter() {
+        let script = Script(
+            name: "Selection Test",
+            minSelection: 2,
+            maxSelection: 3
+        )
+
+        #expect(script.matchesSelectionCount(1) == false)
+        #expect(script.matchesSelectionCount(2) == true)
+        #expect(script.matchesSelectionCount(3) == true)
+        #expect(script.matchesSelectionCount(4) == false)
     }
 
     @Test("Script is Codable with file extensions")

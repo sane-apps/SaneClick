@@ -11,6 +11,8 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
     var appliesTo: AppliesTo
     var fileExtensions: [String] // Empty = all files, otherwise only these extensions
     var extensionMatchMode: ExtensionMatchMode
+    var minSelection: Int
+    var maxSelection: Int?
     var categoryId: UUID? // nil = uncategorized
 
     init(
@@ -23,6 +25,8 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
         appliesTo: AppliesTo = .allItems,
         fileExtensions: [String] = [],
         extensionMatchMode: ExtensionMatchMode = .any,
+        minSelection: Int = 1,
+        maxSelection: Int? = nil,
         categoryId: UUID? = nil
     ) {
         self.id = id
@@ -34,6 +38,8 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
         self.appliesTo = appliesTo
         self.fileExtensions = fileExtensions
         self.extensionMatchMode = extensionMatchMode
+        self.minSelection = minSelection
+        self.maxSelection = maxSelection
         self.categoryId = categoryId
     }
 
@@ -63,6 +69,64 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
                 normalizedExtensions.contains(url.pathExtension.lowercased())
             }
         }
+    }
+
+    /// Check if this script applies to the selection count
+    func matchesSelectionCount(_ count: Int) -> Bool {
+        if count < minSelection {
+            return false
+        }
+        if let maxSelection, count > maxSelection {
+            return false
+        }
+        return true
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case type
+        case content
+        case isEnabled
+        case icon
+        case appliesTo
+        case fileExtensions
+        case extensionMatchMode
+        case minSelection
+        case maxSelection
+        case categoryId
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        type = try container.decode(ScriptType.self, forKey: .type)
+        content = try container.decode(String.self, forKey: .content)
+        isEnabled = try container.decode(Bool.self, forKey: .isEnabled)
+        icon = try container.decode(String.self, forKey: .icon)
+        appliesTo = try container.decode(AppliesTo.self, forKey: .appliesTo)
+        fileExtensions = try container.decodeIfPresent([String].self, forKey: .fileExtensions) ?? []
+        extensionMatchMode = try container.decodeIfPresent(ExtensionMatchMode.self, forKey: .extensionMatchMode) ?? .any
+        minSelection = try container.decodeIfPresent(Int.self, forKey: .minSelection) ?? 1
+        maxSelection = try container.decodeIfPresent(Int.self, forKey: .maxSelection)
+        categoryId = try container.decodeIfPresent(UUID.self, forKey: .categoryId)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(name, forKey: .name)
+        try container.encode(type, forKey: .type)
+        try container.encode(content, forKey: .content)
+        try container.encode(isEnabled, forKey: .isEnabled)
+        try container.encode(icon, forKey: .icon)
+        try container.encode(appliesTo, forKey: .appliesTo)
+        try container.encode(fileExtensions, forKey: .fileExtensions)
+        try container.encode(extensionMatchMode, forKey: .extensionMatchMode)
+        try container.encode(minSelection, forKey: .minSelection)
+        try container.encodeIfPresent(maxSelection, forKey: .maxSelection)
+        try container.encodeIfPresent(categoryId, forKey: .categoryId)
     }
 }
 

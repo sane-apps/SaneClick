@@ -366,7 +366,10 @@ struct ScriptLibraryView: View {
                     isEnabled: true,
                     icon: libraryScript.icon,
                     appliesTo: libraryScript.appliesTo,
-                    fileExtensions: libraryScript.fileExtensions
+                    fileExtensions: libraryScript.fileExtensions,
+                    extensionMatchMode: libraryScript.extensionMatchMode,
+                    minSelection: libraryScript.minSelection,
+                    maxSelection: libraryScript.maxSelection
                 )
                 scriptStore.addScript(newScript)
             }

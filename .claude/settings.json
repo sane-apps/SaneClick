@@ -26,7 +26,7 @@
       "mcp__apple-docs__*",
       "mcp__context7__*",
       "mcp__github__*",
-      "mcp__XcodeBuildMCP__*",
+      "mcp__xcode__*",
       "mcp__macos-automator__*"
     ]
   }

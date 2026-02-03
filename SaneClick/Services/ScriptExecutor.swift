@@ -1,5 +1,6 @@
 import Foundation
 import os.log
+@preconcurrency import UserNotifications
 
 private let executorLogger = Logger(subsystem: "com.saneclick.SaneClick", category: "ScriptExecutor")
 
@@ -298,6 +299,60 @@ final class ScriptExecutor: @unchecked Sendable {
                 userInfo: ["result": executionResult]
             )
         }
+
+        maybeNotifyUser(for: executionResult, script: script)
+    }
+
+    // MARK: - User Notifications
+
+    private func maybeNotifyUser(for result: ScriptExecutionResult, script: Script) {
+        let defaults = UserDefaults.standard
+        if defaults.object(forKey: "showActionNotifications") == nil {
+            defaults.set(true, forKey: "showActionNotifications")
+        }
+
+        guard defaults.bool(forKey: "showActionNotifications") else { return }
+        guard shouldNotify(for: script) else { return }
+
+        let content = UNMutableNotificationContent()
+        content.title = "SaneClick"
+        if result.success {
+            content.body = "\(script.name) completed"
+        } else if let error = result.error {
+            content.body = "\(script.name) failed: \(error)"
+        } else {
+            content.body = "\(script.name) failed"
+        }
+
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: content,
+            trigger: nil
+        )
+
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { settings in
+            switch settings.authorizationStatus {
+            case .notDetermined:
+                center.requestAuthorization(options: [.alert, .sound]) { granted, _ in
+                    if granted {
+                        center.add(request)
+                    }
+                }
+            case .authorized, .provisional:
+                center.add(request)
+            default:
+                break
+            }
+        }
+    }
+
+    private func shouldNotify(for script: Script) -> Bool {
+        let lowerContent = script.content.lowercased()
+        if lowerContent.contains("display notification") || lowerContent.contains("osascript -e") {
+            return false
+        }
+        return true
     }
 
     // MARK: - Execution Methods

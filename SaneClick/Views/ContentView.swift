@@ -11,6 +11,8 @@ struct ContentView: View {
     @State private var showLibrary = false
     @State private var showCustomScriptEditor = false
     @State private var showMoreOptions = false
+    @State private var showImportExport = false
+    @State private var importExportMode: ImportExportView.Mode = .importScripts
     @State private var editingScript: Script?
     @State private var showDeleteConfirmation = false
     @State private var scriptToDelete: Script?
@@ -36,6 +38,10 @@ struct ContentView: View {
                 scriptStore.addScript(newScript)
             }
         }
+        .sheet(isPresented: $showImportExport) {
+            ImportExportView(mode: $importExportMode)
+                .environment(scriptStore)
+        }
         .sheet(item: $editingScript) { script in
             ScriptEditorView(script: script) { updatedScript in
                 scriptStore.updateScript(updatedScript)
@@ -52,6 +58,14 @@ struct ContentView: View {
             Button("Cancel", role: .cancel) {}
         } message: { script in
             Text("Remove \"\(script.name)\" from your right-click menu?")
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .importScriptsRequested)) { _ in
+            importExportMode = .importScripts
+            showImportExport = true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .exportAllScriptsRequested)) { _ in
+            importExportMode = .exportScripts
+            showImportExport = true
         }
     }
 
@@ -97,6 +111,16 @@ struct ContentView: View {
                         color: .orange
                     ) {
                         showCustomScriptEditor = true
+                    }
+
+                    QuickActionRow(
+                        title: "Import / Export",
+                        subtitle: "Move actions between Macs",
+                        icon: "square.and.arrow.up.on.square",
+                        color: .saneTeal
+                    ) {
+                        importExportMode = .importScripts
+                        showImportExport = true
                     }
                 }
             } header: {

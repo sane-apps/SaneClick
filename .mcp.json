@@ -21,16 +21,16 @@
         "/Users/sj/.npm-global/lib/node_modules/@upstash/context7-mcp/dist/index.js"
       ]
     },
-    "XcodeBuildMCP": {
-      "command": "node",
-      "args": [
-        "/Users/sj/Dev/xcodebuild-mcp-local/build/index.js"
-      ]
-    },
     "macos-automator": {
       "command": "node",
       "args": [
         "/Users/sj/.npm-global/lib/node_modules/@steipete/macos-automator-mcp/dist/server.js"
+      ]
+    },
+    "xcode": {
+      "command": "xcrun",
+      "args": [
+        "mcpbridge"
       ]
     }
   }

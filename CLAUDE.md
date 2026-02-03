@@ -45,7 +45,7 @@
 
 | Need | Check |
 |------|-------|
-| Build/test commands | XcodeBuildMCP (see defaults below) |
+| Build/test commands | Xcode Tools (`xcode` MCP) |
 | Project structure | `project.yml` (XcodeGen config) |
 | API research | `RESEARCH.md` |
 | Past bugs/learnings | `.claude/memory.json` or MCP memory |
@@ -54,18 +54,16 @@
 
 ---
 
-## XcodeBuildMCP Session Defaults
+## Xcode Tools (Apple's Official MCP)
 
-Set these at session start:
+Requires Xcode running with the project open. Get the `tabIdentifier` first:
 
 ```
-mcp__XcodeBuildMCP__session-set-defaults:
-  projectPath: ~/SaneApps/apps/SaneClick/SaneClick.xcodeproj
-  scheme: SaneClick
-  arch: arm64
+mcp__xcode__XcodeListWindows
+mcp__xcode__BuildProject
+mcp__xcode__RunAllTests
+mcp__xcode__RenderPreview
 ```
-
-Then use: `build_macos`, `test_macos`, `build_run_macos`
 
 ---
 
@@ -81,7 +79,7 @@ xcodebuild -project SaneClick.xcodeproj -scheme SaneClick -configuration Debug b
 # Run tests
 xcodebuild -project SaneClick.xcodeproj -scheme SaneClick test
 
-# Or use XcodeBuildMCP after setting defaults
+# Or use Xcode Tools MCP (BuildProject / RunAllTests)
 ```
 
 ---
@@ -160,7 +158,7 @@ If automation can't find it → UX is broken → fix design first.
 1. `caffeinate -d -i -m -s &` - Prevent sleep
 2. Kill orphaned Claude processes: `pkill -f 'claude.*--resume' 2>/dev/null || true`
 3. Read `RESEARCH.md` if unfamiliar
-4. Set XcodeBuildMCP defaults
+4. Open project in Xcode (for Xcode Tools MCP)
 5. Use subagents for heavy work, verify their output
 
 ---

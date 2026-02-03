@@ -86,7 +86,8 @@ class FinderSync: FIFinderSync {
         let menu = NSMenu(title: "SaneClick")
 
         let scripts = loadScripts()
-        let selectedURLs = FIFinderSyncController.default().selectedItemURLs() ?? []
+        let selectedURLs = resolvedSelectionURLs()
+        let selectionCount = selectedURLs.count
 
         let applicableScripts = scripts.filter { script in
             guard script.isEnabled else { return false }
@@ -108,6 +109,7 @@ class FinderSync: FIFinderSync {
             }
 
             guard menuKindMatch else { return false }
+            guard script.matchesSelectionCount(selectionCount) else { return false }
             return script.matchesFiles(selectedURLs)
         }
 
@@ -137,7 +139,8 @@ class FinderSync: FIFinderSync {
         guard tag >= 0, tag < currentScripts.count else { return }
         let script = currentScripts[tag]
 
-        guard let items = FIFinderSyncController.default().selectedItemURLs() else { return }
+        let items = resolvedSelectionURLs()
+        guard !items.isEmpty else { return }
         let paths = items.map { $0.path }
 
         guard let containerURL = FileManager.default.containerURL(
@@ -161,17 +164,39 @@ class FinderSync: FIFinderSync {
             deliverImmediately: true
         )
 
-        launchHostApp()
+        ensureHostAppRunning()
     }
 
     @objc func openMainApp() {
-        launchHostApp()
+        launchHostApp(activate: true)
     }
 
-    private func launchHostApp() {
-        if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.saneclick.SaneClick") {
-            NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration())
+    private func ensureHostAppRunning() {
+        let running = NSRunningApplication.runningApplications(withBundleIdentifier: "com.saneclick.SaneClick")
+        if running.isEmpty {
+            launchHostApp(activate: false)
         }
+    }
+
+    private func launchHostApp(activate: Bool) {
+        if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.saneclick.SaneClick") {
+            let configuration = NSWorkspace.OpenConfiguration()
+            configuration.activates = activate
+            configuration.addsToRecentItems = false
+            NSWorkspace.shared.openApplication(at: appURL, configuration: configuration)
+        }
+    }
+
+    private func resolvedSelectionURLs() -> [URL] {
+        let controller = FIFinderSyncController.default()
+        let selected = controller.selectedItemURLs() ?? []
+        if !selected.isEmpty {
+            return selected
+        }
+        if let targeted = controller.targetedURL() {
+            return [targeted]
+        }
+        return []
     }
 
     private func loadScripts() -> [ExtensionScript] {
@@ -218,10 +243,12 @@ struct ExtensionScript: Codable {
     var appliesTo: String
     var fileExtensions: [String]
     var extensionMatchMode: String
+    var minSelection: Int
+    var maxSelection: Int?
     var categoryId: UUID?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, type, content, isEnabled, icon, appliesTo, fileExtensions, extensionMatchMode, categoryId
+        case id, name, type, content, isEnabled, icon, appliesTo, fileExtensions, extensionMatchMode, minSelection, maxSelection, categoryId
     }
 
     init(from decoder: Decoder) throws {
@@ -235,6 +262,8 @@ struct ExtensionScript: Codable {
         appliesTo = try container.decode(String.self, forKey: .appliesTo)
         fileExtensions = try container.decodeIfPresent([String].self, forKey: .fileExtensions) ?? []
         extensionMatchMode = try container.decodeIfPresent(String.self, forKey: .extensionMatchMode) ?? "Any file matches"
+        minSelection = try container.decodeIfPresent(Int.self, forKey: .minSelection) ?? 1
+        maxSelection = try container.decodeIfPresent(Int.self, forKey: .maxSelection)
         categoryId = try container.decodeIfPresent(UUID.self, forKey: .categoryId)
     }
 
@@ -257,5 +286,15 @@ struct ExtensionScript: Codable {
                 normalizedExtensions.contains(url.pathExtension.lowercased())
             }
         }
+    }
+
+    func matchesSelectionCount(_ count: Int) -> Bool {
+        if count < minSelection {
+            return false
+        }
+        if let maxSelection, count > maxSelection {
+            return false
+        }
+        return true
     }
 }
