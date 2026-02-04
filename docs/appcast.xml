@@ -3,6 +3,28 @@
     <channel>
         <title>SaneClick Changelog</title>
         <item>
+            <title>1.0.3</title>
+            <pubDate>Tue, 03 Feb 2026 19:51:16 -0500</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description>
+                <![CDATA[
+                <h2>What's New in 1.0.3</h2>
+                <ul>
+                    <li><strong>Context-aware actions</strong>: show only relevant items based on selection + file types</li>
+                    <li><strong>Import/Export window</strong>: reliable script import/export flow</li>
+                    <li><strong>Background execution</strong>: running actions no longer steals focus</li>
+                    <li><strong>Polish</strong>: optional notifications, menu bar icon + Dock visibility toggles, update menu</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.0.3.dmg"
+                       sparkle:version="103"
+                       sparkle:shortVersionString="1.0.3"
+                       length="1586171"
+                       type="application/x-apple-diskimage"
+                       sparkle:edSignature="vdVwiGQPEgVwl9ceTABc1L3cy43Z7vSe4fITrCKRtpcBvsz14Qwy1UUZfX13HWXnEQm4f6ne5BUPfjcNfz0xAg=="/>
+        </item>
+        <item>
             <title>1.0.2</title>
             <pubDate>Thu, 29 Jan 2026 02:25:33 -0500</pubDate>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
