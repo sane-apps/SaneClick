@@ -2,6 +2,12 @@
 
 > 50+ ready-to-use actions for your Finder right-click menu
 
+[![GitHub stars](https://img.shields.io/github/stars/sane-apps/SaneClick?style=flat-square)](https://github.com/sane-apps/SaneClick/stargazers)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![macOS 14+](https://img.shields.io/badge/macOS-14%2B-brightgreen)](https://www.apple.com/macos)
+
+> **⭐ Star this repo if it's useful!** · **[💰 Buy for $5](https://sane.lemonsqueezy.com/buy/saneclick)** · Keeps development alive
+
 ![SaneClick Main Window](docs/screenshots/main-window.png)
 
 **🔒 No spying · 💵 No subscription · 🛠️ Actively maintained**
@@ -67,6 +73,8 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 DMGs are hosted on Cloudflare (not attached to GitHub releases).
 
 ### Build from Source (Free)
+
+**Building from source?** Consider [buying the DMG for $5](https://sane.lemonsqueezy.com/buy/saneclick) to support continued development. Open source doesn't mean free labor.
 
 ```bash
 # Clone the repository
@@ -141,12 +149,21 @@ SaneClick/
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make changes with tests
-4. Submit a pull request
+Before opening a PR:
+1. **[⭐ Star the repo](https://github.com/sane-apps/SaneClick)** (if you haven't already)
+2. Read [CONTRIBUTING.md](CONTRIBUTING.md)
+3. Open an issue first to discuss major changes
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+---
+
+## Support
+
+**[⭐ Star the repo](https://github.com/sane-apps/SaneClick)** if SaneClick helps you. Stars help others discover quality open source.
+
+**Cloning without starring?** Takes 1 click. Be better.
+
+- 🐛 [Report a Bug](https://github.com/sane-apps/SaneClick/issues)
+- 💡 [Request a Feature](https://github.com/sane-apps/SaneClick/issues)
 
 ---
 
