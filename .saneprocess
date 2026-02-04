@@ -5,6 +5,9 @@ scheme: SaneClick
 project: SaneClick.xcodeproj
 bundle_id: com.saneclick.SaneClick
 
+build:
+  xcodegen: true
+
 release:
   dist_host: dist.saneclick.com
   site_host: saneclick.com
