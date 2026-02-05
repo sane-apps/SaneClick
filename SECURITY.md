@@ -35,7 +35,7 @@ SaneClick runs user-defined scripts on files:
 If you discover a security vulnerability, please:
 
 1. **DO NOT** open a public issue
-2. Email security concerns to: security@saneapps.com
+2. Email security concerns to: hi@saneapps.com
 3. Or use GitHub's private vulnerability reporting
 
 ### What to Include
