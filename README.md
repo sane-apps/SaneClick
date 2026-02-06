@@ -6,7 +6,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![macOS 14+](https://img.shields.io/badge/macOS-14%2B-brightgreen)](https://www.apple.com/macos)
 
-> **⭐ Star this repo if it's useful!** · **[💰 Buy for $5](https://sane.lemonsqueezy.com/buy/saneclick)** · Keeps development alive
+> **⭐ Star this repo if it's useful!** · **[💰 Buy for $5](https://saneclick.com)** · Keeps development alive
 
 ![SaneClick Main Window](docs/screenshots/main-window.png)
 
@@ -69,12 +69,12 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 
 ### Buy the DMG ($5)
 
-[Buy SaneClick](https://sane.lemonsqueezy.com/buy/saneclick) — Signed, notarized, ready to use. Supports sustainable open source development.
+[Buy SaneClick](https://saneclick.com) — Signed, notarized, ready to use. Supports sustainable open source development.
 DMGs are hosted on Cloudflare (not attached to GitHub releases).
 
 ### Build from Source (Free)
 
-**Building from source?** Consider [buying the DMG for $5](https://sane.lemonsqueezy.com/buy/saneclick) to support continued development. Open source doesn't mean free labor.
+**Building from source?** Consider [buying the DMG for $5](https://saneclick.com) to support continued development. Open source doesn't mean free labor.
 
 ```bash
 # Clone the repository
