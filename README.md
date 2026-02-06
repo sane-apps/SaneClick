@@ -4,6 +4,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/sane-apps/SaneClick?style=flat-square)](https://github.com/sane-apps/SaneClick/stargazers)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/sane-apps/SaneClick)](https://github.com/sane-apps/SaneClick/releases)
 [![macOS 14+](https://img.shields.io/badge/macOS-14%2B-brightgreen)](https://www.apple.com/macos)
 
 > **⭐ Star this repo if it's useful!** · **[💰 Buy for $5](https://saneclick.com)** · Keeps development alive
@@ -117,7 +118,7 @@ SaneMaster runs XcodeGen when needed; only run `xcodegen generate` manually if y
 
 ## Architecture
 
-See [ARCHITECTURE.md](../ARCHITECTURE.md) for the full system overview and state machines.
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the full system overview and state machines.
 
 ```
 SaneClick/
