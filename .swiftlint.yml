@@ -1,0 +1,44 @@
+# SaneApps Canonical SwiftLint Configuration
+# Source of truth: infra/SaneProcess/templates/swiftlint.yml
+# Sync via: ruby scripts/sync_check.rb --fix
+#
+# Per-app overrides: Add an `included:` section if needed.
+# Do NOT change disabled_rules or opt_in_rules per-app.
+
+disabled_rules:
+  - trailing_whitespace
+  - todo
+  - identifier_name
+  - line_length
+  - type_body_length
+  - function_body_length
+  - cyclomatic_complexity
+  - nesting
+  - shorthand_operator
+
+file_length:
+  warning: 800
+  error: 1000
+
+opt_in_rules:
+  - empty_count
+  - empty_string
+  - force_cast
+  - force_try
+
+force_cast: error
+force_try: error
+
+excluded:
+  - Carthage
+  - Pods
+  - DerivedData
+  - .build
+  - .swiftpm
+  - SourcePackages
+  - Tests
+  - Scripts
+  - scripts
+  - build
+  - vendor
+  - node_modules
