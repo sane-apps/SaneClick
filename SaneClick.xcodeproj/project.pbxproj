@@ -1,0 +1,781 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		09CF4C3970618994C1F4AD74 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = DCCDF70371884D3762E05659 /* Sparkle */; };
+		0D111DBAB50E53218731BCAB /* CategoryEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901F888200D7C1EC63210408 /* CategoryEditorView.swift */; };
+		1361CF6176967FFC1C817445 /* FinderSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700D47CED971DFCF509DB68A /* FinderSync.swift */; };
+		1DE6BF747A96A9042AF2F879 /* ScriptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CAB9648AF325258DC7FE8E /* ScriptStore.swift */; };
+		24D18F95948C7B912B63B0CD /* ScriptExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC0CF25CD64448C80A443A2 /* ScriptExecutor.swift */; };
+		27421E21068E3EF12E4DC3EF /* SaneColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC056477ED451BA3A4C710 /* SaneColors.swift */; };
+		2815FB85C50E7871E423FCA4 /* ScriptLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DFAFA25A009F3FB7DEDCB9 /* ScriptLibraryView.swift */; };
+		31244C53696A66D583170549 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D6A7A87549AA85929FF95A /* UpdateService.swift */; };
+		4158A3FE5FD6BA942AA6ADE7 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D6405FA6195B48159C6502 /* MenuBarController.swift */; };
+		4214C45F58D93958090E6AF5 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F183182221315A53A467D /* Category.swift */; };
+		45A7BEE2D7D0A8619446CE10 /* ScriptExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621E58252D45C086455F4CA1 /* ScriptExecutorTests.swift */; };
+		4B0EC0F99E93A24B6D900856 /* CategoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1306B2DA996D2CA07D8026B4 /* CategoryTests.swift */; };
+		4C9949F5496F3CCF5E69CA98 /* ExtensionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E13D1032CE6C26DB0310BC0 /* ExtensionStatusTests.swift */; };
+		552CC7A3F57B1F2DB0C0AB48 /* CLAUDE.md in Resources */ = {isa = PBXBuildFile; fileRef = 922BCD9E4777CCF91F87C713 /* CLAUDE.md */; };
+		608EF8B223395F0AAD5C8E7D /* ScriptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F2CF6B85D8D243EB9C017C /* ScriptTests.swift */; };
+		6A4703AFD7F066FE54ACC7D2 /* SaneClickExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		803A6EFC382E0445C1D9CCA4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D5A8C9C025AE4FA559E7A8 /* SettingsView.swift */; };
+		80B217DEAF5CAE7469AFE1F1 /* SaneClickApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2315CC9340FA3A69BDDE3F79 /* SaneClickApp.swift */; };
+		91FB048A84A797926306E11E /* ScriptStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B341F823B9E6117E2232E2D /* ScriptStoreTests.swift */; };
+		96FF0C54A60D14A759E109CB /* FinderControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3657A493D18F7FE8C14A6434 /* FinderControl.swift */; };
+		ABE641DDFB2FA603A3BF14BD /* ExtensionStatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3B0C60BE7EF0BF925BB1F9 /* ExtensionStatusService.swift */; };
+		AD2450C8572F6E5827CA4DE9 /* DefaultScripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */; };
+		AFBD400DBECC4B913690E29E /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447D4BFE5ACB557CE976F11 /* Script.swift */; };
+		B0561246A2A1957E7017B8B1 /* ScriptLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C04403C1E09F0D5028384E /* ScriptLibraryTests.swift */; };
+		B6CDFAE4E438634BAC4324A0 /* ActivationPolicyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6BF49B1921953C02B99C37 /* ActivationPolicyManager.swift */; };
+		C190B7239A1EC80ACF8DC40D /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608B462FF6AD69A9DBC6FA64 /* WelcomeView.swift */; };
+		CA389228F1F7FE16FF17D850 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C430CF1913F9F056D1C42FD1 /* ContentView.swift */; };
+		CCE34A091108F9B0E4A55F18 /* ScriptEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0292252BEA20E38AA9D5AD5 /* ScriptEditorView.swift */; };
+		CED119D09B9E882EE37AEA8B /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF1B4BB43599FDB2D286ADF /* AppPreferences.swift */; };
+		D2804ED379719BFC7420BA98 /* ImportExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037A92156BFEE353DE83DB29 /* ImportExportView.swift */; };
+		D5DA8CBA16326530ED642F7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4375D086296589FD9E2EE58 /* Assets.xcassets */; };
+		DD69DF7A0830FA1026340306 /* CLAUDE.md in Resources */ = {isa = PBXBuildFile; fileRef = 055072596397B3C850616565 /* CLAUDE.md */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		69EF52219E57E59B6C7C0475 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8F781A975882EB5E5B47DBEF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 045E264D93104989A0572DFA;
+			remoteInfo = SaneClick;
+		};
+		ACEBBDDA4F59B372B87EC14E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8F781A975882EB5E5B47DBEF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 263057A7946DC444B1EC8233;
+			remoteInfo = SaneClickExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		503AAFBD32528E884F0EAFD9 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				6A4703AFD7F066FE54ACC7D2 /* SaneClickExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		037A92156BFEE353DE83DB29 /* ImportExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExportView.swift; sourceTree = "<group>"; };
+		055072596397B3C850616565 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
+		07C04403C1E09F0D5028384E /* ScriptLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptLibraryTests.swift; sourceTree = "<group>"; };
+		08770D312D62F0A9C67BFCB9 /* SaneClickTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SaneClickTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0AF1B4BB43599FDB2D286ADF /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
+		1306B2DA996D2CA07D8026B4 /* CategoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTests.swift; sourceTree = "<group>"; };
+		19D6A7A87549AA85929FF95A /* UpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
+		2315CC9340FA3A69BDDE3F79 /* SaneClickApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaneClickApp.swift; sourceTree = "<group>"; };
+		2C3B0C60BE7EF0BF925BB1F9 /* ExtensionStatusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionStatusService.swift; sourceTree = "<group>"; };
+		33D5A8C9C025AE4FA559E7A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		3657A493D18F7FE8C14A6434 /* FinderControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderControl.swift; sourceTree = "<group>"; };
+		37DFAFA25A009F3FB7DEDCB9 /* ScriptLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptLibraryView.swift; sourceTree = "<group>"; };
+		382F183182221315A53A467D /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		39A0410720375087F54994CE /* SaneClick.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SaneClick.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DC44A9E563E5C9FCE44AF4E /* SaneClick.debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaneClick.debug.entitlements; sourceTree = "<group>"; };
+		4E13D1032CE6C26DB0310BC0 /* ExtensionStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionStatusTests.swift; sourceTree = "<group>"; };
+		55F2CF6B85D8D243EB9C017C /* ScriptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptTests.swift; sourceTree = "<group>"; };
+		5BC0CF25CD64448C80A443A2 /* ScriptExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptExecutor.swift; sourceTree = "<group>"; };
+		608B462FF6AD69A9DBC6FA64 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		621E58252D45C086455F4CA1 /* ScriptExecutorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptExecutorTests.swift; sourceTree = "<group>"; };
+		6B341F823B9E6117E2232E2D /* ScriptStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptStoreTests.swift; sourceTree = "<group>"; };
+		6BEC056477ED451BA3A4C710 /* SaneColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaneColors.swift; sourceTree = "<group>"; };
+		700D47CED971DFCF509DB68A /* FinderSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderSync.swift; sourceTree = "<group>"; };
+		73CAB9648AF325258DC7FE8E /* ScriptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptStore.swift; sourceTree = "<group>"; };
+		78E5BF6A55A10C30604680D2 /* SaneClickExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaneClickExtension.entitlements; sourceTree = "<group>"; };
+		8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SaneClickExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		901F888200D7C1EC63210408 /* CategoryEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditorView.swift; sourceTree = "<group>"; };
+		922BCD9E4777CCF91F87C713 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
+		9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultScripts.swift; sourceTree = "<group>"; };
+		9CFB4E957BD2DB0D8CBB4671 /* SaneClickExtension.debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaneClickExtension.debug.entitlements; sourceTree = "<group>"; };
+		A0292252BEA20E38AA9D5AD5 /* ScriptEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptEditorView.swift; sourceTree = "<group>"; };
+		A0A32F90AD3B2ECB3E9A6B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A261E9D493D09361F59B70AB /* SaneClick.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaneClick.entitlements; sourceTree = "<group>"; };
+		A4375D086296589FD9E2EE58 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B1D6405FA6195B48159C6502 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
+		BB6BF49B1921953C02B99C37 /* ActivationPolicyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationPolicyManager.swift; sourceTree = "<group>"; };
+		C19B414E55D6FF5FDF7690BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C430CF1913F9F056D1C42FD1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F447D4BFE5ACB557CE976F11 /* Script.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Script.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7C7E86F91776384DC6392F38 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				09CF4C3970618994C1F4AD74 /* Sparkle in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		214B9F39F3300CEB720EBE9A /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				6BEC056477ED451BA3A4C710 /* SaneColors.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		2D5B27E238D72547A0453A3B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				901F888200D7C1EC63210408 /* CategoryEditorView.swift */,
+				C430CF1913F9F056D1C42FD1 /* ContentView.swift */,
+				037A92156BFEE353DE83DB29 /* ImportExportView.swift */,
+				A0292252BEA20E38AA9D5AD5 /* ScriptEditorView.swift */,
+				37DFAFA25A009F3FB7DEDCB9 /* ScriptLibraryView.swift */,
+				33D5A8C9C025AE4FA559E7A8 /* SettingsView.swift */,
+				608B462FF6AD69A9DBC6FA64 /* WelcomeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		4C7586AE9B542B84D1686C25 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A4375D086296589FD9E2EE58 /* Assets.xcassets */,
+				9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		548AC026F47CA71DE134E308 /* SaneClick */ = {
+			isa = PBXGroup;
+			children = (
+				A0A32F90AD3B2ECB3E9A6B36 /* Info.plist */,
+				4DC44A9E563E5C9FCE44AF4E /* SaneClick.debug.entitlements */,
+				A261E9D493D09361F59B70AB /* SaneClick.entitlements */,
+				2315CC9340FA3A69BDDE3F79 /* SaneClickApp.swift */,
+				F78158E7B9726147A68C2FD1 /* Models */,
+				4C7586AE9B542B84D1686C25 /* Resources */,
+				66F372BAC2D4EF2869CD36D1 /* Services */,
+				214B9F39F3300CEB720EBE9A /* Theme */,
+				2D5B27E238D72547A0453A3B /* Views */,
+			);
+			path = SaneClick;
+			sourceTree = "<group>";
+		};
+		5B3DA58DADBE6A8D7B5F2080 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				39A0410720375087F54994CE /* SaneClick.app */,
+				8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */,
+				08770D312D62F0A9C67BFCB9 /* SaneClickTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		645C9DEFF575C6CA72B4358E /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				1306B2DA996D2CA07D8026B4 /* CategoryTests.swift */,
+				055072596397B3C850616565 /* CLAUDE.md */,
+				4E13D1032CE6C26DB0310BC0 /* ExtensionStatusTests.swift */,
+				621E58252D45C086455F4CA1 /* ScriptExecutorTests.swift */,
+				07C04403C1E09F0D5028384E /* ScriptLibraryTests.swift */,
+				6B341F823B9E6117E2232E2D /* ScriptStoreTests.swift */,
+				55F2CF6B85D8D243EB9C017C /* ScriptTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		66F372BAC2D4EF2869CD36D1 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				BB6BF49B1921953C02B99C37 /* ActivationPolicyManager.swift */,
+				0AF1B4BB43599FDB2D286ADF /* AppPreferences.swift */,
+				2C3B0C60BE7EF0BF925BB1F9 /* ExtensionStatusService.swift */,
+				3657A493D18F7FE8C14A6434 /* FinderControl.swift */,
+				B1D6405FA6195B48159C6502 /* MenuBarController.swift */,
+				5BC0CF25CD64448C80A443A2 /* ScriptExecutor.swift */,
+				73CAB9648AF325258DC7FE8E /* ScriptStore.swift */,
+				19D6A7A87549AA85929FF95A /* UpdateService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		C650B644EC575F986F69D9DE /* SaneClickExtension */ = {
+			isa = PBXGroup;
+			children = (
+				922BCD9E4777CCF91F87C713 /* CLAUDE.md */,
+				700D47CED971DFCF509DB68A /* FinderSync.swift */,
+				C19B414E55D6FF5FDF7690BA /* Info.plist */,
+				9CFB4E957BD2DB0D8CBB4671 /* SaneClickExtension.debug.entitlements */,
+				78E5BF6A55A10C30604680D2 /* SaneClickExtension.entitlements */,
+			);
+			path = SaneClickExtension;
+			sourceTree = "<group>";
+		};
+		CFD110473EC892FF733EC67F = {
+			isa = PBXGroup;
+			children = (
+				548AC026F47CA71DE134E308 /* SaneClick */,
+				C650B644EC575F986F69D9DE /* SaneClickExtension */,
+				645C9DEFF575C6CA72B4358E /* Tests */,
+				5B3DA58DADBE6A8D7B5F2080 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F78158E7B9726147A68C2FD1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				382F183182221315A53A467D /* Category.swift */,
+				F447D4BFE5ACB557CE976F11 /* Script.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		045E264D93104989A0572DFA /* SaneClick */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AEE72DD2E8BC6C3A2C35DF9E /* Build configuration list for PBXNativeTarget "SaneClick" */;
+			buildPhases = (
+				3290F15B85EA6052786CFCED /* Sources */,
+				2AE8693721B632685F9DAA82 /* Resources */,
+				7C7E86F91776384DC6392F38 /* Frameworks */,
+				503AAFBD32528E884F0EAFD9 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				16E04391B6E3CE60E91A02CE /* PBXTargetDependency */,
+			);
+			name = SaneClick;
+			packageProductDependencies = (
+				DCCDF70371884D3762E05659 /* Sparkle */,
+			);
+			productName = SaneClick;
+			productReference = 39A0410720375087F54994CE /* SaneClick.app */;
+			productType = "com.apple.product-type.application";
+		};
+		263057A7946DC444B1EC8233 /* SaneClickExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05BD74581DD41125183DAFEB /* Build configuration list for PBXNativeTarget "SaneClickExtension" */;
+			buildPhases = (
+				8312DDC706E56C766D696E26 /* Sources */,
+				8388C92A6B6D8E8D89ADBDB6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SaneClickExtension;
+			packageProductDependencies = (
+			);
+			productName = SaneClickExtension;
+			productReference = 8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		98B217566C1AA5827815DCE6 /* SaneClickTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7882A228C72BC541A5D61145 /* Build configuration list for PBXNativeTarget "SaneClickTests" */;
+			buildPhases = (
+				97570ABD86D60DC89334F60A /* Sources */,
+				C0573D519CA7D827848F4198 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7A848F6A8DAF2EAD89C7B4E1 /* PBXTargetDependency */,
+			);
+			name = SaneClickTests;
+			packageProductDependencies = (
+			);
+			productName = SaneClickTests;
+			productReference = 08770D312D62F0A9C67BFCB9 /* SaneClickTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8F781A975882EB5E5B47DBEF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					045E264D93104989A0572DFA = {
+						DevelopmentTeam = M78L6FXD48;
+						ProvisioningStyle = Manual;
+					};
+					263057A7946DC444B1EC8233 = {
+						DevelopmentTeam = M78L6FXD48;
+						ProvisioningStyle = Manual;
+					};
+					98B217566C1AA5827815DCE6 = {
+						DevelopmentTeam = M78L6FXD48;
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 443D26756623B9CA79D2727C /* Build configuration list for PBXProject "SaneClick" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = CFD110473EC892FF733EC67F;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A1C361B2823E62E30B2E47AA /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				045E264D93104989A0572DFA /* SaneClick */,
+				263057A7946DC444B1EC8233 /* SaneClickExtension */,
+				98B217566C1AA5827815DCE6 /* SaneClickTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2AE8693721B632685F9DAA82 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5DA8CBA16326530ED642F7C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8388C92A6B6D8E8D89ADBDB6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				552CC7A3F57B1F2DB0C0AB48 /* CLAUDE.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C0573D519CA7D827848F4198 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD69DF7A0830FA1026340306 /* CLAUDE.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3290F15B85EA6052786CFCED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B6CDFAE4E438634BAC4324A0 /* ActivationPolicyManager.swift in Sources */,
+				CED119D09B9E882EE37AEA8B /* AppPreferences.swift in Sources */,
+				4214C45F58D93958090E6AF5 /* Category.swift in Sources */,
+				0D111DBAB50E53218731BCAB /* CategoryEditorView.swift in Sources */,
+				CA389228F1F7FE16FF17D850 /* ContentView.swift in Sources */,
+				AD2450C8572F6E5827CA4DE9 /* DefaultScripts.swift in Sources */,
+				ABE641DDFB2FA603A3BF14BD /* ExtensionStatusService.swift in Sources */,
+				96FF0C54A60D14A759E109CB /* FinderControl.swift in Sources */,
+				D2804ED379719BFC7420BA98 /* ImportExportView.swift in Sources */,
+				4158A3FE5FD6BA942AA6ADE7 /* MenuBarController.swift in Sources */,
+				80B217DEAF5CAE7469AFE1F1 /* SaneClickApp.swift in Sources */,
+				27421E21068E3EF12E4DC3EF /* SaneColors.swift in Sources */,
+				AFBD400DBECC4B913690E29E /* Script.swift in Sources */,
+				CCE34A091108F9B0E4A55F18 /* ScriptEditorView.swift in Sources */,
+				24D18F95948C7B912B63B0CD /* ScriptExecutor.swift in Sources */,
+				2815FB85C50E7871E423FCA4 /* ScriptLibraryView.swift in Sources */,
+				1DE6BF747A96A9042AF2F879 /* ScriptStore.swift in Sources */,
+				803A6EFC382E0445C1D9CCA4 /* SettingsView.swift in Sources */,
+				31244C53696A66D583170549 /* UpdateService.swift in Sources */,
+				C190B7239A1EC80ACF8DC40D /* WelcomeView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8312DDC706E56C766D696E26 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1361CF6176967FFC1C817445 /* FinderSync.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		97570ABD86D60DC89334F60A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B0EC0F99E93A24B6D900856 /* CategoryTests.swift in Sources */,
+				4C9949F5496F3CCF5E69CA98 /* ExtensionStatusTests.swift in Sources */,
+				45A7BEE2D7D0A8619446CE10 /* ScriptExecutorTests.swift in Sources */,
+				B0561246A2A1957E7017B8B1 /* ScriptLibraryTests.swift in Sources */,
+				91FB048A84A797926306E11E /* ScriptStoreTests.swift in Sources */,
+				608EF8B223395F0AAD5C8E7D /* ScriptTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		16E04391B6E3CE60E91A02CE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 263057A7946DC444B1EC8233 /* SaneClickExtension */;
+			targetProxy = ACEBBDDA4F59B372B87EC14E /* PBXContainerItemProxy */;
+		};
+		7A848F6A8DAF2EAD89C7B4E1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 045E264D93104989A0572DFA /* SaneClick */;
+			targetProxy = 69EF52219E57E59B6C7C0475 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		00675DFC11E01DC1AD3525E3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SaneClick/SaneClick.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 103;
+				DEVELOPMENT_TEAM = M78L6FXD48;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = SaneClick/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
+				PRODUCT_NAME = SaneClick;
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				VALID_ARCHS = arm64;
+			};
+			name = Release;
+		};
+		2BD7184264AB393ADA305508 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = M78L6FXD48;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClickTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClick.app/Contents/MacOS/SaneClick";
+			};
+			name = Release;
+		};
+		4A4E496DA77E7E5EFBB3D2A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		511F866CFCDFF0EBBAA57D5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				CODE_SIGN_ENTITLEMENTS = SaneClickExtension/SaneClickExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 103;
+				DEVELOPMENT_TEAM = M78L6FXD48;
+				INFOPLIST_FILE = SaneClickExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick.FinderSync;
+				PRODUCT_NAME = SaneClickExtension;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				VALID_ARCHS = arm64;
+			};
+			name = Release;
+		};
+		BDF53727086479932F06D242 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SaneClick/SaneClick.debug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 103;
+				DEVELOPMENT_TEAM = M78L6FXD48;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = SaneClick/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
+				PRODUCT_NAME = SaneClick;
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				VALID_ARCHS = arm64;
+			};
+			name = Debug;
+		};
+		D2B995C2355914C8CD25A0CB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				CODE_SIGN_ENTITLEMENTS = SaneClickExtension/SaneClickExtension.debug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 103;
+				DEVELOPMENT_TEAM = M78L6FXD48;
+				INFOPLIST_FILE = SaneClickExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick.FinderSync;
+				PRODUCT_NAME = SaneClickExtension;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				VALID_ARCHS = arm64;
+			};
+			name = Debug;
+		};
+		ECD944BEBAEED16C60D2304D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		FB1827823C24B731E81DE0DE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = M78L6FXD48;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClickTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClick.app/Contents/MacOS/SaneClick";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		05BD74581DD41125183DAFEB /* Build configuration list for PBXNativeTarget "SaneClickExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D2B995C2355914C8CD25A0CB /* Debug */,
+				511F866CFCDFF0EBBAA57D5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		443D26756623B9CA79D2727C /* Build configuration list for PBXProject "SaneClick" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4A4E496DA77E7E5EFBB3D2A3 /* Debug */,
+				ECD944BEBAEED16C60D2304D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7882A228C72BC541A5D61145 /* Build configuration list for PBXNativeTarget "SaneClickTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB1827823C24B731E81DE0DE /* Debug */,
+				2BD7184264AB393ADA305508 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AEE72DD2E8BC6C3A2C35DF9E /* Build configuration list for PBXNativeTarget "SaneClick" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BDF53727086479932F06D242 /* Debug */,
+				00675DFC11E01DC1AD3525E3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A1C361B2823E62E30B2E47AA /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DCCDF70371884D3762E05659 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1C361B2823E62E30B2E47AA /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 8F781A975882EB5E5B47DBEF /* Project object */;
+}
