@@ -7,7 +7,7 @@
 [![Release](https://img.shields.io/github/v/release/sane-apps/SaneClick)](https://github.com/sane-apps/SaneClick/releases)
 [![macOS 14+](https://img.shields.io/badge/macOS-14%2B-brightgreen)](https://www.apple.com/macos)
 
-> **⭐ Star this repo if it's useful!** · **[💰 Buy for $5](https://saneclick.com)** · Keeps development alive
+> **⭐ Star this repo if it's useful!** · **[💰 Buy for $6.99](https://saneclick.com)** · Keeps development alive
 
 ![SaneClick Main Window](docs/screenshots/main-window.png)
 
@@ -39,7 +39,9 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 - **Custom Scripts**: Power users can write Bash, AppleScript, or Automator workflows
 - **Categories**: Essentials, Files & Folders, Images & Media, Coding, Advanced
 
-**$5 for the signed DMG. Build from source for free. 100% local. We never see your data.**
+**$6.99 for the signed DMG. Build from source for free. 100% local. We never see your data.**
+
+> *I wanted to make it $5, but processing fees and taxes were... insane. — Mr. Sane*
 
 ---
 
@@ -50,10 +52,15 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 | **50+ Pre-built Actions** | Copy paths, convert images, open in Terminal, and more |
 | **5 Categories** | Essentials, Files & Folders, Images & Media, Coding, Advanced |
 | **Smart Filtering** | Actions appear only for matching file types |
+| **Selection Count Filtering** | Show actions only for single files or multi-select (min/max) |
+| **Extension Match Modes** | "Any file matches" vs "All files must match" |
 | **One-Click Install** | Toggle actions on/off instantly |
 | **Custom Scripts** | Write Bash, AppleScript, or Automator workflows |
-| **Test Before Save** | Run scripts on files before committing |
-| **Import/Export** | Share scripts as JSON files |
+| **Test Before Save** | Run scripts on real files with output preview before committing |
+| **Import/Export** | Share scripts as JSON (skip duplicates, update existing, or replace all) |
+| **Menu Bar Quick Access** | Status bar icon for quick settings, Finder restart, and updates |
+| **Extension Status Monitor** | Color-coded status (green/orange/red) with one-click Finder restart |
+| **App Visibility** | Show/hide menu bar icon and Dock icon independently |
 
 ---
 
@@ -68,14 +75,14 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 
 ## Installation
 
-### Buy the DMG ($5)
+### Buy the DMG ($6.99)
 
 [Buy SaneClick](https://saneclick.com) — Signed, notarized, ready to use. Supports sustainable open source development.
 DMGs are hosted on Cloudflare (not attached to GitHub releases).
 
 ### Build from Source (Free)
 
-**Building from source?** Consider [buying the DMG for $5](https://saneclick.com) to support continued development. Open source doesn't mean free labor.
+**Building from source?** Consider [buying the DMG for $6.99](https://saneclick.com) to support continued development. Open source doesn't mean free labor.
 
 ```bash
 # Clone the repository
@@ -90,21 +97,33 @@ cd SaneClick
 ```
 SaneMaster runs XcodeGen when needed; only run `xcodegen generate` manually if you add files and want to refresh immediately.
 
+### First Launch
+
+On first launch, SaneClick offers curated starter packs by category. Pick the ones that match your workflow and install scripts with one click. Add more anytime from the library.
+
 ### Enable the Extension
 
 1. Open SaneClick
 2. Go to **System Settings > Privacy & Security > Extensions > Finder**
 3. Enable **SaneClick**
 
+### Troubleshooting
+
+Check extension status in **Settings > General**:
+- **Green** = Active and working
+- **Orange** = Enabled but Finder needs restart (use the "Restart Finder" button)
+- **Red** = Disabled — enable in System Settings
+
 ---
 
 ## Usage
 
 1. **Add Scripts**: Click the + button and choose "New Script"
-2. **Configure**: Set name, type, content, and file filters
-3. **Test**: Use the Test button to try your script on files
-4. **Organize**: Create categories and assign scripts
+2. **Configure**: Set name, type (Bash/AppleScript/Automator), content, icon, and file filters
+3. **Test**: Use the Test button to select real files and preview output/errors before saving
+4. **Organize**: Create custom categories and assign scripts to groups
 5. **Use**: Right-click files in Finder to see your scripts
+6. **Notifications**: Toggle action completion confirmations in Settings
 
 ### Script Variables
 
