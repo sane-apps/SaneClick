@@ -3,8 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaneClick — Manage Your Mac's Right-Click Menu</title>
-    <meta name="description" content="Stop fighting Finder. Run scripts, convert files, and automate your Mac directly from the right-click menu. 50+ actions, 100% private. $5.">
+    <title>SaneClick — Right-Click Automation for Mac | 50+ Finder Actions</title>
+    <meta name="description" content="Add 50+ actions to your Mac's right-click menu. Run scripts, convert files, automate Finder. 100% local, open source. $6.99 one-time.">
+    <link rel="canonical" href="https://saneclick.com">
+    <meta property="og:title" content="SaneClick — Right-Click Automation for Mac | 50+ Finder Actions">
+    <meta property="og:description" content="Add 50+ actions to your Mac's right-click menu. Run scripts, convert files, automate Finder. 100% local, open source. $6.99 one-time.">
+    <meta property="og:url" content="https://saneclick.com">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SaneClick">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SaneClick — Right-Click Automation for Mac | 50+ Finder Actions">
+    <meta name="twitter:description" content="Add 50+ actions to your Mac's right-click menu. Run scripts, convert files, automate Finder. 100% local, open source. $6.99 one-time.">
     <meta name="keywords" content="Finder context menu, right-click menu Mac, macOS automation, Mac scripts, Finder extension, custom right-click, Automator alternative, Mac productivity, context menu customization">
     <meta name="author" content="Mr. Sane">
     <meta name="robots" content="index, follow">
@@ -12,27 +21,18 @@
     <meta name="application-name" content="SaneClick">
     <link rel="icon" type="image/png" href="images/icon.png">
     <link rel="apple-touch-icon" href="images/icon.png">
-    <link rel="canonical" href="https://saneclick.com/">
     <meta name="theme-color" content="#4f8ffa">
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://saneclick.com/">
-    <meta property="og:title" content="SaneClick - Bring Sanity to Your Mac's Right-Click Menu">
-    <meta property="og:description" content="Run scripts, convert files, and automate your Mac directly from the right-click menu. 50+ actions, 100% private.">
     <meta property="og:image" content="https://saneclick.com/images/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:site_name" content="SaneClick">
     <meta property="og:locale" content="en_US">
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SaneClick - Bring Sanity to Your Mac's Right-Click Menu">
-    <meta name="twitter:description" content="Run scripts, convert files, and automate your Mac directly from the right-click menu. 50+ actions, 100% private.">
     <meta name="twitter:image" content="https://saneclick.com/images/og-image.png">
     <meta name="twitter:site" content="@saneapps">
-    <meta name="twitter:url" content="https://saneclick.com/">
+    <meta name="twitter:url" content="https://saneclick.com">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +50,7 @@
       "applicationCategory": "UtilitiesApplication",
       "offers": {
         "@type": "Offer",
-        "price": "5",
+        "price": "6.99",
         "priceCurrency": "USD"
       },
       "softwareVersion": "1.0.2",
@@ -96,8 +96,8 @@
             --accent-glow: rgba(79, 143, 250, 0.25);
             --accent-subtle: rgba(79, 143, 250, 0.08);
             --text-primary: #f5f5f8;
-            --text-secondary: #c0c0d0;
-            --text-muted: #a0a0b0;
+            --text-secondary: #e8e8f0;
+            --text-muted: #d0d0e0;
             --success: #34d399;
             --success-soft: rgba(52, 211, 153, 0.15);
             --border: #252530;
@@ -175,8 +175,10 @@
         nav .container { display: flex; justify-content: space-between; align-items: center; }
         .logo { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 1.25rem; text-decoration: none; color: var(--text-primary); }
         .logo img { width: 32px; height: 32px; border-radius: 8px; }
-        .logo-family { font-size: 0.85rem; color: var(--text-muted); font-weight: 400; margin-left: 12px; margin-right: auto; padding-left: 12px; border-left: 1px solid var(--border); text-decoration: none; transition: color 0.2s; }
-        .logo-family:hover { color: var(--accent); }
+        .logo-group { display: flex; flex-direction: column; }
+        .logo-family { font-size: 0.7rem; color: var(--text-secondary); text-decoration: none; margin-left: 44px; margin-top: -2px; opacity: 0.8; transition: color 0.2s; }
+        .logo-family:hover { color: var(--text-primary); }
+        @media (max-width: 768px) { .logo-family { display: none; } }
 
         .nav-links { display: flex; gap: 32px; align-items: center; }
         .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
@@ -393,7 +395,6 @@
         @media (max-width: 768px) {
             .hamburger { display: block; }
             .nav-links { display: none; }
-            .logo-family { display: none; }
             .hero { padding: 120px 0 60px; }
             .cta-buttons { flex-direction: column; align-items: center; }
             .btn { width: 100%; max-width: 300px; justify-content: center; }
@@ -404,6 +405,10 @@
             section { padding-top: 48px !important; padding-bottom: 48px !important; }
             .hero { padding-top: 110px !important; }
         }
+        .price-note { position: relative; display: inline; color: var(--text-primary); font-size: 0.75rem; vertical-align: super; margin-left: 3px; cursor: default; }
+        .price-note::after { content: "I wanted to make it $5, but processing fees and taxes were… insane. — Mr. Sane"; position: absolute; left: calc(100% + 6px); top: 50%; transform: translateY(-50%); background: var(--bg-card); color: var(--text-primary); padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-style: italic; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.1s; z-index: 999; border: 1px solid var(--border); }
+        .price-note:hover::after { opacity: 1; }
+        @media (max-width: 768px) { .price-note { display: none; } }
     </style>
 </head>
 <body>
@@ -411,11 +416,13 @@
 
     <nav>
         <div class="container">
-            <a href="/" class="logo">
-                <img src="images/icon.png" alt="SaneClick">
-                SaneClick
-            </a>
-            <a href="https://saneapps.com" class="logo-family">Part of the SaneApps family</a>
+            <div class="logo-group">
+                <a href="/" class="logo">
+                    <img src="images/icon.png" alt="SaneClick">
+                    SaneClick
+                </a>
+                <a href="https://saneapps.com" class="logo-family">Part of the SaneApps family</a>
+            </div>
             <div class="nav-links">
                 <a href="/guides.html">Guides</a>
                 <a href="#features">Features</a>
@@ -442,7 +449,7 @@
         <a href="https://sanebar.com">SaneBar &mdash; Menu Bar Manager</a>
         <a href="https://saneclip.com">SaneClip &mdash; Clipboard Manager</a>
         <a href="https://saneapps.com">See all SaneApps &rarr;</a>
-        <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="mobile-nav-cta">Buy SaneClick &mdash; $5</a>
+        <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="mobile-nav-cta">Buy SaneClick &mdash; $6.99</a>
     </div>
 
     <section class="hero">
@@ -457,7 +464,7 @@
             </div>
 
             <div class="cta-buttons animate-in delay-4">
-                <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="btn btn-primary">Buy SaneClick — $5</a>
+                <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="btn btn-primary">Buy SaneClick — $6.99</a><span class="price-note">*</span>
             </div>
 
             <div class="demo-box animate-in delay-5" onclick="toggleMenu()">
@@ -572,14 +579,14 @@
         <div class="container">
             <div class="sustainability-card">
                 <h2 style="font-family: 'Playfair Display', serif; font-size: 2.25rem; margin-bottom: 20px;">Open Source &#8800; Free</h2>
-                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 30px;">Great open-source tools die when developers can't sustain them. $5 keeps SaneClick alive and actively maintained.</p>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 30px;">Great open-source tools die when developers can't sustain them. $6.99 keeps SaneClick alive and actively maintained.</p>
                 <div class="sustainability-options">
                     <a href="https://github.com/sane-apps/SaneClick" class="sustainability-option">
                         <h4>Build It Yourself</h4>
                         <p>Clone the repo. GPL v3 Licensed. Build from source for free.</p>
                     </a>
                     <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="sustainability-option featured">
-                        <h4>Buy the DMG — $5</h4>
+                        <h4>Buy the DMG — $6.99</h4>
                         <p>Get a signed, notarized, ready-to-use DMG and support development.</p>
                     </a>
                 </div>
@@ -644,7 +651,7 @@
         <div class="container">
             <div class="crypto-card">
                 <h3>Pay with Crypto</h3>
-                <p class="crypto-subtitle">Prefer privacy-first payments? Send $5 in any of these:</p>
+                <p class="crypto-subtitle">Prefer privacy-first payments? Send $6.99 in any of these:</p>
                 <div class="crypto-grid">
                     <div class="crypto-item crypto-btc">
                         <img class="crypto-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/btc.svg" alt="BTC" width="24" height="24">
@@ -667,7 +674,7 @@
                 <div class="crypto-how">
                     <strong>How it works:</strong>
                     <ol>
-                        <li>Send $5 (or more) to any address above</li>
+                        <li>Send $6.99 (or more) to any address above</li>
                         <li>Email <a href="mailto:hi@saneapps.com">hi@saneapps.com</a> with your transaction ID or screenshot</li>
                         <li>We'll verify and reply with your download link</li>
                     </ol>
@@ -690,6 +697,7 @@
                 <a href="https://github.com/sponsors/MrSaneApps"><svg height="12" viewBox="0 0 16 16" width="12" fill="#ea4aaa" style="vertical-align: -1px; margin-right: 3px;"><path d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.565 20.565 0 008 13.393a20.561 20.561 0 003.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 01-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5zM8 14.25l-.345.666-.002-.001-.006-.003-.018-.01a7.643 7.643 0 01-.31-.17 22.075 22.075 0 01-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.08 22.08 0 01-3.744 2.584l-.018.01-.006.003h-.002L8 14.25z"/></svg>Sponsor</a>
                 <a href="https://saneapps.com">SaneApps</a>
             </div>
+            <p id="pricing-note" style="color: var(--text-secondary); font-size: 0.8rem; font-style: italic; opacity: 0.7; margin-bottom: 12px;">*I wanted to make it $5, but processing fees and taxes were... insane. — Mr. Sane</p>
             <p class="footer-copy">Made with care by Mr. Sane &nbsp;&bull;&nbsp; &copy; 2026 SaneClick</p>
             <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 12px;">"Built for a Sound Mind" &middot; <a href="https://saneapps.com" style="color: var(--text-secondary);">saneapps.com</a></p>
         </div>

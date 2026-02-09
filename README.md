@@ -39,7 +39,7 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 - **Custom Scripts**: Power users can write Bash, AppleScript, or Automator workflows
 - **Categories**: Essentials, Files & Folders, Images & Media, Coding, Advanced
 
-**$6.99 for the signed DMG. Build from source for free. 100% local. We never see your data.**
+**100% local. We never see your data.**
 
 > *I wanted to make it $5, but processing fees and taxes were... insane. — Mr. Sane*
 
@@ -75,14 +75,13 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 
 ## Installation
 
-### Buy the DMG ($6.99)
+### Buy the DMG
 
 [Buy SaneClick](https://saneclick.com) — Signed, notarized, ready to use. Supports sustainable open source development.
-DMGs are hosted on Cloudflare (not attached to GitHub releases).
 
-### Build from Source (Free)
+### Build from Source
 
-**Building from source?** Consider [buying the DMG for $6.99](https://saneclick.com) to support continued development. Open source doesn't mean free labor.
+**Building from source?** Consider [buying the DMG](https://saneclick.com) to support continued development.
 
 ```bash
 # Clone the repository
