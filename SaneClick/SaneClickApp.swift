@@ -1,8 +1,56 @@
-import SwiftUI
 import FinderSync
+import SwiftUI
+
+class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_: Notification) {
+        #if !DEBUG
+            SaneAppMover.moveToApplicationsFolderIfNeeded()
+        #endif
+    }
+
+    func applicationDockMenu(_: NSApplication) -> NSMenu? {
+        let dockMenu = NSMenu()
+
+        // Open SaneClick
+        let openItem = NSMenuItem(title: "Open SaneClick", action: #selector(openMainWindow), keyEquivalent: "")
+        openItem.target = self
+        dockMenu.addItem(openItem)
+
+        dockMenu.addItem(.separator())
+
+        // Check for Updates
+        let updateItem = NSMenuItem(title: "Check for Updates...", action: #selector(checkForUpdates), keyEquivalent: "")
+        updateItem.target = self
+        dockMenu.addItem(updateItem)
+
+        // Settings
+        let settingsItem = NSMenuItem(title: "Settings...", action: #selector(openSettings), keyEquivalent: "")
+        settingsItem.target = self
+        dockMenu.addItem(settingsItem)
+
+        return dockMenu
+    }
+
+    @MainActor @objc private func openMainWindow() {
+        NSApp.activate(ignoringOtherApps: true)
+        if let window = NSApp.windows.first(where: { $0.isMainWindow || $0.canBecomeMain }) {
+            window.makeKeyAndOrderFront(nil)
+        }
+    }
+
+    @MainActor @objc private func checkForUpdates() {
+        UpdateService.shared.checkForUpdates()
+    }
+
+    @MainActor @objc private func openSettings() {
+        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+}
 
 @main
 struct SaneClickApp: App {
+    @NSApplicationDelegateAdaptor(SaneClickAppDelegate.self) private var appDelegate
     @State private var scriptStore = ScriptStore.shared
     @State private var showWelcome = OnboardingHelper.needsOnboarding
 

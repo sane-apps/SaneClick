@@ -74,6 +74,7 @@ targets:
       - path: SaneClick
         excludes:
           - "**/*.md"
+      - path: ../../infra/SaneProcess/shared/MoveToApplications.swift
     settings:
       base:
         INFOPLIST_FILE: SaneClick/Info.plist

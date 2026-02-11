@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		09CF4C3970618994C1F4AD74 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = DCCDF70371884D3762E05659 /* Sparkle */; };
 		0D111DBAB50E53218731BCAB /* CategoryEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901F888200D7C1EC63210408 /* CategoryEditorView.swift */; };
+		0F5FFFE51E47DAE6037CC58C /* MoveToApplications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0269B0579200FC6E6503E2B7 /* MoveToApplications.swift */; };
 		1361CF6176967FFC1C817445 /* FinderSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700D47CED971DFCF509DB68A /* FinderSync.swift */; };
 		1DE6BF747A96A9042AF2F879 /* ScriptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CAB9648AF325258DC7FE8E /* ScriptStore.swift */; };
 		24D18F95948C7B912B63B0CD /* ScriptExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC0CF25CD64448C80A443A2 /* ScriptExecutor.swift */; };
@@ -72,6 +73,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0269B0579200FC6E6503E2B7 /* MoveToApplications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveToApplications.swift; sourceTree = "<group>"; };
 		037A92156BFEE353DE83DB29 /* ImportExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExportView.swift; sourceTree = "<group>"; };
 		07C04403C1E09F0D5028384E /* ScriptLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptLibraryTests.swift; sourceTree = "<group>"; };
 		08770D312D62F0A9C67BFCB9 /* SaneClickTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SaneClickTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -226,9 +228,19 @@
 			children = (
 				548AC026F47CA71DE134E308 /* SaneClick */,
 				C650B644EC575F986F69D9DE /* SaneClickExtension */,
+				EC5E1D9F9814F2A257105101 /* shared */,
 				645C9DEFF575C6CA72B4358E /* Tests */,
 				5B3DA58DADBE6A8D7B5F2080 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		EC5E1D9F9814F2A257105101 /* shared */ = {
+			isa = PBXGroup;
+			children = (
+				0269B0579200FC6E6503E2B7 /* MoveToApplications.swift */,
+			);
+			name = shared;
+			path = ../../infra/SaneProcess/shared;
 			sourceTree = "<group>";
 		};
 		F78158E7B9726147A68C2FD1 /* Models */ = {
@@ -379,6 +391,7 @@
 				96FF0C54A60D14A759E109CB /* FinderControl.swift in Sources */,
 				D2804ED379719BFC7420BA98 /* ImportExportView.swift in Sources */,
 				4158A3FE5FD6BA942AA6ADE7 /* MenuBarController.swift in Sources */,
+				0F5FFFE51E47DAE6037CC58C /* MoveToApplications.swift in Sources */,
 				80B217DEAF5CAE7469AFE1F1 /* SaneClickApp.swift in Sources */,
 				27421E21068E3EF12E4DC3EF /* SaneColors.swift in Sources */,
 				AFBD400DBECC4B913690E29E /* Script.swift in Sources */,
