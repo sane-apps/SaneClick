@@ -38,7 +38,6 @@
 		CED119D09B9E882EE37AEA8B /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF1B4BB43599FDB2D286ADF /* AppPreferences.swift */; };
 		D2804ED379719BFC7420BA98 /* ImportExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037A92156BFEE353DE83DB29 /* ImportExportView.swift */; };
 		D5DA8CBA16326530ED642F7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4375D086296589FD9E2EE58 /* Assets.xcassets */; };
-		DD69DF7A0830FA1026340306 /* CLAUDE.md in Resources */ = {isa = PBXBuildFile; fileRef = 055072596397B3C850616565 /* CLAUDE.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,7 +73,6 @@
 
 /* Begin PBXFileReference section */
 		037A92156BFEE353DE83DB29 /* ImportExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExportView.swift; sourceTree = "<group>"; };
-		055072596397B3C850616565 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		07C04403C1E09F0D5028384E /* ScriptLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptLibraryTests.swift; sourceTree = "<group>"; };
 		08770D312D62F0A9C67BFCB9 /* SaneClickTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SaneClickTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AF1B4BB43599FDB2D286ADF /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
@@ -187,7 +185,6 @@
 			isa = PBXGroup;
 			children = (
 				1306B2DA996D2CA07D8026B4 /* CategoryTests.swift */,
-				055072596397B3C850616565 /* CLAUDE.md */,
 				4E13D1032CE6C26DB0310BC0 /* ExtensionStatusTests.swift */,
 				621E58252D45C086455F4CA1 /* ScriptExecutorTests.swift */,
 				07C04403C1E09F0D5028384E /* ScriptLibraryTests.swift */,
@@ -291,7 +288,6 @@
 			buildConfigurationList = 7882A228C72BC541A5D61145 /* Build configuration list for PBXNativeTarget "SaneClickTests" */;
 			buildPhases = (
 				97570ABD86D60DC89334F60A /* Sources */,
-				C0573D519CA7D827848F4198 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -315,15 +311,12 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					045E264D93104989A0572DFA = {
-						DevelopmentTeam = M78L6FXD48;
 						ProvisioningStyle = Manual;
 					};
 					263057A7946DC444B1EC8233 = {
-						DevelopmentTeam = M78L6FXD48;
 						ProvisioningStyle = Manual;
 					};
 					98B217566C1AA5827815DCE6 = {
-						DevelopmentTeam = M78L6FXD48;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -366,14 +359,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				552CC7A3F57B1F2DB0C0AB48 /* CLAUDE.md in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C0573D519CA7D827848F4198 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DD69DF7A0830FA1026340306 /* CLAUDE.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -591,12 +576,11 @@
 				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SaneClick/SaneClick.debug.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 103;
-				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -619,11 +603,10 @@
 			buildSettings = {
 				ARCHS = arm64;
 				CODE_SIGN_ENTITLEMENTS = SaneClickExtension/SaneClickExtension.debug.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 103;
-				DEVELOPMENT_TEAM = M78L6FXD48;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -699,11 +682,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -156,7 +156,9 @@ targets:
     deploymentTarget:
       macOS: "14.0"
     sources:
-      - Tests
+      - path: Tests
+        excludes:
+          - "**/*.md"
     settings:
       base:
         DEAD_CODE_STRIPPING: NO
