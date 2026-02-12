@@ -9,6 +9,8 @@ build:
   xcodegen: true
 
 release:
+  team_id: M78L6FXD48
+  signing_identity: "Developer ID Application"
   dist_host: dist.saneclick.com
   site_host: saneclick.com
   r2_bucket: sanebar-downloads
