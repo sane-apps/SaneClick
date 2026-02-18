@@ -95,3 +95,44 @@ SaneClick/
 
 - Open an issue on GitHub
 - See the [Sane Apps documentation](https://saneapps.com)
+
+<!-- SANEAPPS_AI_CONTRIB_START -->
+## Become a Contributor (Even if You Don't Code)
+
+Are you tired of waiting on the dev to get around to fixing your problem?  
+Do you have a great idea that could help everyone in the community, but think you can't do anything about it because you're not a coder?
+
+Good news: you actually can.
+
+Copy and paste this into Claude or Codex, then describe your bug or idea:
+
+```text
+I want to contribute to this repo, but I'm not a coder.
+
+Repository:
+https://github.com/sane-apps/SaneClick
+
+Bug or idea:
+[Describe your bug or idea here in plain English]
+
+Please do this for me:
+1) Understand and reproduce the issue (or understand the feature request).
+2) Make the smallest safe fix.
+3) Open a pull request to https://github.com/sane-apps/SaneClick
+4) Give me the pull request link.
+5) Open a GitHub issue in https://github.com/sane-apps/SaneClick/issues that includes:
+   - the pull request link
+   - a short summary of what changed and why
+6) Also give me the exact issue link.
+
+Important:
+- Keep it focused on this one issue/idea.
+- Do not make unrelated changes.
+```
+
+If needed, you can also just email the pull request link to hi@saneapps.com.
+
+I review and test every pull request before merge.
+
+If your PR is merged, I will publicly give you credit, and you'll have the satisfaction of knowing you helped ship a fix for everyone.
+<!-- SANEAPPS_AI_CONTRIB_END -->
