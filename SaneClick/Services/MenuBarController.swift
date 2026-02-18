@@ -13,7 +13,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         return menu
     }()
 
-    private override init() {
+    override private init() {
         super.init()
     }
 
@@ -60,23 +60,27 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         openItem.target = self
         menu.addItem(openItem)
 
-        let updatesItem = NSMenuItem(
-            title: "Check for Updates...",
-            action: #selector(checkForUpdates),
-            keyEquivalent: ""
-        )
-        updatesItem.target = self
-        menu.addItem(updatesItem)
+        #if !APP_STORE
+            let updatesItem = NSMenuItem(
+                title: "Check for Updates...",
+                action: #selector(checkForUpdates),
+                keyEquivalent: ""
+            )
+            updatesItem.target = self
+            menu.addItem(updatesItem)
+        #endif
 
         menu.addItem(NSMenuItem.separator())
 
-        let restartItem = NSMenuItem(
-            title: "Restart Finder",
-            action: #selector(restartFinder),
-            keyEquivalent: ""
-        )
-        restartItem.target = self
-        menu.addItem(restartItem)
+        #if !APP_STORE
+            let restartItem = NSMenuItem(
+                title: "Restart Finder",
+                action: #selector(restartFinder),
+                keyEquivalent: ""
+            )
+            restartItem.target = self
+            menu.addItem(restartItem)
+        #endif
 
         let dockItem = NSMenuItem(
             title: "Show Dock Icon",
@@ -112,13 +116,15 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         }
     }
 
-    @objc private func checkForUpdates() {
-        UpdateService.shared.checkForUpdates()
-    }
+    #if !APP_STORE
+        @objc private func checkForUpdates() {
+            UpdateService.shared.checkForUpdates()
+        }
 
-    @objc private func restartFinder() {
-        FinderControl.restartFinder()
-    }
+        @objc private func restartFinder() {
+            FinderControl.restartFinder()
+        }
+    #endif
 
     @MainActor
     @objc private func toggleDockIcon() {

@@ -27,7 +27,7 @@ struct ScriptEditorView: View {
     @Environment(ScriptStore.self) private var scriptStore
 
     init(script: Script?, onSave: @escaping (Script) -> Void) {
-        self.existingScript = script
+        existingScript = script
         self.onSave = onSave
 
         _name = State(initialValue: script?.name ?? "")
@@ -150,7 +150,7 @@ struct ScriptEditorView: View {
 
     private var selectionFilterSection: some View {
         Section("Selection Count (Optional)") {
-            Stepper(value: $minSelection, in: 0...99) {
+            Stepper(value: $minSelection, in: 0 ... 99) {
                 HStack {
                     Text("Minimum selected")
                     Spacer()
@@ -162,7 +162,7 @@ struct ScriptEditorView: View {
             Toggle("Limit maximum", isOn: $limitSelection)
 
             if limitSelection {
-                Stepper(value: $maxSelection, in: minSelection...99) {
+                Stepper(value: $maxSelection, in: minSelection ... 99) {
                     HStack {
                         Text("Maximum selected")
                         Spacer()
@@ -217,11 +217,11 @@ struct ScriptEditorView: View {
     private var helpText: String {
         switch type {
         case .bash:
-            return "The selected files are passed as $1, $2, etc. Use $@ for all files."
+            "The selected files are passed as $1, $2, etc. Use $@ for all files."
         case .applescript:
-            return "Files are passed as argv. Access with 'item 1 of argv'."
+            "Files are passed as argv. Access with 'item 1 of argv'."
         case .automator:
-            return "Files are passed as input to the workflow."
+            "Files are passed as input to the workflow."
         }
     }
 
@@ -314,7 +314,7 @@ struct ScriptEditorView: View {
         }
     }
 
-    private func testScript() {
+    func testScript() {
         // Open file picker to select test files
         let panel = NSOpenPanel()
         panel.canChooseFiles = true
@@ -329,7 +329,7 @@ struct ScriptEditorView: View {
         testOutput = ""
         testError = nil
 
-        let paths = panel.urls.map { $0.path }
+        let paths = panel.urls.map(\.path)
 
         Task {
             do {
@@ -364,69 +364,82 @@ struct ScriptEditorView: View {
         }
     }
 
-    private func runBashTest(paths: [String]) async throws -> String {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/bin/bash")
-        process.arguments = ["-c", content] + paths
-        process.environment = ProcessInfo.processInfo.environment
+    #if !APP_STORE
+        private func runBashTest(paths: [String]) async throws -> String {
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/bin/bash")
+            process.arguments = ["-c", content] + paths
+            process.environment = ProcessInfo.processInfo.environment
 
-        let outputPipe = Pipe()
-        let errorPipe = Pipe()
-        process.standardOutput = outputPipe
-        process.standardError = errorPipe
+            let outputPipe = Pipe()
+            let errorPipe = Pipe()
+            process.standardOutput = outputPipe
+            process.standardError = errorPipe
 
-        try process.run()
-        process.waitUntilExit()
+            try process.run()
+            process.waitUntilExit()
 
-        let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
-        let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+            let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+            let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
 
-        let output = String(data: outputData, encoding: .utf8) ?? ""
-        let errorOutput = String(data: errorData, encoding: .utf8) ?? ""
+            let output = String(data: outputData, encoding: .utf8) ?? ""
+            let errorOutput = String(data: errorData, encoding: .utf8) ?? ""
 
-        if process.terminationStatus != 0 {
-            throw NSError(domain: "SaneClick", code: Int(process.terminationStatus), userInfo: [
-                NSLocalizedDescriptionKey: errorOutput.isEmpty ? "Script exited with code \(process.terminationStatus)" : errorOutput
+            if process.terminationStatus != 0 {
+                throw NSError(domain: "SaneClick", code: Int(process.terminationStatus), userInfo: [
+                    NSLocalizedDescriptionKey: errorOutput.isEmpty ? "Script exited with code \(process.terminationStatus)" : errorOutput
+                ])
+            }
+
+            return output.isEmpty ? "(No output)" : output
+        }
+
+        private func runAppleScriptTest(paths: [String]) async throws -> String {
+            let wrappedScript = """
+            on run argv
+                \(content)
+            end run
+            """
+
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+            process.arguments = ["-e", wrappedScript] + paths
+
+            let outputPipe = Pipe()
+            let errorPipe = Pipe()
+            process.standardOutput = outputPipe
+            process.standardError = errorPipe
+
+            try process.run()
+            process.waitUntilExit()
+
+            let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+            let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+
+            let output = String(data: outputData, encoding: .utf8) ?? ""
+            let errorOutput = String(data: errorData, encoding: .utf8) ?? ""
+
+            if process.terminationStatus != 0 {
+                throw NSError(domain: "SaneClick", code: Int(process.terminationStatus), userInfo: [
+                    NSLocalizedDescriptionKey: errorOutput.isEmpty ? "AppleScript exited with code \(process.terminationStatus)" : errorOutput
+                ])
+            }
+
+            return output.isEmpty ? "(No output)" : output
+        }
+    #else
+        private func runBashTest(paths _: [String]) async throws -> String {
+            throw NSError(domain: "SaneClick", code: 1, userInfo: [
+                NSLocalizedDescriptionKey: "Script testing is not available in the App Store version. Scripts will run when triggered from Finder."
             ])
         }
 
-        return output.isEmpty ? "(No output)" : output
-    }
-
-    private func runAppleScriptTest(paths: [String]) async throws -> String {
-        // Build AppleScript with paths as argv
-        let wrappedScript = """
-        on run argv
-            \(content)
-        end run
-        """
-
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-        process.arguments = ["-e", wrappedScript] + paths
-
-        let outputPipe = Pipe()
-        let errorPipe = Pipe()
-        process.standardOutput = outputPipe
-        process.standardError = errorPipe
-
-        try process.run()
-        process.waitUntilExit()
-
-        let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
-        let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
-
-        let output = String(data: outputData, encoding: .utf8) ?? ""
-        let errorOutput = String(data: errorData, encoding: .utf8) ?? ""
-
-        if process.terminationStatus != 0 {
-            throw NSError(domain: "SaneClick", code: Int(process.terminationStatus), userInfo: [
-                NSLocalizedDescriptionKey: errorOutput.isEmpty ? "AppleScript exited with code \(process.terminationStatus)" : errorOutput
+        private func runAppleScriptTest(paths _: [String]) async throws -> String {
+            throw NSError(domain: "SaneClick", code: 1, userInfo: [
+                NSLocalizedDescriptionKey: "Script testing is not available in the App Store version. Scripts will run when triggered from Finder."
             ])
         }
-
-        return output.isEmpty ? "(No output)" : output
-    }
+    #endif
 
     private func browseForWorkflow() {
         let panel = NSOpenPanel()
@@ -509,7 +522,7 @@ struct TestOutputView: View {
 
             Divider()
 
-            if let error = error {
+            if let error {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Error")
                         .font(.subheadline)

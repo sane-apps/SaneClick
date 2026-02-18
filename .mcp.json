@@ -32,6 +32,15 @@
       "args": [
         "mcpbridge"
       ]
+    },
+    "memory": {
+      "command": "node",
+      "args": [
+        "/Users/sj/.npm-global/lib/node_modules/@modelcontextprotocol/server-memory/dist/index.js"
+      ],
+      "env": {
+        "MEMORY_FILE_PATH": "/Users/sj/.claude/memory/knowledge-graph.jsonl"
+      }
     }
   }
 }

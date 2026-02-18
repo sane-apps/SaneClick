@@ -5,9 +5,70 @@ struct WelcomeView: View {
     @Environment(ScriptStore.self) private var scriptStore
     @Environment(\.dismiss) private var dismiss
 
+    @State private var currentPage = 0
     @State private var selectedPacks: Set<ScriptLibrary.ScriptCategory> = [.universal]
 
     var body: some View {
+        VStack(spacing: 0) {
+            // Page content
+            Group {
+                switch currentPage {
+                case 0:
+                    scriptsPage
+                case 1:
+                    SanePromisePage(compact: true)
+                default:
+                    scriptsPage
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            // Page indicators
+            HStack(spacing: 8) {
+                ForEach(0 ..< 2) { index in
+                    Circle()
+                        .fill(currentPage == index ? Color.saneTeal : Color.saneSilver.opacity(0.3))
+                        .frame(width: 8, height: 8)
+                }
+            }
+            .padding(.bottom, 12)
+
+            // Bottom Controls
+            HStack {
+                if currentPage == 0 {
+                    Button("Skip for Now") {
+                        markOnboardingComplete()
+                        dismiss()
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
+
+                    Spacer()
+
+                    Button("Install \(selectedScriptCount) Scripts") {
+                        installSelectedPacks()
+                        withAnimation { currentPage = 1 }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .disabled(selectedPacks.isEmpty)
+                } else {
+                    Spacer()
+                    Button("Get Started") {
+                        markOnboardingComplete()
+                        dismiss()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 20)
+        }
+        .frame(width: 440, height: 660)
+    }
+
+    private var scriptsPage: some View {
         VStack(spacing: 16) {
             // Header
             VStack(spacing: 8) {
@@ -51,33 +112,11 @@ struct WelcomeView: View {
                 }
             }
 
-            // Action buttons
-            VStack(spacing: 10) {
-                HStack(spacing: 16) {
-                    Button("Skip for Now") {
-                        markOnboardingComplete()
-                        dismiss()
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(.large)
-
-                    Button("Install \(selectedScriptCount) Scripts") {
-                        installSelectedPacks()
-                        markOnboardingComplete()
-                        dismiss()
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
-                    .disabled(selectedPacks.isEmpty)
-                }
-
-                Text("You can add more anytime from the app")
-                    .font(.subheadline)
-                    .foregroundStyle(Color.saneSilver)
-            }
+            Text("You can add more anytime from the app")
+                .font(.subheadline)
+                .foregroundStyle(Color.saneSilver)
         }
         .padding(24)
-        .frame(width: 440, height: 620)
     }
 
     private var selectedScriptCount: Int {
@@ -85,7 +124,7 @@ struct WelcomeView: View {
     }
 
     private func installSelectedPacks() {
-        let existingNames = Set(scriptStore.scripts.map { $0.name })
+        let existingNames = Set(scriptStore.scripts.map(\.name))
         for category in selectedPacks {
             for script in ScriptLibrary.scripts(for: category) {
                 if !existingNames.contains(script.name) {
@@ -148,6 +187,101 @@ struct StarterPackRow: View {
         .buttonStyle(.plain)
     }
 }
+
+// MARK: - Sane Promise (Brand Philosophy)
+
+struct SanePromisePage: View {
+    var compact: Bool = false
+
+    var body: some View {
+        VStack(spacing: compact ? 16 : 24) {
+            Text("Our Sane Philosophy")
+                .font(.system(size: compact ? 24 : 32, weight: .bold))
+
+            VStack(spacing: 8) {
+                Text("\"For God has not given us a spirit of fear,")
+                    .font(.system(size: compact ? 14 : 17))
+                    .italic()
+                Text("but of power and of love and of a sound mind.\"")
+                    .font(.system(size: compact ? 14 : 17))
+                    .italic()
+                Text("— 2 Timothy 1:7")
+                    .font(.system(size: compact ? 13 : 15, weight: .medium))
+                    .foregroundStyle(.primary)
+                    .padding(.top, 4)
+            }
+
+            if compact {
+                VStack(spacing: 12) {
+                    pillarCards
+                }
+            } else {
+                HStack(spacing: 20) {
+                    pillarCards
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 12)
+            }
+        }
+        .padding(compact ? 20 : 32)
+    }
+
+    @ViewBuilder
+    private var pillarCards: some View {
+        SanePillarCard(
+            icon: "bolt.fill",
+            color: .yellow,
+            title: "Power",
+            description: "Your data stays on your device. No cloud, no tracking."
+        )
+
+        SanePillarCard(
+            icon: "heart.fill",
+            color: .pink,
+            title: "Love",
+            description: "Built to serve you. No dark patterns or manipulation."
+        )
+
+        SanePillarCard(
+            icon: "brain.head.profile",
+            color: .purple,
+            title: "Sound Mind",
+            description: "Calm, focused design. No clutter or anxiety."
+        )
+    }
+}
+
+private struct SanePillarCard: View {
+    let icon: String
+    let color: Color
+    let title: String
+    let description: String
+
+    var body: some View {
+        VStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 32))
+                .foregroundStyle(color)
+
+            Text(title)
+                .font(.system(size: 18, weight: .semibold))
+
+            Text(description)
+                .font(.system(size: 14))
+                .foregroundStyle(.primary)
+                .multilineTextAlignment(.center)
+                .lineLimit(3)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 18)
+        .padding(.horizontal, 14)
+        .background(Color.primary.opacity(0.08))
+        .cornerRadius(12)
+    }
+}
+
+// MARK: - Onboarding Helper
 
 enum OnboardingHelper {
     static var needsOnboarding: Bool {

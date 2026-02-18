@@ -1,4 +1,9 @@
 name: SaneClick
+configs:
+  Debug: debug
+  Release: release
+  Release-AppStore: release
+
 options:
   bundleIdPrefix: com.saneclick
   deploymentTarget:
@@ -18,6 +23,8 @@ settings:
     Debug:
       ENABLE_HARDENED_RUNTIME: NO
     Release:
+      ENABLE_HARDENED_RUNTIME: YES
+    Release-AppStore:
       ENABLE_HARDENED_RUNTIME: YES
   # Warnings
   CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING: YES
@@ -63,6 +70,14 @@ schemes:
     archive:
       config: Release
 
+  SaneClick-AppStore:
+    build:
+      targets:
+        SaneClick: all
+        SaneClickExtension: all
+    archive:
+      config: Release-AppStore
+
 targets:
   SaneClick:
     type: application
@@ -99,6 +114,46 @@ targets:
           DEVELOPMENT_TEAM: M78L6FXD48
           CODE_SIGN_IDENTITY: "Developer ID Application"
           CODE_SIGN_ENTITLEMENTS: SaneClick/SaneClick.entitlements
+        Release-AppStore:
+          DEVELOPMENT_TEAM: M78L6FXD48
+          CODE_SIGN_STYLE: Automatic
+          CODE_SIGN_ENTITLEMENTS: SaneClick/SaneClick-AppStore.entitlements
+          OTHER_SWIFT_FLAGS: "$(inherited) -D APP_STORE"
+    postBuildScripts:
+      - name: Stub Sparkle for App Store builds
+        script: |
+          if [ "${CONFIGURATION}" = "Release-AppStore" ]; then
+            SPARKLE_FW="${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sparkle.framework"
+            if [ -d "${SPARKLE_FW}" ]; then
+              echo "Replacing Sparkle.framework with empty stub for App Store build"
+              # Preserve Info.plist before nuking
+              PLIST_TMP="/tmp/sparkle_info_$$.plist"
+              cp "${SPARKLE_FW}/Versions/B/Resources/Info.plist" "${PLIST_TMP}" 2>/dev/null || true
+              # Nuke entire framework (removes nested Updater.app, XPCServices, etc.)
+              rm -rf "${SPARKLE_FW}"
+              # Recreate clean minimal framework structure
+              mkdir -p "${SPARKLE_FW}/Versions/B/Resources"
+              # Create stub dylib that satisfies LC_LOAD_DYLIB
+              printf 'void __sparkle_stub(void){}\n' | \
+                xcrun clang -x c - -dynamiclib \
+                  -install_name "@rpath/Sparkle.framework/Versions/B/Sparkle" \
+                  -o "${SPARKLE_FW}/Versions/B/Sparkle" 2>/dev/null
+              # Restore preserved Info.plist
+              if [ -f "${PLIST_TMP}" ]; then
+                mv "${PLIST_TMP}" "${SPARKLE_FW}/Versions/B/Resources/Info.plist"
+              fi
+              # Create required framework symlinks
+              ln -sfn B "${SPARKLE_FW}/Versions/Current"
+              ln -sfn Versions/Current/Sparkle "${SPARKLE_FW}/Sparkle"
+              ln -sfn Versions/Current/Resources "${SPARKLE_FW}/Resources"
+              # Sign: stub binary first, then framework bundle
+              /usr/bin/codesign --force --sign "${EXPANDED_CODE_SIGN_IDENTITY}" "${SPARKLE_FW}/Versions/B/Sparkle" 2>&1
+              /usr/bin/codesign --force --sign "${EXPANDED_CODE_SIGN_IDENTITY}" "${SPARKLE_FW}" 2>&1
+              echo "Sparkle stubbed successfully"
+            fi
+            rm -rf "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sparkle_XPCServices.framework" 2>/dev/null || true
+          fi
+        basedOnDependencyAnalysis: false
     dependencies:
       - target: SaneClickExtension
         embed: true
@@ -149,6 +204,11 @@ targets:
           DEVELOPMENT_TEAM: M78L6FXD48
           CODE_SIGN_IDENTITY: "Developer ID Application"
           CODE_SIGN_ENTITLEMENTS: SaneClickExtension/SaneClickExtension.entitlements
+        Release-AppStore:
+          DEVELOPMENT_TEAM: M78L6FXD48
+          CODE_SIGN_STYLE: Automatic
+          CODE_SIGN_ENTITLEMENTS: SaneClickExtension/SaneClickExtension.entitlements
+          OTHER_SWIFT_FLAGS: "$(inherited) -D APP_STORE"
 
   SaneClickTests:
     type: bundle.unit-test

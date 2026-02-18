@@ -23,6 +23,27 @@ release:
     app_icon_pos: "200 185"
     drop_pos: "600 185"
 
+appstore:
+  enabled: true
+  app_id: "6759330868"
+  scheme: SaneClick-AppStore
+  configuration: Release-AppStore
+  platforms: [macos]
+  category: public.app-category.productivity
+  age_rating: "4+"
+  privacy_policy_url: "https://saneclick.com/privacy"
+  support_url: "https://saneclick.com/support"
+  review_notes: "SaneClick runs user-created automation scripts for Finder workflow and productivity actions. Some scripts use AppleScript via osascript (for example Finder actions and display notifications), so macOS may request Automation/Apple Events permission when those scripts target another app. Core file actions continue to work without Automation permission."
+  screenshots:
+    macos: docs/screenshots/*.png
+  contact:
+    name: "Stephan Joseph"
+    phone: "+17277589785"
+    email: "hi@saneapps.com"
+  entitlements: SaneClick/SaneClick-AppStore.entitlements
+  strip_frameworks:
+    - Sparkle.framework
+
 commands:
   verify: ./scripts/SaneMaster.rb verify
   test_mode: ./scripts/SaneMaster.rb tm

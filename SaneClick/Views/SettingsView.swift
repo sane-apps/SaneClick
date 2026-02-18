@@ -2,7 +2,9 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(ScriptStore.self) private var scriptStore
-    @StateObject private var updateService = UpdateService.shared
+    #if !APP_STORE
+        @StateObject private var updateService = UpdateService.shared
+    #endif
     @AppStorage(AppPreferences.showActionNotificationsKey) private var showActionNotifications = true
     @AppStorage(AppPreferences.showMenuBarIconKey) private var showMenuBarIcon = true
     @AppStorage(AppPreferences.showDockIconKey) private var showDockIcon = true
@@ -49,12 +51,14 @@ struct SettingsView: View {
                     }
                     .disabled(isCheckingStatus)
 
-                    if extensionStatus == .enabledNotRunning {
-                        Button("Restart Finder") {
-                            FinderControl.restartFinder()
-                            refreshExtensionStatus()
+                    #if !APP_STORE
+                        if extensionStatus == .enabledNotRunning {
+                            Button("Restart Finder") {
+                                FinderControl.restartFinder()
+                                refreshExtensionStatus()
+                            }
                         }
-                    }
+                    #endif
                 }
             }
 
@@ -142,10 +146,12 @@ struct SettingsView: View {
                 .font(.caption)
                 .foregroundStyle(.tertiary)
 
-            Button("Check for Updates") {
-                updateService.checkForUpdates()
-            }
-            .buttonStyle(.bordered)
+            #if !APP_STORE
+                Button("Check for Updates") {
+                    updateService.checkForUpdates()
+                }
+                .buttonStyle(.bordered)
+            #endif
         }
         .padding()
     }
@@ -158,11 +164,11 @@ struct SettingsView: View {
     private var statusColor: Color {
         switch extensionStatus {
         case .active:
-            return .green
+            .green
         case .enabledNotRunning:
-            return .orange
+            .orange
         case .disabled:
-            return .red
+            .red
         }
     }
 

@@ -18,10 +18,12 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
 
         dockMenu.addItem(.separator())
 
-        // Check for Updates
-        let updateItem = NSMenuItem(title: "Check for Updates...", action: #selector(checkForUpdates), keyEquivalent: "")
-        updateItem.target = self
-        dockMenu.addItem(updateItem)
+        #if !APP_STORE
+            // Check for Updates
+            let updateItem = NSMenuItem(title: "Check for Updates...", action: #selector(checkForUpdates), keyEquivalent: "")
+            updateItem.target = self
+            dockMenu.addItem(updateItem)
+        #endif
 
         // Settings
         let settingsItem = NSMenuItem(title: "Settings...", action: #selector(openSettings), keyEquivalent: "")
@@ -38,9 +40,11 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    @MainActor @objc private func checkForUpdates() {
-        UpdateService.shared.checkForUpdates()
-    }
+    #if !APP_STORE
+        @MainActor @objc private func checkForUpdates() {
+            UpdateService.shared.checkForUpdates()
+        }
+    #endif
 
     @MainActor @objc private func openSettings() {
         NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
@@ -100,11 +104,13 @@ struct SaneClickApp: App {
 
 struct AppCommands: Commands {
     var body: some Commands {
-        CommandGroup(after: .appInfo) {
-            Button("Check for Updates...") {
-                UpdateService.shared.checkForUpdates()
+        #if !APP_STORE
+            CommandGroup(after: .appInfo) {
+                Button("Check for Updates...") {
+                    UpdateService.shared.checkForUpdates()
+                }
             }
-        }
+        #endif
 
         CommandGroup(after: .newItem) {
             Button("Import Scripts...") {

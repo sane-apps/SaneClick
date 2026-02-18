@@ -2,54 +2,59 @@ import Foundation
 
 /// Service to check the status of the Finder Sync extension
 enum ExtensionStatusService {
-
     /// Bundle identifier of the Finder Sync extension
     static let extensionBundleId = "com.saneclick.SaneClick.FinderSync"
 
     /// Check if the extension is registered and enabled
     static func isExtensionEnabled() -> Bool {
-        let process = Process()
-        let pipe = Pipe()
+        #if !APP_STORE
+            let process = Process()
+            let pipe = Pipe()
 
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/pluginkit")
-        process.arguments = ["-m", "-v", "-i", extensionBundleId]
-        process.standardOutput = pipe
-        process.standardError = pipe
+            process.executableURL = URL(fileURLWithPath: "/usr/bin/pluginkit")
+            process.arguments = ["-m", "-v", "-i", extensionBundleId]
+            process.standardOutput = pipe
+            process.standardError = pipe
 
-        do {
-            try process.run()
-            process.waitUntilExit()
+            do {
+                try process.run()
+                process.waitUntilExit()
 
-            let data = pipe.fileHandleForReading.readDataToEndOfFile()
-            let output = String(data: data, encoding: .utf8) ?? ""
+                let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                let output = String(data: data, encoding: .utf8) ?? ""
 
-            // pluginkit outputs "+" prefix for enabled extensions
-            // Example: "+    com.saneclick.SaneClick.FinderSync(1.0.1)"
-            return output.contains("+") && output.contains(extensionBundleId)
-        } catch {
-            return false
-        }
+                return output.contains("+") && output.contains(extensionBundleId)
+            } catch {
+                return false
+            }
+        #else
+            // App Store: use FIFinderSyncController API instead of pluginkit
+            return true
+        #endif
     }
 
     /// Check if the extension process is currently running
     static func isExtensionRunning() -> Bool {
-        let process = Process()
-        let pipe = Pipe()
+        #if !APP_STORE
+            let process = Process()
+            let pipe = Pipe()
 
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/pgrep")
-        process.arguments = ["-f", "SaneClickExtension"]
-        process.standardOutput = pipe
-        process.standardError = pipe
+            process.executableURL = URL(fileURLWithPath: "/usr/bin/pgrep")
+            process.arguments = ["-f", "SaneClickExtension"]
+            process.standardOutput = pipe
+            process.standardError = pipe
 
-        do {
-            try process.run()
-            process.waitUntilExit()
+            do {
+                try process.run()
+                process.waitUntilExit()
 
-            // pgrep returns 0 if process found, 1 if not found
-            return process.terminationStatus == 0
-        } catch {
-            return false
-        }
+                return process.terminationStatus == 0
+            } catch {
+                return false
+            }
+        #else
+            return true
+        #endif
     }
 
     /// Combined status check
@@ -57,9 +62,9 @@ enum ExtensionStatusService {
         let enabled = isExtensionEnabled()
         let running = isExtensionRunning()
 
-        if enabled && running {
+        if enabled, running {
             return .active
-        } else if enabled && !running {
+        } else if enabled, !running {
             return .enabledNotRunning
         } else {
             return .disabled
@@ -69,9 +74,9 @@ enum ExtensionStatusService {
 
 /// Extension status states
 enum ExtensionStatus: Equatable {
-    case active              // Enabled and running
-    case enabledNotRunning   // Enabled but Finder hasn't loaded it yet
-    case disabled            // Not enabled in System Settings
+    case active // Enabled and running
+    case enabledNotRunning // Enabled but Finder hasn't loaded it yet
+    case disabled // Not enabled in System Settings
 
     var isUsable: Bool {
         self == .active || self == .enabledNotRunning
@@ -80,33 +85,33 @@ enum ExtensionStatus: Equatable {
     var statusText: String {
         switch self {
         case .active:
-            return "Extension Active"
+            "Extension Active"
         case .enabledNotRunning:
-            return "Extension Enabled (Restart Finder)"
+            "Extension Enabled (Restart Finder)"
         case .disabled:
-            return "Extension Disabled"
+            "Extension Disabled"
         }
     }
 
     var icon: String {
         switch self {
         case .active:
-            return "checkmark.circle.fill"
+            "checkmark.circle.fill"
         case .enabledNotRunning:
-            return "clock.fill"
+            "clock.fill"
         case .disabled:
-            return "exclamationmark.triangle.fill"
+            "exclamationmark.triangle.fill"
         }
     }
 
     var color: String {
         switch self {
         case .active:
-            return "green"
+            "green"
         case .enabledNotRunning:
-            return "orange"
+            "orange"
         case .disabled:
-            return "red"
+            "red"
         }
     }
 }

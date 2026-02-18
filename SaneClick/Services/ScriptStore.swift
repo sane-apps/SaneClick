@@ -53,7 +53,7 @@ struct ScriptExportBundle: Codable, Sendable {
 /// Manages script configurations with file-based persistence
 @Observable
 @MainActor
-final class ScriptStore: Sendable {
+final class ScriptStore {
     static let shared = ScriptStore()
 
     private(set) var scripts: [Script] = []
@@ -64,7 +64,26 @@ final class ScriptStore: Sendable {
 
     /// Shared file location via App Group container (accessible by both app and extension)
     private static var containerURL: URL? {
-        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.saneclick.app")
+        // Tests run inside the host app process; isolate persistence to avoid
+        // contention with extension/runtime files in the shared App Group path.
+        if isRunningTests {
+            return testStorageURL
+        }
+        return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.saneclick.app")
+    }
+
+    private static var isRunningTests: Bool {
+        let env = ProcessInfo.processInfo.environment
+        return env["XCTestConfigurationFilePath"] != nil || env["XCTestSessionIdentifier"] != nil
+    }
+
+    private static var testStorageURL: URL? {
+        guard let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+            return nil
+        }
+        let url = caches.appendingPathComponent("SaneClickTests", isDirectory: true)
+        try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        return url
     }
 
     private static var scriptsFileURL: URL {

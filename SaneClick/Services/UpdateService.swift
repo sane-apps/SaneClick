@@ -1,5 +1,7 @@
 import Foundation
-import Sparkle
+#if !APP_STORE
+    import Sparkle
+#endif
 import os.log
 
 private let logger = Logger(subsystem: "com.saneclick.SaneClick", category: "UpdateService")
@@ -8,49 +10,57 @@ private let logger = Logger(subsystem: "com.saneclick.SaneClick", category: "Upd
 /// Handles app updates securely and privately.
 @MainActor
 final class UpdateService: NSObject, ObservableObject {
-
     // MARK: - Singleton
 
     static let shared = UpdateService()
 
     // MARK: - Properties
 
-    private var updaterController: SPUStandardUpdaterController?
+    #if !APP_STORE
+        private var updaterController: SPUStandardUpdaterController?
+    #endif
 
     // MARK: - Initialization
 
-    private override init() {
+    override private init() {
         super.init()
 
-        // SPUStandardUpdaterController must be retained by the app.
-        // startingUpdater: true starts the scheduled checks logic immediately.
-        self.updaterController = SPUStandardUpdaterController(
-            startingUpdater: true,
-            updaterDelegate: nil,
-            userDriverDelegate: nil
-        )
+        #if !APP_STORE
+            updaterController = SPUStandardUpdaterController(
+                startingUpdater: true,
+                updaterDelegate: nil,
+                userDriverDelegate: nil
+            )
+            logger.info("Sparkle updater initialized")
 
-        logger.info("Sparkle updater initialized")
-
-        // Privacy check (Sanity check for developers)
-        if let profiling = Bundle.main.object(forInfoDictionaryKey: "SUEnableSystemProfiling") as? Bool,
-           profiling == true {
-            logger.fault("CRITICAL: SUEnableSystemProfiling is ENABLED. This violates the privacy policy.")
-        }
+            if let profiling = Bundle.main.object(forInfoDictionaryKey: "SUEnableSystemProfiling") as? Bool,
+               profiling == true {
+                logger.fault("CRITICAL: SUEnableSystemProfiling is ENABLED. This violates the privacy policy.")
+            }
+        #endif
     }
 
     // MARK: - Public API
 
-    /// Trigger a user-initiated update check.
-    /// This shows the Sparkle UI (Standard User Driver).
     func checkForUpdates() {
-        logger.info("User triggered check for updates")
-        updaterController?.checkForUpdates(nil)
+        #if !APP_STORE
+            logger.info("User triggered check for updates")
+            updaterController?.checkForUpdates(nil)
+        #endif
     }
 
-    /// Check if updates are handled automatically
     var automaticallyChecksForUpdates: Bool {
-        get { updaterController?.updater.automaticallyChecksForUpdates ?? false }
-        set { updaterController?.updater.automaticallyChecksForUpdates = newValue }
+        get {
+            #if !APP_STORE
+                updaterController?.updater.automaticallyChecksForUpdates ?? false
+            #else
+                false
+            #endif
+        }
+        set {
+            #if !APP_STORE
+                updaterController?.updater.automaticallyChecksForUpdates = newValue
+            #endif
+        }
     }
 }

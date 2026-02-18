@@ -27,7 +27,7 @@ struct ExecutionRequest: Codable {
     let scriptId: UUID
     let paths: [String]
     let timestamp: Date
-    let requestId: UUID  // Unique ID to prevent duplicate processing
+    let requestId: UUID // Unique ID to prevent duplicate processing
 
     init(scriptId: UUID, paths: [String], timestamp: Date = Date(), requestId: UUID = UUID()) {
         self.scriptId = scriptId
@@ -68,7 +68,7 @@ final class ScriptExecutor: @unchecked Sendable {
     }
 
     private var fileWatchSource: DispatchSourceFileSystemObject?
-    private var fileWatchFd: Int32 = -1  // Track fd for cleanup
+    private var fileWatchFd: Int32 = -1 // Track fd for cleanup
     private let queue = DispatchQueue(label: "com.saneclick.executor", qos: .userInitiated)
 
     /// Track recently processed request IDs to prevent duplicates
@@ -127,12 +127,12 @@ final class ScriptExecutor: @unchecked Sendable {
         let source = DispatchSource.makeFileSystemObjectSource(
             fileDescriptor: fd,
             eventMask: .write,
-            queue: queue  // Use serial queue to prevent concurrent processing
+            queue: queue // Use serial queue to prevent concurrent processing
         )
 
         source.setEventHandler { [weak self] in
             NSLog("[ScriptExecutor] File system change detected in container")
-            self?.processPendingExecutionLocked()  // Already on queue, call directly
+            self?.processPendingExecutionLocked() // Already on queue, call directly
         }
 
         source.setCancelHandler { [weak self] in
@@ -164,7 +164,8 @@ final class ScriptExecutor: @unchecked Sendable {
     /// Actual processing with file locking - must be called on queue
     private func processPendingExecutionLocked() {
         guard let pendingURL = Self.pendingExecutionURL,
-              let lockURL = Self.lockFileURL else {
+              let lockURL = Self.lockFileURL
+        else {
             NSLog("[ScriptExecutor] No pending execution URL (App Group not available)")
             return
         }
@@ -251,7 +252,7 @@ final class ScriptExecutor: @unchecked Sendable {
             }
 
             // Clean up old processed IDs periodically
-            self.cleanupOldProcessedIds()
+            cleanupOldProcessedIds()
         } catch {
             NSLog("[ScriptExecutor] Failed to process pending execution: \(error)")
         }
@@ -270,24 +271,21 @@ final class ScriptExecutor: @unchecked Sendable {
 
     /// Execute a script with the given file paths
     func execute(script: Script, withPaths paths: [String]) async {
-        let result: Result<String, ScriptError>
-
-        switch script.type {
+        let result: Result<String, ScriptError> = switch script.type {
         case .bash:
-            result = await executeBash(content: script.content, paths: paths)
+            await executeBash(content: script.content, paths: paths)
         case .applescript:
-            result = await executeAppleScript(content: script.content, paths: paths)
+            await executeAppleScript(content: script.content, paths: paths)
         case .automator:
-            result = await executeAutomator(workflowPath: script.content, paths: paths)
+            await executeAutomator(workflowPath: script.content, paths: paths)
         }
 
         // Create execution result for UI
-        let executionResult: ScriptExecutionResult
-        switch result {
-        case .success(let output):
-            executionResult = .success(scriptName: script.name, output: output)
-        case .failure(let error):
-            executionResult = .failure(scriptName: script.name, error: error.localizedDescription)
+        let executionResult: ScriptExecutionResult = switch result {
+        case let .success(output):
+            .success(scriptName: script.name, output: output)
+        case let .failure(error):
+            .failure(scriptName: script.name, error: error.localizedDescription)
         }
 
         // Update on main thread and post notification
@@ -357,102 +355,214 @@ final class ScriptExecutor: @unchecked Sendable {
 
     // MARK: - Execution Methods
 
-    private func executeBash(content: String, paths: [String]) async -> Result<String, ScriptError> {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/bin/bash")
-        // Note: with bash -c, first arg after script becomes $0, so we add "bash" as placeholder
-        process.arguments = ["-c", content, "bash"] + paths
+    #if !APP_STORE
+        private func executeBash(content: String, paths: [String]) async -> Result<String, ScriptError> {
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/bin/bash")
+            process.arguments = ["-c", content, "bash"] + paths
 
-        let outputPipe = Pipe()
-        let errorPipe = Pipe()
-        process.standardOutput = outputPipe
-        process.standardError = errorPipe
+            let outputPipe = Pipe()
+            let errorPipe = Pipe()
+            process.standardOutput = outputPipe
+            process.standardError = errorPipe
 
-        do {
-            try process.run()
-            process.waitUntilExit()
+            do {
+                try process.run()
+                process.waitUntilExit()
 
-            let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
-            let output = String(data: outputData, encoding: .utf8) ?? ""
+                let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+                let output = String(data: outputData, encoding: .utf8) ?? ""
 
-            if process.terminationStatus == 0 {
-                return .success(output)
-            } else {
-                let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
-                let errorOutput = String(data: errorData, encoding: .utf8) ?? "Unknown error"
-                return .failure(.executionFailed(errorOutput))
+                if process.terminationStatus == 0 {
+                    return .success(output)
+                } else {
+                    let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+                    let errorOutput = String(data: errorData, encoding: .utf8) ?? "Unknown error"
+                    return .failure(.executionFailed(errorOutput))
+                }
+            } catch {
+                return .failure(.launchFailed(error.localizedDescription))
             }
-        } catch {
-            return .failure(.launchFailed(error.localizedDescription))
         }
-    }
 
-    private func executeAppleScript(content: String, paths: [String]) async -> Result<String, ScriptError> {
-        // Build the AppleScript with paths as arguments
-        let fullScript = """
-        on run argv
-            \(content)
-        end run
-        """
+        private func executeAppleScript(content: String, paths: [String]) async -> Result<String, ScriptError> {
+            let fullScript = """
+            on run argv
+                \(content)
+            end run
+            """
 
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-        process.arguments = ["-e", fullScript] + paths
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+            process.arguments = ["-e", fullScript] + paths
 
-        let outputPipe = Pipe()
-        let errorPipe = Pipe()
-        process.standardOutput = outputPipe
-        process.standardError = errorPipe
+            let outputPipe = Pipe()
+            let errorPipe = Pipe()
+            process.standardOutput = outputPipe
+            process.standardError = errorPipe
 
-        do {
-            try process.run()
-            process.waitUntilExit()
+            do {
+                try process.run()
+                process.waitUntilExit()
 
-            let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
-            let output = String(data: outputData, encoding: .utf8) ?? ""
+                let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+                let output = String(data: outputData, encoding: .utf8) ?? ""
 
-            if process.terminationStatus == 0 {
-                return .success(output)
-            } else {
-                let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
-                let errorOutput = String(data: errorData, encoding: .utf8) ?? "Unknown error"
-                return .failure(.executionFailed(errorOutput))
+                if process.terminationStatus == 0 {
+                    return .success(output)
+                } else {
+                    let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+                    let errorOutput = String(data: errorData, encoding: .utf8) ?? "Unknown error"
+                    return .failure(.executionFailed(errorOutput))
+                }
+            } catch {
+                return .failure(.launchFailed(error.localizedDescription))
             }
-        } catch {
-            return .failure(.launchFailed(error.localizedDescription))
-        }
-    }
-
-    private func executeAutomator(workflowPath: String, paths: [String]) async -> Result<String, ScriptError> {
-        guard FileManager.default.fileExists(atPath: workflowPath) else {
-            return .failure(.workflowNotFound(workflowPath))
         }
 
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/automator")
-        process.arguments = [workflowPath]
+        private func executeAutomator(workflowPath: String, paths: [String]) async -> Result<String, ScriptError> {
+            guard FileManager.default.fileExists(atPath: workflowPath) else {
+                return .failure(.workflowNotFound(workflowPath))
+            }
 
-        // Pass paths via stdin
-        let inputPipe = Pipe()
-        process.standardInput = inputPipe
-        let pathsString = paths.joined(separator: "\n")
-        inputPipe.fileHandleForWriting.write(pathsString.data(using: .utf8) ?? Data())
-        inputPipe.fileHandleForWriting.closeFile()
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/usr/bin/automator")
+            process.arguments = [workflowPath]
 
-        let outputPipe = Pipe()
-        process.standardOutput = outputPipe
+            let inputPipe = Pipe()
+            process.standardInput = inputPipe
+            let pathsString = paths.joined(separator: "\n")
+            inputPipe.fileHandleForWriting.write(pathsString.data(using: .utf8) ?? Data())
+            inputPipe.fileHandleForWriting.closeFile()
 
-        do {
-            try process.run()
-            process.waitUntilExit()
+            let outputPipe = Pipe()
+            process.standardOutput = outputPipe
 
-            let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
-            let output = String(data: outputData, encoding: .utf8) ?? ""
-            return .success(output)
-        } catch {
-            return .failure(.launchFailed(error.localizedDescription))
+            do {
+                try process.run()
+                process.waitUntilExit()
+
+                let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+                let output = String(data: outputData, encoding: .utf8) ?? ""
+                return .success(output)
+            } catch {
+                return .failure(.launchFailed(error.localizedDescription))
+            }
         }
-    }
+    #else
+
+        // MARK: - App Store Execution (NSUserScriptTask — sandbox-compatible)
+
+        /// Get the Application Scripts directory for this app
+        private func applicationScriptsDirectory() throws -> URL {
+            try FileManager.default.url(
+                for: .applicationScriptsDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
+                create: true
+            )
+        }
+
+        private func executeBash(content: String, paths: [String]) async -> Result<String, ScriptError> {
+            do {
+                let scriptsDir = try applicationScriptsDirectory()
+                let scriptFile = scriptsDir.appendingPathComponent("saneclick_\(UUID().uuidString).sh")
+
+                // Write script content with paths as arguments
+                let scriptContent = "#!/bin/bash\n\(content)"
+                try scriptContent.write(to: scriptFile, atomically: true, encoding: .utf8)
+                try FileManager.default.setAttributes(
+                    [.posixPermissions: 0o755],
+                    ofItemAtPath: scriptFile.path
+                )
+                defer { try? FileManager.default.removeItem(at: scriptFile) }
+
+                let task = try NSUserUnixTask(url: scriptFile)
+                let outputPipe = Pipe()
+                task.standardOutput = outputPipe.fileHandleForWriting
+
+                return await withCheckedContinuation { continuation in
+                    task.execute(withArguments: paths) { error in
+                        outputPipe.fileHandleForWriting.closeFile()
+                        let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+                        let output = String(data: outputData, encoding: .utf8) ?? ""
+
+                        if let error {
+                            continuation.resume(returning: .failure(.executionFailed(error.localizedDescription)))
+                        } else {
+                            continuation.resume(returning: .success(output))
+                        }
+                    }
+                }
+            } catch {
+                return .failure(.launchFailed(error.localizedDescription))
+            }
+        }
+
+        private func executeAppleScript(content: String, paths: [String]) async -> Result<String, ScriptError> {
+            do {
+                let scriptsDir = try applicationScriptsDirectory()
+                let scriptFile = scriptsDir.appendingPathComponent("saneclick_\(UUID().uuidString).applescript")
+
+                let fullScript = "on run argv\n\(content)\nend run"
+                try fullScript.write(to: scriptFile, atomically: true, encoding: .utf8)
+                defer { try? FileManager.default.removeItem(at: scriptFile) }
+
+                let task = try NSUserAppleScriptTask(url: scriptFile)
+
+                // Build AppleEvent with paths as arguments
+                let params = NSAppleEventDescriptor.list()
+                for (i, path) in paths.enumerated() {
+                    params.insert(NSAppleEventDescriptor(string: path), at: i + 1)
+                }
+                let event = NSAppleEventDescriptor(
+                    eventClass: AEEventClass(kCoreEventClass),
+                    eventID: AEEventID(kAEOpenApplication),
+                    targetDescriptor: nil,
+                    returnID: AEReturnID(kAutoGenerateReturnID),
+                    transactionID: AETransactionID(kAnyTransactionID)
+                )
+                event.setDescriptor(params, forKeyword: keyDirectObject)
+
+                return await withCheckedContinuation { continuation in
+                    task.execute(withAppleEvent: event) { result, error in
+                        if let error {
+                            continuation.resume(returning: .failure(.executionFailed(error.localizedDescription)))
+                        } else {
+                            let output = result?.stringValue ?? ""
+                            continuation.resume(returning: .success(output))
+                        }
+                    }
+                }
+            } catch {
+                return .failure(.launchFailed(error.localizedDescription))
+            }
+        }
+
+        private func executeAutomator(workflowPath: String, paths: [String]) async -> Result<String, ScriptError> {
+            guard FileManager.default.fileExists(atPath: workflowPath) else {
+                return .failure(.workflowNotFound(workflowPath))
+            }
+
+            do {
+                let task = try NSUserAutomatorTask(url: URL(fileURLWithPath: workflowPath))
+                let input = paths as NSArray
+
+                return await withCheckedContinuation { continuation in
+                    task.execute(withInput: input) { result, error in
+                        if let error {
+                            continuation.resume(returning: .failure(.executionFailed(error.localizedDescription)))
+                        } else {
+                            let output = (result as? String) ?? ""
+                            continuation.resume(returning: .success(output))
+                        }
+                    }
+                }
+            } catch {
+                return .failure(.launchFailed(error.localizedDescription))
+            }
+        }
+    #endif
 }
 
 // MARK: - Errors
@@ -464,12 +574,12 @@ enum ScriptError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .launchFailed(let reason):
-            return "Failed to launch script: \(reason)"
-        case .executionFailed(let reason):
-            return "Script execution failed: \(reason)"
-        case .workflowNotFound(let path):
-            return "Automator workflow not found: \(path)"
+        case let .launchFailed(reason):
+            "Failed to launch script: \(reason)"
+        case let .executionFailed(reason):
+            "Script execution failed: \(reason)"
+        case let .workflowNotFound(path):
+            "Automator workflow not found: \(path)"
         }
     }
 }
