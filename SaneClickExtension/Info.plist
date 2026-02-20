@@ -32,6 +32,6 @@
         <string>$(PRODUCT_MODULE_NAME).FinderSync</string>
     </dict>
     <key>NSHumanReadableCopyright</key>
-    <string>Copyright 2026 SaneApps. MIT License.</string>
+    <string>Copyright 2026 SaneApps. PolyForm Shield 1.0.0.</string>
 </dict>
 </plist>

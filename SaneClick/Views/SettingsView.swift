@@ -142,7 +142,7 @@ struct SettingsView: View {
                 }
             }
 
-            Text("MIT License")
+            Text("PolyForm Shield 1.0.0")
                 .font(.caption)
                 .foregroundStyle(.tertiary)
 
