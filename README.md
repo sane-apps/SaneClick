@@ -6,6 +6,7 @@
 [![License: PolyForm Shield](https://img.shields.io/badge/License-PolyForm%20Shield-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/sane-apps/SaneClick)](https://github.com/sane-apps/SaneClick/releases)
 [![macOS 14+](https://img.shields.io/badge/macOS-14%2B-brightgreen)](https://www.apple.com/macos)
+[![Listed on awesome-macos](https://img.shields.io/badge/Listed%20on-open--source--mac--os--apps%20(40k%E2%98%85)-black)](https://github.com/serhii-londar/open-source-mac-os-apps)
 
 > **⭐ Star this repo if it's useful!** · **[💰 Buy for $6.99](https://saneclick.com)** · Keeps development alive
 
