@@ -75,13 +75,13 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 
 ## Installation
 
-### Buy the DMG
+### Download
 
 [Buy SaneClick](https://saneclick.com) — Signed, notarized, ready to use. Supports sustainable open source development.
 
 ### Build from Source
 
-**Building from source?** Consider [buying the DMG](https://saneclick.com) to support continued development.
+**Building from source?** Consider [buying the app](https://saneclick.com) to support continued development.
 
 ```bash
 # Clone the repository
