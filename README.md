@@ -3,7 +3,7 @@
 > 50+ ready-to-use actions for your Finder right-click menu
 
 [![GitHub stars](https://img.shields.io/github/stars/sane-apps/SaneClick?style=flat-square)](https://github.com/sane-apps/SaneClick/stargazers)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![License: PolyForm Shield](https://img.shields.io/badge/License-PolyForm%20Shield-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/sane-apps/SaneClick)](https://github.com/sane-apps/SaneClick/releases)
 [![macOS 14+](https://img.shields.io/badge/macOS-14%2B-brightgreen)](https://www.apple.com/macos)
 
@@ -188,7 +188,7 @@ Before opening a PR:
 
 ## License
 
-GPL v3 — see [LICENSE](LICENSE) for details.
+[PolyForm Shield 1.0.0](https://polyformproject.org/licenses/shield/1.0.0) — free for any use except building a competing product. See [LICENSE](LICENSE) for details.
 
 ---
 
