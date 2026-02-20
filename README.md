@@ -77,7 +77,7 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 
 ### Download
 
-[Buy SaneClick](https://saneclick.com) — Signed, notarized, ready to use. Supports sustainable open source development.
+[Buy SaneClick](https://saneclick.com) — Signed, notarized, ready to use. Supports sustainable development.
 
 ### Build from Source
 
@@ -177,7 +177,7 @@ Before opening a PR:
 
 ## Support
 
-**[⭐ Star the repo](https://github.com/sane-apps/SaneClick)** if SaneClick helps you. Stars help others discover quality open source.
+**[⭐ Star the repo](https://github.com/sane-apps/SaneClick)** if SaneClick helps you. Stars help others discover quality software.
 
 **Cloning without starring?** For real bro? Gimme that star!
 
