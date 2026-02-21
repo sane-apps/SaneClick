@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Remove EXIF Data from Photos on Mac (GPS, Camera Info)</title>
+    <meta name="description" content="Remove EXIF data, GPS location, and camera info from photos on Mac. Compare Preview, Terminal exiftool, and SaneClick's one-click metadata remover.">
+    <meta name="keywords" content="remove exif data mac, strip gps from photo mac, remove metadata from image, remove location data photo mac, SaneClick">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="canonical" href="https://saneclick.com/how-to-remove-exif-data-photos-mac">
+    <meta name="theme-color" content="#4f8ffa">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saneclick.com/how-to-remove-exif-data-photos-mac">
+    <meta property="og:title" content="How to Remove EXIF Data from Photos on Mac (GPS, Camera Info)">
+    <meta property="og:description" content="Remove EXIF data, GPS location, and camera info from photos on Mac. Preview vs exiftool vs SaneClick compared.">
+    <meta property="og:image" content="https://saneclick.com/images/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="SaneClick">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How to Remove EXIF Data from Photos on Mac (GPS, Camera Info)">
+    <meta name="twitter:description" content="Remove EXIF data, GPS location, and camera info from photos on Mac. Preview vs exiftool vs SaneClick compared.">
+    <meta name="twitter:image" content="https://saneclick.com/images/og-image.png">
+    <meta name="twitter:site" content="@saneapps">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #08080c;
+            --bg-secondary: #0f0f16;
+            --bg-card: #16161f;
+            --accent: #4f8ffa;
+            --accent-soft: #3b7ce8;
+            --accent-glow: rgba(79, 143, 250, 0.25);
+            --accent-subtle: rgba(79, 143, 250, 0.08);
+            --text-primary: #f5f5f8;
+            --text-secondary: #c0c0d0;
+            --text-muted: #a0a0b0;
+            --success: #34d399;
+            --error: #ef4444;
+            --border: #252530;
+            --border-subtle: #1e1e28;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 18px;
+            overflow-x: hidden;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        .gradient-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse at 15% 10%, rgba(79, 143, 250, 0.12) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 90%, rgba(52, 211, 153, 0.06) 0%, transparent 45%),
+                radial-gradient(ellipse at 50% 50%, rgba(20, 20, 30, 1) 0%, var(--bg-primary) 100%);
+            z-index: -1;
+        }
+
+        .gradient-bg::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+
+        /* Navigation */
+        nav {
+            padding: 20px 0; position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 100; border-bottom: 1px solid var(--border);
+        }
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 1.25rem; text-decoration: none; color: var(--text-primary); }
+        .logo img { width: 32px; height: 32px; border-radius: 8px; }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text-primary); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+            color: #ffffff !important; font-weight: 600; padding: 8px 16px; font-size: 0.85rem;
+            border-radius: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+            box-shadow: 0 4px 24px var(--accent-glow), 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px var(--accent-glow); filter: brightness(1.05); }
+
+        /* Article */
+        article { padding-top: 120px; padding-bottom: 80px; }
+        article h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 5vw, 2.75rem); line-height: 1.2; margin-bottom: 24px; letter-spacing: -0.02em; }
+        article h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.5rem; margin: 48px 0 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; letter-spacing: -0.01em; }
+        article p { margin-bottom: 24px; color: var(--text-secondary); }
+
+        /* Comparison Cards */
+        .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 40px 0; }
+        @media (max-width: 600px) { .comparison { grid-template-columns: 1fr; } }
+
+        .option-card {
+            background: linear-gradient(145deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .option-card:hover::before { opacity: 1; }
+
+        .option-card h3 { color: var(--text-primary); margin-bottom: 16px; font-size: 1.15rem; }
+        .option-card > p { font-size: 0.95rem; }
+
+        .winner-card {
+            border-color: var(--accent);
+            background:
+                radial-gradient(ellipse at 90% 50%, rgba(79, 143, 250, 0.15) 0%, transparent 50%),
+                linear-gradient(145deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            box-shadow: 0 0 30px rgba(79, 143, 250, 0.1);
+        }
+
+        .step-list { list-style: none; margin: 0; }
+        .step-list li {
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        .icon { flex-shrink: 0; width: 24px; text-align: center; }
+        .icon-check { color: var(--success); }
+        .icon-x { color: var(--error); }
+        .icon-num { color: var(--text-muted); font-weight: bold; }
+
+        code {
+            background: var(--bg-card);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.9em;
+            color: var(--accent);
+            border: 1px solid var(--border);
+        }
+
+        .cta-box { margin-top: 24px; text-align: center; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+            color: #ffffff;
+            padding: 14px 28px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 24px var(--accent-glow), 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 40px var(--accent-glow); filter: brightness(1.05); }
+
+        /* Footer */
+        footer {
+            padding: 60px 0 40px;
+            border-top: 1px solid var(--border-subtle);
+            text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.2));
+        }
+        .footer-privacy { font-size: 1.05rem; margin-bottom: 28px; letter-spacing: 0.02em; }
+        .footer-privacy strong { color: var(--accent); font-weight: 600; }
+        .footer-links { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--accent); }
+        .footer-copy { color: var(--text-secondary); font-size: 0.95rem; }
+
+        @media (max-width: 768px) {
+            article { padding-top: 100px; }
+            .footer-links { flex-direction: column; gap: 12px; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bg"></div>
+
+    <nav>
+        <div class="container">
+            <a href="/" class="logo">
+                <img src="images/icon.png" alt="SaneClick">
+                SaneClick
+            </a>
+            <div class="nav-links">
+                <a href="/guides.html">&larr; All Guides</a>
+                <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="btn-primary" style="padding: 10px 20px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444" stroke="#ffffff" stroke-width="1.5" style="margin-right: 6px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    Donate
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <article class="container">
+        <h1>How to Remove EXIF Data from Photos on Mac</h1>
+        <p>Every photo your iPhone takes embeds hidden metadata: GPS coordinates, camera model, lens settings, date, time, and more. When you share photos online, you're sharing your exact location with every viewer. Stripping this data before uploading protects your privacy.</p>
+
+        <p>Here are two ways to remove EXIF data on macOS: the manual approach and the right-click approach.</p>
+
+        <div class="comparison">
+            <!-- Option 1 -->
+            <div class="option-card">
+                <h3>Option 1: The Hard Way (Terminal + exiftool)</h3>
+                <p>Powerful, but requires installation and command-line knowledge.</p>
+                <ul class="step-list">
+                    <li><span class="icon icon-num">1</span> <div>Install Homebrew (if not already installed)</div></li>
+                    <li><span class="icon icon-num">2</span> <div>Run <code>brew install exiftool</code></div></li>
+                    <li><span class="icon icon-num">3</span> <div>Open Terminal and navigate to your photos</div></li>
+                    <li><span class="icon icon-num">4</span> <div>Run <code>exiftool -all= photo.jpg</code> for each file</div></li>
+                    <li><span class="icon icon-num">5</span> <div>Or <code>exiftool -all= *.jpg</code> for a whole folder</div></li>
+                    <li><span class="icon icon-x">&#10007;</span> <div>Third-party tool &mdash; must install and maintain</div></li>
+                    <li><span class="icon icon-x">&#10007;</span> <div>No visual confirmation &mdash; trust the command worked</div></li>
+                </ul>
+                <p style="margin-top: 16px; font-size: 14px; color: var(--text-muted);"><em>Result: Works great if you're comfortable with Terminal. Most people aren't.</em></p>
+            </div>
+
+            <!-- Option 2 -->
+            <div class="option-card winner-card">
+                <h3>Option 2: The Sane Way (SaneClick)</h3>
+                <p>Right-click photos, strip metadata instantly.</p>
+                <ul class="step-list">
+                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Remove Photo Info:</strong> Strips EXIF, GPS, camera data in one click</div></li>
+                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Batch support:</strong> Select dozens of photos, clean them all at once</div></li>
+                    <li><span class="icon icon-check">&#10003;</span> <div><strong>No install needed:</strong> Uses macOS built-in <code>sips</code> &mdash; no Homebrew</div></li>
+                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Smart filtering:</strong> Only appears for image files (JPG, PNG, HEIC, etc.)</div></li>
+                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Notification:</strong> Confirms when metadata removal is complete</div></li>
+                </ul>
+                <div class="cta-box">
+                    <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="btn">Get SaneClick &mdash; $6.99</a>
+                </div>
+            </div>
+        </div>
+
+        <h2>What About Preview?</h2>
+        <p>macOS Preview can show some EXIF data (Tools > Show Inspector), but it has no built-in way to <em>remove</em> it. You can export the image to strip some metadata, but this changes the file format and quality settings. It's not a clean solution, and it doesn't handle batch operations at all.</p>
+
+        <h2>What Data Gets Removed?</h2>
+        <p>SaneClick's "Remove Photo Info" script re-encodes the image through macOS's <code>sips</code> engine, which strips all embedded metadata: GPS coordinates, camera make and model, lens info, ISO, shutter speed, date/time stamps, and any custom EXIF tags. The image quality and pixel dimensions stay the same.</p>
+
+        <h2>When Should You Strip EXIF Data?</h2>
+        <p>Before uploading photos to forums, marketplaces, social media (some platforms strip it automatically, many don't), or sending to strangers. If you sell products online, strip the EXIF from product photos so buyers don't see your home GPS coordinates in the file metadata.</p>
+
+        <h2>Conclusion</h2>
+        <p>If you're already a Terminal power user, <code>exiftool</code> is excellent. If you want to protect your privacy with a right-click instead of installing tools and typing commands, <strong>SaneClick</strong> makes EXIF removal as simple as it should be.</p>
+    </article>
+
+    <footer>
+        <div class="container">
+            <p style="font-style: italic; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 20px; opacity: 0.85;">"For God has not given us a spirit of fear, but of power, love, and a sound mind." &mdash; 2 Timothy 1:7</p>
+            <p class="footer-privacy"><strong>0% Telemetry</strong>. <strong>0% Spying</strong>. <strong>100% On-Device</strong>.</p>
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/guides.html">Guides</a>
+                <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
+                <a href="/privacy.html">Privacy</a>
+                <a href="https://github.com/sane-apps/SaneClick/issues">Help</a>
+                <a href="https://polyformproject.org/licenses/shield/1.0.0">PolyForm Shield License</a>
+            </div>
+            <p class="footer-copy">Made with care by Mr. Sane &nbsp;&bull;&nbsp; &copy; 2026 SaneClick</p>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 12px;">"Built for a Sound Mind" &middot; <a href="https://saneapps.com" style="color: var(--text-secondary);">saneapps.com</a></p>
+        </div>
+    </footer>
+
+    <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "bad38ef682374c00a2ac812a3b76a51f"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
