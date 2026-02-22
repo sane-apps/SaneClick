@@ -13,6 +13,23 @@ competitors:
   - "rxhanson/Rectangle" # Window management, overlapping user base
   - "linearmouse/linearmouse" # Mouse customization
 
+# Curated listings
+launches:
+  - platform: "awesome-mac"
+    url: "https://github.com/jaywcjlove/awesome-mac/pull/1804"
+    date: "2026-02-10"
+    status: "merged"
+    notes: "99k star repo."
+  - platform: "open-source-mac-os-apps"
+    date: "2026-02-20"
+    status: "merged"
+    notes: "47k star repo. PR #1008 merged."
+  - platform: "awesome-macOS"
+    url: "https://github.com/iCHAIT/awesome-macOS/pull/697"
+    date: "2026-02-20"
+    status: "submitted"
+    notes: "17.8k star repo. PR #697."
+
 search_terms:
   # Problems
   - "finder context menu custom script"

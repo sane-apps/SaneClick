@@ -3,6 +3,7 @@ import SwiftUI
 
 class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_: Notification) {
+        NSApp.appearance = NSAppearance(named: .darkAqua)
         #if !DEBUG
             SaneAppMover.moveToApplicationsFolderIfNeeded()
         #endif
@@ -84,9 +85,11 @@ struct SaneClickApp: App {
         WindowGroup {
             ContentView()
                 .environment(scriptStore)
+                .preferredColorScheme(.dark)
                 .sheet(isPresented: $showWelcome) {
                     WelcomeView()
                         .environment(scriptStore)
+                        .preferredColorScheme(.dark)
                 }
         }
         // .windowStyle(.hiddenTitleBar) // Temporarily disabled to test file picker
@@ -98,6 +101,7 @@ struct SaneClickApp: App {
         Settings {
             SettingsView()
                 .environment(scriptStore)
+                .preferredColorScheme(.dark)
         }
     }
 }
