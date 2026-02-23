@@ -285,7 +285,6 @@
 			buildConfigurationList = 05BD74581DD41125183DAFEB /* Build configuration list for PBXNativeTarget "SaneClickExtension" */;
 			buildPhases = (
 				8312DDC706E56C766D696E26 /* Sources */,
-				8388C92A6B6D8E8D89ADBDB6 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -361,13 +360,6 @@
 			files = (
 				D5DA8CBA16326530ED642F7C /* Assets.xcassets in Resources */,
 				B2528D20E9949935D53FCF49 /* PrivacyInfo.xcprivacy in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8388C92A6B6D8E8D89ADBDB6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

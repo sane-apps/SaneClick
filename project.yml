@@ -166,6 +166,7 @@ targets:
       properties:
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        NSAppleEventsUsageDescription: "SaneClick runs user-created automation scripts that can control other apps (for example Finder actions and notifications) when you choose those scripts."
         LSApplicationCategoryType: "public.app-category.utilities"
         SUFeedURL: "https://saneclick.com/appcast.xml"
         SUEnableSystemProfiling: false
@@ -181,6 +182,8 @@ targets:
       macOS: "14.0"
     sources:
       - path: SaneClickExtension
+        excludes:
+          - "**/*.md"
     settings:
       base:
         INFOPLIST_FILE: SaneClickExtension/Info.plist
