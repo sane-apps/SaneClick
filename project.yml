@@ -88,6 +88,7 @@ targets:
     sources:
       - path: SaneClick
         excludes:
+          - "CLAUDE.md"
           - "**/*.md"
       - path: ../../infra/SaneProcess/shared/MoveToApplications.swift
     settings:
@@ -183,6 +184,7 @@ targets:
     sources:
       - path: SaneClickExtension
         excludes:
+          - "CLAUDE.md"
           - "**/*.md"
     settings:
       base:
