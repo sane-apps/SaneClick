@@ -4,6 +4,12 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.0.4] - 2026-02-23
+
+Corrective release: align binary metadata with appcast and App Store pipeline.
+
+---
+
 ## [1.0.3] - 2026-02-03
 
 ### Added
