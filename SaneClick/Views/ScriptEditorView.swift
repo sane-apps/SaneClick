@@ -1,3 +1,4 @@
+import SaneUI
 import SwiftUI
 
 struct ScriptEditorView: View {

@@ -1,6 +1,7 @@
 name: SaneClick
 configs:
   Debug: debug
+  ProdDebug: debug
   Release: release
   Release-AppStore: release
 
@@ -14,6 +15,8 @@ packages:
   Sparkle:
     url: https://github.com/sparkle-project/Sparkle
     from: 2.8.0
+  SaneUI:
+    path: ../../infra/SaneUI
 
 settings:
   DEAD_CODE_STRIPPING: YES
@@ -96,8 +99,8 @@ targets:
         INFOPLIST_FILE: SaneClick/Info.plist
         PRODUCT_NAME: SaneClick
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        MARKETING_VERSION: "1.0.4"
-        CURRENT_PROJECT_VERSION: "1004"
+        MARKETING_VERSION: "1.1.0"
+        CURRENT_PROJECT_VERSION: "1100"
         ENABLE_PREVIEWS: YES
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
@@ -110,6 +113,10 @@ targets:
       configs:
         Debug:
           CODE_SIGN_IDENTITY: "-"
+          CODE_SIGN_ENTITLEMENTS: SaneClick/SaneClick.debug.entitlements
+        ProdDebug:
+          DEVELOPMENT_TEAM: M78L6FXD48
+          CODE_SIGN_IDENTITY: "Apple Development"
           CODE_SIGN_ENTITLEMENTS: SaneClick/SaneClick.debug.entitlements
         Release:
           DEVELOPMENT_TEAM: M78L6FXD48
@@ -162,6 +169,7 @@ targets:
         copyPhase:
           destination: plugins
       - package: Sparkle
+      - package: SaneUI
     info:
       path: SaneClick/Info.plist
       properties:
@@ -191,8 +199,8 @@ targets:
         INFOPLIST_FILE: SaneClickExtension/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.saneclick.SaneClick.FinderSync
         PRODUCT_NAME: SaneClickExtension
-        MARKETING_VERSION: "1.0.4"
-        CURRENT_PROJECT_VERSION: "1004"
+        MARKETING_VERSION: "1.1.0"
+        CURRENT_PROJECT_VERSION: "1100"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
         MACOSX_DEPLOYMENT_TARGET: "14.0"
@@ -204,6 +212,10 @@ targets:
       configs:
         Debug:
           CODE_SIGN_IDENTITY: "-"
+          CODE_SIGN_ENTITLEMENTS: SaneClickExtension/SaneClickExtension.debug.entitlements
+        ProdDebug:
+          DEVELOPMENT_TEAM: M78L6FXD48
+          CODE_SIGN_IDENTITY: "Apple Development"
           CODE_SIGN_ENTITLEMENTS: SaneClickExtension/SaneClickExtension.debug.entitlements
         Release:
           DEVELOPMENT_TEAM: M78L6FXD48

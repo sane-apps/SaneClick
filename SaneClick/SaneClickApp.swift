@@ -1,4 +1,5 @@
 import FinderSync
+import SaneUI
 import SwiftUI
 
 class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
@@ -57,7 +58,11 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
 struct SaneClickApp: App {
     @NSApplicationDelegateAdaptor(SaneClickAppDelegate.self) private var appDelegate
     @State private var scriptStore = ScriptStore.shared
-    @State private var showWelcome = OnboardingHelper.needsOnboarding
+    @State private var licenseService = LicenseService(
+        appName: "SaneClick",
+        checkoutURL: URL(string: "https://go.saneapps.com/buy/saneclick")!
+    )
+    @AppStorage("hasSeenWelcome") private var hasSeenWelcome = false
 
     init() {
         AppPreferences.registerDefaults()
@@ -83,13 +88,47 @@ struct SaneClickApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(licenseService: licenseService)
                 .environment(scriptStore)
                 .preferredColorScheme(.dark)
-                .sheet(isPresented: $showWelcome) {
-                    WelcomeView()
-                        .environment(scriptStore)
-                        .preferredColorScheme(.dark)
+                .sheet(isPresented: Binding(
+                    get: { !hasSeenWelcome },
+                    set: { showing in if !showing { hasSeenWelcome = true } }
+                )) {
+                    WelcomeGateView(
+                        appName: "SaneClick",
+                        appIcon: "cursorarrow.click.2",
+                        freeFeatures: [
+                            ("star.fill", "10 Essential Finder actions"),
+                            ("cursorarrow.click.2", "Right-click on any file or folder"),
+                            ("checkmark.shield", "No account or signup needed")
+                        ],
+                        proFeatures: [
+                            ("square.stack.3d.up.fill", "All 50+ scripts across 5 categories"),
+                            ("chevron.left.forwardslash.chevron.right", "12 Coding scripts"),
+                            ("photo.on.rectangle.angled", "10 Images & Media scripts"),
+                            ("wrench.and.screwdriver.fill", "10 Advanced scripts"),
+                            ("folder.fill", "8 Files & Folders scripts"),
+                            ("square.and.pencil", "Custom Script Editor"),
+                            ("square.and.arrow.up.on.square", "Import / Export scripts")
+                        ],
+                        licenseService: licenseService
+                    )
+                    .preferredColorScheme(.dark)
+                }
+                .onAppear {
+                    licenseService.checkCachedLicense()
+                    let isPro = licenseService.isPro
+                    let isFirstLaunch = !hasSeenWelcome
+                    Task.detached {
+                        await EventTracker.log(
+                            isPro ? "app_launch_pro" : "app_launch_free",
+                            app: "saneclick"
+                        )
+                        if isFirstLaunch, !isPro {
+                            await EventTracker.log("new_free_user", app: "saneclick")
+                        }
+                    }
                 }
         }
         // .windowStyle(.hiddenTitleBar) // Temporarily disabled to test file picker
@@ -99,7 +138,7 @@ struct SaneClickApp: App {
         }
 
         Settings {
-            SettingsView()
+            SettingsView(licenseService: licenseService)
                 .environment(scriptStore)
                 .preferredColorScheme(.dark)
         }

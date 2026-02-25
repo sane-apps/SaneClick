@@ -1,4 +1,5 @@
 import AppKit
+import SaneUI
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -11,8 +12,8 @@ struct ImportExportView: View {
 
         var icon: String {
             switch self {
-            case .importScripts: return "square.and.arrow.down"
-            case .exportScripts: return "square.and.arrow.up"
+            case .importScripts: "square.and.arrow.down"
+            case .exportScripts: "square.and.arrow.up"
             }
         }
     }
@@ -20,6 +21,7 @@ struct ImportExportView: View {
     @Environment(ScriptStore.self) private var scriptStore
     @Environment(\.dismiss) private var dismiss
     @Binding var mode: Mode
+    var licenseService: LicenseService
 
     @State private var importMode: ScriptImportMode = .skipDuplicates
     @State private var statusMessage: StatusMessage?
@@ -281,25 +283,25 @@ private struct StatusBanner: View {
 
     private var backgroundColor: Color {
         switch message.kind {
-        case .success: return Color.saneSuccess.opacity(0.15)
-        case .error: return Color.saneError.opacity(0.15)
-        case .warning: return Color.saneWarning.opacity(0.15)
+        case .success: Color.saneSuccess.opacity(0.15)
+        case .error: Color.saneError.opacity(0.15)
+        case .warning: Color.saneWarning.opacity(0.15)
         }
     }
 
     private var borderColor: Color {
         switch message.kind {
-        case .success: return Color.saneSuccess
-        case .error: return Color.saneError
-        case .warning: return Color.saneWarning
+        case .success: Color.saneSuccess
+        case .error: Color.saneError
+        case .warning: Color.saneWarning
         }
     }
 
     private var iconName: String {
         switch message.kind {
-        case .success: return "checkmark.circle.fill"
-        case .error: return "xmark.octagon.fill"
-        case .warning: return "exclamationmark.triangle.fill"
+        case .success: "checkmark.circle.fill"
+        case .error: "xmark.octagon.fill"
+        case .warning: "exclamationmark.triangle.fill"
         }
     }
 
@@ -325,6 +327,12 @@ private struct StatusBanner: View {
 }
 
 #Preview {
-    ImportExportView(mode: .constant(.importScripts))
-        .environment(ScriptStore.shared)
+    ImportExportView(
+        mode: .constant(.importScripts),
+        licenseService: LicenseService(
+            appName: "SaneClick",
+            checkoutURL: URL(string: "https://go.saneapps.com/buy/saneclick")!
+        )
+    )
+    .environment(ScriptStore.shared)
 }

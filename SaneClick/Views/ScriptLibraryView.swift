@@ -1,14 +1,17 @@
+import SaneUI
 import SwiftUI
 
 /// Browse and install scripts from the curated library
 /// Mirrors ContentView design: categories as sections, toggle-based UI
 struct ScriptLibraryView: View {
+    var licenseService: LicenseService
     @Environment(ScriptStore.self) private var scriptStore
     @Environment(\.dismiss) private var dismiss
 
     @State private var searchText = ""
     @State private var expandedCategories: Set<ScriptLibrary.ScriptCategory> = []
-    @State private var showAllSection = false  // "All" section expanded
+    @State private var showAllSection = false // "All" section expanded
+    @State private var proUpsellFeature: ProFeature?
 
     /// Success green for enabled state
     private let successGreen = Color(red: 0.13, green: 0.77, blue: 0.37)
@@ -41,6 +44,10 @@ struct ScriptLibraryView: View {
         }
         .frame(minWidth: 600, minHeight: 500)
         .background(Color.saneNavy.opacity(0.3))
+        .sheet(item: $proUpsellFeature) { feature in
+            ProUpsellView(feature: feature, licenseService: licenseService)
+                .preferredColorScheme(.dark)
+        }
     }
 
     // MARK: - Header
@@ -157,7 +164,7 @@ struct ScriptLibraryView: View {
             }
 
             // Scripts list (collapsible)
-            if showAllSection && !allScripts.isEmpty {
+            if showAllSection, !allScripts.isEmpty {
                 VStack(spacing: 8) {
                     ForEach(allScripts, id: \.name) { libraryScript in
                         let installedScript = scriptStore.scripts.first { $0.name == libraryScript.name }
@@ -179,7 +186,7 @@ struct ScriptLibraryView: View {
                         )
                     }
                 }
-            } else if showAllSection && allScripts.isEmpty && !searchText.isEmpty {
+            } else if showAllSection, allScripts.isEmpty, !searchText.isEmpty {
                 Text("No matching scripts")
                     .font(.subheadline)
                     .foregroundStyle(Color.saneSilver)
@@ -200,7 +207,7 @@ struct ScriptLibraryView: View {
 
         return ScriptLibrary.allScripts.filter { script in
             script.name.localizedCaseInsensitiveContains(searchText) ||
-            script.description.localizedCaseInsensitiveContains(searchText)
+                script.description.localizedCaseInsensitiveContains(searchText)
         }
     }
 
@@ -213,6 +220,8 @@ struct ScriptLibraryView: View {
         let totalInCategory = ScriptLibrary.scripts(for: category).count
         let allCategoryEnabled = enabledInCategory == totalInCategory && totalInCategory > 0
         let isExpanded = expandedCategories.contains(category)
+        let isProCategory = category != .universal
+        let isLocked = isProCategory && !licenseService.isPro
 
         return VStack(alignment: .leading, spacing: 12) {
             // Category header
@@ -224,7 +233,7 @@ struct ScriptLibraryView: View {
                             expandedCategories.remove(category)
                         } else {
                             expandedCategories.insert(category)
-                            showAllSection = false  // Collapse "All" when expanding a category
+                            showAllSection = false // Collapse "All" when expanding a category
                         }
                     }
                 } label: {
@@ -236,20 +245,42 @@ struct ScriptLibraryView: View {
 
                         Image(systemName: category.icon)
                             .font(.title2)
-                            .foregroundStyle(categoryColor)
+                            .foregroundStyle(isLocked ? Color.saneSilver : categoryColor)
 
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(category.rawValue)
-                                .font(.headline)
-                                .foregroundStyle(.primary)
+                            HStack(spacing: 6) {
+                                Text(category.rawValue)
+                                    .font(.headline)
+                                    .foregroundStyle(.primary)
 
-                            HStack(spacing: 4) {
-                                Text("\(enabledInCategory)")
-                                    .foregroundStyle(enabledInCategory > 0 ? successGreen : Color.saneSilver)
-                                Text("of \(totalInCategory) enabled")
-                                    .foregroundStyle(Color.saneSilver)
+                                if isLocked {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "lock.fill")
+                                            .font(.system(size: 9))
+                                        Text("Pro")
+                                            .font(.system(size: 10, weight: .semibold))
+                                    }
+                                    .foregroundStyle(.teal)
+                                    .padding(.horizontal, 5)
+                                    .padding(.vertical, 2)
+                                    .background(Color.teal.opacity(0.15))
+                                    .clipShape(Capsule())
+                                }
                             }
-                            .font(.caption)
+
+                            if isLocked {
+                                Text("Upgrade to enable")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.saneSilver)
+                            } else {
+                                HStack(spacing: 4) {
+                                    Text("\(enabledInCategory)")
+                                        .foregroundStyle(enabledInCategory > 0 ? successGreen : Color.saneSilver)
+                                    Text("of \(totalInCategory) enabled")
+                                        .foregroundStyle(Color.saneSilver)
+                                }
+                                .font(.caption)
+                            }
                         }
                     }
                 }
@@ -257,47 +288,112 @@ struct ScriptLibraryView: View {
 
                 Spacer()
 
-                // Enable All toggle for this category
-                VStack(alignment: .trailing, spacing: 2) {
-                    Toggle("", isOn: Binding(
-                        get: { allCategoryEnabled },
-                        set: { enableAll in
-                            toggleAllScripts(in: category, enable: enableAll)
+                if isLocked {
+                    // Unlock CTA for Pro categories
+                    Button {
+                        proUpsellFeature = proFeatureForCategory(category)
+                    } label: {
+                        HStack(spacing: 5) {
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 11))
+                            Text("Unlock")
+                                .font(.system(size: 12, weight: .semibold))
                         }
-                    ))
-                    .toggleStyle(.switch)
-                    .labelsHidden()
-                    .tint(categoryColor)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(Color.teal)
+                        .clipShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                } else {
+                    // Enable All toggle for this category
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Toggle("", isOn: Binding(
+                            get: { allCategoryEnabled },
+                            set: { enableAll in
+                                toggleAllScripts(in: category, enable: enableAll)
+                            }
+                        ))
+                        .toggleStyle(.switch)
+                        .labelsHidden()
+                        .tint(categoryColor)
 
-                    Text(allCategoryEnabled ? "All On" : "Enable All")
-                        .font(.caption)
-                        .foregroundStyle(Color.saneSilver)
+                        Text(allCategoryEnabled ? "All On" : "Enable All")
+                            .font(.caption)
+                            .foregroundStyle(Color.saneSilver)
+                    }
                 }
             }
 
-            // Scripts list (collapsible)
-            if isExpanded && !libraryScripts.isEmpty {
-                VStack(spacing: 8) {
-                    ForEach(libraryScripts, id: \.name) { libraryScript in
-                        let installedScript = scriptStore.scripts.first { $0.name == libraryScript.name }
-                        let isEnabled = installedScript?.isEnabled ?? false
+            // Scripts list (collapsible) — always show for free categories, Pro shows teaser
+            if isExpanded, !libraryScripts.isEmpty {
+                if isLocked {
+                    // Show a teaser with blur and unlock prompt
+                    ZStack(alignment: .center) {
+                        VStack(spacing: 8) {
+                            ForEach(libraryScripts.prefix(3), id: \.name) { libraryScript in
+                                HStack(spacing: 14) {
+                                    Image(systemName: libraryScript.icon)
+                                        .font(.title3)
+                                        .foregroundStyle(Color.saneSilver)
+                                        .frame(width: 36, height: 36)
+                                        .background(Color.saneSmoke)
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
 
-                        LibraryScriptRow(
-                            libraryScript: libraryScript,
-                            isInstalled: installedScript != nil,
-                            isEnabled: isEnabled,
-                            categoryColor: categoryColor,
-                            onToggle: { newValue in
-                                handleScriptToggle(
-                                    libraryScript: libraryScript,
-                                    installedScript: installedScript,
-                                    enable: newValue
-                                )
+                                    Text(libraryScript.name)
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                        .foregroundStyle(Color.saneSilver)
+
+                                    Spacer()
+                                }
+                                .padding(14)
+                                .background { RoundedRectangle(cornerRadius: 12).fill(Color.saneCarbon) }
                             }
-                        )
+                        }
+                        .blur(radius: 3)
+                        .allowsHitTesting(false)
+
+                        Button {
+                            proUpsellFeature = proFeatureForCategory(category)
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "lock.fill")
+                                    .font(.system(size: 13))
+                                Text("Unlock \(totalInCategory) scripts")
+                                    .font(.system(size: 13, weight: .semibold))
+                            }
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.teal)
+                    }
+                } else {
+                    VStack(spacing: 8) {
+                        ForEach(libraryScripts, id: \.name) { libraryScript in
+                            let installedScript = scriptStore.scripts.first { $0.name == libraryScript.name }
+                            let isEnabled = installedScript?.isEnabled ?? false
+
+                            LibraryScriptRow(
+                                libraryScript: libraryScript,
+                                isInstalled: installedScript != nil,
+                                isEnabled: isEnabled,
+                                categoryColor: categoryColor,
+                                onToggle: { newValue in
+                                    handleScriptToggle(
+                                        libraryScript: libraryScript,
+                                        installedScript: installedScript,
+                                        enable: newValue
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
-            } else if isExpanded && libraryScripts.isEmpty && !searchText.isEmpty {
+            } else if isExpanded, libraryScripts.isEmpty, !searchText.isEmpty {
                 Text("No matching scripts")
                     .font(.subheadline)
                     .foregroundStyle(Color.saneSilver)
@@ -315,12 +411,12 @@ struct ScriptLibraryView: View {
 
     private func colorForCategory(_ category: ScriptLibrary.ScriptCategory) -> Color {
         switch category.colorName {
-        case "blue": return .blue
-        case "green": return Color(red: 0.13, green: 0.77, blue: 0.37)
-        case "pink": return .pink
-        case "purple": return .purple
-        case "orange": return .orange
-        default: return .blue
+        case "blue": .blue
+        case "green": Color(red: 0.13, green: 0.77, blue: 0.37)
+        case "pink": .pink
+        case "purple": .purple
+        case "orange": .orange
+        default: .blue
         }
     }
 
@@ -333,16 +429,15 @@ struct ScriptLibraryView: View {
 
         return categoryScripts.filter { script in
             script.name.localizedCaseInsensitiveContains(searchText) ||
-            script.description.localizedCaseInsensitiveContains(searchText)
+                script.description.localizedCaseInsensitiveContains(searchText)
         }
     }
 
     private func enabledCount(for category: ScriptLibrary.ScriptCategory?) -> Int {
-        let libraryScriptNames: Set<String>
-        if let category = category {
-            libraryScriptNames = Set(ScriptLibrary.scripts(for: category).map { $0.name })
+        let libraryScriptNames: Set<String> = if let category {
+            Set(ScriptLibrary.scripts(for: category).map(\.name))
         } else {
-            libraryScriptNames = Set(ScriptLibrary.allScripts.map { $0.name })
+            Set(ScriptLibrary.allScripts.map(\.name))
         }
 
         return scriptStore.scripts.filter { script in
@@ -352,6 +447,12 @@ struct ScriptLibraryView: View {
 
     private func handleScriptToggle(libraryScript: ScriptLibrary.LibraryScript, installedScript: Script?, enable: Bool) {
         if enable {
+            // Gate non-Essentials scripts behind Pro
+            if libraryScript.category != .universal, !licenseService.isPro {
+                proUpsellFeature = proFeatureForCategory(libraryScript.category)
+                return
+            }
+
             if let script = installedScript {
                 if !script.isEnabled {
                     var updated = script
@@ -383,6 +484,11 @@ struct ScriptLibraryView: View {
     }
 
     private func toggleAllScripts(in category: ScriptLibrary.ScriptCategory, enable: Bool) {
+        // Gate enabling Pro categories behind Pro
+        if enable, category != .universal, !licenseService.isPro {
+            proUpsellFeature = proFeatureForCategory(category)
+            return
+        }
         for libraryScript in ScriptLibrary.scripts(for: category) {
             let installedScript = scriptStore.scripts.first { $0.name == libraryScript.name }
             handleScriptToggle(libraryScript: libraryScript, installedScript: installedScript, enable: enable)
@@ -390,14 +496,36 @@ struct ScriptLibraryView: View {
     }
 
     private func toggleAllLibrary(enable: Bool) {
+        // When enabling all — only enable Essentials for free users
+        if enable, !licenseService.isPro {
+            for libraryScript in ScriptLibrary.scripts(for: .universal) {
+                let installedScript = scriptStore.scripts.first { $0.name == libraryScript.name }
+                handleScriptToggle(libraryScript: libraryScript, installedScript: installedScript, enable: enable)
+            }
+            proUpsellFeature = .codingScripts
+            return
+        }
         for libraryScript in ScriptLibrary.allScripts {
             let installedScript = scriptStore.scripts.first { $0.name == libraryScript.name }
             handleScriptToggle(libraryScript: libraryScript, installedScript: installedScript, enable: enable)
         }
     }
+
+    private func proFeatureForCategory(_ category: ScriptLibrary.ScriptCategory) -> ProFeature {
+        switch category {
+        case .developer: .codingScripts
+        case .designer: .imageScripts
+        case .powerUser: .advancedScripts
+        case .organization: .organizationScripts
+        case .universal: .codingScripts // Fallback
+        }
+    }
 }
 
 #Preview {
-    ScriptLibraryView()
-        .environment(ScriptStore.shared)
+    ScriptLibraryView(licenseService: LicenseService(
+        appName: "SaneClick",
+        checkoutURL: URL(string: "https://go.saneapps.com/buy/saneclick")!
+    ))
+    .environment(ScriptStore.shared)
 }

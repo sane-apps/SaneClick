@@ -54,7 +54,7 @@
         "price": "6.99",
         "priceCurrency": "USD"
       },
-      "softwareVersion": "1.0.2",
+      "softwareVersion": "1.0.3",
       "featureList": [
         "50+ Pre-built Actions",
         "Custom Scripts",
@@ -99,10 +99,15 @@
             --text-primary: #f5f5f8;
             --text-secondary: #e8e8f0;
             --text-muted: #d0d0e0;
-            --success: #34d399;
+            --success: #34c759;
             --success-soft: rgba(52, 211, 153, 0.15);
             --border: #252530;
             --border-subtle: #1e1e28;
+            --phi-xs: 8px;
+            --phi-sm: 13px;
+            --phi-md: 21px;
+            --phi-lg: 34px;
+            --phi-xl: 55px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -434,6 +439,150 @@
         .price-note::after { content: "I wanted to make it $5, but processing fees and taxes were… insane. — Mr. Sane"; position: absolute; left: calc(100% + 6px); top: 50%; transform: translateY(-50%); background: var(--bg-card); color: var(--text-primary); padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-style: italic; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.1s; z-index: 999; border: 1px solid var(--border); }
         .price-note:hover::after { opacity: 1; }
         @media (max-width: 768px) { .price-note { display: none; } }
+
+        .hero-pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--phi-lg);
+            max-width: 700px;
+            margin: 0 auto var(--phi-xxl, 55px);
+            text-align: left;
+            align-items: start;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: var(--phi-xl) var(--phi-lg);
+            text-align: left;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            border-color: rgba(79, 143, 250, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 13px 34px rgba(0, 0, 0, 0.3);
+        }
+
+        .pricing-card.featured {
+            background:
+                radial-gradient(ellipse at 80% 20%, rgba(79, 143, 250, 0.12) 0%, transparent 50%),
+                linear-gradient(160deg, #0d1830 0%, #0a1225 100%);
+            border-color: rgba(79, 143, 250, 0.35);
+            box-shadow: 0 8px 34px rgba(79, 143, 250, 0.1);
+        }
+
+        .pricing-card.featured:hover {
+            box-shadow: 0 13px 55px rgba(79, 143, 250, 0.15);
+        }
+
+        .pricing-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: var(--phi-sm);
+        }
+
+        .pricing-card.featured .pricing-label {
+            color: var(--accent);
+        }
+
+        .pricing-price {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.618rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--phi-xs);
+            line-height: 1.1;
+        }
+
+        .pricing-price-note {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: var(--phi-lg);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: var(--phi-lg);
+        }
+
+        .pricing-features li {
+            padding: var(--phi-xs) 0;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--phi-xs);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .pricing-card.featured .pricing-features li.extra::before {
+            color: var(--accent);
+            content: '★';
+        }
+
+        .pricing-cta {
+            display: block;
+            text-align: center;
+            padding: var(--phi-sm) var(--phi-md);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-cta-free {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .pricing-cta-free:hover {
+            border-color: var(--accent);
+            background: var(--accent-subtle);
+        }
+
+        .pricing-cta-pro {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 21px var(--accent-glow);
+        }
+
+        .pricing-cta-pro:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 34px var(--accent-glow);
+            filter: brightness(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .hero-pricing-grid {
+                grid-template-columns: 1fr;
+                gap: var(--phi-md);
+                max-width: 340px;
+            }
+
+            .pricing-card {
+                padding: var(--phi-lg) var(--phi-md);
+            }
+
+            .pricing-price {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -452,10 +601,8 @@
                 <a href="/guides.html">Guides</a>
                 <a href="#features">Features</a>
                 <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
-                <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="btn btn-primary btn-donate">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    Donate
-                </a>
+                <a href="https://dist.saneclick.com/updates/SaneClick-1.1.0.dmg">Download Free</a>
+                <a href="https://go.saneapps.com/buy/saneclick?ref=website-nav" class="btn btn-primary btn-donate">Buy Pro — $6.99</a>
             </div>
             <button class="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -475,7 +622,8 @@
         <a href="https://saneclip.com">SaneClip &mdash; Clipboard Manager</a>
         <a href="https://sanesales.com">SaneSales &mdash; Sales Tracker</a>
         <a href="https://saneapps.com">See all SaneApps &rarr;</a>
-        <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="mobile-nav-cta">Buy SaneClick &mdash; $6.99</a>
+        <a href="https://dist.saneclick.com/updates/SaneClick-1.1.0.dmg" class="mobile-nav-cta" style="background: var(--bg-secondary); border: 1px solid var(--border); box-shadow: none; margin-bottom: 12px;">Download Free</a>
+        <a href="https://go.saneapps.com/buy/saneclick?ref=website-mobile" class="mobile-nav-cta">Buy Pro &mdash; $6.99</a>
     </div>
 
     <section class="hero">
@@ -489,8 +637,42 @@
                 <a href="https://forums.basehub.com/sane-apps/SaneClick/1" target="_blank" rel="noopener">&#128737;&#65039; Provably Private (Audit)</a>
             </div>
 
-            <div class="cta-buttons animate-in delay-4">
-                <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="btn btn-primary">Buy SaneClick — $6.99</a><span class="price-note">*</span>
+            <div class="hero-pricing-grid animate-in delay-4" id="pricing">
+                <div class="pricing-card">
+                    <p class="pricing-label">Basic</p>
+                    <p class="pricing-price">Free</p>
+                    <p class="pricing-price-note">Forever — no catch</p>
+                    <ul class="pricing-features">
+                        <li>9 Essential Finder scripts</li>
+                        <li>Copy Path, Open Terminal, and more</li>
+                        <li>Browse the full script library</li>
+                        <li>Basic Finder extension</li>
+                        <li>100% on-device privacy</li>
+                    </ul>
+                    <a href="https://dist.saneclick.com/updates/SaneClick-1.1.0.dmg" class="pricing-cta pricing-cta-free">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 6px;">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Download Free
+                    </a>
+                </div>
+                <div class="pricing-card featured">
+                    <p class="pricing-label">Pro</p>
+                    <p class="pricing-price">$6.99<span class="price-note">*</span></p>
+                    <p class="pricing-price-note">One-time — yours forever</p>
+                    <ul class="pricing-features">
+                        <li>Everything in Basic, plus:</li>
+                        <li class="extra">All 50+ scripts across every category</li>
+                        <li class="extra">Coding tools (Git, JSON, diff, and more)</li>
+                        <li class="extra">Image &amp; media scripts (resize, convert, compress)</li>
+                        <li class="extra">Advanced tools (hashing, compression, system)</li>
+                        <li class="extra">Files &amp; folders organization scripts</li>
+                        <li class="extra">Custom script editor</li>
+                        <li class="extra">Script testing before deployment</li>
+                        <li class="extra">Import / export script collections</li>
+                    </ul>
+                    <a href="https://go.saneapps.com/buy/saneclick?ref=website-hero" class="pricing-cta pricing-cta-pro">Buy Pro</a>
+                </div>
             </div>
 
             <div class="demo-box animate-in delay-5" onclick="toggleMenu()">
@@ -607,13 +789,13 @@
                 <h2 style="font-family: 'Playfair Display', serif; font-size: 2.25rem; margin-bottom: 20px;">100% Transparent Code &#8800; Free</h2>
                 <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 30px;">Great transparent-code tools die when developers can't sustain them. $6.99 keeps SaneClick alive and actively maintained.</p>
                 <div class="sustainability-options">
-                    <a href="https://github.com/sane-apps/SaneClick" class="sustainability-option">
-                        <h4>Build It Yourself</h4>
-                        <p>Clone the repo. PolyForm Shield Licensed. Build from source for free.</p>
+                    <a href="https://dist.saneclick.com/updates/SaneClick-1.1.0.dmg" class="sustainability-option">
+                        <h4>Download Free</h4>
+                        <p>9 essential Finder scripts, 100% on-device. No account, no catch.</p>
                     </a>
-                    <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="sustainability-option featured">
-                        <h4>Buy Now - $6.99</h4>
-                        <p>Get a signed, notarized, ready-to-use app and support development.</p>
+                    <a href="https://go.saneapps.com/buy/saneclick?ref=website-sustainability" class="sustainability-option featured">
+                        <h4>Upgrade to Pro — $6.99</h4>
+                        <p>Unlock all 50+ scripts, custom editor, and import/export. One-time purchase, yours forever.</p>
                     </a>
                 </div>
             </div>

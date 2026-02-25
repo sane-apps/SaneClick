@@ -1,6 +1,8 @@
+import SaneUI
 import SwiftUI
 
 struct SettingsView: View {
+    var licenseService: LicenseService
     @Environment(ScriptStore.self) private var scriptStore
     #if !APP_STORE
         @StateObject private var updateService = UpdateService.shared
@@ -18,12 +20,26 @@ struct SettingsView: View {
                     Label("General", systemImage: "gearshape")
                 }
 
+            licenseTab
+                .tabItem {
+                    Label("License", systemImage: "key")
+                }
+
             aboutTab
                 .tabItem {
                     Label("About", systemImage: "info.circle")
                 }
         }
-        .frame(width: 450, height: 300)
+        .frame(width: 450, height: 340)
+    }
+
+    // MARK: - License Tab
+
+    private var licenseTab: some View {
+        Form {
+            LicenseSettingsView(licenseService: licenseService)
+        }
+        .formStyle(.grouped)
     }
 
     // MARK: - General Tab
@@ -185,6 +201,9 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView()
-        .environment(ScriptStore.shared)
+    SettingsView(licenseService: LicenseService(
+        appName: "SaneClick",
+        checkoutURL: URL(string: "https://go.saneapps.com/buy/saneclick")!
+    ))
+    .environment(ScriptStore.shared)
 }
