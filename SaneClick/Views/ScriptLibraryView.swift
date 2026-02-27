@@ -414,7 +414,7 @@ struct ScriptLibraryView: View {
         case "blue": .blue
         case "green": Color(red: 0.13, green: 0.77, blue: 0.37)
         case "pink": .pink
-        case "purple": .purple
+        case "purple": .teal
         case "orange": .orange
         default: .blue
         }

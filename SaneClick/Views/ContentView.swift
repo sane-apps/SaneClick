@@ -174,6 +174,7 @@ struct ContentView: View {
                         activeCount: activeCount,
                         isLocked: isProCategory && !licenseService.isPro
                     )
+                    .padding(.top, category == .universal ? 7 : 0)
                     .tag(category)
                 }
             } header: {
@@ -207,7 +208,7 @@ struct ContentView: View {
         case "blue": .blue
         case "green": Color(red: 0.13, green: 0.77, blue: 0.37)
         case "pink": .pink
-        case "purple": .purple
+        case "purple": .teal
         case "orange": .orange
         default: .blue
         }
@@ -584,14 +585,14 @@ struct CategoryRow: View {
     /// - Blue: Essential/primary features
     /// - Green: Safe/file management (also success state)
     /// - Pink: Creative/visual
-    /// - Purple: Technical/developer
+    /// - Teal: Technical/developer
     /// - Orange: Warning/advanced (be careful)
     private var categoryColor: Color {
         switch category.colorName {
         case "blue": .blue
         case "green": Color(red: 0.13, green: 0.77, blue: 0.37) // Brand success green
         case "pink": .pink
-        case "purple": .purple
+        case "purple": .teal
         case "orange": .orange
         default: .blue
         }

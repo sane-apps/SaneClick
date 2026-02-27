@@ -95,7 +95,7 @@ enum ScriptLibrary {
         }
 
         /// Semantic color name for SwiftUI
-        /// Meanings: blue=essential, green=safe, pink=creative, purple=technical, orange=warning
+            /// Meanings: blue=essential, green=safe, pink=creative, teal=technical, orange=warning
         var colorName: String {
             switch self {
             case .universal: return "blue"
@@ -110,7 +110,6 @@ enum ScriptLibrary {
     private static let imageExtensions = [
         "jpg", "jpeg", "png", "heic", "tiff", "gif", "bmp", "webp"
     ]
-
 
     // MARK: - Universal Scripts
 
