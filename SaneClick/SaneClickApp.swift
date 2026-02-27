@@ -71,7 +71,7 @@ struct SaneClickApp: App {
         DispatchQueue.main.async {
             Task { @MainActor in
                 MenuBarController.shared.setEnabled(AppPreferences.showMenuBarIcon)
-                ActivationPolicyManager.applyPolicy(showDockIcon: AppPreferences.showDockIcon)
+                SaneActivationPolicy.applyInitialPolicy(showDockIcon: AppPreferences.showDockIcon)
             }
         }
 

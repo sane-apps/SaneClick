@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		09CF4C3970618994C1F4AD74 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = DCCDF70371884D3762E05659 /* Sparkle */; };
 		0D111DBAB50E53218731BCAB /* CategoryEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901F888200D7C1EC63210408 /* CategoryEditorView.swift */; };
-		0F5FFFE51E47DAE6037CC58C /* MoveToApplications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0269B0579200FC6E6503E2B7 /* MoveToApplications.swift */; };
 		1361CF6176967FFC1C817445 /* FinderSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700D47CED971DFCF509DB68A /* FinderSync.swift */; };
 		1DE6BF747A96A9042AF2F879 /* ScriptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CAB9648AF325258DC7FE8E /* ScriptStore.swift */; };
 		24D18F95948C7B912B63B0CD /* ScriptExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC0CF25CD64448C80A443A2 /* ScriptExecutor.swift */; };
@@ -34,7 +33,6 @@
 		AFBD400DBECC4B913690E29E /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447D4BFE5ACB557CE976F11 /* Script.swift */; };
 		B0561246A2A1957E7017B8B1 /* ScriptLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C04403C1E09F0D5028384E /* ScriptLibraryTests.swift */; };
 		B2528D20E9949935D53FCF49 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 5B42E303B65FD7B78AFCEF2F /* PrivacyInfo.xcprivacy */; };
-		B6CDFAE4E438634BAC4324A0 /* ActivationPolicyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6BF49B1921953C02B99C37 /* ActivationPolicyManager.swift */; };
 		C190B7239A1EC80ACF8DC40D /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608B462FF6AD69A9DBC6FA64 /* WelcomeView.swift */; };
 		CA389228F1F7FE16FF17D850 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C430CF1913F9F056D1C42FD1 /* ContentView.swift */; };
 		CCE34A091108F9B0E4A55F18 /* ScriptEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0292252BEA20E38AA9D5AD5 /* ScriptEditorView.swift */; };
@@ -75,7 +73,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0269B0579200FC6E6503E2B7 /* MoveToApplications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveToApplications.swift; sourceTree = "<group>"; };
 		037A92156BFEE353DE83DB29 /* ImportExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExportView.swift; sourceTree = "<group>"; };
 		07C04403C1E09F0D5028384E /* ScriptLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptLibraryTests.swift; sourceTree = "<group>"; };
 		08770D312D62F0A9C67BFCB9 /* SaneClickTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SaneClickTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,7 +109,6 @@
 		A261E9D493D09361F59B70AB /* SaneClick.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaneClick.entitlements; sourceTree = "<group>"; };
 		A4375D086296589FD9E2EE58 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B1D6405FA6195B48159C6502 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
-		BB6BF49B1921953C02B99C37 /* ActivationPolicyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationPolicyManager.swift; sourceTree = "<group>"; };
 		C19B414E55D6FF5FDF7690BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C430CF1913F9F056D1C42FD1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E68AE3D3E5F32A83827F08A7 /* SaneClick-AppStore.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "SaneClick-AppStore.entitlements"; sourceTree = "<group>"; };
@@ -208,7 +204,6 @@
 		66F372BAC2D4EF2869CD36D1 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				BB6BF49B1921953C02B99C37 /* ActivationPolicyManager.swift */,
 				0AF1B4BB43599FDB2D286ADF /* AppPreferences.swift */,
 				2C3B0C60BE7EF0BF925BB1F9 /* ExtensionStatusService.swift */,
 				3657A493D18F7FE8C14A6434 /* FinderControl.swift */,
@@ -245,19 +240,9 @@
 				97E6233ACB704BBD4112CC8A /* Packages */,
 				548AC026F47CA71DE134E308 /* SaneClick */,
 				C650B644EC575F986F69D9DE /* SaneClickExtension */,
-				EC5E1D9F9814F2A257105101 /* shared */,
 				645C9DEFF575C6CA72B4358E /* Tests */,
 				5B3DA58DADBE6A8D7B5F2080 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		EC5E1D9F9814F2A257105101 /* shared */ = {
-			isa = PBXGroup;
-			children = (
-				0269B0579200FC6E6503E2B7 /* MoveToApplications.swift */,
-			);
-			name = shared;
-			path = ../../infra/SaneProcess/shared;
 			sourceTree = "<group>";
 		};
 		F78158E7B9726147A68C2FD1 /* Models */ = {
@@ -409,7 +394,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B6CDFAE4E438634BAC4324A0 /* ActivationPolicyManager.swift in Sources */,
 				CED119D09B9E882EE37AEA8B /* AppPreferences.swift in Sources */,
 				4214C45F58D93958090E6AF5 /* Category.swift in Sources */,
 				0D111DBAB50E53218731BCAB /* CategoryEditorView.swift in Sources */,
@@ -419,7 +403,6 @@
 				96FF0C54A60D14A759E109CB /* FinderControl.swift in Sources */,
 				D2804ED379719BFC7420BA98 /* ImportExportView.swift in Sources */,
 				4158A3FE5FD6BA942AA6ADE7 /* MenuBarController.swift in Sources */,
-				0F5FFFE51E47DAE6037CC58C /* MoveToApplications.swift in Sources */,
 				A4AFD157125E508753899D83 /* ProFeature.swift in Sources */,
 				80B217DEAF5CAE7469AFE1F1 /* SaneClickApp.swift in Sources */,
 				27421E21068E3EF12E4DC3EF /* SaneColors.swift in Sources */,
@@ -482,7 +465,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 110;
+				CURRENT_PROJECT_VERSION = 1100;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
@@ -698,7 +681,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 110;
+				CURRENT_PROJECT_VERSION = 1100;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
@@ -722,7 +705,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 110;
+				CURRENT_PROJECT_VERSION = 1100;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
@@ -748,7 +731,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 110;
+				CURRENT_PROJECT_VERSION = 1100;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
@@ -779,7 +762,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 110;
+				CURRENT_PROJECT_VERSION = 1100;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -804,7 +787,7 @@
 				CODE_SIGN_ENTITLEMENTS = SaneClickExtension/SaneClickExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 110;
+				CURRENT_PROJECT_VERSION = 1100;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
@@ -829,7 +812,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 110;
+				CURRENT_PROJECT_VERSION = 1100;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -912,7 +895,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 110;
+				CURRENT_PROJECT_VERSION = 1100;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;

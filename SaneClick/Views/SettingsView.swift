@@ -6,6 +6,7 @@ struct SettingsView: View {
     @Environment(ScriptStore.self) private var scriptStore
     #if !APP_STORE
         @StateObject private var updateService = UpdateService.shared
+        @State private var automaticallyChecksForUpdates = UpdateService.shared.automaticallyChecksForUpdates
     #endif
     @AppStorage(AppPreferences.showActionNotificationsKey) private var showActionNotifications = true
     @AppStorage(AppPreferences.showMenuBarIconKey) private var showMenuBarIcon = true
@@ -30,7 +31,7 @@ struct SettingsView: View {
                     Label("About", systemImage: "info.circle")
                 }
         }
-        .frame(width: 450, height: 340)
+        .frame(width: 450, height: 380)
     }
 
     // MARK: - License Tab
@@ -95,13 +96,14 @@ struct SettingsView: View {
             }
 
             Section("App Visibility") {
+                SaneLoginItemToggle()
+
+                SaneDockIconToggle(showDockIcon: $showDockIcon)
+
                 Toggle("Show menu bar icon", isOn: $showMenuBarIcon)
                     .help("Keep SaneClick available in your menu bar")
 
-                Toggle("Show app in Dock", isOn: $showDockIcon)
-                    .help("Show SaneClick in the Dock and Cmd+Tab")
-
-                Text("If you hide both, open SaneClick from Applications.")
+                Text("If you hide both the Dock icon and menu bar icon, open SaneClick from Applications.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -110,6 +112,18 @@ struct SettingsView: View {
                 Toggle("Show action confirmations", isOn: $showActionNotifications)
                     .help("Show a notification when an action finishes")
             }
+
+            #if !APP_STORE
+                Section("Software Updates") {
+                    SaneSparkleRow(
+                        automaticallyChecks: $automaticallyChecksForUpdates,
+                        onCheckNow: { updateService.checkForUpdates() }
+                    )
+                    .onChange(of: automaticallyChecksForUpdates) { _, newValue in
+                        updateService.automaticallyChecksForUpdates = newValue
+                    }
+                }
+            #endif
         }
         .formStyle(.grouped)
         .onAppear {
@@ -120,61 +134,15 @@ struct SettingsView: View {
                 MenuBarController.shared.setEnabled(newValue)
             }
         }
-        .onChange(of: showDockIcon) { _, newValue in
-            Task { @MainActor in
-                ActivationPolicyManager.applyPolicy(showDockIcon: newValue)
-            }
-        }
     }
 
     // MARK: - About Tab
 
     private var aboutTab: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "cursorarrow.click.2")
-                .font(.system(size: 64))
-                .foregroundStyle(.teal)
-
-            Text("SaneClick")
-                .font(.title)
-
-            Text("Version \(appVersion)")
-                .foregroundStyle(.secondary)
-
-            Text("Add custom actions to your right-click menu")
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-
-            Divider()
-
-            HStack(spacing: 16) {
-                Link(destination: URL(string: "https://github.com/sane-apps/SaneClick")!) {
-                    Label("GitHub", systemImage: "link")
-                }
-
-                Link(destination: URL(string: "https://saneclick.com")!) {
-                    Label("Website", systemImage: "globe")
-                }
-            }
-
-            Text("PolyForm Shield 1.0.0")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
-
-            #if !APP_STORE
-                Button("Check for Updates") {
-                    updateService.checkForUpdates()
-                }
-                .buttonStyle(.bordered)
-            #endif
-        }
-        .padding()
-    }
-
-    private var appVersion: String {
-        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-        return version ?? "Unknown"
+        SaneAboutView(
+            appName: "SaneClick",
+            githubRepo: "SaneClick"
+        )
     }
 
     private var statusColor: Color {

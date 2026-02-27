@@ -1,5 +1,6 @@
 import AppKit
 import os.log
+import SaneUI
 
 @MainActor
 final class MenuBarController: NSObject, NSMenuDelegate {
@@ -130,7 +131,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     @objc private func toggleDockIcon() {
         let newValue = !AppPreferences.showDockIcon
         UserDefaults.standard.set(newValue, forKey: AppPreferences.showDockIconKey)
-        ActivationPolicyManager.applyPolicy(showDockIcon: newValue)
+        SaneActivationPolicy.applyPolicy(showDockIcon: newValue)
         if newValue {
             NSApp.activate(ignoringOtherApps: true)
         }

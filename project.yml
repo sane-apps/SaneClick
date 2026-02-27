@@ -93,7 +93,6 @@ targets:
         excludes:
           - "CLAUDE.md"
           - "**/*.md"
-      - path: ../../infra/SaneProcess/shared/MoveToApplications.swift
     settings:
       base:
         INFOPLIST_FILE: SaneClick/Info.plist
