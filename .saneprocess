@@ -26,6 +26,7 @@ release:
 appstore:
   enabled: true
   app_id: "6759330868"
+  product_id: "com.saneclick.app.pro.unlock"
   scheme: SaneClick-AppStore
   configuration: Release-AppStore
   platforms: [macos]
