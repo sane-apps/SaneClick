@@ -6,7 +6,7 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_: Notification) {
         NSApp.appearance = NSAppearance(named: .darkAqua)
         #if !DEBUG
-            SaneAppMover.moveToApplicationsFolderIfNeeded()
+            if SaneAppMover.moveToApplicationsFolderIfNeeded() { return }
         #endif
     }
 

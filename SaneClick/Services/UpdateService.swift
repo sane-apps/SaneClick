@@ -3,6 +3,7 @@ import Foundation
     import Sparkle
 #endif
 import os.log
+import SaneUI
 
 private let logger = Logger(subsystem: "com.saneclick.SaneClick", category: "UpdateService")
 
@@ -31,6 +32,7 @@ final class UpdateService: NSObject, ObservableObject {
                 updaterDelegate: nil,
                 userDriverDelegate: nil
             )
+            normalizeUpdateCheckFrequency()
             logger.info("Sparkle updater initialized")
 
             if let profiling = Bundle.main.object(forInfoDictionaryKey: "SUEnableSystemProfiling") as? Bool,
@@ -62,5 +64,28 @@ final class UpdateService: NSObject, ObservableObject {
                 updaterController?.updater.automaticallyChecksForUpdates = newValue
             #endif
         }
+    }
+
+    var updateCheckFrequency: SaneSparkleCheckFrequency {
+        get {
+            #if !APP_STORE
+                let interval = updaterController?.updater.updateCheckInterval ?? SaneSparkleCheckFrequency.daily.interval
+                return SaneSparkleCheckFrequency.resolve(updateCheckInterval: interval)
+            #else
+                .daily
+            #endif
+        }
+        set {
+            #if !APP_STORE
+                updaterController?.updater.updateCheckInterval = newValue.interval
+            #endif
+        }
+    }
+
+    private func normalizeUpdateCheckFrequency() {
+        #if !APP_STORE
+            guard let updater = updaterController?.updater else { return }
+            updater.updateCheckInterval = SaneSparkleCheckFrequency.normalizedInterval(from: updater.updateCheckInterval)
+        #endif
     }
 }

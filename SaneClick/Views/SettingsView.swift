@@ -7,6 +7,7 @@ struct SettingsView: View {
     #if !APP_STORE
         @StateObject private var updateService = UpdateService.shared
         @State private var automaticallyChecksForUpdates = UpdateService.shared.automaticallyChecksForUpdates
+        @State private var updateCheckFrequency = UpdateService.shared.updateCheckFrequency
     #endif
     @AppStorage(AppPreferences.showActionNotificationsKey) private var showActionNotifications = true
     @AppStorage(AppPreferences.showMenuBarIconKey) private var showMenuBarIcon = true
@@ -117,10 +118,14 @@ struct SettingsView: View {
                 Section("Software Updates") {
                     SaneSparkleRow(
                         automaticallyChecks: $automaticallyChecksForUpdates,
+                        checkFrequency: $updateCheckFrequency,
                         onCheckNow: { updateService.checkForUpdates() }
                     )
                     .onChange(of: automaticallyChecksForUpdates) { _, newValue in
                         updateService.automaticallyChecksForUpdates = newValue
+                    }
+                    .onChange(of: updateCheckFrequency) { _, newValue in
+                        updateService.updateCheckFrequency = newValue
                     }
                 }
             #endif
@@ -128,6 +133,8 @@ struct SettingsView: View {
         .formStyle(.grouped)
         .onAppear {
             refreshExtensionStatus()
+            automaticallyChecksForUpdates = updateService.automaticallyChecksForUpdates
+            updateCheckFrequency = updateService.updateCheckFrequency
         }
         .onChange(of: showMenuBarIcon) { _, newValue in
             Task { @MainActor in
