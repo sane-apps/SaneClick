@@ -133,8 +133,10 @@ struct SettingsView: View {
         .formStyle(.grouped)
         .onAppear {
             refreshExtensionStatus()
-            automaticallyChecksForUpdates = updateService.automaticallyChecksForUpdates
-            updateCheckFrequency = updateService.updateCheckFrequency
+            #if !APP_STORE
+                automaticallyChecksForUpdates = updateService.automaticallyChecksForUpdates
+                updateCheckFrequency = updateService.updateCheckFrequency
+            #endif
         }
         .onChange(of: showMenuBarIcon) { _, newValue in
             Task { @MainActor in
