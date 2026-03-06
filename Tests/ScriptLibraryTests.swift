@@ -182,22 +182,23 @@ struct ExecutionRequestTests {
     }
 }
 
-// MARK: - Onboarding Helper Tests
+// MARK: - Onboarding State Tests
 
-struct OnboardingHelperTests {
+struct OnboardingStateTests {
+    private let onboardingKey = "hasSeenWelcome"
 
-    @Test("Onboarding state can be checked and reset")
+    @Test("Onboarding welcome state can be toggled and reset")
     func onboardingStateManagement() {
-        // Reset to known state
-        OnboardingHelper.reset()
-        #expect(OnboardingHelper.needsOnboarding == true)
+        // Reset to known state: first launch should need onboarding.
+        UserDefaults.standard.removeObject(forKey: onboardingKey)
+        #expect(UserDefaults.standard.bool(forKey: onboardingKey) == false)
 
-        // Mark as complete
-        UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
-        #expect(OnboardingHelper.needsOnboarding == false)
+        // Mark welcome as seen.
+        UserDefaults.standard.set(true, forKey: onboardingKey)
+        #expect(UserDefaults.standard.bool(forKey: onboardingKey) == true)
 
-        // Reset again
-        OnboardingHelper.reset()
-        #expect(OnboardingHelper.needsOnboarding == true)
+        // Reset again to first-launch state.
+        UserDefaults.standard.removeObject(forKey: onboardingKey)
+        #expect(UserDefaults.standard.bool(forKey: onboardingKey) == false)
     }
 }

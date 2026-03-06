@@ -34,7 +34,23 @@ appstore:
   age_rating: "4+"
   privacy_policy_url: "https://saneclick.com/privacy"
   support_url: "https://saneclick.com/support"
+  marketing_url: "https://saneclick.com"
+  metadata:
+    macos:
+      subtitle: "Finder Right-Click Tools"
+      promotional_text: "Add 50+ Finder right-click actions in seconds. Automate file tasks, run scripts, and keep your workflow inside Finder."
+      description: >-
+        SaneClick upgrades Finder with 50+ ready-to-use right-click actions so you can move faster without leaving your file workflow.
+        Automate repetitive tasks, run custom scripts, and show only actions that match selected files.
+        Everything runs locally on your Mac with no tracking or cloud dependency.
+      keywords: "finder,right click,automation,scripts,context menu,productivity,file tools,mac utility"
+      whats_new: "Improved script reliability, smoother action filtering, and faster Finder extension responsiveness."
+      marketing_url: "https://saneclick.com"
   review_notes: "SaneClick runs user-created automation scripts for Finder workflow and productivity actions. Some scripts use AppleScript via osascript (for example Finder actions and display notifications), so macOS may request Automation/Apple Events permission when those scripts target another app. Core file actions continue to work without Automation permission."
+  accessibility_declarations:
+    publish: true
+    mac:
+      supports_dark_interface: true
   screenshots:
     macos: docs/screenshots/*.png
   contact:

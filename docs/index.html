@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SaneClick — Right-Click Automation for Mac | 50+ Finder Actions</title>
-    <meta name="description" content="Add 50+ actions to your Mac's right-click menu. Run scripts, convert files, automate Finder. 100% local, 100% transparent code. $6.99 one-time.">
+    <meta name="description" content="Add 50+ actions to your Mac's right-click menu. Run scripts, convert files, automate Finder. 100% On-Device, No Subscriptions, 100% Public Code. $6.99 one-time.">
     <link rel="canonical" href="https://saneclick.com">
     <meta property="og:title" content="SaneClick — Right-Click Automation for Mac | 50+ Finder Actions">
-    <meta property="og:description" content="Add 50+ actions to your Mac's right-click menu. Run scripts, convert files, automate Finder. 100% local, 100% transparent code. $6.99 one-time.">
+    <meta property="og:description" content="Add 50+ actions to your Mac's right-click menu. Run scripts, convert files, automate Finder. 100% On-Device, No Subscriptions, 100% Public Code. $6.99 one-time.">
     <meta property="og:url" content="https://saneclick.com">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="SaneClick">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="SaneClick — Right-Click Automation for Mac | 50+ Finder Actions">
-    <meta name="twitter:description" content="Add 50+ actions to your Mac's right-click menu. Run scripts, convert files, automate Finder. 100% local, 100% transparent code. $6.99 one-time.">
+    <meta name="twitter:description" content="Add 50+ actions to your Mac's right-click menu. Run scripts, convert files, automate Finder. 100% On-Device, No Subscriptions, 100% Public Code. $6.99 one-time.">
     <meta name="keywords" content="Finder context menu, right-click menu Mac, macOS automation, Mac scripts, Finder extension, custom right-click, Automator alternative, Mac productivity, context menu customization">
     <meta name="author" content="Mr. Sane">
     <meta name="robots" content="index, follow">
@@ -46,7 +46,7 @@
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "SaneClick",
-      "description": "Bring sanity to your Mac's right-click menu. Run scripts, convert files, and automate your Mac directly from Finder. 50+ pre-built actions, 100% private.",
+      "description": "Bring sanity to your Mac's right-click menu. Run scripts, convert files, and automate your Mac directly from Finder. 50+ pre-built actions, 100% On-Device.",
       "operatingSystem": "macOS",
       "applicationCategory": "UtilitiesApplication",
       "offers": {
@@ -61,7 +61,7 @@
         "Smart File Filtering",
         "Finder Context Menu Integration",
         "100% On-Device Privacy",
-        "100% Transparent Code (PolyForm Shield)"
+        "100% Public Code (PolyForm Shield)"
       ],
       "downloadUrl": "https://go.saneapps.com/buy/saneclick?ref=website",
       "image": "https://saneclick.com/images/icon.png",
@@ -266,7 +266,8 @@
         .comparison { padding: 100px 0; }
         .section-title { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 600; text-align: center; margin-bottom: 20px; letter-spacing: -0.02em; line-height: 1.2; }
         .section-subtitle { text-align: center; color: var(--text-secondary); font-size: 1.1rem; max-width: 540px; margin: 0 auto 64px; line-height: 1.7; }
-        .comparison-table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+        .comparison-table-wrapper { overflow-x: auto; margin: 0 -24px; padding: 0 24px; -webkit-overflow-scrolling: touch; }
+        .comparison-table { width: 100%; min-width: 640px; border-collapse: collapse; background: var(--bg-card); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
         .comparison-table th, .comparison-table td { padding: 20px; text-align: center; border-bottom: 1px solid var(--border); }
         .comparison-table th { background: var(--bg-secondary); font-weight: 600; font-size: 0.95rem; color: var(--text-secondary); }
         .comparison-table th.highlight-col { background: linear-gradient(180deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); color: var(--accent); }
@@ -384,6 +385,25 @@
         .crypto-how li { margin-bottom: 6px; }
         .crypto-how a { color: var(--accent); text-decoration: none; }
         .crypto-how a:hover { text-decoration: underline; }
+        .crypto-faq {
+            margin-top: 14px;
+            text-align: left;
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 12px 14px;
+        }
+        .crypto-faq summary {
+            cursor: pointer;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        .crypto-faq p {
+            margin: 10px 0 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
 
         /* Footer */
         footer {
@@ -429,6 +449,7 @@
             .cta-buttons { flex-direction: column; align-items: center; }
             .btn { width: 100%; max-width: 300px; justify-content: center; }
             .mock-menu { left: 5%; width: 90%; }
+            .comparison-table { min-width: 560px; }
             .sustainability-options { grid-template-columns: 1fr; }
             .more-apps-grid { grid-template-columns: 1fr; }
             .footer-links { flex-direction: column; gap: 12px; align-items: center; }
@@ -601,8 +622,12 @@
                 <a href="/guides.html">Guides</a>
                 <a href="#features">Features</a>
                 <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
-                <a href="https://github.com/sponsors/MrSaneApps">Donate</a>
-                <a href="https://go.saneapps.com/buy/saneclick?ref=website-nav" class="btn btn-primary btn-donate">Buy Pro — $6.99</a>
+                <a href="https://github.com/sponsors/MrSaneApps" class="btn btn-primary btn-donate">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444" stroke="#ffffff" stroke-width="1.5">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    Donate
+                </a>
             </div>
             <button class="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -622,8 +647,8 @@
         <a href="https://saneclip.com">SaneClip &mdash; Clipboard Manager</a>
         <a href="https://sanesales.com">SaneSales &mdash; Sales Tracker</a>
         <a href="https://saneapps.com">See all SaneApps &rarr;</a>
-        <a href="https://dist.saneclick.com/updates/SaneClick-1.1.0.dmg" class="mobile-nav-cta" style="background: var(--bg-secondary); border: 1px solid var(--border); box-shadow: none; margin-bottom: 12px;">Download Free</a>
-        <a href="https://go.saneapps.com/buy/saneclick?ref=website-mobile" class="mobile-nav-cta">Buy Pro &mdash; $6.99</a>
+        <a href="https://dist.saneclick.com/updates/SaneClick-1.0.4.zip" class="mobile-nav-cta" style="background: var(--bg-secondary); border: 1px solid var(--border); box-shadow: none; margin-bottom: 12px;" data-cta="download_free">Download Free</a>
+        <a href="https://go.saneapps.com/buy/saneclick?ref=website-mobile" class="mobile-nav-cta" data-cta="buy_pro">Buy Pro &mdash; $6.99</a>
     </div>
 
     <section class="hero">
@@ -633,7 +658,7 @@
 
             <div class="trust-badges animate-in delay-3">
                 <span>&#128187; 1,000+ Downloads/Month</span>
-                <span>&#128274; 100% On-Device</span>
+                <span>&#128274; 100% On-Device &middot; &#128176; No Subscriptions &middot; &#128269; 100% Public Code</span>
                 <a href="https://forums.basehub.com/sane-apps/SaneClick/1" target="_blank" rel="noopener">&#128737;&#65039; Provably Private (Audit)</a>
             </div>
 
@@ -647,9 +672,9 @@
                         <li>Copy Path, Open Terminal, and more</li>
                         <li>Browse the full script library</li>
                         <li>Basic Finder extension</li>
-                        <li>100% on-device privacy</li>
+                        <li>100% On-Device privacy</li>
                     </ul>
-                    <a href="https://dist.saneclick.com/updates/SaneClick-1.1.0.dmg" class="pricing-cta pricing-cta-free">
+                    <a href="https://dist.saneclick.com/updates/SaneClick-1.0.4.zip" class="pricing-cta pricing-cta-free" data-cta="download_free">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 6px;">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
                         </svg>
@@ -671,7 +696,7 @@
                         <li class="extra">Script testing before deployment</li>
                         <li class="extra">Import / export script collections</li>
                     </ul>
-                    <a href="https://go.saneapps.com/buy/saneclick?ref=website-hero" class="pricing-cta pricing-cta-pro">Buy Pro</a>
+                    <a href="https://go.saneapps.com/buy/saneclick?ref=website-hero" class="pricing-cta pricing-cta-pro" data-cta="buy_pro">Buy Pro</a>
                 </div>
             </div>
 
@@ -706,6 +731,7 @@
         <div class="container">
             <h2 class="section-title">The Sane Way to Automate</h2>
             <p class="section-subtitle">Why fight with Automator when you can just right-click?</p>
+            <div class="comparison-table-wrapper">
             <table class="comparison-table">
                 <thead>
                     <tr>
@@ -748,6 +774,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </section>
 
@@ -786,14 +813,14 @@
     <section class="sustainability">
         <div class="container">
             <div class="sustainability-card">
-                <h2 style="font-family: 'Playfair Display', serif; font-size: 2.25rem; margin-bottom: 20px;">&#128269; 100% Transparent Code &#8800; Free</h2>
-                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 30px;">Great transparent-code tools die when developers can't sustain them. $6.99 keeps SaneClick alive and actively maintained.</p>
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 2.25rem; margin-bottom: 20px;">&#128269; 100% Public Code &#8800; Free</h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 30px;">Great public-code tools die when developers can't sustain them. $6.99 keeps SaneClick alive and actively maintained.</p>
                 <div class="sustainability-options">
-                    <a href="https://dist.saneclick.com/updates/SaneClick-1.1.0.dmg" class="sustainability-option">
+                    <a href="https://dist.saneclick.com/updates/SaneClick-1.0.4.zip" class="sustainability-option" data-cta="download_free">
                         <h4>Download Free</h4>
-                        <p>9 essential Finder scripts, 100% on-device. No account, no catch.</p>
+                        <p>9 essential Finder scripts, 100% On-Device. No account, no catch.</p>
                     </a>
-                    <a href="https://go.saneapps.com/buy/saneclick?ref=website-sustainability" class="sustainability-option featured">
+                    <a href="https://go.saneapps.com/buy/saneclick?ref=website-sustainability" class="sustainability-option featured" data-cta="buy_pro">
                         <h4>Upgrade to Pro — $6.99</h4>
                         <p>Unlock all 50+ scripts, custom editor, and import/export. One-time purchase, yours forever.</p>
                     </a>
@@ -853,7 +880,7 @@
                         <img src="images/sanesales-icon.png" alt="SaneSales" class="app-card-icon">
                         <div class="app-card-name">SaneSales</div>
                     </div>
-                    <p class="app-card-tagline">Track your indie sales from LemonSqueezy, Gumroad, and Stripe in one beautiful, native app. Revenue charts, CSV export, 100% on-device.</p>
+                    <p class="app-card-tagline">Track your indie sales from LemonSqueezy, Gumroad, and Stripe in one beautiful, native app. Revenue charts, CSV export, 100% On-Device.</p>
                     <span class="app-card-cta">Learn more &rarr;</span>
                 </a>
             </div>
@@ -871,19 +898,19 @@
                 <div class="crypto-grid">
                     <div class="crypto-item crypto-btc">
                         <img class="crypto-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/btc.svg" alt="BTC" width="24" height="24">
-                        <code class="crypto-addr" onclick="copyToClipboard(this)">3Go9nJu3dj2qaa4EAYXrTsTf5AnhcrPQke</code>
+                        <code class="crypto-addr" onclick="copyToClipboard(this)" data-asset="BTC">3Go9nJu3dj2qaa4EAYXrTsTf5AnhcrPQke</code>
                     </div>
                     <div class="crypto-item crypto-eth">
                         <img class="crypto-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/eth.svg" alt="ETH" width="24" height="24">
-                        <code class="crypto-addr" onclick="copyToClipboard(this)">0x026668feA51c27F0803055B8c0d881ac2F1e7C3e</code>
+                        <code class="crypto-addr" onclick="copyToClipboard(this)" data-asset="ETH">0x026668feA51c27F0803055B8c0d881ac2F1e7C3e</code>
                     </div>
                     <div class="crypto-item crypto-sol">
-                        <img class="crypto-logo" src="https://cryptologos.cc/logos/solana-sol-logo.svg" alt="SOL" width="24" height="24">
-                        <code class="crypto-addr" onclick="copyToClipboard(this)">FBvU83GUmwEYk3HMwZh3GBorGvrVVWSPb8VLCKeLiWZZ</code>
+                        <img class="crypto-logo" src="https://solana.com/src/img/branding/solanaLogoMark.svg" alt="SOL" width="24" height="24">
+                        <code class="crypto-addr" onclick="copyToClipboard(this)" data-asset="SOL">FBvU83GUmwEYk3HMwZh3GBorGvrVVWSPb8VLCKeLiWZZ</code>
                     </div>
                     <div class="crypto-item crypto-zec">
                         <img class="crypto-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/zec.svg" alt="ZEC" width="24" height="24">
-                        <code class="crypto-addr" onclick="copyToClipboard(this)">t1PaQ7LSoRDVvXLaQTWmy5tKUAiKxuE9hBN</code>
+                        <code class="crypto-addr" onclick="copyToClipboard(this)" data-asset="ZEC">t1PaQ7LSoRDVvXLaQTWmy5tKUAiKxuE9hBN</code>
                     </div>
                 </div>
                 <p class="crypto-hint">Click any address to copy</p>
@@ -895,6 +922,10 @@
                         <li>I'll verify and reply with your download link</li>
                     </ol>
                 </div>
+                <details class="crypto-faq">
+                    <summary>FAQ: what happens after I pay with crypto?</summary>
+                    <p>I verify the transaction, then I reply with your Pro download link. If I miss your email, follow up and I will fix it.</p>
+                </details>
             </div>
         </div>
     </section>
@@ -904,61 +935,89 @@
             <h2 class="section-title">What Mac Users Are Saying</h2>
             <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 40px;">From the SaneApps community</p>
         </div>
-        <div style="overflow: hidden; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
-            <div style="display: flex; gap: 20px; animation: testimonialScroll 20s linear infinite; width: max-content;" onmouseenter="this.style.animationPlayState='paused'" onmouseleave="this.style.animationPlayState='running'">
-                <div style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
+        <div class="testimonial-mask" style="overflow: hidden; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
+            <div class="testimonial-track" style="display: flex; gap: 20px; animation: testimonialScroll 20s linear infinite; width: max-content;" onmouseenter="this.style.animationPlayState='paused'" onmouseleave="this.style.animationPlayState='running'">
+                <div class="testimonial-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
                     <p style="font-style: italic; color: var(--text-primary); margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">"Actually local and no telemetry is the only way to do this."</p>
                     <div style="color: var(--accent); font-size: 0.9rem; font-weight: 500;">@manuotel (X)</div>
                 </div>
-                <div style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
+                <div class="testimonial-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
                     <p style="font-style: italic; color: var(--text-primary); margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">"I really think your app deserves much more recognition. I'm rooting for you!"</p>
                     <div style="color: var(--accent); font-size: 0.9rem; font-weight: 500;">@3ryooo (X)</div>
                 </div>
-                <div style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
+                <div class="testimonial-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
                     <p style="font-style: italic; color: var(--text-primary); margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">"This is awesome! Congrats man!"</p>
                     <div style="color: var(--accent); font-size: 0.9rem; font-weight: 500;">@dyoburon (X)</div>
                 </div>
-                <div style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
+                <div class="testimonial-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
                     <p style="font-style: italic; color: var(--text-primary); margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">"Made by a cool dev @MrSaneApps"</p>
                     <div style="color: var(--accent); font-size: 0.9rem; font-weight: 500;">@codepinedev (X)</div>
                 </div>
-                <div style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
+                <div class="testimonial-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
                     <p style="font-style: italic; color: var(--text-primary); margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">"We all appreciate your rapid attention to all these recent concerns."</p>
                     <div style="color: var(--accent); font-size: 0.9rem; font-weight: 500;">MartySkinner (GitHub)</div>
                 </div>
-                <div style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
+                <div class="testimonial-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
                     <p style="font-style: italic; color: var(--text-primary); margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">"Damn! This looks great. I have been desperately looking for a FOSS alternative."</p>
                     <div style="color: var(--accent); font-size: 0.9rem; font-weight: 500;">u/JustABro_2321 (Reddit)</div>
                 </div>
                 <!-- Duplicated for seamless loop -->
-                <div style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
+                <div class="testimonial-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
                     <p style="font-style: italic; color: var(--text-primary); margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">"Actually local and no telemetry is the only way to do this."</p>
                     <div style="color: var(--accent); font-size: 0.9rem; font-weight: 500;">@manuotel (X)</div>
                 </div>
-                <div style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
+                <div class="testimonial-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
                     <p style="font-style: italic; color: var(--text-primary); margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">"I really think your app deserves much more recognition. I'm rooting for you!"</p>
                     <div style="color: var(--accent); font-size: 0.9rem; font-weight: 500;">@3ryooo (X)</div>
                 </div>
-                <div style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
+                <div class="testimonial-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
                     <p style="font-style: italic; color: var(--text-primary); margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">"This is awesome! Congrats man!"</p>
                     <div style="color: var(--accent); font-size: 0.9rem; font-weight: 500;">@dyoburon (X)</div>
                 </div>
-                <div style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
+                <div class="testimonial-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
                     <p style="font-style: italic; color: var(--text-primary); margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">"Made by a cool dev @MrSaneApps"</p>
                     <div style="color: var(--accent); font-size: 0.9rem; font-weight: 500;">@codepinedev (X)</div>
                 </div>
-                <div style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
+                <div class="testimonial-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
                     <p style="font-style: italic; color: var(--text-primary); margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">"We all appreciate your rapid attention to all these recent concerns."</p>
                     <div style="color: var(--accent); font-size: 0.9rem; font-weight: 500;">MartySkinner (GitHub)</div>
                 </div>
-                <div style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
+                <div class="testimonial-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
                     <p style="font-style: italic; color: var(--text-primary); margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">"Damn! This looks great. I have been desperately looking for a FOSS alternative."</p>
                     <div style="color: var(--accent); font-size: 0.9rem; font-weight: 500;">u/JustABro_2321 (Reddit)</div>
                 </div>
             </div>
         </div>
     </section>
-    <style>@keyframes testimonialScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }</style>
+    <style>
+        @keyframes testimonialScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @media (max-width: 768px) {
+            .testimonial-mask {
+                overflow-x: auto !important;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
+                mask-image: none !important;
+                -webkit-mask-image: none !important;
+                padding: 0 16px 8px;
+            }
+
+            .testimonial-track {
+                animation: none !important;
+                gap: 14px !important;
+            }
+
+            .testimonial-card {
+                min-width: 82vw !important;
+                max-width: 82vw !important;
+                scroll-snap-align: start;
+            }
+        }
+    </style>
 
     <footer>
         <div class="container">
@@ -968,14 +1027,13 @@
                 <a href="/guides.html">Guides</a>
                 <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
                 <a href="/privacy.html">Privacy</a>
-                <a href="https://github.com/sane-apps/SaneClick/issues">Help</a>
+                <a href="https://github.com/sane-apps/SaneClick/issues/new?template=bug_report.md">Help</a>
                 <a href="mailto:hi@saneapps.com">Contact</a>
                 <a href="https://polyformproject.org/licenses/shield/1.0.0">PolyForm Shield License</a>
                 <a href="https://github.com/sponsors/MrSaneApps"><svg height="12" viewBox="0 0 16 16" width="12" fill="#ea4aaa" style="vertical-align: -1px; margin-right: 3px;"><path d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.565 20.565 0 008 13.393a20.561 20.561 0 003.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 01-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5zM8 14.25l-.345.666-.002-.001-.006-.003-.018-.01a7.643 7.643 0 01-.31-.17 22.075 22.075 0 01-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.08 22.08 0 01-3.744 2.584l-.018.01-.006.003h-.002L8 14.25z"/></svg>Sponsor</a>
                 <a href="https://saneapps.com">SaneApps</a>
             </div>
-            <p id="pricing-note" style="color: var(--text-secondary); font-size: 0.8rem; font-style: italic; opacity: 0.7; margin-bottom: 12px;">*I wanted to make it $5, but processing fees and taxes were... insane. — Mr. Sane</p>
-            <p class="footer-copy">Made with care by Mr. Sane &nbsp;&bull;&nbsp; &copy; 2026 SaneClick</p>
+            <p class="footer-copy">Made with ❤️ in America by Mr. Sane &middot; &copy; 2026 SaneApps</p>
             <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 12px;">"Built for a Sound Mind" &middot; <a href="https://saneapps.com" style="color: var(--text-secondary);">saneapps.com</a></p>
         </div>
     </footer>
@@ -998,9 +1056,34 @@
                 document.getElementById('mockMenu').classList.remove('active');
             }
         }
+
+        const APP_ID = 'saneclick';
+
+        function trackCta(eventName, metadata) {
+            const detail = Object.assign({ app: APP_ID, event: eventName }, metadata || {});
+            if (typeof window.plausible === 'function') {
+                window.plausible(eventName, { props: detail });
+            }
+            if (typeof window.sa_event === 'function') {
+                window.sa_event(eventName, detail);
+            }
+            window.dispatchEvent(new CustomEvent('saneapps:cta', { detail }));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('[data-cta]').forEach(function(el) {
+                el.addEventListener('click', function() {
+                    trackCta(el.getAttribute('data-cta'), { href: el.getAttribute('href') || '' });
+                });
+            });
+        });
+
         // Copy crypto address to clipboard
         function copyToClipboard(el) {
             navigator.clipboard.writeText(el.textContent);
+            if (el.closest('.crypto-item')) {
+                trackCta('crypto_copy', { asset: el.getAttribute('data-asset') || 'UNKNOWN' });
+            }
             var orig = el.textContent;
             el.textContent = 'Copied!';
             el.style.color = 'var(--success)';

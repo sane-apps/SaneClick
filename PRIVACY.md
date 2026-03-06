@@ -65,7 +65,7 @@ rm -rf ~/Library/Caches/com.saneclick.SaneClick
 
 ## Contact
 
-Questions about privacy? Open an issue on [GitHub](https://github.com/sane-apps/SaneClick/issues).
+Questions about privacy? Open an issue on [GitHub](https://github.com/sane-apps/SaneClick/issues/new?template=bug_report.md).
 
 ## Changes
 

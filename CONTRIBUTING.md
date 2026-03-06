@@ -120,7 +120,7 @@ Please do this for me:
 2) Make the smallest safe fix.
 3) Open a pull request to https://github.com/sane-apps/SaneClick
 4) Give me the pull request link.
-5) Open a GitHub issue in https://github.com/sane-apps/SaneClick/issues that includes:
+5) Open a GitHub issue in https://github.com/sane-apps/SaneClick/issues/new?template=bug_report.md that includes:
    - the pull request link
    - a short summary of what changed and why
 6) Also give me the exact issue link.
