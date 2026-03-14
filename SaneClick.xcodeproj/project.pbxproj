@@ -14,6 +14,7 @@
 		24D18F95948C7B912B63B0CD /* ScriptExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC0CF25CD64448C80A443A2 /* ScriptExecutor.swift */; };
 		27421E21068E3EF12E4DC3EF /* SaneColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC056477ED451BA3A4C710 /* SaneColors.swift */; };
 		2815FB85C50E7871E423FCA4 /* ScriptLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DFAFA25A009F3FB7DEDCB9 /* ScriptLibraryView.swift */; };
+		2DA20DBD2363C91587C94D3A /* AppStoreReviewGuardrailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4BD1719C49E8BC6550B2C0C /* AppStoreReviewGuardrailTests.swift */; };
 		31244C53696A66D583170549 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D6A7A87549AA85929FF95A /* UpdateService.swift */; };
 		4158A3FE5FD6BA942AA6ADE7 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D6405FA6195B48159C6502 /* MenuBarController.swift */; };
 		4214C45F58D93958090E6AF5 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F183182221315A53A467D /* Category.swift */; };
@@ -25,19 +26,25 @@
 		7A98271CEF2DBF64523D9EC1 /* SaneUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9B8390F8830A9BA53FD66F1F /* SaneUI */; };
 		803A6EFC382E0445C1D9CCA4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D5A8C9C025AE4FA559E7A8 /* SettingsView.swift */; };
 		80B217DEAF5CAE7469AFE1F1 /* SaneClickApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2315CC9340FA3A69BDDE3F79 /* SaneClickApp.swift */; };
+		8F04B14A86B9911E8790F68D /* MonitoredFolderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B70939D4CC943905E332A2 /* MonitoredFolderService.swift */; };
 		91FB048A84A797926306E11E /* ScriptStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B341F823B9E6117E2232E2D /* ScriptStoreTests.swift */; };
 		96FF0C54A60D14A759E109CB /* FinderControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3657A493D18F7FE8C14A6434 /* FinderControl.swift */; };
+		98E493FB92410FF637BF4EB9 /* AppStoreScreenshotRenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8894C708FDE7B61CCCD4E9D9 /* AppStoreScreenshotRenderTests.swift */; };
+		A078CB636A3A04456B7E291E /* AppStoreNativeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E8F38469A2721677F9A7EC /* AppStoreNativeAction.swift */; };
 		A4AFD157125E508753899D83 /* ProFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7561E69DFD12512C70D2215B /* ProFeature.swift */; };
 		ABE641DDFB2FA603A3BF14BD /* ExtensionStatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3B0C60BE7EF0BF925BB1F9 /* ExtensionStatusService.swift */; };
 		AD2450C8572F6E5827CA4DE9 /* DefaultScripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */; };
 		AFBD400DBECC4B913690E29E /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447D4BFE5ACB557CE976F11 /* Script.swift */; };
 		B0561246A2A1957E7017B8B1 /* ScriptLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C04403C1E09F0D5028384E /* ScriptLibraryTests.swift */; };
 		B2528D20E9949935D53FCF49 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 5B42E303B65FD7B78AFCEF2F /* PrivacyInfo.xcprivacy */; };
+		C34F834B549E53DABC8C3C86 /* AppStoreNativeActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FA2F0EB8086652DAA990F0 /* AppStoreNativeActionTests.swift */; };
+		C6AF9FAE601D4CFD944911CB /* MonitoredFolders.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E14736E3A91B0759B66C0E /* MonitoredFolders.swift */; };
 		CA389228F1F7FE16FF17D850 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C430CF1913F9F056D1C42FD1 /* ContentView.swift */; };
 		CCE34A091108F9B0E4A55F18 /* ScriptEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0292252BEA20E38AA9D5AD5 /* ScriptEditorView.swift */; };
 		CED119D09B9E882EE37AEA8B /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF1B4BB43599FDB2D286ADF /* AppPreferences.swift */; };
 		D2804ED379719BFC7420BA98 /* ImportExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037A92156BFEE353DE83DB29 /* ImportExportView.swift */; };
 		D5DA8CBA16326530ED642F7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4375D086296589FD9E2EE58 /* Assets.xcassets */; };
+		F91271770A8383B473533243 /* MonitoredFolders.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E14736E3A91B0759B66C0E /* MonitoredFolders.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +98,7 @@
 		5B42E303B65FD7B78AFCEF2F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5BC0CF25CD64448C80A443A2 /* ScriptExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptExecutor.swift; sourceTree = "<group>"; };
 		621E58252D45C086455F4CA1 /* ScriptExecutorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptExecutorTests.swift; sourceTree = "<group>"; };
+		66E8F38469A2721677F9A7EC /* AppStoreNativeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreNativeAction.swift; sourceTree = "<group>"; };
 		6B341F823B9E6117E2232E2D /* ScriptStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptStoreTests.swift; sourceTree = "<group>"; };
 		6BEC056477ED451BA3A4C710 /* SaneColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaneColors.swift; sourceTree = "<group>"; };
 		6D11A214F9A451522A93F6B5 /* SaneUI */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SaneUI; path = ../../infra/SaneUI; sourceTree = SOURCE_ROOT; };
@@ -99,6 +107,7 @@
 		7561E69DFD12512C70D2215B /* ProFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProFeature.swift; sourceTree = "<group>"; };
 		78E5BF6A55A10C30604680D2 /* SaneClickExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaneClickExtension.entitlements; sourceTree = "<group>"; };
 		8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SaneClickExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		8894C708FDE7B61CCCD4E9D9 /* AppStoreScreenshotRenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreScreenshotRenderTests.swift; sourceTree = "<group>"; };
 		901F888200D7C1EC63210408 /* CategoryEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditorView.swift; sourceTree = "<group>"; };
 		9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultScripts.swift; sourceTree = "<group>"; };
 		9CFB4E957BD2DB0D8CBB4671 /* SaneClickExtension.debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaneClickExtension.debug.entitlements; sourceTree = "<group>"; };
@@ -106,9 +115,13 @@
 		A0A32F90AD3B2ECB3E9A6B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A261E9D493D09361F59B70AB /* SaneClick.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaneClick.entitlements; sourceTree = "<group>"; };
 		A4375D086296589FD9E2EE58 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A6B70939D4CC943905E332A2 /* MonitoredFolderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitoredFolderService.swift; sourceTree = "<group>"; };
 		B1D6405FA6195B48159C6502 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
+		B1FA2F0EB8086652DAA990F0 /* AppStoreNativeActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreNativeActionTests.swift; sourceTree = "<group>"; };
+		B4BD1719C49E8BC6550B2C0C /* AppStoreReviewGuardrailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreReviewGuardrailTests.swift; sourceTree = "<group>"; };
 		C19B414E55D6FF5FDF7690BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C430CF1913F9F056D1C42FD1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C9E14736E3A91B0759B66C0E /* MonitoredFolders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitoredFolders.swift; sourceTree = "<group>"; };
 		E68AE3D3E5F32A83827F08A7 /* SaneClick-AppStore.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "SaneClick-AppStore.entitlements"; sourceTree = "<group>"; };
 		F447D4BFE5ACB557CE976F11 /* Script.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Script.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -188,6 +201,9 @@
 		645C9DEFF575C6CA72B4358E /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				B1FA2F0EB8086652DAA990F0 /* AppStoreNativeActionTests.swift */,
+				B4BD1719C49E8BC6550B2C0C /* AppStoreReviewGuardrailTests.swift */,
+				8894C708FDE7B61CCCD4E9D9 /* AppStoreScreenshotRenderTests.swift */,
 				1306B2DA996D2CA07D8026B4 /* CategoryTests.swift */,
 				4E13D1032CE6C26DB0310BC0 /* ExtensionStatusTests.swift */,
 				621E58252D45C086455F4CA1 /* ScriptExecutorTests.swift */,
@@ -202,9 +218,11 @@
 			isa = PBXGroup;
 			children = (
 				0AF1B4BB43599FDB2D286ADF /* AppPreferences.swift */,
+				66E8F38469A2721677F9A7EC /* AppStoreNativeAction.swift */,
 				2C3B0C60BE7EF0BF925BB1F9 /* ExtensionStatusService.swift */,
 				3657A493D18F7FE8C14A6434 /* FinderControl.swift */,
 				B1D6405FA6195B48159C6502 /* MenuBarController.swift */,
+				A6B70939D4CC943905E332A2 /* MonitoredFolderService.swift */,
 				5BC0CF25CD64448C80A443A2 /* ScriptExecutor.swift */,
 				73CAB9648AF325258DC7FE8E /* ScriptStore.swift */,
 				19D6A7A87549AA85929FF95A /* UpdateService.swift */,
@@ -237,9 +255,18 @@
 				97E6233ACB704BBD4112CC8A /* Packages */,
 				548AC026F47CA71DE134E308 /* SaneClick */,
 				C650B644EC575F986F69D9DE /* SaneClickExtension */,
+				E43EE5BFE2983895396BE905 /* Shared */,
 				645C9DEFF575C6CA72B4358E /* Tests */,
 				5B3DA58DADBE6A8D7B5F2080 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		E43EE5BFE2983895396BE905 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				C9E14736E3A91B0759B66C0E /* MonitoredFolders.swift */,
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 		F78158E7B9726147A68C2FD1 /* Models */ = {
@@ -262,7 +289,7 @@
 				2AE8693721B632685F9DAA82 /* Resources */,
 				7C7E86F91776384DC6392F38 /* Frameworks */,
 				503AAFBD32528E884F0EAFD9 /* Embed Foundation Extensions */,
-				7537F0204136F17E08F39AEA /* Stub Sparkle for App Store builds */,
+				E3BB46817582126F330F6DE1 /* Strip Sparkle for App Store */,
 			);
 			buildRules = (
 			);
@@ -365,7 +392,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7537F0204136F17E08F39AEA /* Stub Sparkle for App Store builds */ = {
+		E3BB46817582126F330F6DE1 /* Strip Sparkle for App Store */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -375,14 +402,14 @@
 			);
 			inputPaths = (
 			);
-			name = "Stub Sparkle for App Store builds";
+			name = "Strip Sparkle for App Store";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" = \"Release-AppStore\" ]; then\n  SPARKLE_FW=\"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sparkle.framework\"\n  if [ -d \"${SPARKLE_FW}\" ]; then\n    echo \"Replacing Sparkle.framework with empty stub for App Store build\"\n    # Preserve Info.plist before nuking\n    PLIST_TMP=\"/tmp/sparkle_info_$$.plist\"\n    cp \"${SPARKLE_FW}/Versions/B/Resources/Info.plist\" \"${PLIST_TMP}\" 2>/dev/null || true\n    # Nuke entire framework (removes nested Updater.app, XPCServices, etc.)\n    rm -rf \"${SPARKLE_FW}\"\n    # Recreate clean minimal framework structure\n    mkdir -p \"${SPARKLE_FW}/Versions/B/Resources\"\n    # Create stub dylib that satisfies LC_LOAD_DYLIB\n    printf 'void __sparkle_stub(void){}\\n' | \\\n      xcrun clang -x c - -dynamiclib \\\n        -install_name \"@rpath/Sparkle.framework/Versions/B/Sparkle\" \\\n        -o \"${SPARKLE_FW}/Versions/B/Sparkle\" 2>/dev/null\n    # Restore preserved Info.plist\n    if [ -f \"${PLIST_TMP}\" ]; then\n      mv \"${PLIST_TMP}\" \"${SPARKLE_FW}/Versions/B/Resources/Info.plist\"\n    fi\n    # Create required framework symlinks\n    ln -sfn B \"${SPARKLE_FW}/Versions/Current\"\n    ln -sfn Versions/Current/Sparkle \"${SPARKLE_FW}/Sparkle\"\n    ln -sfn Versions/Current/Resources \"${SPARKLE_FW}/Resources\"\n    # Sign: stub binary first, then framework bundle\n    /usr/bin/codesign --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${SPARKLE_FW}/Versions/B/Sparkle\" 2>&1\n    /usr/bin/codesign --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${SPARKLE_FW}\" 2>&1\n    echo \"Sparkle stubbed successfully\"\n  fi\n  rm -rf \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sparkle_XPCServices.framework\" 2>/dev/null || true\nfi\n";
+			shellScript = "if [ \"${CONFIGURATION}\" = \"Release-AppStore\" ]; then\n  echo \"App Store build: stripping Sparkle framework and keys...\"\n  rm -rf \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sparkle.framework\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Delete :SUFeedURL\" \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Delete :SUPublicEDKey\" \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Delete :SUEnableAutomaticChecks\" \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Delete :SUEnableSystemProfiling\" \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Delete :NSAppleEventsUsageDescription\" \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true\n\n  APP_BINARY=\"${TARGET_BUILD_DIR}/${EXECUTABLE_PATH}\"\n  WEAKEN_SCRIPT=\"${SRCROOT}/../../infra/SaneProcess/scripts/weaken_sparkle.rb\"\n  if [ -f \"${WEAKEN_SCRIPT}\" ] && [ -f \"${APP_BINARY}\" ]; then\n    ruby \"${WEAKEN_SCRIPT}\" \"${APP_BINARY}\" || exit 1\n  fi\n\n  echo \"App Store build: Sparkle stripped and weak-linked.\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -392,6 +419,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CED119D09B9E882EE37AEA8B /* AppPreferences.swift in Sources */,
+				A078CB636A3A04456B7E291E /* AppStoreNativeAction.swift in Sources */,
 				4214C45F58D93958090E6AF5 /* Category.swift in Sources */,
 				0D111DBAB50E53218731BCAB /* CategoryEditorView.swift in Sources */,
 				CA389228F1F7FE16FF17D850 /* ContentView.swift in Sources */,
@@ -400,6 +428,8 @@
 				96FF0C54A60D14A759E109CB /* FinderControl.swift in Sources */,
 				D2804ED379719BFC7420BA98 /* ImportExportView.swift in Sources */,
 				4158A3FE5FD6BA942AA6ADE7 /* MenuBarController.swift in Sources */,
+				8F04B14A86B9911E8790F68D /* MonitoredFolderService.swift in Sources */,
+				C6AF9FAE601D4CFD944911CB /* MonitoredFolders.swift in Sources */,
 				A4AFD157125E508753899D83 /* ProFeature.swift in Sources */,
 				80B217DEAF5CAE7469AFE1F1 /* SaneClickApp.swift in Sources */,
 				27421E21068E3EF12E4DC3EF /* SaneColors.swift in Sources */,
@@ -418,6 +448,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1361CF6176967FFC1C817445 /* FinderSync.swift in Sources */,
+				F91271770A8383B473533243 /* MonitoredFolders.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,6 +456,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C34F834B549E53DABC8C3C86 /* AppStoreNativeActionTests.swift in Sources */,
+				2DA20DBD2363C91587C94D3A /* AppStoreReviewGuardrailTests.swift in Sources */,
+				98E493FB92410FF637BF4EB9 /* AppStoreScreenshotRenderTests.swift in Sources */,
 				4B0EC0F99E93A24B6D900856 /* CategoryTests.swift in Sources */,
 				4C9949F5496F3CCF5E69CA98 /* ExtensionStatusTests.swift in Sources */,
 				45A7BEE2D7D0A8619446CE10 /* ScriptExecutorTests.swift in Sources */,
@@ -461,7 +495,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1100;
+				CURRENT_PROJECT_VERSION = 1102;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
@@ -483,7 +517,11 @@
 		006C488976565E1422831C67 /* Release-AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = arm64;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = NO;
@@ -494,9 +532,11 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClickTests;
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClick.app/Contents/MacOS/SaneClick";
+				VALID_ARCHS = arm64;
 			};
 			name = "Release-AppStore";
 		};
@@ -566,6 +606,7 @@
 		1B7D934CC5CD4F01A80BDFAC /* ProdDebug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = arm64;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -580,12 +621,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClickTests;
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClick.app/Contents/MacOS/SaneClick";
+				VALID_ARCHS = arm64;
 			};
 			name = ProdDebug;
 		};
 		2BD7184264AB393ADA305508 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = arm64;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
@@ -602,6 +645,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClickTests;
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClick.app/Contents/MacOS/SaneClick";
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
@@ -677,7 +721,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1100;
+				CURRENT_PROJECT_VERSION = 1102;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
@@ -701,7 +745,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1100;
+				CURRENT_PROJECT_VERSION = 1102;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
@@ -727,10 +771,11 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1100;
+				CURRENT_PROJECT_VERSION = 1102;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
+				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.unlock.v2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -758,7 +803,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1100;
+				CURRENT_PROJECT_VERSION = 1102;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -783,7 +828,7 @@
 				CODE_SIGN_ENTITLEMENTS = SaneClickExtension/SaneClickExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1100;
+				CURRENT_PROJECT_VERSION = 1102;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
@@ -808,7 +853,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1100;
+				CURRENT_PROJECT_VERSION = 1102;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -891,7 +936,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1100;
+				CURRENT_PROJECT_VERSION = 1102;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
@@ -970,6 +1015,7 @@
 		FB1827823C24B731E81DE0DE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = arm64;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
@@ -985,6 +1031,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClickTests;
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClick.app/Contents/MacOS/SaneClick";
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};

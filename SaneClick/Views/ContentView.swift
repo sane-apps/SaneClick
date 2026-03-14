@@ -9,6 +9,7 @@ private let logger = Logger(subsystem: "com.saneclick.SaneClick", category: "Con
 struct ContentView: View {
     var licenseService: LicenseService
     @Environment(ScriptStore.self) private var scriptStore
+    @Environment(MonitoredFolderService.self) private var monitoredFolderService
     @State private var selectedCategory: ScriptLibrary.ScriptCategory? = .universal
     @State private var showLibrary = false
     @State private var showCustomScriptEditor = false
@@ -93,63 +94,76 @@ struct ContentView: View {
                 // Primary action: Browse Library
                 QuickActionRow(
                     title: "Browse Library",
-                    subtitle: "50+ ready-to-use actions",
+                    subtitle: librarySubtitle,
                     icon: "books.vertical.fill",
                     color: .saneTeal
                 ) {
                     showLibrary = true
                 }
 
+                #if APP_STORE
+                    QuickActionRow(
+                        title: "Manage Folders",
+                        subtitle: monitoredFolderSubtitle,
+                        icon: "folder.badge.gearshape",
+                        color: .green
+                    ) {
+                        openSettingsWindow()
+                    }
+                #endif
+
                 // More options (collapsed by default)
-                Button {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        showMoreOptions.toggle()
+                #if !APP_STORE
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showMoreOptions.toggle()
+                        }
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 11, weight: .semibold))
+                                .rotationEffect(.degrees(showMoreOptions ? 90 : 0))
+                            Text("More Options")
+                                .font(.system(size: 13, weight: .medium))
+                        }
+                        .foregroundStyle(Color.saneTeal.opacity(0.8))
+                        .padding(.vertical, 6)
                     }
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 11, weight: .semibold))
-                            .rotationEffect(.degrees(showMoreOptions ? 90 : 0))
-                        Text("More Options")
-                            .font(.system(size: 13, weight: .medium))
-                    }
-                    .foregroundStyle(Color.saneTeal.opacity(0.8))
-                    .padding(.vertical, 6)
-                }
-                .buttonStyle(.plain)
+                    .buttonStyle(.plain)
 
-                if showMoreOptions {
-                    // Custom Script Editor — Pro feature
-                    QuickActionRow(
-                        title: "Write Custom Action",
-                        subtitle: licenseService.isPro ? "For advanced users" : "Pro — create your own scripts",
-                        icon: "terminal",
-                        color: .orange,
-                        isLocked: !licenseService.isPro
-                    ) {
-                        if licenseService.isPro {
-                            showCustomScriptEditor = true
-                        } else {
-                            proUpsellFeature = .scriptEditor
+                    if showMoreOptions {
+                        // Custom Script Editor — Pro feature
+                        QuickActionRow(
+                            title: "Write Custom Action",
+                            subtitle: licenseService.isPro ? "For advanced users" : "Pro — create your own scripts",
+                            icon: "terminal",
+                            color: .orange,
+                            isLocked: !licenseService.isPro
+                        ) {
+                            if licenseService.isPro {
+                                showCustomScriptEditor = true
+                            } else {
+                                proUpsellFeature = .scriptEditor
+                            }
+                        }
+
+                        // Import / Export — Pro feature
+                        QuickActionRow(
+                            title: "Import / Export",
+                            subtitle: licenseService.isPro ? "Move actions between Macs" : "Pro — backup & share scripts",
+                            icon: "square.and.arrow.up.on.square",
+                            color: .saneTeal,
+                            isLocked: !licenseService.isPro
+                        ) {
+                            if licenseService.isPro {
+                                importExportMode = .importScripts
+                                showImportExport = true
+                            } else {
+                                proUpsellFeature = .importExport
+                            }
                         }
                     }
-
-                    // Import / Export — Pro feature
-                    QuickActionRow(
-                        title: "Import / Export",
-                        subtitle: licenseService.isPro ? "Move actions between Macs" : "Pro — backup & share scripts",
-                        icon: "square.and.arrow.up.on.square",
-                        color: .saneTeal,
-                        isLocked: !licenseService.isPro
-                    ) {
-                        if licenseService.isPro {
-                            importExportMode = .importScripts
-                            showImportExport = true
-                        } else {
-                            proUpsellFeature = .importExport
-                        }
-                    }
-                }
+                #endif
             } header: {
                 HStack(spacing: 6) {
                     Image(systemName: "bolt.fill")
@@ -162,8 +176,8 @@ struct ContentView: View {
 
             // Categories section
             Section {
-                ForEach(ScriptLibrary.ScriptCategory.allCases, id: \.self) { category in
-                    let libraryCount = ScriptLibrary.scripts(for: category).count
+                ForEach(ScriptLibrary.availableCategories, id: \.self) { category in
+                    let libraryCount = ScriptLibrary.availableScripts(for: category).count
                     let installedScripts = scriptsForCategory(category)
                     let activeCount = installedScripts.filter(\.isEnabled).count
                     let isProCategory = category != .universal
@@ -216,7 +230,7 @@ struct ContentView: View {
 
     private func categoryDetail(category: ScriptLibrary.ScriptCategory) -> some View {
         let categoryColor = colorForCategory(category)
-        let libraryScripts = ScriptLibrary.scripts(for: category)
+        let libraryScripts = ScriptLibrary.availableScripts(for: category)
         let installedScripts = scriptsForCategory(category)
         let activeCount = installedScripts.filter(\.isEnabled).count
         let allEnabled = activeCount == libraryScripts.count && activeCount > 0
@@ -298,6 +312,12 @@ struct ContentView: View {
                 }
                 .padding(.bottom, 8)
 
+                #if APP_STORE
+                    if monitoredFolderService.monitoredFolderCount == 0 {
+                        monitoredFoldersNotice
+                    }
+                #endif
+
                 if isLocked {
                     // Locked state — show blurred preview
                     lockedCategoryOverlay(category: category, color: categoryColor)
@@ -330,7 +350,7 @@ struct ContentView: View {
 
     /// A blurred script list with an unlock CTA overlay for locked Pro categories.
     private func lockedCategoryOverlay(category: ScriptLibrary.ScriptCategory, color _: Color) -> some View {
-        let libraryScripts = ScriptLibrary.scripts(for: category)
+        let libraryScripts = ScriptLibrary.availableScripts(for: category)
         let previewCount = min(libraryScripts.count, 4)
 
         return ZStack(alignment: .center) {
@@ -473,7 +493,7 @@ struct ContentView: View {
 
     /// Enable or disable all scripts in a category
     private func toggleAllScripts(in category: ScriptLibrary.ScriptCategory, enable: Bool) {
-        let libraryScripts = ScriptLibrary.scripts(for: category)
+        let libraryScripts = ScriptLibrary.availableScripts(for: category)
         let installedScripts = scriptsForCategory(category)
 
         for libraryScript in libraryScripts {
@@ -492,7 +512,7 @@ struct ContentView: View {
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            Text("Add actions to your Finder right-click menu from our curated library.")
+            Text(emptyStateBody)
                 .font(.body)
                 .foregroundStyle(Color.saneSilver)
                 .multilineTextAlignment(.center)
@@ -515,8 +535,52 @@ struct ContentView: View {
 
     private func scriptsForCategory(_ category: ScriptLibrary.ScriptCategory) -> [Script] {
         // Map library category to installed scripts by matching names
-        let libraryScriptNames = Set(ScriptLibrary.scripts(for: category).map(\.name))
+        let libraryScriptNames = Set(ScriptLibrary.availableScripts(for: category).map(\.name))
         return scriptStore.scripts.filter { libraryScriptNames.contains($0.name) }
+    }
+
+    private var librarySubtitle: String {
+        #if APP_STORE
+            "\(ScriptLibrary.availableAllScripts.count) built-in Finder actions"
+        #else
+            "50+ ready-to-use actions"
+        #endif
+    }
+
+    private var monitoredFolderSubtitle: String {
+        let count = monitoredFolderService.monitoredFolderCount
+        return count == 0 ? "Choose where SaneClick appears in Finder" : "\(count) monitored folder\(count == 1 ? "" : "s")"
+    }
+
+    private var emptyStateBody: String {
+        #if APP_STORE
+            "Choose built-in actions from the library, then add monitored folders in Settings so they appear in Finder."
+        #else
+            "Add actions to your Finder right-click menu from our curated library."
+        #endif
+    }
+
+    #if APP_STORE
+        private var monitoredFoldersNotice: some View {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Add at least one monitored folder in Settings before testing actions in Finder.")
+                    .font(.subheadline)
+                    .foregroundStyle(.white)
+
+                Button("Open Settings") {
+                    openSettingsWindow()
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.saneTeal)
+            }
+            .padding(16)
+            .background(RoundedRectangle(cornerRadius: 12).fill(Color.saneCarbon))
+            .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(Color.saneSmoke, lineWidth: 1))
+        }
+    #endif
+
+    private func openSettingsWindow() {
+        SettingsActionStorage.shared.showSettings()
     }
 
     private func toggleScript(_ script: Script) {
@@ -804,7 +868,8 @@ struct LibraryScriptRow: View {
 #Preview {
     ContentView(licenseService: LicenseService(
         appName: "SaneClick",
-        checkoutURL: URL(string: "https://go.saneapps.com/buy/saneclick")!
+        checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick")
     ))
     .environment(ScriptStore.shared)
+    .environment(MonitoredFolderService.shared)
 }

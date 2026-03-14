@@ -202,3 +202,10 @@ struct OnboardingStateTests {
         #expect(UserDefaults.standard.bool(forKey: onboardingKey) == false)
     }
 }
+
+struct AppPreferencesTests {
+    @Test("Dock icon default stays hidden")
+    func dockIconDefaultIsHidden() {
+        #expect(AppPreferences.defaultShowDockIcon == false)
+    }
+}

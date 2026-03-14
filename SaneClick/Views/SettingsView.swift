@@ -4,6 +4,7 @@ import SwiftUI
 struct SettingsView: View {
     var licenseService: LicenseService
     @Environment(ScriptStore.self) private var scriptStore
+    @Environment(MonitoredFolderService.self) private var monitoredFolderService
     #if !APP_STORE
         @StateObject private var updateService = UpdateService.shared
         @State private var automaticallyChecksForUpdates = UpdateService.shared.automaticallyChecksForUpdates
@@ -11,7 +12,7 @@ struct SettingsView: View {
     #endif
     @AppStorage(AppPreferences.showActionNotificationsKey) private var showActionNotifications = true
     @AppStorage(AppPreferences.showMenuBarIconKey) private var showMenuBarIcon = true
-    @AppStorage(AppPreferences.showDockIconKey) private var showDockIcon = true
+    @AppStorage(AppPreferences.showDockIconKey) private var showDockIcon = SaneBackgroundAppDefaults.showDockIcon
     @State private var extensionStatus = ExtensionStatusService.checkStatus()
     @State private var isCheckingStatus = false
 
@@ -32,7 +33,7 @@ struct SettingsView: View {
                     Label("About", systemImage: "info.circle")
                 }
         }
-        .frame(width: 450, height: 380)
+        .frame(width: 500, height: 470)
     }
 
     // MARK: - License Tab
@@ -79,6 +80,46 @@ struct SettingsView: View {
                     #endif
                 }
             }
+
+            #if APP_STORE
+                Section("Monitored Folders") {
+                    if monitoredFolderService.folders.isEmpty {
+                        Text("Choose the folders where SaneClick should appear in Finder.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(monitoredFolderService.folders) { folder in
+                            HStack {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(folder.name)
+                                        .foregroundStyle(.primary)
+                                    Text(folder.path)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                        .lineLimit(1)
+                                }
+
+                                Spacer()
+
+                                Button("Remove") {
+                                    monitoredFolderService.removeFolder(folder)
+                                }
+                                .buttonStyle(.borderless)
+                            }
+                        }
+                    }
+
+                    Button("Add Folder") {
+                        monitoredFolderService.addFolders()
+                    }
+
+                    if let lastError = monitoredFolderService.lastError {
+                        Text(lastError)
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                    }
+                }
+            #endif
 
             Section("Your Actions") {
                 HStack {
@@ -180,7 +221,8 @@ struct SettingsView: View {
 #Preview {
     SettingsView(licenseService: LicenseService(
         appName: "SaneClick",
-        checkoutURL: URL(string: "https://go.saneapps.com/buy/saneclick")!
+        checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick")
     ))
     .environment(ScriptStore.shared)
+    .environment(MonitoredFolderService.shared)
 }

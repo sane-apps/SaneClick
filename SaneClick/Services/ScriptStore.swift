@@ -115,14 +115,24 @@ final class ScriptStore {
     // MARK: - CRUD Operations
 
     func addScript(_ script: Script) {
-        scripts.append(script)
+        #if APP_STORE
+            guard let sanitized = sanitizeForAppStore(script) else { return }
+            scripts.append(sanitized)
+        #else
+            scripts.append(script)
+        #endif
         saveScripts()
         notifyExtension()
     }
 
     func updateScript(_ script: Script) {
         guard let index = scripts.firstIndex(where: { $0.id == script.id }) else { return }
-        scripts[index] = script
+        #if APP_STORE
+            guard let sanitized = sanitizeForAppStore(script) else { return }
+            scripts[index] = sanitized
+        #else
+            scripts[index] = script
+        #endif
         saveScripts()
         notifyExtension()
     }
@@ -195,6 +205,9 @@ final class ScriptStore {
         // Try to decode
         do {
             scripts = try JSONDecoder().decode([Script].self, from: data)
+            #if APP_STORE
+                scripts = sanitizeForAppStore(scripts)
+            #endif
             loadError = nil
             storeLogger.info("Loaded \(self.scripts.count) scripts")
             applyLibraryDefaultsIfNeeded()
@@ -211,6 +224,9 @@ final class ScriptStore {
 
     private func saveScripts() {
         let fileURL = Self.scriptsFileURL
+        #if APP_STORE
+            scripts = sanitizeForAppStore(scripts)
+        #endif
 
         // Encode data first - fail fast if encoding fails
         let data: Data
@@ -496,6 +512,37 @@ final class ScriptStore {
             )
         ]
     }
+
+    #if APP_STORE
+        private func sanitizeForAppStore(_ script: Script) -> Script? {
+            guard AppStoreNativeAction(script: script) != nil,
+                  let libraryScript = ScriptLibrary.libraryScript(named: script.name),
+                  script.type == libraryScript.type,
+                  script.content == libraryScript.content
+            else {
+                return nil
+            }
+
+            return Script(
+                id: script.id,
+                name: libraryScript.name,
+                type: libraryScript.type,
+                content: libraryScript.content,
+                isEnabled: script.isEnabled,
+                icon: libraryScript.icon,
+                appliesTo: libraryScript.appliesTo,
+                fileExtensions: libraryScript.fileExtensions,
+                extensionMatchMode: libraryScript.extensionMatchMode,
+                minSelection: libraryScript.minSelection,
+                maxSelection: libraryScript.maxSelection,
+                categoryId: nil
+            )
+        }
+
+        private func sanitizeForAppStore(_ scripts: [Script]) -> [Script] {
+            scripts.compactMap(sanitizeForAppStore)
+        }
+    #endif
 }
 
 // MARK: - Extension Helpers

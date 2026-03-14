@@ -331,7 +331,7 @@ private struct StatusBanner: View {
         mode: .constant(.importScripts),
         licenseService: LicenseService(
             appName: "SaneClick",
-            checkoutURL: URL(string: "https://go.saneapps.com/buy/saneclick")!
+            checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick")
         )
     )
     .environment(ScriptStore.shared)

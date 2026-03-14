@@ -2,7 +2,26 @@
 
 > **Single Source of Truth** - All research findings, API documentation, and architectural decisions.
 >
-> Last Updated: 2026-02-03
+> Last Updated: 2026-03-12
+
+## 2026-03-12 App Review Recheck
+
+- Live App Store Connect recheck confirmed macOS version `1.1.0 (1101)` is still `REJECTED / UNRESOLVED_ISSUES`.
+- The current rejection has two concrete blockers:
+  - `5.2.5 Legal`: App Store subtitle must avoid Apple product wording. The old subtitle used `Finder`; current source should keep that out of the subtitle entirely.
+  - `2.1 App Completeness`: `Open Settings / Open SaneClick` did not respond during review.
+- Local code trace found a real reopen bug in the Finder extension path:
+  - `FinderSync.openMainApp()` only called `NSRunningApplication.activate(...)` when the host app was already running.
+  - If the host app was alive with no visible window, activation could succeed without reopening the main window, matching the reviewer symptom exactly.
+- Fresh implementation rule for this bug family:
+  - Extension must send an explicit cross-process `open main window` request.
+  - Host app must observe that request and reopen or create the main window on the main actor.
+- Apple/local pattern check:
+  - Finder Sync extensions are long-lived and should use simple IPC for host-app coordination.
+  - Our own existing research already chose `DistributedNotificationCenter` for simple extension ↔ host-app messaging, so using it for the reopen request is consistent with the current architecture.
+- Current ASC IAP state for `com.saneclick.app.pro.unlock` is `DEVELOPER_ACTION_NEEDED`.
+  - Direct ASC API inspection showed the specific broken subresource is the IAP localization, which is in `REJECTED`.
+  - Review screenshot and availability are both complete, so the localization must be refreshed before resubmission.
 
 ---
 
@@ -491,6 +510,16 @@ killall Finder
 
 ## Known Bugs
 
+## App Store Settings Launch + Metadata Clarity | Updated: 2026-03-12 | Status: verified | TTL: 30d
+
+- Official Apple docs confirm the correct SwiftUI APIs for opening a settings scene are `SettingsLink` and `EnvironmentValues.openSettings`, not relying only on the legacy `showSettingsWindow:` responder-chain selector.
+- In SaneClick, review-facing buttons `Manage Folders` and `Open Settings` were wired only through `NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)`, which can no-op if the responder chain is missing or not active.
+- SaneHosts already uses a safer pattern: AppKit posts a notification and a SwiftUI view modifier handles it with `@Environment(\\.openSettings)`.
+- App Review rejection on 2026-03-12 for SaneClick 1.1.0 had two concrete causes:
+  - Metadata issue: subtitle used the Apple trademark term `Finder` inappropriately.
+  - App completeness issue: tapping `Open Settings/Open SaneClick` did nothing.
+- Operational guidance: for Mac App Store review notes, prefer `core features are included with the app download` over `Basic is free` unless the lane is actually priced Free in App Store Connect.
+
 ### BUG-001: File Picker Dialog Not Appearing (Import Scripts)
 
 **Status**: RESOLVED (2026-02-03)
@@ -585,3 +614,41 @@ Button("Import Scripts...") {
 - [Semiotics in UI Design - Medium](https://dyessdesign.medium.com/semiotics-the-unspoken-language-of-graphic-design-592db4f6c226)
 - [Visual Communication in Software Design](https://medium.com/@dr.arya.design/visual-communication-in-software-design-deciphering-the-semiotic-landscape-for-engaging-user-a46d60606c29)
 - [Interaction Design Foundation - Semiotics](https://www.interaction-design.org/literature/book/the-encyclopedia-of-human-computer-interaction-2nd-ed/semiotics)
+
+---
+
+## App Store Redesign | Updated: 2026-03-11 | Status: verified | TTL: 90d
+
+### Review Rejection Root Cause
+
+- Apple rejected SaneClick `1.1.0` under `Guideline 2.4.5(i)` for invalid sandbox entitlements in the App Store host app.
+- Rejected keys were `com.apple.security.scripting-targets` for Finder sync and `com.apple.security.temporary-exception.files.home-relative-path.read-write` for `/Library/Application Scripts/com.saneclick.SaneClick/`.
+- The old App Store path wrote temporary shell and AppleScript files into `applicationScriptsDirectory` and executed them with `NSUserUnixTask` / `NSUserAppleScriptTask`.
+- That design was not App Store safe and also kept the product in a "global Finder script runner" posture that did not match Finder Sync's intended monitored-folder model.
+
+### App Store-Safe Replacement
+
+- App Store build now uses monitored folders chosen by the user instead of all mounted volumes.
+- Monitored folders are persisted as security-scoped bookmarks in shared storage and surfaced in Settings.
+- Finder Sync only advertises menus inside those monitored folders for `APP_STORE` builds.
+- App Store build no longer exposes custom actions or import/export.
+- App Store build only exposes a native built-in action subset implemented in Swift, not arbitrary scripts.
+
+### Supported App Store Action Catalog
+
+- Essentials: `Copy Path`, `Copy Filename`, `Open in Terminal`, `New Text File`, `Delete .DS_Store Files`, `Duplicate with Timestamp`, `Get File Info`, `Reveal in Finder`, `Make Executable`
+- Files & Folders: `Create Folder from Selection`, `Flatten Folder`, `Organize by Extension`, `Organize by Date`, `Rename with Sequence`, `Lowercase Filenames`, `Replace Spaces with Underscores`
+- Advanced: `MD5 Hash`, `SHA256 Hash`
+
+### Required App Store Metadata / Build Notes
+
+- App Store host entitlements now keep sandboxing plus `com.apple.security.files.user-selected.read-write` and `com.apple.security.files.bookmarks.app-scope`.
+- Rejected Finder scripting and temporary home-relative entitlements were removed.
+- `AppStoreProductID` must be present both in Info.plist generation and in the `Release-AppStore` build settings.
+- App Store post-build stripping also removes Sparkle keys and `NSAppleEventsUsageDescription` from the App Store artifact.
+
+### Verification
+
+- `./scripts/SaneMaster.rb verify` passed on the mini with 70 tests after the redesign and new action regression tests.
+- `./scripts/SaneMaster.rb appstore_preflight` passed all technical gates after the redesign.
+- Remaining preflight warning was only the dirty worktree count during local development.

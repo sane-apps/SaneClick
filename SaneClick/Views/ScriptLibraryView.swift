@@ -35,7 +35,7 @@ struct ScriptLibraryView: View {
                     allSection
 
                     // Individual category sections
-                    ForEach(ScriptLibrary.ScriptCategory.allCases, id: \.self) { category in
+                    ForEach(ScriptLibrary.availableCategories, id: \.self) { category in
                         categorySection(category)
                     }
                 }
@@ -60,7 +60,7 @@ struct ScriptLibraryView: View {
                     .fontWeight(.bold)
 
                 let totalEnabled = enabledCount(for: nil)
-                let totalAvailable = ScriptLibrary.allScripts.count
+                let totalAvailable = ScriptLibrary.availableAllScripts.count
                 HStack(spacing: 4) {
                     Text("\(totalEnabled)")
                         .foregroundStyle(totalEnabled > 0 ? successGreen : Color.saneSilver)
@@ -100,7 +100,7 @@ struct ScriptLibraryView: View {
     private var allSection: some View {
         let allScripts = filteredAllScripts
         let totalEnabled = enabledCount(for: nil)
-        let totalAvailable = ScriptLibrary.allScripts.count
+        let totalAvailable = ScriptLibrary.availableAllScripts.count
         let allEnabled = totalEnabled == totalAvailable && totalAvailable > 0
 
         return VStack(alignment: .leading, spacing: 12) {
@@ -202,10 +202,10 @@ struct ScriptLibraryView: View {
 
     private var filteredAllScripts: [ScriptLibrary.LibraryScript] {
         if searchText.isEmpty {
-            return ScriptLibrary.allScripts
+            return ScriptLibrary.availableAllScripts
         }
 
-        return ScriptLibrary.allScripts.filter { script in
+        return ScriptLibrary.availableAllScripts.filter { script in
             script.name.localizedCaseInsensitiveContains(searchText) ||
                 script.description.localizedCaseInsensitiveContains(searchText)
         }
@@ -217,7 +217,7 @@ struct ScriptLibraryView: View {
         let categoryColor = colorForCategory(category)
         let libraryScripts = filteredScripts(for: category)
         let enabledInCategory = enabledCount(for: category)
-        let totalInCategory = ScriptLibrary.scripts(for: category).count
+        let totalInCategory = ScriptLibrary.availableScripts(for: category).count
         let allCategoryEnabled = enabledInCategory == totalInCategory && totalInCategory > 0
         let isExpanded = expandedCategories.contains(category)
         let isProCategory = category != .universal
@@ -421,7 +421,7 @@ struct ScriptLibraryView: View {
     }
 
     private func filteredScripts(for category: ScriptLibrary.ScriptCategory) -> [ScriptLibrary.LibraryScript] {
-        let categoryScripts = ScriptLibrary.scripts(for: category)
+        let categoryScripts = ScriptLibrary.availableScripts(for: category)
 
         if searchText.isEmpty {
             return categoryScripts
@@ -435,9 +435,9 @@ struct ScriptLibraryView: View {
 
     private func enabledCount(for category: ScriptLibrary.ScriptCategory?) -> Int {
         let libraryScriptNames: Set<String> = if let category {
-            Set(ScriptLibrary.scripts(for: category).map(\.name))
+            Set(ScriptLibrary.availableScripts(for: category).map(\.name))
         } else {
-            Set(ScriptLibrary.allScripts.map(\.name))
+            Set(ScriptLibrary.availableAllScripts.map(\.name))
         }
 
         return scriptStore.scripts.filter { script in
@@ -489,7 +489,7 @@ struct ScriptLibraryView: View {
             proUpsellFeature = proFeatureForCategory(category)
             return
         }
-        for libraryScript in ScriptLibrary.scripts(for: category) {
+        for libraryScript in ScriptLibrary.availableScripts(for: category) {
             let installedScript = scriptStore.scripts.first { $0.name == libraryScript.name }
             handleScriptToggle(libraryScript: libraryScript, installedScript: installedScript, enable: enable)
         }
@@ -505,7 +505,7 @@ struct ScriptLibraryView: View {
             proUpsellFeature = .codingScripts
             return
         }
-        for libraryScript in ScriptLibrary.allScripts {
+        for libraryScript in ScriptLibrary.availableAllScripts {
             let installedScript = scriptStore.scripts.first { $0.name == libraryScript.name }
             handleScriptToggle(libraryScript: libraryScript, installedScript: installedScript, enable: enable)
         }
@@ -525,7 +525,7 @@ struct ScriptLibraryView: View {
 #Preview {
     ScriptLibraryView(licenseService: LicenseService(
         appName: "SaneClick",
-        checkoutURL: URL(string: "https://go.saneapps.com/buy/saneclick")!
+        checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick")
     ))
     .environment(ScriptStore.shared)
 }

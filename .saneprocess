@@ -26,7 +26,7 @@ release:
 appstore:
   enabled: true
   app_id: "6759330868"
-  product_id: "com.saneclick.app.pro.unlock"
+  product_id: "com.saneclick.app.pro.unlock.v2"
   scheme: SaneClick-AppStore
   configuration: Release-AppStore
   platforms: [macos]
@@ -37,16 +37,20 @@ appstore:
   marketing_url: "https://saneclick.com"
   metadata:
     macos:
-      subtitle: "Finder Right-Click Tools"
-      promotional_text: "Add 50+ Finder right-click actions in seconds. Automate file tasks, run scripts, and keep your workflow inside Finder."
+      subtitle: "Built-In File Actions"
+      promotional_text: "Add built-in file actions to the folders you choose. Rename, organize, hash, and inspect files without leaving your workflow."
       description: >-
-        SaneClick upgrades Finder with 50+ ready-to-use right-click actions so you can move faster without leaving your file workflow.
-        Automate repetitive tasks, run custom scripts, and show only actions that match selected files.
-        Everything runs locally on your Mac with no tracking or cloud dependency.
-      keywords: "finder,right click,automation,scripts,context menu,productivity,file tools,mac utility"
-      whats_new: "Improved script reliability, smoother action filtering, and faster Finder extension responsiveness."
+        SaneClick adds built-in right-click file actions to the folders you choose on your Mac.
+        Use it to copy paths, rename files, organize folders, create text files, calculate hashes, clean up .DS_Store files, and handle other everyday file tasks without leaving your current folder workflow.
+        Everything runs locally on your Mac. No tracking. No cloud service.
+      keywords: "right click,file actions,file tools,rename,organize,clipboard,folders,productivity"
+      whats_new: "App Store build now uses monitored folders with built-in native actions, plus smoother Finder extension reliability."
       marketing_url: "https://saneclick.com"
-  review_notes: "SaneClick runs user-created automation scripts for Finder workflow and productivity actions. Some scripts use AppleScript via osascript (for example Finder actions and display notifications), so macOS may request Automation/Apple Events permission when those scripts target another app. Core file actions continue to work without Automation permission."
+  review_notes: "SaneClick is a freemium App Store app. Basic is free in the App Store build. The free download includes 9 built-in native file actions, monitored folders, and the Finder Sync extension inside those selected folders. SaneClick Pro is an optional one-time non-consumable StoreKit in-app purchase that adds 9 more built-in native actions, including additional files-and-folders utilities and advanced hashing tools. There is no external checkout, website checkout, license key, or external payment flow in this build. The App Store build no longer runs user-created scripts. There are no Apple Events or automation entitlements in this build."
+  iap:
+    display_name: "SaneClick Pro Upgrade"
+    description: "Unlock 9 more built-in file actions."
+    review_note: "SaneClick Pro Unlock is a one-time non-consumable StoreKit purchase. It adds 9 more built-in native file actions, including advanced hashing and extra file and folder utilities. It does not unlock scripts, external checkout, or license keys."
   accessibility_declarations:
     publish: true
     mac:

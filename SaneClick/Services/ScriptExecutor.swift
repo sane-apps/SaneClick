@@ -271,14 +271,19 @@ final class ScriptExecutor: @unchecked Sendable {
 
     /// Execute a script with the given file paths
     func execute(script: Script, withPaths paths: [String]) async {
-        let result: Result<String, ScriptError> = switch script.type {
-        case .bash:
-            await executeBash(content: script.content, paths: paths)
-        case .applescript:
-            await executeAppleScript(content: script.content, paths: paths)
-        case .automator:
-            await executeAutomator(workflowPath: script.content, paths: paths)
-        }
+        let result: Result<String, ScriptError>
+        #if APP_STORE
+            result = executeAppStoreAction(script: script, paths: paths)
+        #else
+            result = switch script.type {
+            case .bash:
+                await executeBash(content: script.content, paths: paths)
+            case .applescript:
+                await executeAppleScript(content: script.content, paths: paths)
+            case .automator:
+                await executeAutomator(workflowPath: script.content, paths: paths)
+            }
+        #endif
 
         // Create execution result for UI
         let executionResult: ScriptExecutionResult = switch result {
@@ -346,6 +351,12 @@ final class ScriptExecutor: @unchecked Sendable {
     }
 
     private func shouldNotify(for script: Script) -> Bool {
+        #if APP_STORE
+            if AppStoreNativeAction(script: script) != nil {
+                return true
+            }
+        #endif
+
         let lowerContent = script.content.lowercased()
         if lowerContent.contains("display notification") || lowerContent.contains("osascript -e") {
             return false
@@ -451,115 +462,22 @@ final class ScriptExecutor: @unchecked Sendable {
         }
     #else
 
-        // MARK: - App Store Execution (NSUserScriptTask — sandbox-compatible)
-
-        /// Get the Application Scripts directory for this app
-        private func applicationScriptsDirectory() throws -> URL {
-            try FileManager.default.url(
-                for: .applicationScriptsDirectory,
-                in: .userDomainMask,
-                appropriateFor: nil,
-                create: true
-            )
-        }
-
-        private func executeBash(content: String, paths: [String]) async -> Result<String, ScriptError> {
-            do {
-                let scriptsDir = try applicationScriptsDirectory()
-                let scriptFile = scriptsDir.appendingPathComponent("saneclick_\(UUID().uuidString).sh")
-
-                // Write script content with paths as arguments
-                let scriptContent = "#!/bin/bash\n\(content)"
-                try scriptContent.write(to: scriptFile, atomically: true, encoding: .utf8)
-                try FileManager.default.setAttributes(
-                    [.posixPermissions: 0o755],
-                    ofItemAtPath: scriptFile.path
-                )
-                defer { try? FileManager.default.removeItem(at: scriptFile) }
-
-                let task = try NSUserUnixTask(url: scriptFile)
-                let outputPipe = Pipe()
-                task.standardOutput = outputPipe.fileHandleForWriting
-
-                return await withCheckedContinuation { continuation in
-                    task.execute(withArguments: paths) { error in
-                        outputPipe.fileHandleForWriting.closeFile()
-                        let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
-                        let output = String(data: outputData, encoding: .utf8) ?? ""
-
-                        if let error {
-                            continuation.resume(returning: .failure(.executionFailed(error.localizedDescription)))
-                        } else {
-                            continuation.resume(returning: .success(output))
-                        }
-                    }
-                }
-            } catch {
-                return .failure(.launchFailed(error.localizedDescription))
-            }
-        }
-
-        private func executeAppleScript(content: String, paths: [String]) async -> Result<String, ScriptError> {
-            do {
-                let scriptsDir = try applicationScriptsDirectory()
-                let scriptFile = scriptsDir.appendingPathComponent("saneclick_\(UUID().uuidString).applescript")
-
-                let fullScript = "on run argv\n\(content)\nend run"
-                try fullScript.write(to: scriptFile, atomically: true, encoding: .utf8)
-                defer { try? FileManager.default.removeItem(at: scriptFile) }
-
-                let task = try NSUserAppleScriptTask(url: scriptFile)
-
-                // Build AppleEvent with paths as arguments
-                let params = NSAppleEventDescriptor.list()
-                for (i, path) in paths.enumerated() {
-                    params.insert(NSAppleEventDescriptor(string: path), at: i + 1)
-                }
-                let event = NSAppleEventDescriptor(
-                    eventClass: AEEventClass(kCoreEventClass),
-                    eventID: AEEventID(kAEOpenApplication),
-                    targetDescriptor: nil,
-                    returnID: AEReturnID(kAutoGenerateReturnID),
-                    transactionID: AETransactionID(kAnyTransactionID)
-                )
-                event.setDescriptor(params, forKeyword: keyDirectObject)
-
-                return await withCheckedContinuation { continuation in
-                    task.execute(withAppleEvent: event) { result, error in
-                        if let error {
-                            continuation.resume(returning: .failure(.executionFailed(error.localizedDescription)))
-                        } else {
-                            let output = result?.stringValue ?? ""
-                            continuation.resume(returning: .success(output))
-                        }
-                    }
-                }
-            } catch {
-                return .failure(.launchFailed(error.localizedDescription))
-            }
-        }
-
-        private func executeAutomator(workflowPath: String, paths: [String]) async -> Result<String, ScriptError> {
-            guard FileManager.default.fileExists(atPath: workflowPath) else {
-                return .failure(.workflowNotFound(workflowPath))
+        private func executeAppStoreAction(script: Script, paths: [String]) -> Result<String, ScriptError> {
+            guard let action = AppStoreNativeAction(script: script) else {
+                return .failure(.executionFailed("This action is not available in the App Store build."))
             }
 
-            do {
-                let task = try NSUserAutomatorTask(url: URL(fileURLWithPath: workflowPath))
-                let input = paths as NSArray
+            guard let accessScope = MonitoredFolders.beginAccess(for: paths) else {
+                return .failure(.executionFailed("Add the selected folder to Monitored Folders in Settings first."))
+            }
+            defer { accessScope.stop() }
 
-                return await withCheckedContinuation { continuation in
-                    task.execute(withInput: input) { result, error in
-                        if let error {
-                            continuation.resume(returning: .failure(.executionFailed(error.localizedDescription)))
-                        } else {
-                            let output = (result as? String) ?? ""
-                            continuation.resume(returning: .success(output))
-                        }
-                    }
-                }
+            do {
+                return .success(try AppStoreNativeActionExecutor.execute(action, paths: paths))
+            } catch let error as ScriptError {
+                return .failure(error)
             } catch {
-                return .failure(.launchFailed(error.localizedDescription))
+                return .failure(.executionFailed(error.localizedDescription))
             }
         }
     #endif

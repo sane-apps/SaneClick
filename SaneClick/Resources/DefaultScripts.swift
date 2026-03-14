@@ -1003,6 +1003,22 @@ enum ScriptLibrary {
         universalScripts + developerScripts + designerScripts + powerUserScripts + organizationScripts
     }
 
+    static var availableCategories: [ScriptCategory] {
+        #if APP_STORE
+            ScriptCategory.allCases.filter { !availableScripts(for: $0).isEmpty }
+        #else
+            ScriptCategory.allCases
+        #endif
+    }
+
+    static var availableAllScripts: [LibraryScript] {
+        #if APP_STORE
+            allScripts.filter { AppStoreNativeAction(rawValue: $0.name) != nil }
+        #else
+            allScripts
+        #endif
+    }
+
     /// Get scripts for a specific category
     static func scripts(for category: ScriptCategory) -> [LibraryScript] {
         switch category {
@@ -1012,5 +1028,17 @@ enum ScriptLibrary {
         case .powerUser: return powerUserScripts
         case .organization: return organizationScripts
         }
+    }
+
+    static func availableScripts(for category: ScriptCategory) -> [LibraryScript] {
+        #if APP_STORE
+            scripts(for: category).filter { AppStoreNativeAction(rawValue: $0.name) != nil }
+        #else
+            scripts(for: category)
+        #endif
+    }
+
+    static func libraryScript(named name: String) -> LibraryScript? {
+        allScripts.first { $0.name == name }
     }
 }

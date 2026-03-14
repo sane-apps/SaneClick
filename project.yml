@@ -93,13 +93,16 @@ targets:
         excludes:
           - "CLAUDE.md"
           - "**/*.md"
+      - path: Shared
+        excludes:
+          - "**/*.md"
     settings:
       base:
         INFOPLIST_FILE: SaneClick/Info.plist
         PRODUCT_NAME: SaneClick
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         MARKETING_VERSION: "1.1.0"
-        CURRENT_PROJECT_VERSION: "1100"
+        CURRENT_PROJECT_VERSION: "1102"
         ENABLE_PREVIEWS: YES
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
@@ -125,6 +128,7 @@ targets:
           DEVELOPMENT_TEAM: M78L6FXD48
           CODE_SIGN_STYLE: Automatic
           CODE_SIGN_ENTITLEMENTS: SaneClick/SaneClick-AppStore.entitlements
+          INFOPLIST_KEY_AppStoreProductID: com.saneclick.app.pro.unlock.v2
           OTHER_SWIFT_FLAGS: "$(inherited) -D APP_STORE"
     postBuildScripts:
       - name: Strip Sparkle for App Store
@@ -136,6 +140,7 @@ targets:
             /usr/libexec/PlistBuddy -c "Delete :SUPublicEDKey" "${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}" 2>/dev/null || true
             /usr/libexec/PlistBuddy -c "Delete :SUEnableAutomaticChecks" "${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}" 2>/dev/null || true
             /usr/libexec/PlistBuddy -c "Delete :SUEnableSystemProfiling" "${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}" 2>/dev/null || true
+            /usr/libexec/PlistBuddy -c "Delete :NSAppleEventsUsageDescription" "${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}" 2>/dev/null || true
 
             APP_BINARY="${TARGET_BUILD_DIR}/${EXECUTABLE_PATH}"
             WEAKEN_SCRIPT="${SRCROOT}/../../infra/SaneProcess/scripts/weaken_sparkle.rb"
@@ -159,6 +164,7 @@ targets:
       properties:
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        AppStoreProductID: com.saneclick.app.pro.unlock.v2
         NSAppleEventsUsageDescription: "SaneClick runs user-created automation scripts that can control other apps (for example Finder actions and notifications) when you choose those scripts."
         LSApplicationCategoryType: "public.app-category.utilities"
         SUFeedURL: "https://saneclick.com/appcast.xml"
@@ -178,13 +184,16 @@ targets:
         excludes:
           - "CLAUDE.md"
           - "**/*.md"
+      - path: Shared
+        excludes:
+          - "**/*.md"
     settings:
       base:
         INFOPLIST_FILE: SaneClickExtension/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.saneclick.SaneClick.FinderSync
         PRODUCT_NAME: SaneClickExtension
         MARKETING_VERSION: "1.1.0"
-        CURRENT_PROJECT_VERSION: "1100"
+        CURRENT_PROJECT_VERSION: "1102"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
         MACOSX_DEPLOYMENT_TARGET: "14.0"
@@ -227,11 +236,18 @@ targets:
         CODE_SIGN_STYLE: Manual
         ENABLE_HARDENED_RUNTIME: NO
         GENERATE_INFOPLIST_FILE: YES
+        ARCHS: arm64
+        VALID_ARCHS: arm64
       configs:
         Debug:
           CODE_SIGN_IDENTITY: "-"
         Release:
           DEVELOPMENT_TEAM: M78L6FXD48
           CODE_SIGN_IDENTITY: "Apple Development"
+        Release-AppStore:
+          CODE_SIGN_IDENTITY: "-"
+          CODE_SIGNING_ALLOWED: NO
+          CODE_SIGNING_REQUIRED: NO
+          OTHER_SWIFT_FLAGS: "$(inherited) -D APP_STORE"
     dependencies:
       - target: SaneClick

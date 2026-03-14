@@ -2,12 +2,85 @@ import FinderSync
 import SaneUI
 import SwiftUI
 
+extension Notification.Name {
+    static let openSettings = Notification.Name("openSettings")
+    static let openMainWindow = Notification.Name("openMainWindow")
+}
+
+private enum CrossProcessNotifications {
+    static let openMainWindow = NSNotification.Name("com.saneclick.openMainWindow")
+}
+
+@MainActor
+final class SettingsActionStorage {
+    static let shared = SettingsActionStorage()
+    var openSettings: (() -> Void)?
+
+    func capture(_ action: OpenSettingsAction) {
+        openSettings = {
+            action()
+        }
+    }
+
+    func showSettings() {
+        if let openSettings {
+            openSettings()
+        } else {
+            NotificationCenter.default.post(name: .openSettings, object: nil)
+            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        }
+
+        NSApp.activate(ignoringOtherApps: true)
+    }
+}
+
+@MainActor
+final class WindowActionStorage {
+    static let shared = WindowActionStorage()
+    var openWindow: ((String) -> Void)?
+
+    func capture(_ action: OpenWindowAction) {
+        openWindow = { id in
+            action(id: id)
+        }
+    }
+
+    func showMainWindow() {
+        let mainWindow = NSApp.windows.first(where: {
+            $0.canBecomeMain &&
+                $0.contentView != nil &&
+                $0.identifier?.rawValue.contains("main") == true
+        })
+
+        if let window = mainWindow {
+            if window.isMiniaturized {
+                window.deminiaturize(nil)
+            }
+            window.makeKeyAndOrderFront(nil)
+        } else {
+            openWindow?("main")
+        }
+
+        NSApp.activate(ignoringOtherApps: true)
+    }
+}
+
 class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_: Notification) {
         NSApp.appearance = NSAppearance(named: .darkAqua)
-        #if !DEBUG
+        #if !DEBUG && !APP_STORE
             if SaneAppMover.moveToApplicationsFolderIfNeeded() { return }
         #endif
+
+        DistributedNotificationCenter.default().addObserver(
+            forName: CrossProcessNotifications.openMainWindow,
+            object: nil,
+            queue: .main
+        ) { _ in
+            Task { @MainActor in
+                WindowActionStorage.shared.showMainWindow()
+            }
+        }
     }
 
     func applicationDockMenu(_: NSApplication) -> NSMenu? {
@@ -36,10 +109,7 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @MainActor @objc private func openMainWindow() {
-        NSApp.activate(ignoringOtherApps: true)
-        if let window = NSApp.windows.first(where: { $0.isMainWindow || $0.canBecomeMain }) {
-            window.makeKeyAndOrderFront(nil)
-        }
+        WindowActionStorage.shared.showMainWindow()
     }
 
     #if !APP_STORE
@@ -49,8 +119,18 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
     #endif
 
     @MainActor @objc private func openSettings() {
-        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-        NSApp.activate(ignoringOtherApps: true)
+        SettingsActionStorage.shared.showSettings()
+    }
+
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if !flag {
+            if let openWindow = WindowActionStorage.shared.openWindow {
+                openWindow("main")
+            } else {
+                WindowActionStorage.shared.showMainWindow()
+            }
+        }
+        return true
     }
 }
 
@@ -58,10 +138,18 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
 struct SaneClickApp: App {
     @NSApplicationDelegateAdaptor(SaneClickAppDelegate.self) private var appDelegate
     @State private var scriptStore = ScriptStore.shared
-    @State private var licenseService = LicenseService(
-        appName: "SaneClick",
-        checkoutURL: URL(string: "https://go.saneapps.com/buy/saneclick")!
-    )
+    @State private var monitoredFolderService = MonitoredFolderService.shared
+    #if APP_STORE
+        @State private var licenseService = LicenseService(
+            appName: "SaneClick",
+            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.unlock.v2")
+        )
+    #else
+        @State private var licenseService = LicenseService(
+            appName: "SaneClick",
+            checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick")
+        )
+    #endif
     @AppStorage("hasSeenWelcome") private var hasSeenWelcome = false
 
     init() {
@@ -87,9 +175,13 @@ struct SaneClickApp: App {
     }
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup(id: "main") {
             ContentView(licenseService: licenseService)
                 .environment(scriptStore)
+                .environment(monitoredFolderService)
+                .modifier(SettingsLauncher())
+                .modifier(SettingsActionCapture())
+                .modifier(WindowActionCapture())
                 .preferredColorScheme(.dark)
                 .sheet(isPresented: Binding(
                     get: { !hasSeenWelcome },
@@ -98,20 +190,8 @@ struct SaneClickApp: App {
                     WelcomeGateView(
                         appName: "SaneClick",
                         appIcon: "cursorarrow.click.2",
-                        freeFeatures: [
-                            ("star.fill", "10 Essential Finder actions"),
-                            ("cursorarrow.click.2", "Right-click on any file or folder"),
-                            ("checkmark.shield", "No account or signup needed")
-                        ],
-                        proFeatures: [
-                            ("square.stack.3d.up.fill", "All 50+ scripts across 5 categories"),
-                            ("chevron.left.forwardslash.chevron.right", "12 Coding scripts"),
-                            ("photo.on.rectangle.angled", "10 Images & Media scripts"),
-                            ("wrench.and.screwdriver.fill", "10 Advanced scripts"),
-                            ("folder.fill", "8 Files & Folders scripts"),
-                            ("square.and.pencil", "Custom Script Editor"),
-                            ("square.and.arrow.up.on.square", "Import / Export scripts")
-                        ],
+                        freeFeatures: welcomeFreeFeatures,
+                        proFeatures: welcomeProFeatures,
                         licenseService: licenseService
                     )
                     .preferredColorScheme(.dark)
@@ -120,6 +200,9 @@ struct SaneClickApp: App {
                     licenseService.checkCachedLicense()
                     let isPro = licenseService.isPro
                     let isFirstLaunch = !hasSeenWelcome
+                    if SaneBackgroundAppDefaults.launchAtLogin {
+                        _ = SaneLoginItemPolicy.enableByDefaultIfNeeded(isFirstLaunch: isFirstLaunch)
+                    }
                     Task.detached {
                         await EventTracker.log(
                             isPro ? "app_launch_pro" : "app_launch_free",
@@ -140,10 +223,80 @@ struct SaneClickApp: App {
         Settings {
             SettingsView(licenseService: licenseService)
                 .environment(scriptStore)
+                .environment(monitoredFolderService)
                 .preferredColorScheme(.dark)
         }
     }
 }
+
+struct SettingsLauncher: ViewModifier {
+    @Environment(\.openSettings) private var openSettings
+
+    func body(content: Content) -> some View {
+        content
+            .onReceive(NotificationCenter.default.publisher(for: .openSettings)) { _ in
+                openSettings()
+                NSApp.activate(ignoringOtherApps: true)
+            }
+    }
+}
+
+struct SettingsActionCapture: ViewModifier {
+    @Environment(\.openSettings) private var openSettings
+
+    func body(content: Content) -> some View {
+        content
+            .onAppear {
+                SettingsActionStorage.shared.capture(openSettings)
+            }
+    }
+}
+
+struct WindowActionCapture: ViewModifier {
+    @Environment(\.openWindow) private var openWindow
+
+    func body(content: Content) -> some View {
+        content
+            .onAppear {
+                WindowActionStorage.shared.capture(openWindow)
+            }
+    }
+}
+
+private let welcomeFreeFeatures: [(String, String)] = {
+    #if APP_STORE
+        [
+            ("star.fill", "9 built-in Finder actions"),
+            ("folder.badge.gearshape", "Choose the folders SaneClick watches"),
+            ("checkmark.shield", "No account or signup needed")
+        ]
+    #else
+        [
+            ("star.fill", "10 Essential Finder actions"),
+            ("cursorarrow.click.2", "Right-click on any file or folder"),
+            ("checkmark.shield", "No account or signup needed")
+        ]
+    #endif
+}()
+
+private let welcomeProFeatures: [(String, String)] = {
+    #if APP_STORE
+        [
+            ("folder.fill", "7 Files & Folders actions"),
+            ("wrench.and.screwdriver.fill", "2 Advanced hashing actions")
+        ]
+    #else
+        [
+            ("square.stack.3d.up.fill", "All 50+ scripts across 5 categories"),
+            ("chevron.left.forwardslash.chevron.right", "12 Coding scripts"),
+            ("photo.on.rectangle.angled", "10 Images & Media scripts"),
+            ("wrench.and.screwdriver.fill", "10 Advanced scripts"),
+            ("folder.fill", "8 Files & Folders scripts"),
+            ("square.and.pencil", "Custom Script Editor"),
+            ("square.and.arrow.up.on.square", "Import / Export scripts")
+        ]
+    #endif
+}()
 
 struct AppCommands: Commands {
     var body: some Commands {
@@ -153,19 +306,18 @@ struct AppCommands: Commands {
                     UpdateService.shared.checkForUpdates()
                 }
             }
+            CommandGroup(after: .newItem) {
+                Button("Import Scripts...") {
+                    NotificationCenter.default.post(name: .importScriptsRequested, object: nil)
+                }
+                .keyboardShortcut("o", modifiers: .command)
+
+                Button("Export All Scripts...") {
+                    NotificationCenter.default.post(name: .exportAllScriptsRequested, object: nil)
+                }
+                .keyboardShortcut("e", modifiers: [.command, .shift])
+            }
         #endif
-
-        CommandGroup(after: .newItem) {
-            Button("Import Scripts...") {
-                NotificationCenter.default.post(name: .importScriptsRequested, object: nil)
-            }
-            .keyboardShortcut("o", modifiers: .command)
-
-            Button("Export All Scripts...") {
-                NotificationCenter.default.post(name: .exportAllScriptsRequested, object: nil)
-            }
-            .keyboardShortcut("e", modifiers: [.command, .shift])
-        }
     }
 }
 

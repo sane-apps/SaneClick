@@ -10,6 +10,7 @@ import FinderSync
 import os.log
 
 private let logger = Logger(subsystem: "com.saneclick.SaneClick.FinderSync", category: "FinderSync")
+private let openMainWindowNotification = NSNotification.Name("com.saneclick.openMainWindow")
 
 /// Execution request written to App Group container for host app to process
 struct ExecutionRequest: Codable {
@@ -44,25 +45,34 @@ class FinderSync: FIFinderSync {
         logger.info("FinderSync extension init() called")
 
         let finderSync = FIFinderSyncController.default()
-        if let mountedVolumes = FileManager.default.mountedVolumeURLs(
-            includingResourceValuesForKeys: nil,
-            options: [.skipHiddenVolumes]
-        ) {
-            finderSync.directoryURLs = Set(mountedVolumes)
-            logger.info("Set directoryURLs to \(mountedVolumes.count) volumes")
-        } else {
-            finderSync.directoryURLs = [URL(fileURLWithPath: "/")]
-            logger.warning("mountedVolumeURLs returned nil, using root /")
-        }
+        #if APP_STORE
+            finderSync.directoryURLs = Set(MonitoredFolders.monitoredURLs())
+            logger.info("Set directoryURLs to \(finderSync.directoryURLs.count) monitored folders")
+        #else
+            if let mountedVolumes = FileManager.default.mountedVolumeURLs(
+                includingResourceValuesForKeys: nil,
+                options: [.skipHiddenVolumes]
+            ) {
+                finderSync.directoryURLs = Set(mountedVolumes)
+                logger.info("Set directoryURLs to \(mountedVolumes.count) volumes")
+            } else {
+                finderSync.directoryURLs = [URL(fileURLWithPath: "/")]
+                logger.warning("mountedVolumeURLs returned nil, using root /")
+            }
+        #endif
 
         NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didMountNotification,
             object: nil,
             queue: .main
         ) { notification in
-            if let volumeURL = notification.userInfo?[NSWorkspace.volumeURLUserInfoKey] as? URL {
-                FIFinderSyncController.default().directoryURLs.insert(volumeURL)
-            }
+            #if APP_STORE
+                self.reloadMonitoredFolders()
+            #else
+                if let volumeURL = notification.userInfo?[NSWorkspace.volumeURLUserInfoKey] as? URL {
+                    FIFinderSyncController.default().directoryURLs.insert(volumeURL)
+                }
+            #endif
         }
 
         DistributedNotificationCenter.default().addObserver(
@@ -71,6 +81,15 @@ class FinderSync: FIFinderSync {
             name: NSNotification.Name("com.saneclick.scriptsChanged"),
             object: nil
         )
+
+        #if APP_STORE
+            DistributedNotificationCenter.default().addObserver(
+                self,
+                selector: #selector(monitoredFoldersDidChange),
+                name: MonitoredFolders.changedNotification,
+                object: nil
+            )
+        #endif
     }
 
     deinit {
@@ -78,6 +97,18 @@ class FinderSync: FIFinderSync {
     }
 
     @objc private func scriptsDidChange() {}
+
+    #if APP_STORE
+        @objc private func monitoredFoldersDidChange() {
+            reloadMonitoredFolders()
+        }
+
+        private func reloadMonitoredFolders() {
+            let urls = Set(MonitoredFolders.monitoredURLs())
+            FIFinderSyncController.default().directoryURLs = urls
+            logger.info("Reloaded monitored folders: \(urls.count)")
+        }
+    #endif
 
     // MARK: - Context Menu
 
@@ -168,7 +199,18 @@ class FinderSync: FIFinderSync {
     }
 
     @objc func openMainApp() {
-        launchHostApp(activate: true)
+        let center = DistributedNotificationCenter.default()
+        if let running = NSRunningApplication.runningApplications(withBundleIdentifier: "com.saneclick.SaneClick").first {
+            center.postNotificationName(openMainWindowNotification, object: nil, userInfo: nil, deliverImmediately: true)
+            running.activate(options: [.activateAllWindows, .activateIgnoringOtherApps])
+        } else {
+            launchHostApp(activate: true)
+            for delay in [0.75, 1.5, 3.0] {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    center.postNotificationName(openMainWindowNotification, object: nil, userInfo: nil, deliverImmediately: true)
+                }
+            }
+        }
     }
 
     private func ensureHostAppRunning() {
