@@ -3,7 +3,28 @@
     <channel>
         <title>SaneClick Changelog</title>
 
-    <item>
+            <item>
+            <title>1.1.0</title>
+            <pubDate>Fri, 13 Mar 2026 22:58:45 -0400</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description>
+                <![CDATA[
+                <h2>What's New</h2>
+                <ul>
+                <li>Improved reopening the main window from the menu bar</li>
+                <li>Improved opening Settings from the app menu</li>
+                <li>Reliability improvements for the App Store build</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.1.0.zip"
+                       sparkle:version="1102"
+                       sparkle:shortVersionString="1.1.0"
+                       length="2047120"
+                       type="application/octet-stream"
+                       sparkle:edSignature="gbjROIIqe/xlhLkOZPpwozJsxNshmybFADVuCAXwir84Dhc374E2JePN0ozogOl12+oJR5Q5dkuM6P9EPPPICA=="/>
+        </item>
+<item>
                 <title>1.0.4</title>
                 <pubDate>Sat, 28 Feb 2026 07:08:00 +0000</pubDate>
                 <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
