@@ -4,6 +4,12 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.1.1] - 2026-03-16
+
+Adds in-app bug reporting with diagnostics from Settings, and improves support and settings consistency.
+
+---
+
 ## [1.0.4] - 2026-02-23
 
 Corrective release: align binary metadata with appcast and App Store pipeline.
