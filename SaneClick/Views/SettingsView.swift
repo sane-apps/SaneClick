@@ -191,7 +191,8 @@ struct SettingsView: View {
     private var aboutTab: some View {
         SaneAboutView(
             appName: "SaneClick",
-            githubRepo: "SaneClick"
+            githubRepo: "SaneClick",
+            diagnosticsService: .shared
         )
     }
 
@@ -216,6 +217,46 @@ struct SettingsView: View {
             }
         }
     }
+}
+
+extension SaneDiagnosticsService {
+    static let shared = SaneDiagnosticsService(
+        appName: "SaneClick",
+        subsystem: "com.saneclick.SaneClick",
+        githubRepo: "SaneClick",
+        settingsCollector: { await collectSaneClickSettings() }
+    )
+}
+
+@MainActor
+private func collectSaneClickSettings() -> String {
+    let defaults = UserDefaults.standard
+    let showActionNotifications = defaults.object(forKey: AppPreferences.showActionNotificationsKey) as? Bool ?? true
+    let showMenuBarIcon = defaults.object(forKey: AppPreferences.showMenuBarIconKey) as? Bool ?? true
+    let showDockIcon = defaults.object(forKey: AppPreferences.showDockIconKey) as? Bool ?? SaneBackgroundAppDefaults.showDockIcon
+    let scriptStore = ScriptStore.shared
+    let monitoredFolderCount = MonitoredFolderService.shared.folders.count
+    let extensionStatus = ExtensionStatusService.checkStatus().statusText
+
+    #if APP_STORE
+        let updateChecks = "app_store_build"
+    #else
+        let updateChecks = UpdateService.shared.automaticallyChecksForUpdates ? "enabled" : "disabled"
+    #endif
+
+    return """
+    extensionStatus: \(extensionStatus)
+    totalScripts: \(scriptStore.scripts.count)
+    enabledScripts: \(scriptStore.enabledScripts.count)
+    monitoredFolderCount: \(monitoredFolderCount)
+
+    settings:
+      launchAtLogin: \(SaneLoginItemPolicy.toggleValue())
+      showMenuBarIcon: \(showMenuBarIcon)
+      showDockIcon: \(showDockIcon)
+      showActionNotifications: \(showActionNotifications)
+      softwareUpdates: \(updateChecks)
+    """
 }
 
 #Preview {
