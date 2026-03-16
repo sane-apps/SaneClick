@@ -189,11 +189,21 @@ struct SettingsView: View {
     // MARK: - About Tab
 
     private var aboutTab: some View {
-        SaneAboutView(
-            appName: "SaneClick",
-            githubRepo: "SaneClick",
-            diagnosticsService: .shared
-        )
+        #if APP_STORE
+            SaneAboutView(
+                appName: "SaneClick",
+                githubRepo: "SaneClick",
+                diagnosticsService: .shared,
+                showsSupportSection: false
+            )
+        #else
+            SaneAboutView(
+                appName: "SaneClick",
+                githubRepo: "SaneClick",
+                diagnosticsService: .shared,
+                showsSupportSection: true
+            )
+        #endif
     }
 
     private var statusColor: Color {

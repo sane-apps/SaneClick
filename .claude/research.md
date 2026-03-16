@@ -2,7 +2,27 @@
 
 > **Single Source of Truth** - All research findings, API documentation, and architectural decisions.
 >
-> Last Updated: 2026-03-12
+> Last Updated: 2026-03-16
+
+## 2026-03-16 App Store Donation Rejection
+
+- Fresh App Store Connect review fetch on the mini confirmed the current macOS blocker is no longer the older entitlement or reopen issue.
+- Apple rejected `1.1.0` under guideline `3.1.1` because the app allows donations outside In-App Purchase.
+- Local code trace matched that exactly:
+  - SaneClick's About tab uses shared `SaneAboutView`.
+  - Shared `SaneAboutView` always rendered a `Donate` button, GitHub Sponsors link, and crypto addresses.
+  - That support surface is acceptable for direct builds but not for the App Store variant.
+- Safe fix chosen:
+  - keep the shared About layout and diagnostics flow
+  - hide only the support/donation section in `APP_STORE` builds
+  - leave direct builds unchanged
+- Validation work on the mini:
+  - `swift test` in `infra/SaneUI` passed after adding the support-visibility policy tests
+  - direct `xcodebuild` App Store build for SaneClick succeeded once the caller-side boolean was simplified
+  - SaneMaster's `verify` path briefly failed because the new package-only helper was referenced from the app target; fixing that by passing a compile-time boolean resolved the compile failure
+- Process gap found:
+  - `./scripts/SaneMaster.rb appstore_preflight` gave a false-green before this work because it does not currently audit shared SaneUI donation/support surfaces
+  - preflight should eventually flag App Store builds that expose Donate / GitHub Sponsors / crypto support UI
 
 ## 2026-03-12 App Review Recheck
 
