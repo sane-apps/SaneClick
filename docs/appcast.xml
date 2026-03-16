@@ -3,7 +3,26 @@
     <channel>
         <title>SaneClick Changelog</title>
 
-            <item>
+                    <item>
+            <title>1.1.1</title>
+            <pubDate>Mon, 16 Mar 2026 15:01:39 -0400</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description>
+                <![CDATA[
+                <h2>What's New</h2>
+                <ul>
+                <li>Adds in-app bug reporting with diagnostics from Settings, and improves support and settings consistency.</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.1.1.zip"
+                       sparkle:version="1101"
+                       sparkle:shortVersionString="1.1.1"
+                       length="2059212"
+                       type="application/octet-stream"
+                       sparkle:edSignature="MKWulboQ4nSXMZ9C/OK1RqrMCSEMj1a0wAPhKkxozmPUhZPsA/9iywcL2rHJhakoxgcWuz+W5It9WclP6H8tDg=="/>
+        </item>
+<item>
             <title>1.1.0</title>
             <pubDate>Fri, 13 Mar 2026 22:58:45 -0400</pubDate>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
