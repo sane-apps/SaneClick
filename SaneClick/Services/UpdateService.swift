@@ -1,7 +1,6 @@
 import Foundation
 #if !APP_STORE
     import Sparkle
-#endif
 import os.log
 import SaneUI
 
@@ -83,9 +82,8 @@ final class UpdateService: NSObject, ObservableObject {
     }
 
     private func normalizeUpdateCheckFrequency() {
-        #if !APP_STORE
-            guard let updater = updaterController?.updater else { return }
-            updater.updateCheckInterval = SaneSparkleCheckFrequency.normalizedInterval(from: updater.updateCheckInterval)
-        #endif
+        guard let updater = updaterController?.updater else { return }
+        updater.updateCheckInterval = SaneSparkleCheckFrequency.normalizedInterval(from: updater.updateCheckInterval)
     }
 }
+#endif

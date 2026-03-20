@@ -20,7 +20,7 @@ struct AppStoreScreenshotRenderTests {
 
         let licenseService = LicenseService(
             appName: "SaneClick",
-            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.unlock.v2")
+            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.unlock.v3")
         )
         let scriptStore = ScriptStore.shared
         try seedScreenshotState(store: scriptStore)

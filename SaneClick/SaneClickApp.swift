@@ -69,7 +69,12 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_: Notification) {
         NSApp.appearance = NSAppearance(named: .darkAqua)
         #if !DEBUG && !APP_STORE
-            if SaneAppMover.moveToApplicationsFolderIfNeeded() { return }
+            if SaneAppMover.moveToApplicationsFolderIfNeeded(prompt: .init(
+                messageText: "Move to Applications?",
+                informativeText: "{appName} works best from your Applications folder. Move it there now? You may be asked for your password.",
+                moveButtonTitle: "Move to Applications",
+                cancelButtonTitle: "Not Now"
+            )) { return }
         #endif
 
         DistributedNotificationCenter.default().addObserver(
@@ -142,12 +147,13 @@ struct SaneClickApp: App {
     #if APP_STORE
         @State private var licenseService = LicenseService(
             appName: "SaneClick",
-            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.unlock.v2")
+            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.unlock.v3")
         )
     #else
         @State private var licenseService = LicenseService(
             appName: "SaneClick",
-            checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick")
+            checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick"),
+            directCopy: LicenseService.DirectCopy.saneClick
         )
     #endif
     @AppStorage("hasSeenWelcome") private var hasSeenWelcome = false

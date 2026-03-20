@@ -7,17 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0227BF1EF92C137AF9F4E394 /* ProFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7561E69DFD12512C70D2215B /* ProFeature.swift */; };
+		069D968637A1F3C0CFF84CF7 /* ScriptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CAB9648AF325258DC7FE8E /* ScriptStore.swift */; };
 		09CF4C3970618994C1F4AD74 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = DCCDF70371884D3762E05659 /* Sparkle */; };
 		0D111DBAB50E53218731BCAB /* CategoryEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901F888200D7C1EC63210408 /* CategoryEditorView.swift */; };
 		1361CF6176967FFC1C817445 /* FinderSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700D47CED971DFCF509DB68A /* FinderSync.swift */; };
 		1DE6BF747A96A9042AF2F879 /* ScriptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CAB9648AF325258DC7FE8E /* ScriptStore.swift */; };
+		208F9AF07BD57E545DFA327C /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D6405FA6195B48159C6502 /* MenuBarController.swift */; };
+		21BA87EACB53CCF3867B7247 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D6A7A87549AA85929FF95A /* UpdateService.swift */; };
 		24D18F95948C7B912B63B0CD /* ScriptExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC0CF25CD64448C80A443A2 /* ScriptExecutor.swift */; };
 		27421E21068E3EF12E4DC3EF /* SaneColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC056477ED451BA3A4C710 /* SaneColors.swift */; };
 		2815FB85C50E7871E423FCA4 /* ScriptLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DFAFA25A009F3FB7DEDCB9 /* ScriptLibraryView.swift */; };
 		2DA20DBD2363C91587C94D3A /* AppStoreReviewGuardrailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4BD1719C49E8BC6550B2C0C /* AppStoreReviewGuardrailTests.swift */; };
+		2EB015FA609862A4838D87AF /* ScriptExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC0CF25CD64448C80A443A2 /* ScriptExecutor.swift */; };
+		2FE77C4D19704C748426146B /* ImportExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037A92156BFEE353DE83DB29 /* ImportExportView.swift */; };
+		300E8E5181F1B20D980FFEE1 /* DirectDistributionSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8B50CEA8F97A893927BB7D /* DirectDistributionSupport.swift */; };
 		31244C53696A66D583170549 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D6A7A87549AA85929FF95A /* UpdateService.swift */; };
+		31AC9D9565D351875B198DDC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 5B42E303B65FD7B78AFCEF2F /* PrivacyInfo.xcprivacy */; };
+		3403559622138EF20F1F7335 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D5A8C9C025AE4FA559E7A8 /* SettingsView.swift */; };
+		347583F7E4F146C5BEEE9D21 /* MonitoredFolders.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E14736E3A91B0759B66C0E /* MonitoredFolders.swift */; };
+		395985D6C5DDC4E3B5D4030A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F183182221315A53A467D /* Category.swift */; };
+		3AA1657E2507EC25CA62B705 /* ExtensionStatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3B0C60BE7EF0BF925BB1F9 /* ExtensionStatusService.swift */; };
+		3C26D6534EF5533C89A950A6 /* SaneColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC056477ED451BA3A4C710 /* SaneColors.swift */; };
 		4158A3FE5FD6BA942AA6ADE7 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D6405FA6195B48159C6502 /* MenuBarController.swift */; };
 		4214C45F58D93958090E6AF5 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F183182221315A53A467D /* Category.swift */; };
+		4293100EAB878ED0D89819E4 /* ScriptLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DFAFA25A009F3FB7DEDCB9 /* ScriptLibraryView.swift */; };
 		45A7BEE2D7D0A8619446CE10 /* ScriptExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621E58252D45C086455F4CA1 /* ScriptExecutorTests.swift */; };
 		4B0EC0F99E93A24B6D900856 /* CategoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1306B2DA996D2CA07D8026B4 /* CategoryTests.swift */; };
 		4C9949F5496F3CCF5E69CA98 /* ExtensionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E13D1032CE6C26DB0310BC0 /* ExtensionStatusTests.swift */; };
@@ -29,25 +43,46 @@
 		8F04B14A86B9911E8790F68D /* MonitoredFolderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B70939D4CC943905E332A2 /* MonitoredFolderService.swift */; };
 		91FB048A84A797926306E11E /* ScriptStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B341F823B9E6117E2232E2D /* ScriptStoreTests.swift */; };
 		96FF0C54A60D14A759E109CB /* FinderControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3657A493D18F7FE8C14A6434 /* FinderControl.swift */; };
+		985B54C7FA6D8961728EBB9A /* CategoryEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901F888200D7C1EC63210408 /* CategoryEditorView.swift */; };
 		98E493FB92410FF637BF4EB9 /* AppStoreScreenshotRenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8894C708FDE7B61CCCD4E9D9 /* AppStoreScreenshotRenderTests.swift */; };
+		9AC93BCBE2F4543EC1691704 /* AppStoreNativeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E8F38469A2721677F9A7EC /* AppStoreNativeAction.swift */; };
 		A078CB636A3A04456B7E291E /* AppStoreNativeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E8F38469A2721677F9A7EC /* AppStoreNativeAction.swift */; };
+		A2814B7D8E5C998434A68C28 /* ScriptEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0292252BEA20E38AA9D5AD5 /* ScriptEditorView.swift */; };
+		A32EFFBFF6ED1304526BF32F /* SaneClickApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2315CC9340FA3A69BDDE3F79 /* SaneClickApp.swift */; };
 		A4AFD157125E508753899D83 /* ProFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7561E69DFD12512C70D2215B /* ProFeature.swift */; };
+		A835726077778654601A5DF6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C430CF1913F9F056D1C42FD1 /* ContentView.swift */; };
 		ABE641DDFB2FA603A3BF14BD /* ExtensionStatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3B0C60BE7EF0BF925BB1F9 /* ExtensionStatusService.swift */; };
 		AD2450C8572F6E5827CA4DE9 /* DefaultScripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */; };
 		AFBD400DBECC4B913690E29E /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447D4BFE5ACB557CE976F11 /* Script.swift */; };
 		B0561246A2A1957E7017B8B1 /* ScriptLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C04403C1E09F0D5028384E /* ScriptLibraryTests.swift */; };
 		B2528D20E9949935D53FCF49 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 5B42E303B65FD7B78AFCEF2F /* PrivacyInfo.xcprivacy */; };
+		B863B7721AC91FC4A31AD179 /* MonitoredFolderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B70939D4CC943905E332A2 /* MonitoredFolderService.swift */; };
 		C34F834B549E53DABC8C3C86 /* AppStoreNativeActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FA2F0EB8086652DAA990F0 /* AppStoreNativeActionTests.swift */; };
 		C6AF9FAE601D4CFD944911CB /* MonitoredFolders.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E14736E3A91B0759B66C0E /* MonitoredFolders.swift */; };
+		C783F29A466DD724C8040AC0 /* FinderControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3657A493D18F7FE8C14A6434 /* FinderControl.swift */; };
+		C94E2F1B3ACA6C7E0BD129AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4375D086296589FD9E2EE58 /* Assets.xcassets */; };
 		CA389228F1F7FE16FF17D850 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C430CF1913F9F056D1C42FD1 /* ContentView.swift */; };
 		CCE34A091108F9B0E4A55F18 /* ScriptEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0292252BEA20E38AA9D5AD5 /* ScriptEditorView.swift */; };
 		CED119D09B9E882EE37AEA8B /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF1B4BB43599FDB2D286ADF /* AppPreferences.swift */; };
 		D2804ED379719BFC7420BA98 /* ImportExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037A92156BFEE353DE83DB29 /* ImportExportView.swift */; };
 		D5DA8CBA16326530ED642F7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4375D086296589FD9E2EE58 /* Assets.xcassets */; };
+		D934D0819D52D0C810281548 /* SaneUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9F1286E819DE20012553BDE1 /* SaneUI */; };
+		E646F123A34072852AA1F4B1 /* DefaultScripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */; };
+		E9456CC812E10D96402F93C9 /* SaneClickExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F52F937E1B88C7672C3470CA /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447D4BFE5ACB557CE976F11 /* Script.swift */; };
+		F7886BBDB60B447EE583AFD2 /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF1B4BB43599FDB2D286ADF /* AppPreferences.swift */; };
 		F91271770A8383B473533243 /* MonitoredFolders.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E14736E3A91B0759B66C0E /* MonitoredFolders.swift */; };
+		FAED3702C92DCECD0123044B /* DirectDistributionSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8B50CEA8F97A893927BB7D /* DirectDistributionSupport.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		16349FC967C6555AC3928FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8F781A975882EB5E5B47DBEF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 263057A7946DC444B1EC8233;
+			remoteInfo = SaneClickExtension;
+		};
 		69EF52219E57E59B6C7C0475 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8F781A975882EB5E5B47DBEF /* Project object */;
@@ -65,6 +100,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		156E549314FCFE5CD5383061 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E9456CC812E10D96402F93C9 /* SaneClickExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		503AAFBD32528E884F0EAFD9 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -119,8 +165,10 @@
 		B1D6405FA6195B48159C6502 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 		B1FA2F0EB8086652DAA990F0 /* AppStoreNativeActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreNativeActionTests.swift; sourceTree = "<group>"; };
 		B4BD1719C49E8BC6550B2C0C /* AppStoreReviewGuardrailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreReviewGuardrailTests.swift; sourceTree = "<group>"; };
+		BA8B50CEA8F97A893927BB7D /* DirectDistributionSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectDistributionSupport.swift; sourceTree = "<group>"; };
 		C19B414E55D6FF5FDF7690BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C430CF1913F9F056D1C42FD1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C7D697C2D4CBA6B49BECA004 /* SaneClickAppStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SaneClickAppStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9E14736E3A91B0759B66C0E /* MonitoredFolders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitoredFolders.swift; sourceTree = "<group>"; };
 		E68AE3D3E5F32A83827F08A7 /* SaneClick-AppStore.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "SaneClick-AppStore.entitlements"; sourceTree = "<group>"; };
 		F447D4BFE5ACB557CE976F11 /* Script.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Script.swift; sourceTree = "<group>"; };
@@ -133,6 +181,14 @@
 			files = (
 				09CF4C3970618994C1F4AD74 /* Sparkle in Frameworks */,
 				7A98271CEF2DBF64523D9EC1 /* SaneUI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A6BB611593AED691253F5056 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D934D0819D52D0C810281548 /* SaneUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,6 +229,7 @@
 		548AC026F47CA71DE134E308 /* SaneClick */ = {
 			isa = PBXGroup;
 			children = (
+				BA8B50CEA8F97A893927BB7D /* DirectDistributionSupport.swift */,
 				A0A32F90AD3B2ECB3E9A6B36 /* Info.plist */,
 				7561E69DFD12512C70D2215B /* ProFeature.swift */,
 				E68AE3D3E5F32A83827F08A7 /* SaneClick-AppStore.entitlements */,
@@ -192,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				39A0410720375087F54994CE /* SaneClick.app */,
+				C7D697C2D4CBA6B49BECA004 /* SaneClickAppStore.app */,
 				8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */,
 				08770D312D62F0A9C67BFCB9 /* SaneClickTests.xctest */,
 			);
@@ -289,7 +347,6 @@
 				2AE8693721B632685F9DAA82 /* Resources */,
 				7C7E86F91776384DC6392F38 /* Frameworks */,
 				503AAFBD32528E884F0EAFD9 /* Embed Foundation Extensions */,
-				E3BB46817582126F330F6DE1 /* Strip Sparkle for App Store */,
 			);
 			buildRules = (
 			);
@@ -321,6 +378,28 @@
 			productName = SaneClickExtension;
 			productReference = 8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		2964F8430D462CA61E76DB02 /* SaneClickAppStore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5E9004E72647DCBD40548CAF /* Build configuration list for PBXNativeTarget "SaneClickAppStore" */;
+			buildPhases = (
+				718E1DF25BD8553EAEB29E54 /* Sources */,
+				26F56EC5603B59517FD13C39 /* Resources */,
+				A6BB611593AED691253F5056 /* Frameworks */,
+				156E549314FCFE5CD5383061 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2F5079648F6AD9FAC7415523 /* PBXTargetDependency */,
+			);
+			name = SaneClickAppStore;
+			packageProductDependencies = (
+				9F1286E819DE20012553BDE1 /* SaneUI */,
+			);
+			productName = SaneClickAppStore;
+			productReference = C7D697C2D4CBA6B49BECA004 /* SaneClickAppStore.app */;
+			productType = "com.apple.product-type.application";
 		};
 		98B217566C1AA5827815DCE6 /* SaneClickTests */ = {
 			isa = PBXNativeTarget;
@@ -373,6 +452,7 @@
 			projectRoot = "";
 			targets = (
 				045E264D93104989A0572DFA /* SaneClick */,
+				2964F8430D462CA61E76DB02 /* SaneClickAppStore */,
 				263057A7946DC444B1EC8233 /* SaneClickExtension */,
 				98B217566C1AA5827815DCE6 /* SaneClickTests */,
 			);
@@ -380,6 +460,15 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		26F56EC5603B59517FD13C39 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C94E2F1B3ACA6C7E0BD129AA /* Assets.xcassets in Resources */,
+				31AC9D9565D351875B198DDC /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2AE8693721B632685F9DAA82 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -390,28 +479,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		E3BB46817582126F330F6DE1 /* Strip Sparkle for App Store */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Strip Sparkle for App Store";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" = \"Release-AppStore\" ]; then\n  echo \"App Store build: stripping Sparkle framework and keys...\"\n  rm -rf \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sparkle.framework\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Delete :SUFeedURL\" \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Delete :SUPublicEDKey\" \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Delete :SUEnableAutomaticChecks\" \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Delete :SUEnableSystemProfiling\" \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Delete :NSAppleEventsUsageDescription\" \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true\n\n  APP_BINARY=\"${TARGET_BUILD_DIR}/${EXECUTABLE_PATH}\"\n  WEAKEN_SCRIPT=\"${SRCROOT}/../../infra/SaneProcess/scripts/weaken_sparkle.rb\"\n  if [ -f \"${WEAKEN_SCRIPT}\" ] && [ -f \"${APP_BINARY}\" ]; then\n    ruby \"${WEAKEN_SCRIPT}\" \"${APP_BINARY}\" || exit 1\n  fi\n\n  echo \"App Store build: Sparkle stripped and weak-linked.\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3290F15B85EA6052786CFCED /* Sources */ = {
@@ -424,6 +491,7 @@
 				0D111DBAB50E53218731BCAB /* CategoryEditorView.swift in Sources */,
 				CA389228F1F7FE16FF17D850 /* ContentView.swift in Sources */,
 				AD2450C8572F6E5827CA4DE9 /* DefaultScripts.swift in Sources */,
+				FAED3702C92DCECD0123044B /* DirectDistributionSupport.swift in Sources */,
 				ABE641DDFB2FA603A3BF14BD /* ExtensionStatusService.swift in Sources */,
 				96FF0C54A60D14A759E109CB /* FinderControl.swift in Sources */,
 				D2804ED379719BFC7420BA98 /* ImportExportView.swift in Sources */,
@@ -440,6 +508,36 @@
 				1DE6BF747A96A9042AF2F879 /* ScriptStore.swift in Sources */,
 				803A6EFC382E0445C1D9CCA4 /* SettingsView.swift in Sources */,
 				31244C53696A66D583170549 /* UpdateService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		718E1DF25BD8553EAEB29E54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7886BBDB60B447EE583AFD2 /* AppPreferences.swift in Sources */,
+				9AC93BCBE2F4543EC1691704 /* AppStoreNativeAction.swift in Sources */,
+				395985D6C5DDC4E3B5D4030A /* Category.swift in Sources */,
+				985B54C7FA6D8961728EBB9A /* CategoryEditorView.swift in Sources */,
+				A835726077778654601A5DF6 /* ContentView.swift in Sources */,
+				E646F123A34072852AA1F4B1 /* DefaultScripts.swift in Sources */,
+				300E8E5181F1B20D980FFEE1 /* DirectDistributionSupport.swift in Sources */,
+				3AA1657E2507EC25CA62B705 /* ExtensionStatusService.swift in Sources */,
+				C783F29A466DD724C8040AC0 /* FinderControl.swift in Sources */,
+				2FE77C4D19704C748426146B /* ImportExportView.swift in Sources */,
+				208F9AF07BD57E545DFA327C /* MenuBarController.swift in Sources */,
+				B863B7721AC91FC4A31AD179 /* MonitoredFolderService.swift in Sources */,
+				347583F7E4F146C5BEEE9D21 /* MonitoredFolders.swift in Sources */,
+				0227BF1EF92C137AF9F4E394 /* ProFeature.swift in Sources */,
+				A32EFFBFF6ED1304526BF32F /* SaneClickApp.swift in Sources */,
+				3C26D6534EF5533C89A950A6 /* SaneColors.swift in Sources */,
+				F52F937E1B88C7672C3470CA /* Script.swift in Sources */,
+				A2814B7D8E5C998434A68C28 /* ScriptEditorView.swift in Sources */,
+				2EB015FA609862A4838D87AF /* ScriptExecutor.swift in Sources */,
+				4293100EAB878ED0D89819E4 /* ScriptLibraryView.swift in Sources */,
+				069D968637A1F3C0CFF84CF7 /* ScriptStore.swift in Sources */,
+				3403559622138EF20F1F7335 /* SettingsView.swift in Sources */,
+				21BA87EACB53CCF3867B7247 /* UpdateService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,6 +573,11 @@
 			isa = PBXTargetDependency;
 			target = 263057A7946DC444B1EC8233 /* SaneClickExtension */;
 			targetProxy = ACEBBDDA4F59B372B87EC14E /* PBXContainerItemProxy */;
+		};
+		2F5079648F6AD9FAC7415523 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 263057A7946DC444B1EC8233 /* SaneClickExtension */;
+			targetProxy = 16349FC967C6555AC3928FDD /* PBXContainerItemProxy */;
 		};
 		7A848F6A8DAF2EAD89C7B4E1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -603,6 +706,36 @@
 			};
 			name = ProdDebug;
 		};
+		0C66080762DC52A8358550B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "SaneClick/SaneClick-AppStore.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1101;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = SaneClick/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.1.1;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
+				PRODUCT_NAME = SaneClick;
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				VALID_ARCHS = arm64;
+			};
+			name = Debug;
+		};
 		1B7D934CC5CD4F01A80BDFAC /* ProdDebug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -645,6 +778,37 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClickTests;
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClick.app/Contents/MacOS/SaneClick";
+				VALID_ARCHS = arm64;
+			};
+			name = Release;
+		};
+		314996F2FB6752433444EDB9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "SaneClick/SaneClick-AppStore.entitlements";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1101;
+				DEVELOPMENT_TEAM = M78L6FXD48;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = SaneClick/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.1.1;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
+				PRODUCT_NAME = SaneClick;
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
 				VALID_ARCHS = arm64;
 			};
 			name = Release;
@@ -737,6 +901,37 @@
 			};
 			name = Release;
 		};
+		5772BA0600E5EB10A2A9A031 /* ProdDebug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "SaneClick/SaneClick-AppStore.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1101;
+				DEVELOPMENT_TEAM = M78L6FXD48;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = SaneClick/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.1.1;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
+				PRODUCT_NAME = SaneClick;
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				VALID_ARCHS = arm64;
+			};
+			name = ProdDebug;
+		};
 		915118A97D1D9B364C4980B1 /* ProdDebug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -775,7 +970,7 @@
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
-				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.unlock.v2;
+				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.unlock.v3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -867,6 +1062,37 @@
 				VALID_ARCHS = arm64;
 			};
 			name = Debug;
+		};
+		D597DAF228F1681A799B6B98 /* Release-AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "SaneClick/SaneClick-AppStore.entitlements";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1101;
+				DEVELOPMENT_TEAM = M78L6FXD48;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = SaneClick/Info.plist;
+				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.unlock.v3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.1.1;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
+				PRODUCT_NAME = SaneClick;
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				VALID_ARCHS = arm64;
+			};
+			name = "Release-AppStore";
 		};
 		ECD944BEBAEED16C60D2304D /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -1060,6 +1286,17 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		5E9004E72647DCBD40548CAF /* Build configuration list for PBXNativeTarget "SaneClickAppStore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0C66080762DC52A8358550B6 /* Debug */,
+				5772BA0600E5EB10A2A9A031 /* ProdDebug */,
+				314996F2FB6752433444EDB9 /* Release */,
+				D597DAF228F1681A799B6B98 /* Release-AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		7882A228C72BC541A5D61145 /* Build configuration list for PBXNativeTarget "SaneClickTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1104,6 +1341,10 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		9B8390F8830A9BA53FD66F1F /* SaneUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SaneUI;
+		};
+		9F1286E819DE20012553BDE1 /* SaneUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SaneUI;
 		};

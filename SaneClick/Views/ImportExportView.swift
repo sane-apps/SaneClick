@@ -329,10 +329,23 @@ private struct StatusBanner: View {
 #Preview {
     ImportExportView(
         mode: .constant(.importScripts),
-        licenseService: LicenseService(
-            appName: "SaneClick",
-            checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick")
-        )
+        licenseService: importExportPreviewLicenseService()
     )
     .environment(ScriptStore.shared)
+}
+
+@MainActor
+private func importExportPreviewLicenseService() -> LicenseService {
+    #if APP_STORE
+        LicenseService(
+            appName: "SaneClick",
+            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.unlock.v3")
+        )
+    #else
+        LicenseService(
+            appName: "SaneClick",
+            checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick"),
+            directCopy: LicenseService.DirectCopy.saneClick
+        )
+    #endif
 }

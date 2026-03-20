@@ -65,9 +65,21 @@ struct AppStoreReviewGuardrailTests {
         let displayName = String(manifest.matches(of: namePattern).first?.output.1 ?? "")
         let description = String(manifest.matches(of: descriptionPattern).first?.output.1 ?? "")
 
-        #expect(productId == "com.saneclick.app.pro.unlock.v2")
-        #expect(displayName == "SaneClick Pro Upgrade")
+        #expect(productId == "com.saneclick.app.pro.unlock.v3")
+        #expect(displayName == "SaneClick Pro Actions")
         #expect(description == "Unlock 9 more built-in file actions.")
         #expect(description.localizedCaseInsensitiveContains("one-time purchase") == false)
+    }
+
+    @Test("App Store review notes explain where review can find Pro")
+    func appStoreReviewNotesExplainProPath() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let manifest = try String(contentsOf: projectRoot.appendingPathComponent(".saneprocess"), encoding: .utf8)
+
+        #expect(manifest.localizedCaseInsensitiveContains("Settings > License"))
+        #expect(manifest.localizedCaseInsensitiveContains("Browse Library"))
+        #expect(manifest.localizedCaseInsensitiveContains("Unlock Pro"))
     }
 }

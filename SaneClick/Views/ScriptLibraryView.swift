@@ -523,9 +523,22 @@ struct ScriptLibraryView: View {
 }
 
 #Preview {
-    ScriptLibraryView(licenseService: LicenseService(
-        appName: "SaneClick",
-        checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick")
-    ))
+    ScriptLibraryView(licenseService: scriptLibraryPreviewLicenseService())
     .environment(ScriptStore.shared)
+}
+
+@MainActor
+private func scriptLibraryPreviewLicenseService() -> LicenseService {
+    #if APP_STORE
+        LicenseService(
+            appName: "SaneClick",
+            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.unlock.v3")
+        )
+    #else
+        LicenseService(
+            appName: "SaneClick",
+            checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick"),
+            directCopy: LicenseService.DirectCopy.saneClick
+        )
+    #endif
 }

@@ -160,6 +160,16 @@ struct SettingsView: View {
                     SaneSparkleRow(
                         automaticallyChecks: $automaticallyChecksForUpdates,
                         checkFrequency: $updateCheckFrequency,
+                        labels: .init(
+                            automaticCheckLabel: "Check for updates automatically",
+                            automaticCheckHelp: "Periodically check for new versions",
+                            checkFrequencyLabel: "Check frequency",
+                            checkFrequencyHelp: "Choose how often automatic update checks run",
+                            actionsLabel: "Actions",
+                            checkingLabel: "Checking…",
+                            checkNowLabel: "Check Now",
+                            checkNowHelp: "Check for updates right now"
+                        ),
                         onCheckNow: { updateService.checkForUpdates() }
                     )
                     .onChange(of: automaticallyChecksForUpdates) { _, newValue in
@@ -193,15 +203,13 @@ struct SettingsView: View {
             SaneAboutView(
                 appName: "SaneClick",
                 githubRepo: "SaneClick",
-                diagnosticsService: .shared,
-                showsSupportSection: false
+                diagnosticsService: .shared
             )
         #else
             SaneAboutView(
                 appName: "SaneClick",
                 githubRepo: "SaneClick",
-                diagnosticsService: .shared,
-                showsSupportSection: true
+                diagnosticsService: .shared
             )
         #endif
     }
@@ -270,10 +278,23 @@ private func collectSaneClickSettings() -> String {
 }
 
 #Preview {
-    SettingsView(licenseService: LicenseService(
-        appName: "SaneClick",
-        checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick")
-    ))
+    SettingsView(licenseService: settingsPreviewLicenseService())
     .environment(ScriptStore.shared)
     .environment(MonitoredFolderService.shared)
+}
+
+@MainActor
+private func settingsPreviewLicenseService() -> LicenseService {
+    #if APP_STORE
+        LicenseService(
+            appName: "SaneClick",
+            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.unlock.v3")
+        )
+    #else
+        LicenseService(
+            appName: "SaneClick",
+            checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick"),
+            directCopy: LicenseService.DirectCopy.saneClick
+        )
+    #endif
 }

@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "045E264D93104989A0572DFA"
-               BuildableName = "SaneClick.app"
-               BlueprintName = "SaneClick"
+               BlueprintIdentifier = "2964F8430D462CA61E76DB02"
+               BuildableName = "SaneClickAppStore.app"
+               BlueprintName = "SaneClickAppStore"
                ReferencedContainer = "container:SaneClick.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,9 +46,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "045E264D93104989A0572DFA"
-            BuildableName = "SaneClick.app"
-            BlueprintName = "SaneClick"
+            BlueprintIdentifier = "2964F8430D462CA61E76DB02"
+            BuildableName = "SaneClickAppStore.app"
+            BlueprintName = "SaneClickAppStore"
             ReferencedContainer = "container:SaneClick.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -69,9 +69,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "045E264D93104989A0572DFA"
-            BuildableName = "SaneClick.app"
-            BlueprintName = "SaneClick"
+            BlueprintIdentifier = "2964F8430D462CA61E76DB02"
+            BuildableName = "SaneClickAppStore.app"
+            BlueprintName = "SaneClickAppStore"
             ReferencedContainer = "container:SaneClick.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -86,9 +86,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "045E264D93104989A0572DFA"
-            BuildableName = "SaneClick.app"
-            BlueprintName = "SaneClick"
+            BlueprintIdentifier = "2964F8430D462CA61E76DB02"
+            BuildableName = "SaneClickAppStore.app"
+            BlueprintName = "SaneClickAppStore"
             ReferencedContainer = "container:SaneClick.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
