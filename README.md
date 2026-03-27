@@ -154,6 +154,19 @@ SaneClick/
 
 ---
 
+## Documentation
+
+| Document | Purpose |
+|----------|---------|
+| [README.md](README.md) | Product overview and doc map |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | System design and state machines |
+| [DEVELOPMENT.md](DEVELOPMENT.md) | Build, test, and workflow SOP |
+| [PRIVACY.md](PRIVACY.md) | Privacy practices and limited network behavior |
+| [SECURITY.md](SECURITY.md) | Security policy and vulnerability reporting |
+| [`docs/`](docs/) | Public website and guide pages |
+
+---
+
 ## Our Promise
 
 > *"For God has not given us a spirit of fear, but of power and of love and of a sound mind."*
@@ -161,7 +174,7 @@ SaneClick/
 
 | Pillar | Meaning |
 |--------|---------|
-| **⚡ Power** | Your data stays on your device. No cloud, no tracking. |
+| **⚡ Power** | Your files stay on your device. No cloud account, no personal-content upload. |
 | **❤️ Love** | Built to serve you. No dark patterns or manipulation. |
 | **🧠 Sound Mind** | Calm, focused design. Does one thing well. |
 

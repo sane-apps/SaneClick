@@ -111,10 +111,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
     @MainActor
     @objc private func openApp() {
-        NSApp.activate(ignoringOtherApps: true)
-        for window in NSApp.windows {
-            window.makeKeyAndOrderFront(nil)
-        }
+        WindowActionStorage.shared.showMainWindow()
     }
 
     #if !APP_STORE

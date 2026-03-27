@@ -245,7 +245,7 @@ struct ScriptLibraryView: View {
 
                         Image(systemName: category.icon)
                             .font(.title2)
-                            .foregroundStyle(isLocked ? Color.saneSilver : categoryColor)
+                            .foregroundStyle(categoryColor)
 
                         VStack(alignment: .leading, spacing: 2) {
                             HStack(spacing: 6) {
@@ -269,8 +269,8 @@ struct ScriptLibraryView: View {
                             }
 
                             if isLocked {
-                                Text("Upgrade to enable")
-                                    .font(.caption)
+                                Text("\(totalInCategory) scripts included with Pro")
+                                    .font(.subheadline)
                                     .foregroundStyle(Color.saneSilver)
                             } else {
                                 HStack(spacing: 4) {
@@ -296,7 +296,7 @@ struct ScriptLibraryView: View {
                         HStack(spacing: 5) {
                             Image(systemName: "lock.fill")
                                 .font(.system(size: 11))
-                            Text("Unlock")
+                            Text("Unlock Pro")
                                 .font(.system(size: 12, weight: .semibold))
                         }
                         .foregroundStyle(.white)
@@ -329,47 +329,38 @@ struct ScriptLibraryView: View {
             // Scripts list (collapsible) — always show for free categories, Pro shows teaser
             if isExpanded, !libraryScripts.isEmpty {
                 if isLocked {
-                    // Show a teaser with blur and unlock prompt
-                    ZStack(alignment: .center) {
-                        VStack(spacing: 8) {
-                            ForEach(libraryScripts.prefix(3), id: \.name) { libraryScript in
-                                HStack(spacing: 14) {
-                                    Image(systemName: libraryScript.icon)
-                                        .font(.title3)
-                                        .foregroundStyle(Color.saneSilver)
-                                        .frame(width: 36, height: 36)
-                                        .background(Color.saneSmoke)
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
-
-                                    Text(libraryScript.name)
-                                        .font(.body)
-                                        .fontWeight(.medium)
-                                        .foregroundStyle(Color.saneSilver)
-
-                                    Spacer()
+                    // Show the actual scripts so users can see what Pro includes
+                    VStack(spacing: 8) {
+                        ForEach(libraryScripts, id: \.name) { libraryScript in
+                            LibraryScriptRow(
+                                libraryScript: libraryScript,
+                                isInstalled: false,
+                                isEnabled: false,
+                                categoryColor: categoryColor,
+                                isLocked: true,
+                                onToggle: { _ in },
+                                onLockedTap: {
+                                    proUpsellFeature = proFeatureForCategory(category)
                                 }
-                                .padding(14)
-                                .background { RoundedRectangle(cornerRadius: 12).fill(Color.saneCarbon) }
-                            }
+                            )
                         }
-                        .blur(radius: 3)
-                        .allowsHitTesting(false)
 
-                        Button {
-                            proUpsellFeature = proFeatureForCategory(category)
-                        } label: {
-                            HStack(spacing: 8) {
-                                Image(systemName: "lock.fill")
-                                    .font(.system(size: 13))
-                                Text("Unlock \(totalInCategory) scripts")
+                        HStack {
+                            Text("\(totalInCategory) scripts included with Pro")
+                                .font(.subheadline)
+                                .foregroundStyle(Color.saneSilver)
+
+                            Spacer()
+
+                            Button {
+                                proUpsellFeature = proFeatureForCategory(category)
+                            } label: {
+                                Label("Unlock Pro", systemImage: "lock.fill")
                                     .font(.system(size: 13, weight: .semibold))
                             }
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 8)
+                            .buttonStyle(.borderedProminent)
+                            .tint(.teal)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.teal)
                     }
                 } else {
                     VStack(spacing: 8) {

@@ -1,5 +1,7 @@
 # SaneClick Architecture
 
+> [README](README.md) · [ARCHITECTURE](ARCHITECTURE.md) · [DEVELOPMENT](DEVELOPMENT.md) · [PRIVACY](PRIVACY.md) · [SECURITY](SECURITY.md)
+
 Last updated: 2026-02-02
 
 ## Purpose

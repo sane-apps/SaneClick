@@ -37,14 +37,27 @@ appstore:
   marketing_url: "https://saneclick.com"
   metadata:
     macos:
-      subtitle: "Built-In File Actions"
-      promotional_text: "Add built-in file actions to the folders you choose. Rename, organize, hash, and inspect files without leaving your workflow."
+      subtitle: "Right-Click File Tools"
+      promotional_text: "Add native Finder actions to the folders you choose. Free includes 9 core actions; Pro adds batch rename, hashing, and more built-in file tools."
       description: >-
-        SaneClick adds built-in right-click file actions to the folders you choose on your Mac.
-        Use it to copy paths, rename files, organize folders, create text files, calculate hashes, clean up .DS_Store files, and handle other everyday file tasks without leaving your current folder workflow.
-        Everything runs locally on your Mac. No tracking. No cloud service.
-      keywords: "right click,file actions,file tools,rename,organize,clipboard,folders,productivity"
-      whats_new: "App Store build now uses monitored folders with built-in native actions, plus smoother Finder extension reliability."
+        Add native right-click actions to the folders you choose in Finder.
+
+        SaneClick keeps your Finder context menu focused by only showing actions inside the folders you monitor. Copy paths, create text files, reveal items, rename in batches, hash files, and work faster without leaving Finder.
+
+        Free includes:
+        • 9 built-in Finder actions
+        • Monitored folders
+        • Finder Sync actions inside those selected folders
+
+        Pro unlock adds:
+        • 9 more built-in Finder actions
+        • Batch rename and advanced file and folder tools
+        • MD5 and SHA-256 hashing
+        • Restore purchases across your Macs
+
+        Everything runs locally on your Mac.
+      keywords: "context menu,folders,batch rename,hash,copy path,terminal,file info,duplicate,productivity"
+      whats_new: "Improves Finder extension reliability and makes the Pro upgrade path clearer in the App Store build."
       marketing_url: "https://saneclick.com"
   review_notes_by_platform:
     macos: >-
@@ -52,10 +65,12 @@ appstore:
       Review steps:
       1. Launch SaneClick.
       2. Continue onboarding to the final screen and click "Unlock Pro" to review the optional StoreKit purchase flow.
-      3. If onboarding has already been dismissed, open Settings > License, or open Browse Library and select a locked category to see the same unlock flow again.
-      The free download includes 9 built-in native file actions, monitored folders, and the Finder Sync extension inside those selected folders.
-      SaneClick Pro is an optional one-time non-consumable StoreKit in-app purchase that adds 9 more built-in native actions, including additional files-and-folders utilities and advanced hashing tools.
-      There is no external checkout, website checkout, license key, or external payment flow in this build.
+      3. If onboarding has already been dismissed, use the visible "Unlock Pro" action in the sidebar Quick Actions section or open Settings > License.
+      4. To see what Pro includes before purchasing, open Browse Library and select a Pro category such as "Files & Folders" or "Advanced". The locked actions remain visible with Pro badges.
+      The free download includes 9 built-in Finder actions, monitored folders, and Finder Sync inside those selected folders.
+      SaneClick Pro is an optional one-time non-consumable StoreKit in-app purchase that adds 9 more built-in Finder actions, including batch rename, additional file-and-folder tools, and MD5 / SHA-256 hashing.
+      There is no Donate, Support the Developer, GitHub Sponsors, or other outside payment flow in this build.
+      No external checkout or license key flow exists in this build.
       The App Store build no longer runs user-created scripts.
       There are no Apple Events or automation entitlements in this build.
   iap:

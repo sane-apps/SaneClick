@@ -5,32 +5,40 @@ enum ExtensionStatusService {
     /// Bundle identifier of the Finder Sync extension
     static let extensionBundleId = "com.saneclick.SaneClick.FinderSync"
 
+    static func parsePluginKitEnabled(_ output: String) -> Bool {
+        output
+            .split(whereSeparator: \.isNewline)
+            .contains { line in
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                return trimmed.hasPrefix("+") && trimmed.contains(extensionBundleId)
+            }
+    }
+
+    private static func pluginKitOutput() -> String? {
+        let process = Process()
+        let pipe = Pipe()
+
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/pluginkit")
+        process.arguments = ["-m", "-v", "-i", extensionBundleId]
+        process.standardOutput = pipe
+        process.standardError = pipe
+
+        do {
+            try process.run()
+            process.waitUntilExit()
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            return String(data: data, encoding: .utf8) ?? ""
+        } catch {
+            return nil
+        }
+    }
+
     /// Check if the extension is registered and enabled
     static func isExtensionEnabled() -> Bool {
-        #if !APP_STORE
-            let process = Process()
-            let pipe = Pipe()
-
-            process.executableURL = URL(fileURLWithPath: "/usr/bin/pluginkit")
-            process.arguments = ["-m", "-v", "-i", extensionBundleId]
-            process.standardOutput = pipe
-            process.standardError = pipe
-
-            do {
-                try process.run()
-                process.waitUntilExit()
-
-                let data = pipe.fileHandleForReading.readDataToEndOfFile()
-                let output = String(data: data, encoding: .utf8) ?? ""
-
-                return output.contains("+") && output.contains(extensionBundleId)
-            } catch {
-                return false
-            }
-        #else
-            // App Store: use FIFinderSyncController API instead of pluginkit
-            return true
-        #endif
+        guard let output = pluginKitOutput() else {
+            return false
+        }
+        return parsePluginKitEnabled(output)
     }
 
     /// Check if the extension process is currently running

@@ -3,6 +3,25 @@ import Testing
 @testable import SaneClick
 
 struct ExtensionStatusTests {
+    @Test("pluginkit output parser detects enabled extension")
+    func parsePluginkitEnabledOutput() {
+        let output = """
+        +    com.saneclick.SaneClick.FinderSync(1.1.0)\tUUID\t2026-03-16 23:01:17 +0000\t/Applications/SaneClick.app/Contents/PlugIns/SaneClickExtension.appex
+         (1 plug-in)
+        """
+
+        #expect(ExtensionStatusService.parsePluginKitEnabled(output) == true)
+    }
+
+    @Test("pluginkit output parser rejects disabled extension")
+    func parsePluginkitDisabledOutput() {
+        let output = """
+        -    com.saneclick.SaneClick.FinderSync(1.1.0)\tUUID\t2026-03-16 23:01:17 +0000\t/Applications/SaneClick.app/Contents/PlugIns/SaneClickExtension.appex
+         (1 plug-in)
+        """
+
+        #expect(ExtensionStatusService.parsePluginKitEnabled(output) == false)
+    }
 
     // MARK: - ExtensionStatus Enum Tests
 

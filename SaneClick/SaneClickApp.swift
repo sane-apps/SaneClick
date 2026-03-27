@@ -1,4 +1,3 @@
-import FinderSync
 import SaneUI
 import SwiftUI
 
@@ -38,6 +37,7 @@ final class SettingsActionStorage {
 final class WindowActionStorage {
     static let shared = WindowActionStorage()
     var openWindow: ((String) -> Void)?
+    weak var mainWindow: NSWindow?
 
     func capture(_ action: OpenWindowAction) {
         openWindow = { id in
@@ -45,18 +45,24 @@ final class WindowActionStorage {
         }
     }
 
+    func captureMainWindow(_ window: NSWindow?) {
+        guard let window, window.canBecomeMain, !window.isSheet else { return }
+        mainWindow = window
+    }
+
     func showMainWindow() {
-        let mainWindow = NSApp.windows.first(where: {
+        let window = mainWindow ?? NSApp.windows.first(where: {
             $0.canBecomeMain &&
                 $0.contentView != nil &&
-                $0.identifier?.rawValue.contains("main") == true
+                ($0.identifier?.rawValue.contains("main") == true || !$0.title.isEmpty)
         })
 
-        if let window = mainWindow {
+        if let window {
             if window.isMiniaturized {
                 window.deminiaturize(nil)
             }
             window.makeKeyAndOrderFront(nil)
+            mainWindow = window
         } else {
             openWindow?("main")
         }
@@ -172,12 +178,6 @@ struct SaneClickApp: App {
         // Initialize ScriptExecutor to register notification listener for extension requests
         _ = ScriptExecutor.shared
 
-        // Prompt user to enable Finder extension if not already enabled
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            if !FIFinderSyncController.isExtensionEnabled {
-                FIFinderSyncController.showExtensionManagementInterface()
-            }
-        }
     }
 
     var body: some Scene {
@@ -188,6 +188,7 @@ struct SaneClickApp: App {
                 .modifier(SettingsLauncher())
                 .modifier(SettingsActionCapture())
                 .modifier(WindowActionCapture())
+                .background(MainWindowCaptureView())
                 .preferredColorScheme(.dark)
                 .sheet(isPresented: Binding(
                     get: { !hasSeenWelcome },
@@ -196,8 +197,10 @@ struct SaneClickApp: App {
                     WelcomeGateView(
                         appName: "SaneClick",
                         appIcon: "cursorarrow.click.2",
-                        freeFeatures: welcomeFreeFeatures,
-                        proFeatures: welcomeProFeatures,
+                        freeFeatures: SaneClickWelcomeCopy.freeFeatures,
+                        proFeatures: SaneClickWelcomeCopy.proFeatures,
+                        freeTierPrice: SaneClickWelcomeCopy.basicPrice,
+                        proTierPriceOverride: SaneClickWelcomeCopy.proPrice,
                         licenseService: licenseService
                     )
                     .preferredColorScheme(.dark)
@@ -269,40 +272,70 @@ struct WindowActionCapture: ViewModifier {
     }
 }
 
-private let welcomeFreeFeatures: [(String, String)] = {
-    #if APP_STORE
-        [
-            ("star.fill", "9 built-in Finder actions"),
-            ("folder.badge.gearshape", "Choose the folders SaneClick watches"),
-            ("checkmark.shield", "No account or signup needed")
-        ]
-    #else
-        [
-            ("star.fill", "10 Essential Finder actions"),
-            ("cursorarrow.click.2", "Right-click on any file or folder"),
-            ("checkmark.shield", "No account or signup needed")
-        ]
-    #endif
-}()
+struct MainWindowCaptureView: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        DispatchQueue.main.async {
+            WindowActionStorage.shared.captureMainWindow(view.window)
+        }
+        return view
+    }
 
-private let welcomeProFeatures: [(String, String)] = {
-    #if APP_STORE
-        [
-            ("folder.fill", "7 Files & Folders actions"),
-            ("wrench.and.screwdriver.fill", "2 Advanced hashing actions")
-        ]
-    #else
-        [
-            ("square.stack.3d.up.fill", "All 50+ scripts across 5 categories"),
-            ("chevron.left.forwardslash.chevron.right", "12 Coding scripts"),
-            ("photo.on.rectangle.angled", "10 Images & Media scripts"),
-            ("wrench.and.screwdriver.fill", "10 Advanced scripts"),
-            ("folder.fill", "8 Files & Folders scripts"),
-            ("square.and.pencil", "Custom Script Editor"),
-            ("square.and.arrow.up.on.square", "Import / Export scripts")
-        ]
-    #endif
-}()
+    func updateNSView(_ nsView: NSView, context: Context) {
+        DispatchQueue.main.async {
+            WindowActionStorage.shared.captureMainWindow(nsView.window)
+        }
+    }
+}
+
+enum SaneClickWelcomeCopy {
+    static let basicPrice = "Included"
+    static let proPrice = "One-time unlock"
+
+    static let freeFeatures: [(String, String)] = {
+        #if APP_STORE
+            [
+                ("star.fill", "\(AppStoreActionCatalog.basicActions.count) core Finder actions"),
+                ("doc.on.doc.fill", "Copy paths, names, and file info"),
+                ("terminal.fill", "Open in Terminal and create text files"),
+                ("wand.and.stars", "Reveal, duplicate, clean, and make files executable")
+            ]
+        #else
+            let basicCount = ScriptLibrary.availableScripts(for: .universal).count
+            return [
+                ("star.fill", "\(basicCount) core Finder actions"),
+                ("cursorarrow.click.2", "Run the essentials from any Finder right-click"),
+                ("terminal.fill", "Copy, reveal, duplicate, and open folders in Terminal"),
+                ("checkmark.shield", "No account or signup needed")
+            ]
+        #endif
+    }()
+
+    static let proFeatures: [(String, String)] = {
+        #if APP_STORE
+            [
+                ("checkmark", "Everything in Basic, plus:"),
+                ("folder.badge.plus", "\(AppStoreActionCatalog.proActions.count) more built-in Finder actions"),
+                ("folder.badge.gearshape", "Batch rename and organization tools"),
+                ("number.square.fill", "MD5 + SHA256 hashing"),
+                ("arrow.clockwise", "Restore purchases on your Macs")
+            ]
+        #else
+            let proCount = ScriptLibrary
+                .availableCategories
+                .filter { $0 != .universal }
+                .map { ScriptLibrary.availableScripts(for: $0).count }
+                .reduce(0, +)
+            return [
+                ("checkmark", "Everything in Basic, plus:"),
+                ("folder.badge.plus", "\(proCount) more built-in Finder actions"),
+                ("square.stack.3d.up.fill", "Developer, media, advanced, and organization tools"),
+                ("square.and.pencil", "Build your own custom Finder scripts"),
+                ("square.and.arrow.up.on.square", "Import and export your library")
+            ]
+        #endif
+    }()
+}
 
 struct AppCommands: Commands {
     var body: some Commands {

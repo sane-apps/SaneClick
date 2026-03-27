@@ -35,6 +35,32 @@ enum AppStoreNativeAction: String, CaseIterable, Sendable {
     }
 }
 
+enum AppStoreActionCatalog {
+    static let basicActions: [AppStoreNativeAction] = [
+        .copyPath,
+        .copyFilename,
+        .openInTerminal,
+        .newTextFile,
+        .deleteDSStoreFiles,
+        .duplicateWithTimestamp,
+        .getFileInfo,
+        .revealInFinder,
+        .makeExecutable
+    ]
+
+    static let proActions: [AppStoreNativeAction] = [
+        .md5Hash,
+        .sha256Hash,
+        .createFolderFromSelection,
+        .flattenFolder,
+        .organizeByExtension,
+        .organizeByDate,
+        .renameWithSequence,
+        .lowercaseFilenames,
+        .replaceSpacesWithUnderscores
+    ]
+}
+
 enum AppStoreNativeActionExecutor {
     static func execute(_ action: AppStoreNativeAction, paths: [String]) throws -> String {
         let urls = paths.map { URL(fileURLWithPath: $0).standardizedFileURL }

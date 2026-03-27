@@ -26,11 +26,7 @@ struct ContentView: View {
             sidebar
                 .navigationSplitViewColumnWidth(min: 220, ideal: 250, max: 300)
         } detail: {
-            ZStack {
-                Color.saneNavy.opacity(0.3)
-                    .ignoresSafeArea()
-                detailView
-            }
+            detailBackground
         }
         .navigationTitle("SaneClick")
         .sheet(isPresented: $showLibrary) {
@@ -85,6 +81,14 @@ struct ContentView: View {
         }
     }
 
+    private var detailBackground: some View {
+        ZStack {
+            Color.saneNavy.opacity(0.3)
+                .ignoresSafeArea()
+            detailView
+        }
+    }
+
     // MARK: - Sidebar
 
     private var sidebar: some View {
@@ -102,6 +106,17 @@ struct ContentView: View {
                 }
 
                 #if APP_STORE
+                    if !licenseService.isPro {
+                        QuickActionRow(
+                            title: "Unlock Pro",
+                            subtitle: "Get 9 more built-in file actions",
+                            icon: "lock.open.fill",
+                            color: .teal
+                        ) {
+                            proUpsellFeature = .organizationScripts
+                        }
+                    }
+
                     QuickActionRow(
                         title: "Manage Folders",
                         subtitle: monitoredFolderSubtitle,
@@ -202,6 +217,8 @@ struct ContentView: View {
             }
         }
         .listStyle(.sidebar)
+        .scrollContentBackground(.hidden)
+        .background(Color.saneNavy.opacity(0.3))
     }
 
     // MARK: - Detail View
@@ -243,7 +260,7 @@ struct ContentView: View {
                 HStack {
                     Image(systemName: category.icon)
                         .font(.title)
-                        .foregroundStyle(isLocked ? Color.saneSilver : categoryColor)
+                        .foregroundStyle(categoryColor)
 
                     VStack(alignment: .leading, spacing: 2) {
                         HStack(spacing: 8) {
@@ -259,7 +276,7 @@ struct ContentView: View {
                         // Active count in green (success), total available
                         HStack(spacing: 4) {
                             if isLocked {
-                                Text("Pro feature")
+                                Text("\(libraryScripts.count) scripts included with Pro")
                                     .foregroundStyle(Color.saneSilver)
                             } else {
                                 Text("\(activeCount)")
@@ -281,7 +298,7 @@ struct ContentView: View {
                             HStack(spacing: 6) {
                                 Image(systemName: "lock.fill")
                                     .font(.system(size: 12))
-                                Text("Unlock")
+                                Text("Unlock Pro")
                                     .font(.system(size: 13, weight: .semibold))
                             }
                             .foregroundStyle(.white)
@@ -319,7 +336,7 @@ struct ContentView: View {
                 #endif
 
                 if isLocked {
-                    // Locked state — show blurred preview
+                    // Locked state — show the actual scripts with clear Pro tagging
                     lockedCategoryOverlay(category: category, color: categoryColor)
                 } else {
                     // Show ALL library scripts for this category
@@ -348,87 +365,42 @@ struct ContentView: View {
         }
     }
 
-    /// A blurred script list with an unlock CTA overlay for locked Pro categories.
+    /// Show the actual scripts in Pro categories so users can see what Pro includes.
     private func lockedCategoryOverlay(category: ScriptLibrary.ScriptCategory, color _: Color) -> some View {
         let libraryScripts = ScriptLibrary.availableScripts(for: category)
-        let previewCount = min(libraryScripts.count, 4)
 
-        return ZStack(alignment: .center) {
-            // Blurred script rows as preview
-            VStack(spacing: 8) {
-                ForEach(0 ..< previewCount, id: \.self) { index in
-                    HStack(spacing: 14) {
-                        Image(systemName: libraryScripts[index].icon)
-                            .font(.title3)
-                            .foregroundStyle(Color.saneSilver)
-                            .frame(width: 36, height: 36)
-                            .background(Color.saneSmoke)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(libraryScripts[index].name)
-                                .font(.body)
-                                .fontWeight(.medium)
-                                .foregroundStyle(Color.saneSilver)
-                            Text(libraryScripts[index].description)
-                                .font(.caption)
-                                .foregroundStyle(Color.saneSilver.opacity(0.6))
-                                .lineLimit(1)
-                        }
-
-                        Spacer()
-
-                        Toggle("", isOn: .constant(false))
-                            .toggleStyle(.switch)
-                            .labelsHidden()
-                            .disabled(true)
+        return VStack(spacing: 8) {
+            ForEach(libraryScripts, id: \.name) { libraryScript in
+                LibraryScriptRow(
+                    libraryScript: libraryScript,
+                    isInstalled: false,
+                    isEnabled: false,
+                    categoryColor: colorForCategory(category),
+                    isLocked: true,
+                    onToggle: { _ in },
+                    onLockedTap: {
+                        proUpsellFeature = proFeatureForCategory(category)
                     }
-                    .padding(14)
-                    .background { RoundedRectangle(cornerRadius: 12).fill(Color.saneCarbon) }
-                    .overlay { RoundedRectangle(cornerRadius: 12).strokeBorder(Color.saneSmoke, lineWidth: 1) }
-                }
-
-                if libraryScripts.count > previewCount {
-                    Text("+ \(libraryScripts.count - previewCount) more scripts")
-                        .font(.subheadline)
-                        .foregroundStyle(Color.saneSilver.opacity(0.6))
-                }
+                )
             }
-            .blur(radius: 4)
-            .allowsHitTesting(false)
 
-            // Unlock CTA
-            VStack(spacing: 12) {
-                Image(systemName: "lock.fill")
-                    .font(.system(size: 28))
-                    .foregroundStyle(.teal)
-
-                Text("Unlock \(category.rawValue)")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.white)
-
+            HStack {
                 Text("\(libraryScripts.count) scripts included with Pro")
-                    .font(.system(size: 13))
-                    .foregroundStyle(.white.opacity(0.92))
+                    .font(.subheadline)
+                    .foregroundStyle(Color.saneSilver)
+
+                Spacer()
 
                 Button {
                     proUpsellFeature = proFeatureForCategory(category)
                 } label: {
-                    Text("Upgrade to Pro")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 8)
+                    Label("Unlock Pro", systemImage: "lock.fill")
+                        .font(.system(size: 13, weight: .semibold))
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.teal)
             }
-            .padding(24)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.saneCarbon.opacity(0.92))
-                    .shadow(color: .black.opacity(0.3), radius: 12, x: 0, y: 4)
-            )
+            .padding(.top, 8)
         }
     }
 
@@ -527,6 +499,20 @@ struct ContentView: View {
             .buttonStyle(.borderedProminent)
             .tint(.saneTeal)
             .controlSize(.large)
+
+            #if APP_STORE
+                if !licenseService.isPro {
+                    Button {
+                        proUpsellFeature = .organizationScripts
+                    } label: {
+                        Label("Unlock Pro", systemImage: "lock.open.fill")
+                            .font(.headline)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.teal)
+                    .controlSize(.large)
+                }
+            #endif
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -807,7 +793,9 @@ struct LibraryScriptRow: View {
     let isInstalled: Bool
     let isEnabled: Bool
     let categoryColor: Color
+    var isLocked: Bool = false
     let onToggle: (Bool) -> Void // Pass new state: true = enable (add if needed), false = disable
+    var onLockedTap: (() -> Void)?
 
     @State private var isHovered = false
 
@@ -815,13 +803,13 @@ struct LibraryScriptRow: View {
     private let successGreen = Color(red: 0.13, green: 0.77, blue: 0.37)
 
     var body: some View {
-        HStack(spacing: 14) {
-            // Icon - green when enabled, gray when disabled
+        let rowContent = HStack(spacing: 14) {
+            // Icon - keep script identity visible for locked Pro rows
             Image(systemName: libraryScript.icon)
                 .font(.title3)
-                .foregroundStyle(isEnabled ? successGreen : Color.saneSilver)
+                .foregroundStyle(isLocked ? categoryColor : (isEnabled ? successGreen : Color.saneSilver))
                 .frame(width: 36, height: 36)
-                .background(isEnabled ? successGreen.opacity(0.15) : Color.saneSmoke)
+                .background(isLocked ? categoryColor.opacity(0.15) : (isEnabled ? successGreen.opacity(0.15) : Color.saneSmoke))
                 .clipShape(RoundedRectangle(cornerRadius: 8))
 
             // Name and description
@@ -829,7 +817,7 @@ struct LibraryScriptRow: View {
                 Text(libraryScript.name)
                     .font(.body)
                     .fontWeight(.medium)
-                    .foregroundStyle(isEnabled ? Color.saneCloud : Color.saneSilver)
+                    .foregroundStyle(isLocked ? .primary : (isEnabled ? Color.saneCloud : Color.saneSilver))
 
                 Text(libraryScript.description)
                     .font(.caption)
@@ -839,14 +827,28 @@ struct LibraryScriptRow: View {
 
             Spacer()
 
-            // Always show toggle - consistent UI for all scripts
-            Toggle("", isOn: Binding(
-                get: { isEnabled },
-                set: { newValue in onToggle(newValue) }
-            ))
-            .toggleStyle(.switch)
-            .labelsHidden()
-            .tint(successGreen)
+            if isLocked {
+                HStack(spacing: 5) {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 11))
+                    Text("Pro")
+                        .font(.system(size: 12, weight: .semibold))
+                }
+                .foregroundStyle(.teal)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .background(Color.teal.opacity(0.15))
+                .clipShape(Capsule())
+            } else {
+                // Always show toggle - consistent UI for all scripts
+                Toggle("", isOn: Binding(
+                    get: { isEnabled },
+                    set: { newValue in onToggle(newValue) }
+                ))
+                .toggleStyle(.switch)
+                .labelsHidden()
+                .tint(successGreen)
+            }
         }
         .padding(14)
         .background {
@@ -857,6 +859,20 @@ struct LibraryScriptRow: View {
             RoundedRectangle(cornerRadius: 12)
                 .strokeBorder(isHovered ? categoryColor.opacity(0.5) : Color.saneSmoke, lineWidth: 1)
         }
+
+        return Group {
+            if isLocked, let onLockedTap {
+                Button(action: onLockedTap) {
+                    rowContent
+                }
+                .buttonStyle(.plain)
+            } else {
+                rowContent
+            }
+        }
+        .contentShape(Rectangle())
+        .accessibilityAddTraits(isLocked ? .isButton : [])
+        .accessibilityHint(isLocked ? "Shows what is included with Pro" : "")
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.15)) {
                 isHovered = hovering

@@ -1,72 +1,70 @@
 # Privacy Policy
 
-**Last updated: January 19, 2026**
+> [README](README.md) · [ARCHITECTURE](ARCHITECTURE.md) · [DEVELOPMENT](DEVELOPMENT.md) · [PRIVACY](PRIVACY.md) · [SECURITY](SECURITY.md)
 
-SaneClick is designed with privacy as a core principle. This document explains how the app handles your data.
+**Last updated: March 26, 2026**
 
-## Our Philosophy
+SaneClick is built to keep your files, scripts, and automations on your Mac. This page explains what stays local, when the app uses the network, and why.
 
-**Your data stays on your device.** Period.
+## Summary
 
-## Data Collection
+**Your files and script contents stay on your Mac.** SaneClick does not upload them to SaneApps servers.
 
-### What We DON'T Collect
-- No analytics or telemetry
-- No crash reports sent externally
-- No usage statistics
-- No personal information
-- No network requests
+The app may send a few simple anonymous counts, such as whether it opened in Basic or Pro, so we can understand product usage at a high level. Those counts do not include your files or script contents.
 
-### What Stays Local
-- **Scripts** - Stored in your Finder sync folder
-- **Preferences** - Stored in macOS defaults system
+## What SaneClick Does Not Collect
+
+- Your files or script contents on SaneApps servers
+- Personal files from your Mac
+- Crash reports
+- Your passwords
+
+## What Stays Local
+
+SaneClick stores the following locally on your Mac:
+
+- **Scripts and files** in the folders you choose
+- **Preferences** in standard macOS defaults
+- **App configuration** in local application support files
+
+## When SaneClick Uses The Network
+
+SaneClick uses the network only when:
+
+- It checks for app updates, if update checks are enabled
+- It sends a few simple anonymous app counts, such as Basic vs Pro launches
+
+Your files and script contents are not sent to SaneApps.
 
 ## Permissions Used
 
 ### File System Access
-- **Finder Sync Extension** - To display script status in Finder
-- **Application Support** - To store configuration
+
+- **Finder Sync Extension** for Finder integration
+- **Application Support** for local configuration
 
 ### System Services
-- **Finder Extension** - For Finder integration
+
+- **Finder Extension** for right-click integration inside Finder
 
 ## Third-Party Services
 
-SaneClick uses no third-party services, SDKs, or analytics.
+SaneClick uses:
 
-## Auto-Updates
+- **Sparkle** for update checks
+- **SaneApps distribution service** for simple anonymous app counts
+- **Cloudflare Web Analytics** on public website pages
 
-When enabled, SaneClick checks for updates via Sparkle framework:
-- Connects to `saneclick.com/appcast.xml`
-- Only checks for version information
-- No personal data transmitted
+These website services apply to `saneclick.com` pages, not to your files or scripts inside the app.
 
-## Your Rights
+## Your Control
 
-You have full control:
-- View all stored data in Application Support folder
-- Disable all optional features
-- Uninstall completely with no traces
+You can:
 
-## Complete Uninstall
-
-To remove all SaneClick data:
-```bash
-# Remove application
-rm -rf /Applications/SaneClick.app
-
-# Remove preferences
-defaults delete com.saneclick.SaneClick
-
-# Remove application data
-rm -rf ~/Library/Application\ Support/SaneClick
-rm -rf ~/Library/Caches/com.saneclick.SaneClick
-```
+- View local settings and scripts
+- Turn off update checks
+- Uninstall the app and remove its local data
 
 ## Contact
 
 Questions about privacy? Open an issue on [GitHub](https://github.com/sane-apps/SaneClick/issues/new?template=bug_report.md).
-
-## Changes
-
-Any changes to this policy will be documented in the CHANGELOG and noted in release notes.

@@ -1,5 +1,7 @@
 # Security Policy
 
+> [README](README.md) · [ARCHITECTURE](ARCHITECTURE.md) · [DEVELOPMENT](DEVELOPMENT.md) · [PRIVACY](PRIVACY.md) · [SECURITY](SECURITY.md)
+
 ## Supported Versions
 
 | Version | Supported          |

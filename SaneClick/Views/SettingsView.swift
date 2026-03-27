@@ -2,6 +2,12 @@ import SaneUI
 import SwiftUI
 
 struct SettingsView: View {
+    enum Tab: Hashable {
+        case general
+        case license
+        case about
+    }
+
     var licenseService: LicenseService
     @Environment(ScriptStore.self) private var scriptStore
     @Environment(MonitoredFolderService.self) private var monitoredFolderService
@@ -15,23 +21,32 @@ struct SettingsView: View {
     @AppStorage(AppPreferences.showDockIconKey) private var showDockIcon = SaneBackgroundAppDefaults.showDockIcon
     @State private var extensionStatus = ExtensionStatusService.checkStatus()
     @State private var isCheckingStatus = false
+    @State private var selectedTab: Tab
+
+    init(licenseService: LicenseService, initialTab: Tab = .general) {
+        self.licenseService = licenseService
+        _selectedTab = State(initialValue: initialTab)
+    }
 
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             generalTab
                 .tabItem {
                     Label("General", systemImage: "gearshape")
                 }
+                .tag(Tab.general)
 
             licenseTab
                 .tabItem {
                     Label("License", systemImage: "key")
                 }
+                .tag(Tab.license)
 
             aboutTab
                 .tabItem {
                     Label("About", systemImage: "info.circle")
                 }
+                .tag(Tab.about)
         }
         .frame(width: 500, height: 470)
     }

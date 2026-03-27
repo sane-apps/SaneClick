@@ -24,6 +24,110 @@
   - `./scripts/SaneMaster.rb appstore_preflight` gave a false-green before this work because it does not currently audit shared SaneUI donation/support surfaces
   - preflight should eventually flag App Store builds that expose Donate / GitHub Sponsors / crypto support UI
 
+## 2026-03-23 Live ASC Recheck
+
+- Live ASC app list on the Mini now shows `macOS 1.1.1 Ready for Review`, but the latest submission detail still shows unresolved issues. Treat the lane as still risky until Apple clears it.
+- Apple guideline `2.1(b)` requires the IAP to be visible and functional for review.
+- Current code appears to have removed the old donation/support surface from the shared About screen, so the older `3.1.1` complaint may already be addressed in source.
+- Current review discoverability is still weak:
+  - review notes point to onboarding final screen or `Settings > License`
+  - the app's main surface is still primarily about folders and library browsing, not an obvious App Store unlock path
+- Safe next step is to verify the App Store build on the Mini and make the StoreKit upgrade path explicit in the main app flow, not only in reviewer notes.
+
+## 2026-03-23 Finder Sync launch false-negative + screenshot harness
+
+- Fresh Mini repro on 2026-03-23 confirmed a real Finder Sync API false negative:
+  - `pluginkit -m -v -i com.saneclick.SaneClick.FinderSync` reported the extension enabled
+  - `swift -e 'import FinderSync; print(FIFinderSyncController.isExtensionEnabled)'` returned `false`
+- Root cause for the repeated launch prompt was local app code in `SaneClickApp.init()` auto-calling `FIFinderSyncController.showExtensionManagementInterface()` one second after launch.
+- Correct fix is to remove the launch-time auto-open and use `pluginkit` parsing for extension status instead of trusting `FIFinderSyncController.isExtensionEnabled` on the Mini.
+- Post-fix Mini runtime proof:
+  - built `SaneClick-AppStore` launched and stayed running
+  - `System Settings` remained closed after launch
+- Separate tooling issue:
+  - the dedicated `SaneClick-AppStore-Screenshots` XCTest bundle still fails to load under `Release-AppStore`
+  - error is not the app crashing; it is XCTest rejecting `SaneClickAppStoreScreenshotTests.xctest` with a non-platform code-sign mismatch
+  - the dedicated screenshot bundle still ends up `adhoc,linker-signed` even after enabling signing in project config
+- Safer screenshot path:
+  - render the App Store UI through the normal `SaneClickTests/AppStoreScreenshotRenderTests`
+  - build the normal `SaneClick` scheme
+  - force `APP_STORE` compile flags during the screenshot run
+  - this keeps Sparkle available to the host binary while still rendering the App Store copy and layout
+
+## 2026-03-23 Screenshot harness duplicate-file drift
+
+- After the upsell rewrite, Mini `verify` still ran the old screenshot test path even though `Tests/AppStoreScreenshotRenderTests.swift` had been patched to require `SANECLICK_CAPTURE_SCREENSHOTS=1`.
+- Local proof on the Mini:
+  - `Tests/AppStoreScreenshotRenderTests.swift` contains the new env guard.
+  - The failing runtime line numbers and repo search show the test runner is still picking up a duplicate root-level `AppStoreScreenshotRenderTests.swift` that does not have the guard.
+  - The same duplicate-file drift exists for `capture_appstore_screenshots.sh`: the root-level copy still lacks `SANECLICK_CAPTURE_SCREENSHOTS=1` while `scripts/capture_appstore_screenshots.sh` is correct.
+- Root cause:
+  - stale duplicate root-level files were still part of the active Xcode/test path, so editing the `Tests/` and `scripts/` copies alone was not enough.
+- Fix rule:
+  - remove or sync duplicate test/script files so the project has one authoritative screenshot test file and one authoritative screenshot script path.
+  - rerun Mini `verify` only after the active Xcode path is corrected.
+
+## 2026-03-23 Shared WelcomeGate compile rule
+
+- After pushing the shared `WelcomeGateView` override API, Mini compile failed in the SwiftPM checkout with:
+  - `function declares an opaque return type, but has no return statements in its body from which to infer an underlying type`
+- Root cause:
+  - `private var selectionView: some View` was changed to include local `let` bindings before the final `VStack`, and the compiler in the active toolchain rejected that pattern for this opaque-return computed property.
+- Fix:
+  - move the resolved Pro title/price into separate computed properties instead of local bindings inside `selectionView`.
+  - resync the corrected `WelcomeGateView.swift` into the active SwiftPM checkout path before rerunning Mini verify.
+
+## 2026-03-23 SwiftPM cache hash mismatch
+
+- After the shared fix was pushed, Mini SwiftPM resolution still failed even with the new revision in `Package.resolved`.
+- Local proof:
+  - Xcode's package bare repo cache on the Mini did not yet contain the new SaneUI commit, so checkout failed first.
+  - After fetching `main` directly into the active SaneUI bare repo cache, the real fetched commit was `b44df501ec7d3ce899d04387760bd8260e87cc3f`.
+  - The manually edited `Package.resolved` revision was wrong (`b44df500...`), so Xcode still could not check out the requested tree.
+- Fix:
+  - pin `Package.resolved` to the exact fetched revision `b44df501ec7d3ce899d04387760bd8260e87cc3f`.
+  - keep the Mini package cache refreshed before rerunning `verify`.
+
+## 2026-03-23 Screenshot test target leak
+
+- The App Store screenshot renderer was being compiled into both:
+  - the normal `SaneClickTests` bundle
+  - the dedicated `SaneClickAppStoreScreenshotTests` bundle
+- That is why regular `verify` kept tripping over screenshot-only behavior, and why adding a runtime env guard made the dedicated screenshot lane falsely pass without generating PNGs.
+- Root cause:
+  - `project.yml` included all of `Tests/` for `SaneClickTests`, so `AppStoreScreenshotRenderTests.swift` leaked into the normal unit-test target.
+- Correct fix:
+  - exclude `AppStoreScreenshotRenderTests.swift` from `SaneClickTests`
+  - keep it only in `SaneClickAppStoreScreenshotTests`
+  - remove the runtime skip guard so the dedicated screenshot bundle always renders or fails loudly
+
+## 2026-03-23 Screenshot target leak follow-up: stale xcodeproj state
+
+- After fixing the source manifest, Mini `verify` still ran `AppStoreScreenshotRenderTests` inside the normal `SaneClickTests` bundle.
+- The source of truth split was:
+  - `project.yml` correctly excluded `AppStoreScreenshotRenderTests.swift` from `SaneClickTests`
+  - the live `.xcodeproj/project.pbxproj` still had `AppStoreScreenshotRenderTests.swift in Sources` attached to both `SaneClickTests` and `SaneClickAppStoreScreenshotTests`
+- Root cause:
+  - the project file itself was stale, so `verify` kept using the old target membership even though the manifest was already fixed.
+- Fix rule:
+  - after changing target membership in `project.yml`, regenerate the project and sync the resulting `.xcodeproj` before trusting Mini `verify`.
+
+## 2026-03-23 Mini verify "tests passed" but lane still failed
+
+- Apple docs on `Running tests and interpreting results` emphasize that the `.xcresult` bundle is the canonical source for test-run details, not just the summarized terminal output.
+- Local Mini proof:
+  - `test_output.txt` only showed `✘ Test run with 81 tests in 12 suites failed after 0.141 seconds with 2 issues.` and did not print the actual expectation messages.
+  - `xcresulttool` at `actionResult.issues.testFailureSummaries` revealed the real cause immediately.
+- Real root cause:
+  - the failing issues were both from `AppStoreReviewGuardrailTests.appStoreUpsellIsVisibleAcrossPrimarySurfaces()`
+  - the test incorrectly looked for `Unlock Pro —` and `Restore Purchases` in `SettingsView.swift`
+  - those strings actually live in shared SaneUI `LicenseSettingsView.swift`, not in the local wrapper view
+- Supporting external pattern:
+  - GitHub issue searches around `xcresult` / `all tests passed but xcodebuild failed` consistently point back to session-level or summary-hidden failures, which matches what happened here: the plain log was not enough, the `xcresult` issue summaries were.
+- Fix rule:
+  - when `verify` says `tests failed ... with N issues` but the terminal log looks green, inspect `xcresult actionResult.issues.testFailureSummaries` before changing code.
+  - App Store guardrail tests must assert against the real source file that owns the copy, not a wrapper that only embeds the component.
+
 ## 2026-03-12 App Review Recheck
 
 - Live App Store Connect recheck confirmed macOS version `1.1.0 (1101)` is still `REJECTED / UNRESOLVED_ISSUES`.
@@ -42,6 +146,24 @@
 - Current ASC IAP state for `com.saneclick.app.pro.unlock` is `DEVELOPER_ACTION_NEEDED`.
   - Direct ASC API inspection showed the specific broken subresource is the IAP localization, which is in `REJECTED`.
   - Review screenshot and availability are both complete, so the localization must be refreshed before resubmission.
+
+## 2026-03-26 App Store Metadata Research
+
+- Fresh Apple guidance review:
+  - App Store product page guidance says the subtitle should summarize the app's value in a short phrase, the description should open with one strong sentence, and promotional text should communicate current value without turning into review-note/debug copy.
+  - App Review guidance plus the current `3.1.1` / `2.1(b)` rejection mean the SaneClick review notes must explicitly say Basic is free, Pro is a one-time StoreKit purchase, where `Unlock Pro` is visible in the app, and that no donation or outside-payment path exists in the App Store build.
+- Competitor pattern review for Mac utility listings:
+  - strong listings use short value-first subtitles and concrete verb-based descriptions
+  - vague upgrade language performs worse than showing the exact tool category and what Pro adds
+- Applied copy rule for SaneClick:
+  - subtitle should stay Apple-product-neutral
+  - description should clearly separate Free from Pro
+  - review notes should explicitly say `No external checkout or license key flow exists in this build`
+- Mini verification lesson from this pass:
+  - the apparent SaneClick `verify` failure was operator-caused, not an app regression
+  - running `./scripts/SaneMaster.rb verify` and `./scripts/SaneMaster.rb appstore_preflight` in parallel on the same Mini checkout caused the shared cleanup logic to kill the active test run before an `.xcresult` bundle was produced
+  - direct Mini `xcodebuild test` with the same unsigned flags passed `81` tests cleanly
+  - SaneClick verification and App Store preflight must be run sequentially, not in parallel
 
 ---
 

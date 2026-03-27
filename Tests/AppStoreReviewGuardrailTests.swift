@@ -35,6 +35,17 @@ struct AppStoreReviewGuardrailTests {
         #expect(invocationCount == 1)
     }
 
+    @Test("Menu bar open action uses shared main-window path")
+    func menuBarOpenActionUsesSharedMainWindowPath() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let source = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Services/MenuBarController.swift"), encoding: .utf8)
+
+        #expect(source.contains("@objc private func openApp()"))
+        #expect(source.contains("WindowActionStorage.shared.showMainWindow()"))
+    }
+
     @Test("App Store subtitle avoids Apple product names")
     func appStoreSubtitleAvoidsAppleProductNames() throws {
         let projectRoot = URL(fileURLWithPath: #filePath)
@@ -77,9 +88,68 @@ struct AppStoreReviewGuardrailTests {
             .deletingLastPathComponent()
             .deletingLastPathComponent()
         let manifest = try String(contentsOf: projectRoot.appendingPathComponent(".saneprocess"), encoding: .utf8)
+        let source = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/ContentView.swift"), encoding: .utf8)
+        let settingsSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/SettingsView.swift"), encoding: .utf8)
 
         #expect(manifest.localizedCaseInsensitiveContains("Settings > License"))
-        #expect(manifest.localizedCaseInsensitiveContains("Browse Library"))
         #expect(manifest.localizedCaseInsensitiveContains("Unlock Pro"))
+        #expect(manifest.localizedCaseInsensitiveContains("sidebar Quick Actions section"))
+        #expect(manifest.localizedCaseInsensitiveContains("Donate") || manifest.localizedCaseInsensitiveContains("GitHub Sponsors"))
+        #expect(source.contains("title: \"Unlock Pro\""))
+        #expect(settingsSource.contains("Label(\"License\", systemImage: \"key\")"))
+        #expect(settingsSource.contains("LicenseSettingsView(licenseService: licenseService)"))
+    }
+
+    @Test("App Store welcome claims match the actual native action split")
+    func appStoreWelcomeCopyMatchesNativeActionSplit() {
+        let basic = Set(AppStoreActionCatalog.basicActions)
+        let pro = Set(AppStoreActionCatalog.proActions)
+
+        #expect(basic.count == 9)
+        #expect(pro.count == 9)
+        #expect(basic.intersection(pro).isEmpty)
+        #expect(basic.union(pro).count == AppStoreNativeAction.allCases.count)
+    }
+
+    @Test("App Store upsell is visible across onboarding library sidebar and settings")
+    func appStoreUpsellIsVisibleAcrossPrimarySurfaces() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let saneAppsRoot = projectRoot
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let appSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/SaneClickApp.swift"), encoding: .utf8)
+        let contentSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/ContentView.swift"), encoding: .utf8)
+        let librarySource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/ScriptLibraryView.swift"), encoding: .utf8)
+        let settingsSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/SettingsView.swift"), encoding: .utf8)
+        let licenseSettingsSource = try String(
+            contentsOf: saneAppsRoot.appendingPathComponent("infra/SaneUI/Sources/SaneUI/License/LicenseSettingsView.swift"),
+            encoding: .utf8
+        )
+
+        #expect(appSource.contains("WelcomeGateView("))
+        #expect(appSource.contains("proTierPriceOverride: SaneClickWelcomeCopy.proPrice"))
+        #expect(contentSource.contains("title: \"Unlock Pro\""))
+        #expect(contentSource.contains("isLocked: true"))
+        #expect(librarySource.contains("Text(\"Unlock Pro\")"))
+        #expect(librarySource.contains("Text(\"\\(totalInCategory) scripts included with Pro\")"))
+        #expect(librarySource.contains("isLocked: true"))
+        #expect(settingsSource.contains("LicenseSettingsView(licenseService: licenseService)"))
+        #expect(licenseSettingsSource.contains("Unlock Pro —"))
+        #expect(licenseSettingsSource.contains("Restore Purchases"))
+    }
+
+    @Test("Direct welcome claims match the script library split")
+    func directWelcomeCopyMatchesScriptLibrarySplit() {
+        let freeCount = ScriptLibrary.availableScripts(for: .universal).count
+        let proCount = ScriptLibrary
+            .availableCategories
+            .filter { $0 != .universal }
+            .map { ScriptLibrary.availableScripts(for: $0).count }
+            .reduce(0, +)
+
+        #expect(freeCount == 10)
+        #expect(proCount == 40)
     }
 }
