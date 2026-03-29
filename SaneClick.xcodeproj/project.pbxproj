@@ -461,6 +461,9 @@
 					13DD2C4526993B29DEC1B7B0 = {
 						ProvisioningStyle = Manual;
 					};
+					263057A7946DC444B1EC8233 = {
+						ProvisioningStyle = Manual;
+					};
 					2964F8430D462CA61E76DB02 = {
 						ProvisioningStyle = Manual;
 					};
@@ -767,6 +770,9 @@
 				CURRENT_PROJECT_VERSION = 1102;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
+				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.unlock.v3;
+				INFOPLIST_KEY_SUFeedURL = "";
+				INFOPLIST_KEY_SUPublicEDKey = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -844,6 +850,9 @@
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
+				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.unlock.v3;
+				INFOPLIST_KEY_SUFeedURL = "";
+				INFOPLIST_KEY_SUPublicEDKey = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -986,6 +995,9 @@
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
+				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.unlock.v3;
+				INFOPLIST_KEY_SUFeedURL = "";
+				INFOPLIST_KEY_SUPublicEDKey = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1088,14 +1100,12 @@
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
-				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.unlock.v3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.1.1;
-				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
 				PRODUCT_NAME = SaneClick;
 				PROVISIONING_PROFILE_SPECIFIER = "SaneClick Mac App Store";
@@ -1165,7 +1175,7 @@
 				ARCHS = arm64;
 				CODE_SIGN_ENTITLEMENTS = SaneClickExtension/SaneClickExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1102;
 				DEVELOPMENT_TEAM = M78L6FXD48;
@@ -1176,6 +1186,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick.FinderSync;
 				PRODUCT_NAME = SaneClickExtension;
+				PROVISIONING_PROFILE_SPECIFIER = "SaneClick Finder Sync Mac App Store";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;

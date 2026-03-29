@@ -5,9 +5,9 @@ import SwiftUI
 
 extension LicenseService.DirectCopy {
     static let saneClick = Self(
-        alternateUnlockLabel: "Use Activation Code",
-        alternateEntryLabel: "Enter Code",
-        accessManagementLabel: "Remove Unlock",
+        alternateUnlockLabel: "Unlock Pro",
+        alternateEntryLabel: "Enter License Key",
+        accessManagementLabel: "Deactivate Pro",
         alternateEntryInstruction: "Paste your activation code from the confirmation email."
     )
 }
@@ -93,96 +93,4 @@ enum SaneAppMover {
     }
 }
 
-struct SaneSparkleRow: View {
-    struct Labels: Sendable {
-        let automaticCheckLabel: String
-        let automaticCheckHelp: String
-        let checkFrequencyLabel: String
-        let checkFrequencyHelp: String
-        let actionsLabel: String
-        let checkingLabel: String
-        let checkNowLabel: String
-        let checkNowHelp: String
-
-        static let `default` = Labels(
-            automaticCheckLabel: "Check for updates automatically",
-            automaticCheckHelp: "Periodically check for new versions",
-            checkFrequencyLabel: "Check frequency",
-            checkFrequencyHelp: "Choose how often automatic update checks run",
-            actionsLabel: "Actions",
-            checkingLabel: "Checking...",
-            checkNowLabel: "Check Now",
-            checkNowHelp: "Check for updates right now"
-        )
-    }
-
-    @Binding private var automaticallyChecks: Bool
-    @Binding private var checkFrequency: SaneSparkleCheckFrequency
-    private let labels: Labels
-    private let onCheckNow: () -> Void
-    @State private var isChecking = false
-
-    init(
-        automaticallyChecks: Binding<Bool>,
-        checkFrequency: Binding<SaneSparkleCheckFrequency>,
-        onCheckNow: @escaping () -> Void
-    ) {
-        self.init(
-            automaticallyChecks: automaticallyChecks,
-            checkFrequency: checkFrequency,
-            labels: .default,
-            onCheckNow: onCheckNow
-        )
-    }
-
-    init(
-        automaticallyChecks: Binding<Bool>,
-        checkFrequency: Binding<SaneSparkleCheckFrequency>,
-        labels: Labels,
-        onCheckNow: @escaping () -> Void
-    ) {
-        _automaticallyChecks = automaticallyChecks
-        _checkFrequency = checkFrequency
-        self.labels = labels
-        self.onCheckNow = onCheckNow
-    }
-
-    var body: some View {
-        CompactToggle(label: labels.automaticCheckLabel, isOn: $automaticallyChecks)
-            .help(labels.automaticCheckHelp)
-
-        CompactDivider()
-
-        CompactRow(labels.checkFrequencyLabel) {
-            Picker("", selection: $checkFrequency) {
-                ForEach(SaneSparkleCheckFrequency.allCases) { frequency in
-                    Text(frequency.title).tag(frequency)
-                }
-            }
-            .pickerStyle(.segmented)
-            .frame(width: 170)
-            .disabled(!automaticallyChecks)
-        }
-        .help(labels.checkFrequencyHelp)
-
-        CompactDivider()
-
-        CompactRow(labels.actionsLabel) {
-            Button(isChecking ? labels.checkingLabel : labels.checkNowLabel) {
-                guard !isChecking else { return }
-                isChecking = true
-                onCheckNow()
-
-                Task { @MainActor in
-                    try? await Task.sleep(for: .seconds(5))
-                    isChecking = false
-                }
-            }
-            .buttonStyle(.bordered)
-            .controlSize(.small)
-            .disabled(isChecking)
-            .help(labels.checkNowHelp)
-        }
-    }
-}
 #endif

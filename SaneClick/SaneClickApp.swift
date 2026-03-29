@@ -10,6 +10,41 @@ private enum CrossProcessNotifications {
     static let openMainWindow = NSNotification.Name("com.saneclick.openMainWindow")
 }
 
+enum WelcomeGateState {
+    static let hasSeenWelcomeKey = "hasSeenWelcome"
+    static let hasCompletedOnboardingKey = "hasCompletedOnboarding"
+
+    static func hasSeenWelcome(defaults: UserDefaults = .standard) -> Bool {
+        if let explicitValue = defaults.object(forKey: hasSeenWelcomeKey) as? Bool {
+            return explicitValue
+        }
+        return defaults.bool(forKey: hasCompletedOnboardingKey)
+    }
+
+    static func initialPresentation(defaults: UserDefaults = .standard) -> Bool {
+        !hasSeenWelcome(defaults: defaults)
+    }
+
+    static func markSeen(defaults: UserDefaults = .standard) {
+        defaults.set(true, forKey: hasSeenWelcomeKey)
+        defaults.set(true, forKey: hasCompletedOnboardingKey)
+    }
+
+    static func reconcile(isPresented: Bool, defaults: UserDefaults = .standard) -> Bool {
+        hasSeenWelcome(defaults: defaults) ? false : isPresented
+    }
+
+    @discardableResult
+    static func purgeRestoredSheetState(defaults: UserDefaults = .standard) -> Int {
+        let staleKeys = defaults.dictionaryRepresentation().keys.filter { key in
+            key.contains("SheetPresentationModifier") &&
+                (key.contains("WelcomeView") || key.contains("WelcomeGateView"))
+        }
+        staleKeys.forEach { defaults.removeObject(forKey: $0) }
+        return staleKeys.count
+    }
+}
+
 @MainActor
 final class SettingsActionStorage {
     static let shared = SettingsActionStorage()
@@ -153,18 +188,24 @@ struct SaneClickApp: App {
     #if APP_STORE
         @State private var licenseService = LicenseService(
             appName: "SaneClick",
-            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.unlock.v3")
+            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.unlock.v3"),
+            keychain: KeychainService(service: "com.saneclick.SaneClick")
         )
     #else
         @State private var licenseService = LicenseService(
             appName: "SaneClick",
             checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick"),
+            keychain: KeychainService(service: "com.saneclick.SaneClick"),
             directCopy: LicenseService.DirectCopy.saneClick
         )
     #endif
-    @AppStorage("hasSeenWelcome") private var hasSeenWelcome = false
+    @State private var showWelcomeGate: Bool
 
     init() {
+        if WelcomeGateState.hasSeenWelcome() {
+            WelcomeGateState.purgeRestoredSheetState()
+        }
+        _showWelcomeGate = State(initialValue: WelcomeGateState.initialPresentation())
         AppPreferences.registerDefaults()
 
         // Menu bar icon + Dock visibility
@@ -182,46 +223,23 @@ struct SaneClickApp: App {
 
     var body: some Scene {
         WindowGroup(id: "main") {
-            ContentView(licenseService: licenseService)
-                .environment(scriptStore)
-                .environment(monitoredFolderService)
-                .modifier(SettingsLauncher())
-                .modifier(SettingsActionCapture())
-                .modifier(WindowActionCapture())
-                .background(MainWindowCaptureView())
-                .preferredColorScheme(.dark)
-                .sheet(isPresented: Binding(
-                    get: { !hasSeenWelcome },
-                    set: { showing in if !showing { hasSeenWelcome = true } }
-                )) {
-                    WelcomeGateView(
-                        appName: "SaneClick",
-                        appIcon: "cursorarrow.click.2",
-                        freeFeatures: SaneClickWelcomeCopy.freeFeatures,
-                        proFeatures: SaneClickWelcomeCopy.proFeatures,
-                        freeTierPrice: SaneClickWelcomeCopy.basicPrice,
-                        proTierPriceOverride: SaneClickWelcomeCopy.proPrice,
-                        licenseService: licenseService
-                    )
-                    .preferredColorScheme(.dark)
-                }
-                .onAppear {
-                    licenseService.checkCachedLicense()
-                    let isPro = licenseService.isPro
-                    let isFirstLaunch = !hasSeenWelcome
-                    if SaneBackgroundAppDefaults.launchAtLogin {
-                        _ = SaneLoginItemPolicy.enableByDefaultIfNeeded(isFirstLaunch: isFirstLaunch)
-                    }
-                    Task.detached {
-                        await EventTracker.log(
-                            isPro ? "app_launch_pro" : "app_launch_free",
-                            app: "saneclick"
+            if shouldAttachWelcomeGate {
+                mainWindowContent
+                    .sheet(isPresented: welcomeGateBinding) {
+                        WelcomeGateView(
+                            appName: "SaneClick",
+                            appIcon: "cursorarrow.click.2",
+                            freeFeatures: SaneClickWelcomeCopy.freeFeatures,
+                            proFeatures: SaneClickWelcomeCopy.proFeatures,
+                            freeTierPrice: SaneClickWelcomeCopy.basicPrice,
+                            proTierPriceOverride: SaneClickWelcomeCopy.proPrice,
+                            licenseService: licenseService
                         )
-                        if isFirstLaunch, !isPro {
-                            await EventTracker.log("new_free_user", app: "saneclick")
-                        }
+                        .preferredColorScheme(.dark)
                     }
-                }
+            } else {
+                mainWindowContent
+            }
         }
         // .windowStyle(.hiddenTitleBar) // Temporarily disabled to test file picker
         .defaultSize(width: 600, height: 500)
@@ -235,6 +253,55 @@ struct SaneClickApp: App {
                 .environment(monitoredFolderService)
                 .preferredColorScheme(.dark)
         }
+    }
+
+    private var shouldAttachWelcomeGate: Bool {
+        showWelcomeGate || !WelcomeGateState.hasSeenWelcome()
+    }
+
+    private var welcomeGateBinding: Binding<Bool> {
+        Binding(
+            get: { showWelcomeGate },
+            set: { showing in
+                showWelcomeGate = showing
+                if !showing {
+                    WelcomeGateState.markSeen()
+                }
+            }
+        )
+    }
+
+    private var mainWindowContent: some View {
+        ContentView(licenseService: licenseService)
+            .environment(scriptStore)
+            .environment(monitoredFolderService)
+            .modifier(SettingsLauncher())
+            .modifier(SettingsActionCapture())
+            .modifier(WindowActionCapture())
+            .background(MainWindowCaptureView())
+            .preferredColorScheme(.dark)
+            .onAppear {
+                if WelcomeGateState.hasSeenWelcome() {
+                    WelcomeGateState.purgeRestoredSheetState()
+                }
+                showWelcomeGate = WelcomeGateState.reconcile(isPresented: showWelcomeGate)
+                licenseService.checkCachedLicense()
+                let hasSeenWelcome = WelcomeGateState.hasSeenWelcome()
+                let isPro = licenseService.isPro
+                let isFirstLaunch = !hasSeenWelcome
+                if SaneBackgroundAppDefaults.launchAtLogin {
+                    _ = SaneLoginItemPolicy.enableByDefaultIfNeeded(isFirstLaunch: isFirstLaunch)
+                }
+                Task.detached {
+                    await EventTracker.log(
+                        isPro ? "app_launch_pro" : "app_launch_free",
+                        app: "saneclick"
+                    )
+                    if isFirstLaunch, !isPro {
+                        await EventTracker.log("new_free_user", app: "saneclick")
+                    }
+                }
+            }
     }
 }
 

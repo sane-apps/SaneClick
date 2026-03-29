@@ -96,8 +96,8 @@ struct AppStoreReviewGuardrailTests {
         #expect(manifest.localizedCaseInsensitiveContains("sidebar Quick Actions section"))
         #expect(manifest.localizedCaseInsensitiveContains("Donate") || manifest.localizedCaseInsensitiveContains("GitHub Sponsors"))
         #expect(source.contains("title: \"Unlock Pro\""))
-        #expect(settingsSource.contains("Label(\"License\", systemImage: \"key\")"))
-        #expect(settingsSource.contains("LicenseSettingsView(licenseService: licenseService)"))
+        #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab)"))
+        #expect(settingsSource.contains("LicenseSettingsView(licenseService: licenseService, style: .panel)"))
     }
 
     @Test("App Store welcome claims match the actual native action split")
@@ -135,9 +135,56 @@ struct AppStoreReviewGuardrailTests {
         #expect(librarySource.contains("Text(\"Unlock Pro\")"))
         #expect(librarySource.contains("Text(\"\\(totalInCategory) scripts included with Pro\")"))
         #expect(librarySource.contains("isLocked: true"))
-        #expect(settingsSource.contains("LicenseSettingsView(licenseService: licenseService)"))
+        #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab)"))
+        #expect(settingsSource.contains("LicenseSettingsView(licenseService: licenseService, style: .panel)"))
         #expect(licenseSettingsSource.contains("Unlock Pro —"))
         #expect(licenseSettingsSource.contains("Restore Purchases"))
+    }
+
+    @Test("Returning users do not keep the welcome sheet presenter attached")
+    func returningUsersDoNotKeepWelcomeSheetPresenterAttached() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let appSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/SaneClickApp.swift"), encoding: .utf8)
+
+        #expect(appSource.contains("if shouldAttachWelcomeGate"))
+        #expect(appSource.contains("showWelcomeGate || !WelcomeGateState.hasSeenWelcome()"))
+        #expect(appSource.contains("WelcomeGateState.purgeRestoredSheetState()"))
+    }
+
+    @Test("Settings use shared SaneUI shell and standardized direct license copy")
+    func settingsUseSharedShellAndStandardCopy() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let settingsSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/SettingsView.swift"), encoding: .utf8)
+        let directSupportSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/DirectDistributionSupport.swift"), encoding: .utf8)
+
+        #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab)"))
+        #expect(settingsSource.contains("CompactSection(\"App Behavior\""))
+        #expect(settingsSource.contains("SaneSparkleRow("))
+        #expect(settingsSource.contains("Enter License Key") == false)
+        #expect(settingsSource.contains("TabView(selection: $selectedTab)") == false)
+        #expect(directSupportSource.contains("struct SaneSparkleRow") == false)
+        #expect(directSupportSource.contains("alternateUnlockLabel: \"Unlock Pro\""))
+        #expect(directSupportSource.contains("alternateEntryLabel: \"Enter License Key\""))
+        #expect(directSupportSource.contains("accessManagementLabel: \"Deactivate Pro\""))
+    }
+
+    @Test("Direct source build metadata stays on the direct lane")
+    func directSourceBuildMetadataStaysDirect() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let infoPlistSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Info.plist"), encoding: .utf8)
+        let projectManifest = try String(contentsOf: projectRoot.appendingPathComponent("project.yml"), encoding: .utf8)
+
+        #expect(Bundle.main.object(forInfoDictionaryKey: "SUFeedURL") as? String == "https://saneclick.com/appcast.xml")
+        #expect(Bundle.main.object(forInfoDictionaryKey: "AppStoreProductID") == nil)
+        #expect(infoPlistSource.contains("<key>AppStoreProductID</key>") == false)
+        #expect(infoPlistSource.contains("<key>SUFeedURL</key>"))
+        #expect(projectManifest.contains("INFOPLIST_KEY_AppStoreProductID: com.saneclick.app.pro.unlock.v3"))
     }
 
     @Test("Direct welcome claims match the script library split")

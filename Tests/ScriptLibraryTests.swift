@@ -203,6 +203,71 @@ struct OnboardingStateTests {
     }
 }
 
+struct WelcomeGateStateTests {
+    @Test("Returning users do not re-open the welcome gate")
+    func returningUsersDoNotReopenWelcomeGate() {
+        guard let defaults = UserDefaults(suiteName: #function) else {
+            Issue.record("Failed to create isolated defaults suite")
+            return
+        }
+        defaults.removePersistentDomain(forName: #function)
+        defaults.set(true, forKey: WelcomeGateState.hasSeenWelcomeKey)
+
+        #expect(WelcomeGateState.initialPresentation(defaults: defaults) == false)
+        #expect(WelcomeGateState.reconcile(isPresented: true, defaults: defaults) == false)
+    }
+
+    @Test("Legacy completed onboarding key suppresses the welcome gate")
+    func legacyCompletedOnboardingSuppressesWelcomeGate() {
+        guard let defaults = UserDefaults(suiteName: #function) else {
+            Issue.record("Failed to create isolated defaults suite")
+            return
+        }
+        defaults.removePersistentDomain(forName: #function)
+        defaults.set(true, forKey: WelcomeGateState.hasCompletedOnboardingKey)
+
+        #expect(WelcomeGateState.hasSeenWelcome(defaults: defaults) == true)
+        #expect(WelcomeGateState.initialPresentation(defaults: defaults) == false)
+    }
+
+    @Test("Dismissing the welcome gate marks onboarding complete")
+    func dismissingWelcomeGateMarksOnboardingComplete() {
+        guard let defaults = UserDefaults(suiteName: #function) else {
+            Issue.record("Failed to create isolated defaults suite")
+            return
+        }
+        defaults.removePersistentDomain(forName: #function)
+
+        #expect(WelcomeGateState.initialPresentation(defaults: defaults) == true)
+
+        WelcomeGateState.markSeen(defaults: defaults)
+
+        #expect(WelcomeGateState.hasSeenWelcome(defaults: defaults) == true)
+        #expect(defaults.bool(forKey: WelcomeGateState.hasCompletedOnboardingKey) == true)
+        #expect(WelcomeGateState.reconcile(isPresented: true, defaults: defaults) == false)
+    }
+
+    @Test("Completed onboarding purges restored welcome sheet keys")
+    func completedOnboardingPurgesRestoredWelcomeSheetKeys() {
+        guard let defaults = UserDefaults(suiteName: #function) else {
+            Issue.record("Failed to create isolated defaults suite")
+            return
+        }
+        defaults.removePersistentDomain(forName: #function)
+        defaults.set(true, forKey: WelcomeGateState.hasSeenWelcomeKey)
+        defaults.set("frame", forKey: "NSWindow Frame SwiftUI.ModifiedContent<SaneUI.WelcomeGateView>.SheetPresentationModifier")
+        defaults.set("split", forKey: "NSSplitView Subview Frames SwiftUI.ModifiedContent<SaneClick.WelcomeView>.SheetPresentationModifier")
+        defaults.set("keep", forKey: "NSWindow Frame main-AppWindow-1")
+
+        let removedCount = WelcomeGateState.purgeRestoredSheetState(defaults: defaults)
+
+        #expect(removedCount == 2)
+        #expect(defaults.object(forKey: "NSWindow Frame SwiftUI.ModifiedContent<SaneUI.WelcomeGateView>.SheetPresentationModifier") == nil)
+        #expect(defaults.object(forKey: "NSSplitView Subview Frames SwiftUI.ModifiedContent<SaneClick.WelcomeView>.SheetPresentationModifier") == nil)
+        #expect(defaults.string(forKey: "NSWindow Frame main-AppWindow-1") == "keep")
+    }
+}
+
 struct AppPreferencesTests {
     @Test("Dock icon default stays hidden")
     func dockIconDefaultIsHidden() {
