@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AppStoreProductID</key>
+	<string>com.saneclick.app.pro.unlock.v3</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -22,13 +24,5 @@
 	<string>public.app-category.utilities</string>
 	<key>NSAppleEventsUsageDescription</key>
 	<string>SaneClick runs user-created automation scripts that can control other apps (for example Finder actions and notifications) when you choose those scripts.</string>
-	<key>SUEnableAutomaticChecks</key>
-	<true/>
-	<key>SUEnableSystemProfiling</key>
-	<false/>
-	<key>SUFeedURL</key>
-	<string>https://saneclick.com/appcast.xml</string>
-	<key>SUPublicEDKey</key>
-	<string>7Pl/8cwfb2vm4Dm65AByslkMCScLJ9tbGlwGGx81qYU=</string>
 </dict>
 </plist>

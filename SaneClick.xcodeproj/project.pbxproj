@@ -155,7 +155,6 @@
 		66E8F38469A2721677F9A7EC /* AppStoreNativeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreNativeAction.swift; sourceTree = "<group>"; };
 		6B341F823B9E6117E2232E2D /* ScriptStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptStoreTests.swift; sourceTree = "<group>"; };
 		6BEC056477ED451BA3A4C710 /* SaneColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaneColors.swift; sourceTree = "<group>"; };
-		6D11A214F9A451522A93F6B5 /* SaneUI */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SaneUI; path = ../../infra/SaneUI; sourceTree = SOURCE_ROOT; };
 		700D47CED971DFCF509DB68A /* FinderSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderSync.swift; sourceTree = "<group>"; };
 		73CAB9648AF325258DC7FE8E /* ScriptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptStore.swift; sourceTree = "<group>"; };
 		7561E69DFD12512C70D2215B /* ProFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProFeature.swift; sourceTree = "<group>"; };
@@ -166,7 +165,6 @@
 		9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultScripts.swift; sourceTree = "<group>"; };
 		9CFB4E957BD2DB0D8CBB4671 /* SaneClickExtension.debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaneClickExtension.debug.entitlements; sourceTree = "<group>"; };
 		A0292252BEA20E38AA9D5AD5 /* ScriptEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptEditorView.swift; sourceTree = "<group>"; };
-		A0A32F90AD3B2ECB3E9A6B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A261E9D493D09361F59B70AB /* SaneClick.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaneClick.entitlements; sourceTree = "<group>"; };
 		A4375D086296589FD9E2EE58 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A6B70939D4CC943905E332A2 /* MonitoredFolderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitoredFolderService.swift; sourceTree = "<group>"; };
@@ -238,7 +236,6 @@
 			isa = PBXGroup;
 			children = (
 				BA8B50CEA8F97A893927BB7D /* DirectDistributionSupport.swift */,
-				A0A32F90AD3B2ECB3E9A6B36 /* Info.plist */,
 				7561E69DFD12512C70D2215B /* ProFeature.swift */,
 				E68AE3D3E5F32A83827F08A7 /* SaneClick-AppStore.entitlements */,
 				4DC44A9E563E5C9FCE44AF4E /* SaneClick.debug.entitlements */,
@@ -297,14 +294,6 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		97E6233ACB704BBD4112CC8A /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				6D11A214F9A451522A93F6B5 /* SaneUI */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		C650B644EC575F986F69D9DE /* SaneClickExtension */ = {
 			isa = PBXGroup;
 			children = (
@@ -319,7 +308,6 @@
 		CFD110473EC892FF733EC67F = {
 			isa = PBXGroup;
 			children = (
-				97E6233ACB704BBD4112CC8A /* Packages */,
 				548AC026F47CA71DE134E308 /* SaneClick */,
 				C650B644EC575F986F69D9DE /* SaneClickExtension */,
 				E43EE5BFE2983895396BE905 /* Shared */,
@@ -483,8 +471,8 @@
 			mainGroup = CFD110473EC892FF733EC67F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				AF778DBEAA6553F8AC1165A8 /* XCRemoteSwiftPackageReference "SaneUI" */,
 				A1C361B2823E62E30B2E47AA /* XCRemoteSwiftPackageReference "Sparkle" */,
-				5D5CA92E8FC7B9589F4FB5C4 /* XCLocalSwiftPackageReference "../../infra/SaneUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
@@ -769,10 +757,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1102;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = SaneClick/Info.plist;
-				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.unlock.v3;
-				INFOPLIST_KEY_SUFeedURL = "";
-				INFOPLIST_KEY_SUPublicEDKey = "";
+				INFOPLIST_FILE = "SaneClick/Info-AppStore.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -849,10 +834,7 @@
 				CURRENT_PROJECT_VERSION = 1102;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = SaneClick/Info.plist;
-				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.unlock.v3;
-				INFOPLIST_KEY_SUFeedURL = "";
-				INFOPLIST_KEY_SUPublicEDKey = "";
+				INFOPLIST_FILE = "SaneClick/Info-AppStore.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -994,10 +976,7 @@
 				CURRENT_PROJECT_VERSION = 1102;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = SaneClick/Info.plist;
-				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.unlock.v3;
-				INFOPLIST_KEY_SUFeedURL = "";
-				INFOPLIST_KEY_SUPublicEDKey = "";
+				INFOPLIST_FILE = "SaneClick/Info-AppStore.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1232,8 +1211,7 @@
 				CURRENT_PROJECT_VERSION = 1102;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = SaneClick/Info.plist;
-				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.unlock.v3;
+				INFOPLIST_FILE = "SaneClick/Info-AppStore.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1489,13 +1467,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		5D5CA92E8FC7B9589F4FB5C4 /* XCLocalSwiftPackageReference "../../infra/SaneUI" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../infra/SaneUI;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		A1C361B2823E62E30B2E47AA /* XCRemoteSwiftPackageReference "Sparkle" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1505,15 +1476,25 @@
 				minimumVersion = 2.8.0;
 			};
 		};
+		AF778DBEAA6553F8AC1165A8 /* XCRemoteSwiftPackageReference "SaneUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sane-apps/SaneUI.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		9B8390F8830A9BA53FD66F1F /* SaneUI */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = AF778DBEAA6553F8AC1165A8 /* XCRemoteSwiftPackageReference "SaneUI" */;
 			productName = SaneUI;
 		};
 		9F1286E819DE20012553BDE1 /* SaneUI */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = AF778DBEAA6553F8AC1165A8 /* XCRemoteSwiftPackageReference "SaneUI" */;
 			productName = SaneUI;
 		};
 		DCCDF70371884D3762E05659 /* Sparkle */ = {

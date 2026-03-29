@@ -178,13 +178,18 @@ struct AppStoreReviewGuardrailTests {
             .deletingLastPathComponent()
             .deletingLastPathComponent()
         let infoPlistSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Info.plist"), encoding: .utf8)
+        let appStoreInfoPlistSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Info-AppStore.plist"), encoding: .utf8)
         let projectManifest = try String(contentsOf: projectRoot.appendingPathComponent("project.yml"), encoding: .utf8)
 
         #expect(Bundle.main.object(forInfoDictionaryKey: "SUFeedURL") as? String == "https://saneclick.com/appcast.xml")
         #expect(Bundle.main.object(forInfoDictionaryKey: "AppStoreProductID") == nil)
-        #expect(infoPlistSource.contains("<key>AppStoreProductID</key>") == false)
         #expect(infoPlistSource.contains("<key>SUFeedURL</key>"))
-        #expect(projectManifest.contains("INFOPLIST_KEY_AppStoreProductID: com.saneclick.app.pro.unlock.v3"))
+        #expect(infoPlistSource.contains("<key>SUPublicEDKey</key>"))
+        #expect(infoPlistSource.contains("<key>AppStoreProductID</key>") == false)
+        #expect(appStoreInfoPlistSource.contains("<key>AppStoreProductID</key>"))
+        #expect(appStoreInfoPlistSource.contains("<key>SUFeedURL</key>") == false)
+        #expect(projectManifest.contains("INFOPLIST_FILE: SaneClick/Info.plist"))
+        #expect(projectManifest.contains("INFOPLIST_FILE: SaneClick/Info-AppStore.plist"))
     }
 
     @Test("Direct welcome claims match the script library split")
