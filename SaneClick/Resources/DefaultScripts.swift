@@ -693,7 +693,7 @@ enum ScriptLibrary {
             done
             osascript -e 'display notification "SHA256 file created" with title "SaneClick"'
             """,
-            icon: "doc.badge.shield.checkmark",
+            icon: "checkmark.shield",
             appliesTo: .filesOnly,
             fileExtensions: [],
             category: .powerUser,
@@ -1040,7 +1040,7 @@ enum ScriptLibrary {
             done
             osascript -e 'display notification "Spaces replaced" with title "SaneClick"'
             """,
-            icon: "underscore",
+            icon: "underline",
             appliesTo: .allItems,
             fileExtensions: [],
             category: .organization,

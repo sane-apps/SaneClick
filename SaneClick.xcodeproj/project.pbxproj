@@ -71,6 +71,7 @@
 		D2804ED379719BFC7420BA98 /* ImportExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037A92156BFEE353DE83DB29 /* ImportExportView.swift */; };
 		D5DA8CBA16326530ED642F7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4375D086296589FD9E2EE58 /* Assets.xcassets */; };
 		D934D0819D52D0C810281548 /* SaneUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9F1286E819DE20012553BDE1 /* SaneUI */; };
+		DBD8078B3161A28696C81530 /* VisualVerificationRenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C83DAB25F21AC8F5CBF893 /* VisualVerificationRenderTests.swift */; };
 		E646F123A34072852AA1F4B1 /* DefaultScripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */; };
 		E9456CC812E10D96402F93C9 /* SaneClickExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F52F937E1B88C7672C3470CA /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447D4BFE5ACB557CE976F11 /* Script.swift */; };
@@ -163,6 +164,7 @@
 		71B14FC7814E66A745273A50 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		73CAB9648AF325258DC7FE8E /* ScriptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptStore.swift; sourceTree = "<group>"; };
 		7561E69DFD12512C70D2215B /* ProFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProFeature.swift; sourceTree = "<group>"; };
+		75C83DAB25F21AC8F5CBF893 /* VisualVerificationRenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualVerificationRenderTests.swift; sourceTree = "<group>"; };
 		78E5BF6A55A10C30604680D2 /* SaneClickExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaneClickExtension.entitlements; sourceTree = "<group>"; };
 		8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SaneClickExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8894C708FDE7B61CCCD4E9D9 /* AppStoreScreenshotRenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreScreenshotRenderTests.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				07C04403C1E09F0D5028384E /* ScriptLibraryTests.swift */,
 				6B341F823B9E6117E2232E2D /* ScriptStoreTests.swift */,
 				55F2CF6B85D8D243EB9C017C /* ScriptTests.swift */,
+				75C83DAB25F21AC8F5CBF893 /* VisualVerificationRenderTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -628,6 +631,7 @@
 				B0561246A2A1957E7017B8B1 /* ScriptLibraryTests.swift in Sources */,
 				91FB048A84A797926306E11E /* ScriptStoreTests.swift in Sources */,
 				608EF8B223395F0AAD5C8E7D /* ScriptTests.swift in Sources */,
+				DBD8078B3161A28696C81530 /* VisualVerificationRenderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

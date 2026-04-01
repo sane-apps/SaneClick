@@ -16,6 +16,16 @@ enum SaneClickSettingsCopy {
         defaultValue: "Choose the folders where SaneClick should appear in Finder."
     )
 
+    static let showOpenMainWindowMenuItemLabel = String(
+        localized: "saneclick.settings.toggle.show_open_main_window_menu_item",
+        defaultValue: "Show \"Open SaneClick...\" footer item"
+    )
+
+    static let showOpenMainWindowMenuItemHelp = String(
+        localized: "saneclick.settings.help.show_open_main_window_menu_item",
+        defaultValue: "Keep a shortcut to the main SaneClick window at the bottom of the Finder menu"
+    )
+
     static let removeButtonTitle = String(
         localized: "saneclick.settings.button.remove",
         defaultValue: "Remove"

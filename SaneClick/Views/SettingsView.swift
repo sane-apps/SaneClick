@@ -43,6 +43,10 @@ struct SettingsView: View {
     @AppStorage(AppPreferences.showActionNotificationsKey) private var showActionNotifications = true
     @AppStorage(AppPreferences.showMenuBarIconKey) private var showMenuBarIcon = true
     @AppStorage(AppPreferences.showDockIconKey) private var showDockIcon = SaneBackgroundAppDefaults.showDockIcon
+    @AppStorage(
+        SaneClickSharedDefaults.showOpenMainWindowMenuItemKey,
+        store: SaneClickSharedDefaults.userDefaults
+    ) private var showOpenMainWindowMenuItem = true
     @State private var extensionStatus = ExtensionStatusService.checkStatus()
     @State private var isCheckingStatus = false
     @State private var selectedTab: Tab?
@@ -111,6 +115,16 @@ struct SettingsView: View {
                             }
                         }
                     }
+
+                    CompactDivider()
+
+                    CompactToggle(
+                        label: SaneClickSettingsCopy.showOpenMainWindowMenuItemLabel,
+                        icon: "gearshape",
+                        iconColor: .white,
+                        isOn: $showOpenMainWindowMenuItem
+                    )
+                    .help(SaneClickSettingsCopy.showOpenMainWindowMenuItemHelp)
                 }
 
                 #if APP_STORE
@@ -263,7 +277,6 @@ struct SettingsView: View {
         .help(SaneClickSettingsCopy.refreshHelp)
     }
 
-    @ViewBuilder
     private var restartFinderButton: some View {
         Button(SaneClickSettingsCopy.restartFinderButtonTitle) {
             FinderControl.restartFinder()
@@ -323,6 +336,244 @@ struct SettingsView: View {
     }
 }
 
+struct CustomActionsManagerView: View {
+    let scripts: [Script]
+    let onToggle: (Script) -> Void
+    let onEdit: (Script) -> Void
+    let onDelete: (Script) -> Void
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if scripts.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "slider.horizontal.3")
+                            .font(.system(size: 36))
+                            .foregroundStyle(.orange)
+
+                        Text("No Custom Actions")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+
+                        Text("Your custom actions will appear here so you can edit, disable, or remove them.")
+                            .font(.body)
+                            .foregroundStyle(Color.saneSilver)
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: 320)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(24)
+                } else {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 12) {
+                            ForEach(scripts) { script in
+                                ScriptRow(
+                                    script: script,
+                                    categoryColor: .orange,
+                                    onToggle: { onToggle(script) },
+                                    onEdit: { onEdit(script) },
+                                    onDelete: { onDelete(script) }
+                                )
+                            }
+                        }
+                        .padding(20)
+                    }
+                    .background(Color.saneNavy.opacity(0.3))
+                }
+            }
+            .navigationTitle("Custom Actions")
+        }
+        .frame(minWidth: 540, minHeight: 420)
+    }
+}
+
+struct QuickActionRow: View {
+    let title: String
+    let subtitle: String
+    let icon: String
+    let color: Color
+    var isLocked: Bool = false
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .font(.title3)
+                    .foregroundStyle(isLocked ? Color.saneSilver : color)
+                    .frame(width: 24)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.body)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.primary)
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundStyle(.white.opacity(0.9))
+                }
+
+                Spacer()
+
+                if isLocked {
+                    HStack(spacing: 4) {
+                        Image(systemName: "lock.fill")
+                            .font(.system(size: 10))
+                        Text("Pro")
+                            .font(.system(size: 11, weight: .semibold))
+                    }
+                    .foregroundStyle(.teal)
+                }
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .padding(.vertical, 4)
+    }
+}
+
+struct CategoryRow: View {
+    let category: ScriptLibrary.ScriptCategory
+    let totalCount: Int
+    let activeCount: Int
+    var isLocked: Bool = false
+
+    private var categoryColor: Color {
+        switch category.colorName {
+        case "blue": .blue
+        case "green": Color(red: 0.13, green: 0.77, blue: 0.37)
+        case "pink": .pink
+        case "purple": .teal
+        case "orange": .orange
+        default: .blue
+        }
+    }
+
+    private let successGreen = Color(red: 0.13, green: 0.77, blue: 0.37)
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: category.icon)
+                .font(.body)
+                .foregroundStyle(isLocked ? Color.saneSilver : categoryColor)
+                .frame(width: 24)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(category.rawValue)
+                    .font(.body)
+                    .foregroundStyle(.primary)
+
+                if isLocked {
+                    Text("Pro")
+                        .font(.caption)
+                        .foregroundStyle(.teal)
+                } else {
+                    Text("\(activeCount) active")
+                        .font(.caption)
+                        .foregroundStyle(activeCount > 0 ? successGreen : .white.opacity(0.9))
+                }
+            }
+
+            Spacer()
+
+            if isLocked {
+                HStack(spacing: 4) {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 10))
+                    Text("Pro")
+                        .font(.system(size: 11, weight: .semibold))
+                }
+                .foregroundStyle(.teal)
+            } else {
+                Text("\(totalCount)")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundStyle(categoryColor)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background(categoryColor.opacity(0.15))
+                    .clipShape(Capsule())
+            }
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+struct ScriptRow: View {
+    let script: Script
+    let categoryColor: Color
+    let onToggle: () -> Void
+    let onEdit: () -> Void
+    let onDelete: () -> Void
+
+    @State private var isHovered = false
+
+    private let successGreen = Color(red: 0.13, green: 0.77, blue: 0.37)
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Image(systemName: script.icon)
+                .font(.title3)
+                .foregroundStyle(script.isEnabled ? successGreen : Color.saneSilver)
+                .frame(width: 36, height: 36)
+                .background(script.isEnabled ? successGreen.opacity(0.15) : Color.saneSmoke)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(script.name)
+                    .font(.body)
+                    .fontWeight(.medium)
+                    .foregroundStyle(script.isEnabled ? Color.saneCloud : Color.saneSilver)
+
+                if !script.fileExtensions.isEmpty {
+                    Text(script.fileExtensions.joined(separator: ", "))
+                        .font(.caption)
+                        .foregroundStyle(Color.saneSilver)
+                }
+            }
+
+            Spacer()
+
+            Toggle("", isOn: Binding(
+                get: { script.isEnabled },
+                set: { _ in onToggle() }
+            ))
+            .toggleStyle(.switch)
+            .labelsHidden()
+            .tint(successGreen)
+        }
+        .padding(14)
+        .background {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.saneCarbon)
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(isHovered ? categoryColor.opacity(0.5) : Color.saneSmoke, lineWidth: 1)
+        }
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.15)) {
+                isHovered = hovering
+            }
+        }
+        .contextMenu {
+            Button {
+                onEdit()
+            } label: {
+                Label("Edit", systemImage: "pencil")
+            }
+
+            Divider()
+
+            Button(role: .destructive) {
+                onDelete()
+            } label: {
+                Label("Remove", systemImage: "trash")
+            }
+        }
+    }
+}
+
 extension SaneDiagnosticsService {
     static let shared = SaneDiagnosticsService(
         appName: "SaneClick",
@@ -338,6 +589,7 @@ private func collectSaneClickSettings() -> String {
     let showActionNotifications = defaults.object(forKey: AppPreferences.showActionNotificationsKey) as? Bool ?? true
     let showMenuBarIcon = defaults.object(forKey: AppPreferences.showMenuBarIconKey) as? Bool ?? true
     let showDockIcon = defaults.object(forKey: AppPreferences.showDockIconKey) as? Bool ?? SaneBackgroundAppDefaults.showDockIcon
+    let showOpenMainWindowMenuItem = SaneClickSharedDefaults.showOpenMainWindowMenuItem()
     let scriptStore = ScriptStore.shared
     let monitoredFolderCount = MonitoredFolderService.shared.folders.count
     let extensionStatus = ExtensionStatusService.checkStatus().statusText
@@ -348,25 +600,23 @@ private func collectSaneClickSettings() -> String {
         let updateChecks = UpdateService.shared.automaticallyChecksForUpdates ? "enabled" : "disabled"
     #endif
 
-    return """
-    extensionStatus: \(extensionStatus)
-    totalScripts: \(scriptStore.scripts.count)
-    enabledScripts: \(scriptStore.enabledScripts.count)
-    monitoredFolderCount: \(monitoredFolderCount)
-
-    settings:
-      launchAtLogin: \(SaneLoginItemPolicy.toggleValue())
-      showMenuBarIcon: \(showMenuBarIcon)
-      showDockIcon: \(showDockIcon)
-      showActionNotifications: \(showActionNotifications)
-      softwareUpdates: \(updateChecks)
-    """
+    return "extensionStatus: \(extensionStatus)\n" +
+        "totalScripts: \(scriptStore.scripts.count)\n" +
+        "enabledScripts: \(scriptStore.enabledScripts.count)\n" +
+        "monitoredFolderCount: \(monitoredFolderCount)\n\n" +
+        "settings:\n" +
+        "  launchAtLogin: \(SaneLoginItemPolicy.toggleValue())\n" +
+        "  showMenuBarIcon: \(showMenuBarIcon)\n" +
+        "  showDockIcon: \(showDockIcon)\n" +
+        "  showActionNotifications: \(showActionNotifications)\n" +
+        "  showOpenMainWindowMenuItem: \(showOpenMainWindowMenuItem)\n" +
+        "  softwareUpdates: \(updateChecks)"
 }
 
 #Preview {
     SettingsView(licenseService: settingsPreviewLicenseService())
-    .environment(ScriptStore.shared)
-    .environment(MonitoredFolderService.shared)
+        .environment(ScriptStore.shared)
+        .environment(MonitoredFolderService.shared)
 }
 
 @MainActor
@@ -389,37 +639,32 @@ private func settingsPreviewLicenseService() -> LicenseService {
 private func saneClickAboutLicenses(licenseService: LicenseService) -> [SaneAboutView.LicenseEntry] {
     guard licenseService.distributionChannel.supportsInAppUpdates else { return [] }
 
-    return [
-        SaneAboutView.LicenseEntry(
-            name: "Sparkle",
-            url: "https://sparkle-project.org",
-            text: """
-            Copyright (c) 2006-2013 Andy Matuschak.
-            Copyright (c) 2009-2013 Elgato Systems GmbH.
-            Copyright (c) 2011-2014 Kornel Lesiński.
-            Copyright (c) 2015-2017 Mayur Pawashe.
-            Copyright (c) 2014 C.W. Betts.
-            Copyright (c) 2014 Petroules Corporation.
-            Copyright (c) 2014 Big Nerd Ranch.
-            All rights reserved.
+    let sparkleLicense = SaneAboutView.LicenseEntry(
+        name: "Sparkle",
+        url: "https://sparkle-project.org",
+        text: "Copyright (c) 2006-2013 Andy Matuschak.\n" +
+            "Copyright (c) 2009-2013 Elgato Systems GmbH.\n" +
+            "Copyright (c) 2011-2014 Kornel Lesiński.\n" +
+            "Copyright (c) 2015-2017 Mayur Pawashe.\n" +
+            "Copyright (c) 2014 C.W. Betts.\n" +
+            "Copyright (c) 2014 Petroules Corporation.\n" +
+            "Copyright (c) 2014 Big Nerd Ranch.\n" +
+            "All rights reserved.\n\n" +
+            "Permission is hereby granted, free of charge, to any person obtaining a copy of\n" +
+            "this software and associated documentation files (the \"Software\"), to deal in\n" +
+            "the Software without restriction, including without limitation the rights to\n" +
+            "use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\n" +
+            "of the Software, and to permit persons to whom the Software is furnished to do\n" +
+            "so, subject to the following conditions:\n\n" +
+            "The above copyright notice and this permission notice shall be included in all\n" +
+            "copies or substantial portions of the Software.\n\n" +
+            "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n" +
+            "IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\n" +
+            "FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\n" +
+            "COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\n" +
+            "IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\n" +
+            "CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+    )
 
-            Permission is hereby granted, free of charge, to any person obtaining a copy of
-            this software and associated documentation files (the "Software"), to deal in
-            the Software without restriction, including without limitation the rights to
-            use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-            of the Software, and to permit persons to whom the Software is furnished to do
-            so, subject to the following conditions:
-
-            The above copyright notice and this permission notice shall be included in all
-            copies or substantial portions of the Software.
-
-            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-            FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-            COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-            IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-            CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-            """
-        )
-    ]
+    return [sparkleLicense]
 }

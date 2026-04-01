@@ -17,7 +17,7 @@ struct ExecutionRequest: Codable {
     let scriptId: UUID
     let paths: [String]
     let timestamp: Date
-    let requestId: UUID  // Unique ID to prevent duplicate processing
+    let requestId: UUID // Unique ID to prevent duplicate processing
 
     init(scriptId: UUID, paths: [String], timestamp: Date = Date(), requestId: UUID = UUID()) {
         self.scriptId = scriptId
@@ -28,7 +28,6 @@ struct ExecutionRequest: Codable {
 }
 
 class FinderSync: FIFinderSync {
-
     /// Scripts available for current menu
     private var currentScripts: [ExtensionScript] = []
 
@@ -127,14 +126,14 @@ class FinderSync: FIFinderSync {
             switch menuKind {
             case .contextualMenuForItems:
                 menuKindMatch = script.appliesTo == "Files & Folders" ||
-                                script.appliesTo == "Files Only" ||
-                                script.appliesTo == "Folders Only"
+                    script.appliesTo == "Files Only" ||
+                    script.appliesTo == "Folders Only"
             case .contextualMenuForContainer:
                 menuKindMatch = script.appliesTo == "Inside Folder" ||
-                                script.appliesTo == "Files & Folders"
+                    script.appliesTo == "Files & Folders"
             case .contextualMenuForSidebar:
                 menuKindMatch = script.appliesTo == "Folders Only" ||
-                                script.appliesTo == "Files & Folders"
+                    script.appliesTo == "Files & Folders"
             default:
                 menuKindMatch = false
             }
@@ -144,7 +143,7 @@ class FinderSync: FIFinderSync {
             return script.matchesFiles(selectedURLs)
         }
 
-        self.currentScripts = applicableScripts
+        currentScripts = applicableScripts
         for (index, script) in applicableScripts.enumerated() {
             let item = NSMenuItem(title: script.name, action: #selector(executeScript(_:)), keyEquivalent: "")
             item.tag = index
@@ -152,13 +151,15 @@ class FinderSync: FIFinderSync {
             menu.addItem(item)
         }
 
-        if !applicableScripts.isEmpty {
-            menu.addItem(.separator())
-        }
+        if SaneClickSharedDefaults.showOpenMainWindowMenuItem() {
+            if !applicableScripts.isEmpty {
+                menu.addItem(.separator())
+            }
 
-        let settingsItem = NSMenuItem(title: "Open SaneClick...", action: #selector(openMainApp), keyEquivalent: "")
-        settingsItem.image = tintedSFSymbol(name: "gearshape", accessibilityDescription: "Settings")
-        menu.addItem(settingsItem)
+            let settingsItem = NSMenuItem(title: "Open SaneClick...", action: #selector(openMainApp), keyEquivalent: "")
+            settingsItem.image = tintedSFSymbol(name: "gearshape", accessibilityDescription: "Settings")
+            menu.addItem(settingsItem)
+        }
 
         return menu
     }
@@ -244,7 +245,8 @@ class FinderSync: FIFinderSync {
     private func loadScripts() -> [ExtensionScript] {
         guard FileManager.default.fileExists(atPath: scriptsFileURL.path),
               let data = try? Data(contentsOf: scriptsFileURL),
-              let scripts = try? JSONDecoder().decode([ExtensionScript].self, from: data) else {
+              let scripts = try? JSONDecoder().decode([ExtensionScript].self, from: data)
+        else {
             return []
         }
         return scripts

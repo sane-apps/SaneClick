@@ -1,6 +1,6 @@
 import Foundation
 
-struct MonitoredFolder: Codable, Identifiable, Hashable, Sendable {
+struct MonitoredFolder: Codable, Identifiable, Hashable {
     let id: UUID
     let name: String
     let path: String
@@ -15,6 +15,22 @@ struct MonitoredFolder: Codable, Identifiable, Hashable, Sendable {
 
     var url: URL {
         URL(fileURLWithPath: path, isDirectory: true)
+    }
+}
+
+enum SaneClickSharedDefaults {
+    static let showOpenMainWindowMenuItemKey = "showOpenMainWindowMenuItem"
+
+    static var userDefaults: UserDefaults? {
+        UserDefaults(suiteName: MonitoredFolders.appGroupID)
+    }
+
+    static func registerDefaults(in defaults: UserDefaults? = userDefaults) {
+        defaults?.register(defaults: [showOpenMainWindowMenuItemKey: true])
+    }
+
+    static func showOpenMainWindowMenuItem(in defaults: UserDefaults? = userDefaults) -> Bool {
+        defaults?.object(forKey: showOpenMainWindowMenuItemKey) as? Bool ?? true
     }
 }
 

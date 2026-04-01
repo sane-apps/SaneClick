@@ -1,9 +1,9 @@
+import AppKit
 import Foundation
-import Testing
 @testable import SaneClick
+import Testing
 
 struct ScriptLibraryTests {
-
     // MARK: - Library Content Tests
 
     @Test("All library scripts have valid content")
@@ -35,6 +35,19 @@ struct ScriptLibraryTests {
         for category in ScriptLibrary.ScriptCategory.allCases {
             #expect(!category.icon.isEmpty, "Category \(category.rawValue) should have an icon")
             #expect(!category.description.isEmpty, "Category \(category.rawValue) should have a description")
+        }
+    }
+
+    @Test("Library and category icons map to valid SF Symbols")
+    func iconsUseValidSFSymbols() {
+        for script in ScriptLibrary.allScripts {
+            let image = NSImage(systemSymbolName: script.icon, accessibilityDescription: script.name)
+            #expect(image != nil, "Script \(script.name) uses invalid SF Symbol \(script.icon)")
+        }
+
+        for category in ScriptLibrary.ScriptCategory.allCases {
+            let image = NSImage(systemSymbolName: category.icon, accessibilityDescription: category.rawValue)
+            #expect(image != nil, "Category \(category.rawValue) uses invalid SF Symbol \(category.icon)")
         }
     }
 
@@ -110,9 +123,9 @@ struct ScriptLibraryTests {
         for script in bashScripts {
             // Most bash scripts should reference $@ or $1
             let usesArgs = script.content.contains("$@") ||
-                           script.content.contains("$1") ||
-                           script.content.contains("\"$") ||
-                           script.content.contains("argv")
+                script.content.contains("$1") ||
+                script.content.contains("\"$") ||
+                script.content.contains("argv")
             #expect(usesArgs, "Bash script \(script.name) should use file arguments")
         }
     }
@@ -124,8 +137,8 @@ struct ScriptLibraryTests {
         for script in appleScripts {
             // AppleScript should reference argv or tell application
             let hasStructure = script.content.contains("argv") ||
-                               script.content.contains("tell application") ||
-                               script.content.contains("tell app")
+                script.content.contains("tell application") ||
+                script.content.contains("tell app")
             #expect(hasStructure, "AppleScript \(script.name) should have proper structure")
         }
     }
@@ -134,7 +147,6 @@ struct ScriptLibraryTests {
 // MARK: - Execution Request Tests
 
 struct ExecutionRequestTests {
-
     @Test("ExecutionRequest is Codable")
     func requestIsCodable() throws {
         let original = ExecutionRequest(
@@ -169,7 +181,7 @@ struct ExecutionRequestTests {
         let paths = [
             "/Users/test/file with spaces.txt",
             "/Users/test/résumé.pdf",
-            "/Users/test/日本語.txt"
+            "/Users/test/日本語.txt",
         ]
 
         let request = ExecutionRequest(
@@ -268,6 +280,62 @@ struct WelcomeGateStateTests {
         #expect(defaults.object(forKey: "NSWindow Frame SwiftUI.ModifiedContent<SaneUI.WelcomeGateView>.SheetPresentationModifier") == nil)
         #expect(defaults.object(forKey: "NSSplitView Subview Frames SwiftUI.ModifiedContent<SaneClick.WelcomeView>.SheetPresentationModifier") == nil)
         #expect(defaults.string(forKey: "NSWindow Frame main-AppWindow-1") == "keep")
+    }
+}
+
+struct ActionCatalogTests {
+    @Test("Custom actions are separated from built-in library actions")
+    func customActionsAreSeparatedFromLibraryActions() throws {
+        let builtIn = try #require(ScriptLibrary.allScripts.first).toScript()
+        let custom = Script(name: "Zip And Upload", content: "echo custom", icon: "shippingbox")
+
+        let customScripts = ActionCatalog.customScripts(from: [builtIn, custom])
+
+        #expect(customScripts == [custom])
+    }
+
+    @Test("Category scripts only include matching built-in actions")
+    func categoryScriptsOnlyIncludeMatchingBuiltIns() throws {
+        let universalName = try #require(ScriptLibrary.universalScripts.first).name
+        let organizationName = try #require(ScriptLibrary.organizationScripts.first).name
+        let universalScript = Script(name: universalName, content: "echo universal")
+        let organizationScript = Script(name: organizationName, content: "echo organization")
+        let customScript = Script(name: "My Special Action", content: "echo custom")
+
+        let universalScripts = ActionCatalog.libraryScripts(
+            in: .universal,
+            from: [universalScript, organizationScript, customScript]
+        )
+
+        #expect(universalScripts == [universalScript])
+    }
+}
+
+struct SaneClickSharedDefaultsTests {
+    @Test("Open main window footer item defaults to enabled")
+    func openMainWindowFooterItemDefaultsToEnabled() {
+        guard let defaults = UserDefaults(suiteName: #function) else {
+            Issue.record("Failed to create isolated defaults suite")
+            return
+        }
+        defaults.removePersistentDomain(forName: #function)
+
+        SaneClickSharedDefaults.registerDefaults(in: defaults)
+
+        #expect(SaneClickSharedDefaults.showOpenMainWindowMenuItem(in: defaults) == true)
+    }
+
+    @Test("Open main window footer item respects saved value")
+    func openMainWindowFooterItemRespectsSavedValue() {
+        guard let defaults = UserDefaults(suiteName: #function) else {
+            Issue.record("Failed to create isolated defaults suite")
+            return
+        }
+        defaults.removePersistentDomain(forName: #function)
+
+        defaults.set(false, forKey: SaneClickSharedDefaults.showOpenMainWindowMenuItemKey)
+
+        #expect(SaneClickSharedDefaults.showOpenMainWindowMenuItem(in: defaults) == false)
     }
 }
 

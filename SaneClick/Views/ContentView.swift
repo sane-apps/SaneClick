@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var selectedCategory: ScriptLibrary.ScriptCategory? = .universal
     @State private var showLibrary = false
     @State private var showCustomScriptEditor = false
+    @State private var showCustomActionsManager = false
     @State private var showMoreOptions = false
     @State private var showImportExport = false
     @State private var importExportMode: ImportExportView.Mode = .importScripts
@@ -37,6 +38,27 @@ struct ContentView: View {
             ScriptEditorView(script: nil) { newScript in
                 scriptStore.addScript(newScript)
             }
+        }
+        .sheet(isPresented: $showCustomActionsManager) {
+            CustomActionsManagerView(
+                scripts: customScripts,
+                onToggle: { script in
+                    toggleScript(script)
+                },
+                onEdit: { script in
+                    showCustomActionsManager = false
+                    DispatchQueue.main.async {
+                        editingScript = script
+                    }
+                },
+                onDelete: { script in
+                    showCustomActionsManager = false
+                    DispatchQueue.main.async {
+                        scriptToDelete = script
+                        showDeleteConfirmation = true
+                    }
+                }
+            )
         }
         .sheet(isPresented: $showImportExport) {
             ImportExportView(mode: $importExportMode, licenseService: licenseService)
@@ -124,6 +146,19 @@ struct ContentView: View {
                         color: .green
                     ) {
                         openSettingsWindow()
+                    }
+                #endif
+
+                #if !APP_STORE
+                    if !customScripts.isEmpty {
+                        QuickActionRow(
+                            title: "Manage Custom Actions",
+                            subtitle: customActionsSubtitle,
+                            icon: "slider.horizontal.3",
+                            color: .orange
+                        ) {
+                            showCustomActionsManager = true
+                        }
                     }
                 #endif
 
@@ -520,9 +555,11 @@ struct ContentView: View {
     // MARK: - Helpers
 
     private func scriptsForCategory(_ category: ScriptLibrary.ScriptCategory) -> [Script] {
-        // Map library category to installed scripts by matching names
-        let libraryScriptNames = Set(ScriptLibrary.availableScripts(for: category).map(\.name))
-        return scriptStore.scripts.filter { libraryScriptNames.contains($0.name) }
+        ActionCatalog.libraryScripts(in: category, from: scriptStore.scripts)
+    }
+
+    private var customScripts: [Script] {
+        ActionCatalog.customScripts(from: scriptStore.scripts)
     }
 
     private var librarySubtitle: String {
@@ -536,6 +573,11 @@ struct ContentView: View {
     private var monitoredFolderSubtitle: String {
         let count = monitoredFolderService.monitoredFolderCount
         return count == 0 ? "Choose where SaneClick appears in Finder" : "\(count) monitored folder\(count == 1 ? "" : "s")"
+    }
+
+    private var customActionsSubtitle: String {
+        let count = customScripts.count
+        return count == 1 ? "1 custom action to edit or remove" : "\(count) custom actions to edit or remove"
     }
 
     private var emptyStateBody: String {
@@ -573,215 +615,6 @@ struct ContentView: View {
         var updated = script
         updated.isEnabled.toggle()
         scriptStore.updateScript(updated)
-    }
-}
-
-// MARK: - Quick Action Row
-
-struct QuickActionRow: View {
-    let title: String
-    let subtitle: String
-    let icon: String
-    let color: Color
-    var isLocked: Bool = false
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundStyle(isLocked ? Color.saneSilver : color)
-                    .frame(width: 24)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
-                        .font(.body)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.primary)
-                    Text(subtitle)
-                        .font(.caption)
-                        .foregroundStyle(.white.opacity(0.9))
-                }
-
-                Spacer()
-
-                if isLocked {
-                    HStack(spacing: 4) {
-                        Image(systemName: "lock.fill")
-                            .font(.system(size: 10))
-                        Text("Pro")
-                            .font(.system(size: 11, weight: .semibold))
-                    }
-                    .foregroundStyle(.teal)
-                }
-            }
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .padding(.vertical, 4)
-    }
-}
-
-// MARK: - Category Row
-
-struct CategoryRow: View {
-    let category: ScriptLibrary.ScriptCategory
-    let totalCount: Int
-    let activeCount: Int
-    var isLocked: Bool = false
-
-    /// Semantic colors (from SaneApps Brand Guidelines):
-    /// - Blue: Essential/primary features
-    /// - Green: Safe/file management (also success state)
-    /// - Pink: Creative/visual
-    /// - Teal: Technical/developer
-    /// - Orange: Warning/advanced (be careful)
-    private var categoryColor: Color {
-        switch category.colorName {
-        case "blue": .blue
-        case "green": Color(red: 0.13, green: 0.77, blue: 0.37) // Brand success green
-        case "pink": .pink
-        case "purple": .teal
-        case "orange": .orange
-        default: .blue
-        }
-    }
-
-    /// Success green for active count
-    private let successGreen = Color(red: 0.13, green: 0.77, blue: 0.37)
-
-    var body: some View {
-        HStack(spacing: 12) {
-            // Icon uses category color for free, muted for locked
-            Image(systemName: category.icon)
-                .font(.body)
-                .foregroundStyle(isLocked ? Color.saneSilver : categoryColor)
-                .frame(width: 24)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(category.rawValue)
-                    .font(.body)
-                    .foregroundStyle(.primary)
-
-                if isLocked {
-                    Text("Pro")
-                        .font(.caption)
-                        .foregroundStyle(.teal)
-                } else {
-                    // Active count in green (success state)
-                    Text("\(activeCount) active")
-                        .font(.caption)
-                        .foregroundStyle(activeCount > 0 ? successGreen : .white.opacity(0.9))
-                }
-            }
-
-            Spacer()
-
-            if isLocked {
-                // Lock badge for Pro categories
-                HStack(spacing: 4) {
-                    Image(systemName: "lock.fill")
-                        .font(.system(size: 10))
-                    Text("Pro")
-                        .font(.system(size: 11, weight: .semibold))
-                }
-                .foregroundStyle(.teal)
-            } else {
-                // Count badge shows total available scripts in category
-                Text("\(totalCount)")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundStyle(categoryColor)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .background(categoryColor.opacity(0.15))
-                    .clipShape(Capsule())
-            }
-        }
-        .padding(.vertical, 4)
-    }
-}
-
-// MARK: - Script Row
-
-struct ScriptRow: View {
-    let script: Script
-    let categoryColor: Color
-    let onToggle: () -> Void
-    let onEdit: () -> Void
-    let onDelete: () -> Void
-
-    @State private var isHovered = false
-
-    /// Success green for enabled state (from brand guidelines)
-    private let successGreen = Color(red: 0.13, green: 0.77, blue: 0.37)
-
-    var body: some View {
-        HStack(spacing: 14) {
-            // Icon - green when enabled (success), gray when disabled
-            Image(systemName: script.icon)
-                .font(.title3)
-                .foregroundStyle(script.isEnabled ? successGreen : Color.saneSilver)
-                .frame(width: 36, height: 36)
-                .background(script.isEnabled ? successGreen.opacity(0.15) : Color.saneSmoke)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-
-            // Name and status
-            VStack(alignment: .leading, spacing: 2) {
-                Text(script.name)
-                    .font(.body)
-                    .fontWeight(.medium)
-                    .foregroundStyle(script.isEnabled ? Color.saneCloud : Color.saneSilver)
-
-                // Show file type filter if set, otherwise show status
-                if !script.fileExtensions.isEmpty {
-                    Text(script.fileExtensions.joined(separator: ", "))
-                        .font(.caption)
-                        .foregroundStyle(Color.saneSilver)
-                }
-            }
-
-            Spacer()
-
-            // Toggle - green tint for success state
-            Toggle("", isOn: Binding(
-                get: { script.isEnabled },
-                set: { _ in onToggle() }
-            ))
-            .toggleStyle(.switch)
-            .labelsHidden()
-            .tint(successGreen)
-        }
-        .padding(14)
-        .background {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.saneCarbon)
-        }
-        .overlay {
-            RoundedRectangle(cornerRadius: 12)
-                .strokeBorder(isHovered ? categoryColor.opacity(0.5) : Color.saneSmoke, lineWidth: 1)
-        }
-        .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.15)) {
-                isHovered = hovering
-            }
-        }
-        .contextMenu {
-            Button {
-                onEdit()
-            } label: {
-                Label("Edit", systemImage: "pencil")
-            }
-
-            Divider()
-
-            Button(role: .destructive) {
-                onDelete()
-            } label: {
-                Label("Remove", systemImage: "trash")
-            }
-        }
     }
 }
 
@@ -883,8 +716,8 @@ struct LibraryScriptRow: View {
 
 #Preview {
     ContentView(licenseService: contentPreviewLicenseService())
-    .environment(ScriptStore.shared)
-    .environment(MonitoredFolderService.shared)
+        .environment(ScriptStore.shared)
+        .environment(MonitoredFolderService.shared)
 }
 
 @MainActor
