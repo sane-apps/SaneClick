@@ -4,6 +4,12 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.1.3] - 2026-04-01
+
+Adds a Finder footer toggle, restores custom action management in the Mac app, and improves built-in action icon rendering.
+
+---
+
 ## [1.1.1] - 2026-03-16
 
 Adds in-app bug reporting with diagnostics from Settings, and improves support and settings consistency.
