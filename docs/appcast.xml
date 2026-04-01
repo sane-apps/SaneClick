@@ -3,7 +3,26 @@
     <channel>
         <title>SaneClick Changelog</title>
 
-                            <item>
+                                    <item>
+            <title>1.1.3</title>
+            <pubDate>Wed, 01 Apr 2026 17:45:17 -0400</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description>
+                <![CDATA[
+                <h2>What's New</h2>
+                <ul>
+                <li>Adds a Finder footer toggle, restores custom action management in the Mac app, and improves built-in action icon rendering.</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.1.3.zip"
+                       sparkle:version="1103"
+                       sparkle:shortVersionString="1.1.3"
+                       length="2201071"
+                       type="application/octet-stream"
+                       sparkle:edSignature="N5M06aHjYWArAlQEJ4QBsO3yn2VeCGU3lHbAfo8UnJKAWHfizuWlOqpgJqy1tnUm8GC2Lu4MN+DoDdJORpbgAQ=="/>
+        </item>
+<item>
             <title>1.1.2</title>
             <pubDate>Sun, 29 Mar 2026 17:14:46 -0400</pubDate>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
