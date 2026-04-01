@@ -7,6 +7,14 @@ struct SettingsView: View {
         case license = "License"
         case about = "About"
 
+        var title: String {
+            switch self {
+            case .general: SaneSettingsStrings.generalTabTitle
+            case .license: SaneSettingsStrings.licenseTabTitle
+            case .about: SaneSettingsStrings.aboutTabTitle
+            }
+        }
+
         var icon: String {
             switch self {
             case .general: "gearshape"
@@ -77,14 +85,14 @@ struct SettingsView: View {
     private var generalTab: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 16) {
-                CompactSection("Right-Click Menu", icon: "cursorarrow.click.2", iconColor: SaneSettingsIconSemantic.content.color) {
-                    CompactRow("Status", icon: extensionStatus.icon, iconColor: statusColor) {
+                CompactSection(SaneClickSettingsCopy.rightClickMenuSectionTitle, icon: "cursorarrow.click.2", iconColor: SaneSettingsIconSemantic.content.color) {
+                    CompactRow(SaneSettingsStrings.statusLabel, icon: extensionStatus.icon, iconColor: statusColor) {
                         StatusBadge(extensionStatus.statusText, color: statusColor)
                     }
 
                     CompactDivider()
 
-                    CompactRow("Actions", icon: "slider.horizontal.3", iconColor: .white) {
+                    CompactRow(SaneSettingsStrings.actionsLabel, icon: "slider.horizontal.3", iconColor: .white) {
                         ViewThatFits(in: .horizontal) {
                             HStack(spacing: 8) {
                                 openSystemSettingsButton
@@ -106,9 +114,9 @@ struct SettingsView: View {
                 }
 
                 #if APP_STORE
-                    CompactSection("Monitored Folders", icon: "folder.badge.gearshape", iconColor: SaneSettingsIconSemantic.content.color) {
+                    CompactSection(SaneClickSettingsCopy.monitoredFoldersSectionTitle, icon: "folder.badge.gearshape", iconColor: SaneSettingsIconSemantic.content.color) {
                         if monitoredFolderService.folders.isEmpty {
-                            readableHint("Choose the folders where SaneClick should appear in Finder.")
+                            readableHint(SaneClickSettingsCopy.monitoredFoldersEmptyStateHint)
                         } else {
                             let folders = monitoredFolderService.folders
                             ForEach(Array(folders.enumerated()), id: \.element.id) { index, folder in
@@ -120,7 +128,7 @@ struct SettingsView: View {
 
                                         Spacer(minLength: 12)
 
-                                        Button("Remove") {
+                                        Button(SaneClickSettingsCopy.removeButtonTitle) {
                                             monitoredFolderService.removeFolder(folder)
                                         }
                                         .buttonStyle(SaneActionButtonStyle(destructive: true, compact: true))
@@ -144,8 +152,8 @@ struct SettingsView: View {
                             CompactDivider()
                         }
 
-                        CompactRow("Actions", icon: "plus.circle.fill", iconColor: .saneAccent) {
-                            Button("Add Folder") {
+                        CompactRow(SaneSettingsStrings.actionsLabel, icon: "plus.circle.fill", iconColor: .saneAccent) {
+                            Button(SaneClickSettingsCopy.addFolderButtonTitle) {
                                 monitoredFolderService.addFolders()
                             }
                             .buttonStyle(SaneActionButtonStyle())
@@ -158,44 +166,46 @@ struct SettingsView: View {
                     }
                 #endif
 
-                CompactSection("Your Actions", icon: "square.stack.3d.up.fill", iconColor: SaneSettingsIconSemantic.content.color) {
-                    CompactRow("Total actions", icon: "square.stack.3d.up.fill", iconColor: .white) {
+                CompactSection(SaneClickSettingsCopy.yourActionsSectionTitle, icon: "square.stack.3d.up.fill", iconColor: SaneSettingsIconSemantic.content.color) {
+                    CompactRow(SaneClickSettingsCopy.totalActionsLabel, icon: "square.stack.3d.up.fill", iconColor: .white) {
                         valueText("\(scriptStore.scripts.count)")
                     }
 
                     CompactDivider()
 
-                    CompactRow("Active actions", icon: "checkmark.circle.fill", iconColor: .green) {
+                    CompactRow(SaneClickSettingsCopy.activeActionsLabel, icon: "checkmark.circle.fill", iconColor: .green) {
                         valueText("\(scriptStore.enabledScripts.count)")
                     }
                 }
 
-                CompactSection("App Behavior", icon: "switch.2", iconColor: SaneSettingsIconSemantic.general.color) {
+                CompactSection(SaneClickSettingsCopy.appBehaviorSectionTitle, icon: "switch.2", iconColor: SaneSettingsIconSemantic.general.color) {
                     SaneLoginItemToggle()
                     CompactDivider()
                     SaneDockIconToggle(showDockIcon: $showDockIcon)
                     CompactDivider()
                     CompactToggle(
-                        label: "Show menu bar icon",
+                        label: SaneClickSettingsCopy.showMenuBarIconLabel,
                         icon: "menubar.rectangle",
                         iconColor: .white,
                         isOn: showMenuBarIconBinding
                     )
-                    .help("Keep SaneClick available in your menu bar")
+                    .help(SaneClickSettingsCopy.showMenuBarIconHelp)
                     CompactDivider()
                     CompactToggle(
-                        label: "Show action confirmations",
+                        label: SaneClickSettingsCopy.showActionConfirmationsLabel,
                         icon: "bell.badge.fill",
                         iconColor: .white,
                         isOn: $showActionNotifications
                     )
-                    .help("Show a notification when an action finishes")
+                    .help(SaneClickSettingsCopy.showActionConfirmationsHelp)
                     CompactDivider()
-                    readableHint("If you hide both icons, reopen SaneClick from Applications.")
+                    readableHint(SaneClickSettingsCopy.hiddenIconsHint)
                 }
 
+                SaneLanguageSettingsRow()
+
                 #if !APP_STORE
-                    CompactSection("Software Updates", icon: "arrow.triangle.2.circlepath", iconColor: .saneAccent) {
+                    CompactSection(SaneSettingsStrings.softwareUpdatesSectionTitle, icon: "arrow.triangle.2.circlepath", iconColor: .saneAccent) {
                         SaneSparkleRow(
                             automaticallyChecks: $automaticallyChecksForUpdates,
                             checkFrequency: $updateCheckFrequency,
@@ -235,32 +245,32 @@ struct SettingsView: View {
     }
 
     private var openSystemSettingsButton: some View {
-        Button("Open Settings") {
+        Button(SaneClickSettingsCopy.openSettingsButtonTitle) {
             if let url = URL(string: "x-apple.systempreferences:com.apple.ExtensionsPreferences") {
                 NSWorkspace.shared.open(url)
             }
         }
         .buttonStyle(SaneActionButtonStyle())
-        .help("Enable or disable SaneClick in System Settings")
+        .help(SaneClickSettingsCopy.openSettingsHelp)
     }
 
     private var refreshStatusButton: some View {
-        Button(isCheckingStatus ? "Refreshing..." : "Refresh") {
+        Button(isCheckingStatus ? SaneClickSettingsCopy.refreshingButtonTitle : SaneClickSettingsCopy.refreshButtonTitle) {
             refreshExtensionStatus()
         }
         .buttonStyle(SaneActionButtonStyle())
         .disabled(isCheckingStatus)
-        .help("Refresh the Finder extension status")
+        .help(SaneClickSettingsCopy.refreshHelp)
     }
 
     @ViewBuilder
     private var restartFinderButton: some View {
-        Button("Restart Finder") {
+        Button(SaneClickSettingsCopy.restartFinderButtonTitle) {
             FinderControl.restartFinder()
             refreshExtensionStatus()
         }
         .buttonStyle(SaneActionButtonStyle())
-        .help("Restart Finder if the extension is enabled but not yet running")
+        .help(SaneClickSettingsCopy.restartFinderHelp)
     }
 
     private var showMenuBarIconBinding: Binding<Bool> {
@@ -364,7 +374,7 @@ private func settingsPreviewLicenseService() -> LicenseService {
     #if APP_STORE
         LicenseService(
             appName: "SaneClick",
-            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.unlock.v3")
+            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.actions.v4")
         )
     #else
         LicenseService(

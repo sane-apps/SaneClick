@@ -892,7 +892,7 @@ private func contentPreviewLicenseService() -> LicenseService {
     #if APP_STORE
         LicenseService(
             appName: "SaneClick",
-            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.unlock.v3")
+            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.actions.v4")
         )
     #else
         LicenseService(

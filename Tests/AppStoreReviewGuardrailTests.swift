@@ -76,8 +76,8 @@ struct AppStoreReviewGuardrailTests {
         let displayName = String(manifest.matches(of: namePattern).first?.output.1 ?? "")
         let description = String(manifest.matches(of: descriptionPattern).first?.output.1 ?? "")
 
-        #expect(productId == "com.saneclick.app.pro.unlock.v3")
-        #expect(displayName == "SaneClick Pro Actions")
+        #expect(productId == "com.saneclick.app.pro.actions.v4")
+        #expect(displayName == "SaneClick Pro Access")
         #expect(description == "Unlock 9 more built-in file actions.")
         #expect(description.localizedCaseInsensitiveContains("one-time purchase") == false)
     }
@@ -162,7 +162,9 @@ struct AppStoreReviewGuardrailTests {
         let directSupportSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/DirectDistributionSupport.swift"), encoding: .utf8)
 
         #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab)"))
-        #expect(settingsSource.contains("CompactSection(\"App Behavior\""))
+        #expect(settingsSource.contains("SaneClickSettingsCopy.appBehaviorSectionTitle"))
+        #expect(settingsSource.contains("SaneLanguageSettingsRow()"))
+        #expect(settingsSource.contains("SaneClickSettingsCopy.openSettingsButtonTitle"))
         #expect(settingsSource.contains("SaneSparkleRow("))
         #expect(settingsSource.contains("Enter License Key") == false)
         #expect(settingsSource.contains("TabView(selection: $selectedTab)") == false)
@@ -187,9 +189,12 @@ struct AppStoreReviewGuardrailTests {
         #expect(infoPlistSource.contains("<key>SUPublicEDKey</key>"))
         #expect(infoPlistSource.contains("<key>AppStoreProductID</key>") == false)
         #expect(appStoreInfoPlistSource.contains("<key>AppStoreProductID</key>"))
+        #expect(appStoreInfoPlistSource.contains("com.saneclick.app.pro.actions.v4"))
+        #expect(appStoreInfoPlistSource.contains("<key>NSAppleEventsUsageDescription</key>") == false)
         #expect(appStoreInfoPlistSource.contains("<key>SUFeedURL</key>") == false)
         #expect(projectManifest.contains("INFOPLIST_FILE: SaneClick/Info.plist"))
         #expect(projectManifest.contains("INFOPLIST_FILE: SaneClick/Info-AppStore.plist"))
+        #expect(projectManifest.contains("INFOPLIST_KEY_AppStoreProductID: com.saneclick.app.pro.actions.v4"))
     }
 
     @Test("Direct welcome claims match the script library split")
@@ -202,6 +207,6 @@ struct AppStoreReviewGuardrailTests {
             .reduce(0, +)
 
         #expect(freeCount == 10)
-        #expect(proCount == 40)
+        #expect(proCount == 43)
     }
 }

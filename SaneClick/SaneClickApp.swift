@@ -188,7 +188,7 @@ struct SaneClickApp: App {
     #if APP_STORE
         @State private var licenseService = LicenseService(
             appName: "SaneClick",
-            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.unlock.v3"),
+            purchaseBackend: .appStore(productID: "com.saneclick.app.pro.actions.v4"),
             keychain: KeychainService(service: "com.saneclick.SaneClick")
         )
     #else

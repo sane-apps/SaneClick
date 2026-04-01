@@ -25,6 +25,7 @@
 		300E8E5181F1B20D980FFEE1 /* DirectDistributionSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8B50CEA8F97A893927BB7D /* DirectDistributionSupport.swift */; };
 		31244C53696A66D583170549 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D6A7A87549AA85929FF95A /* UpdateService.swift */; };
 		31AC9D9565D351875B198DDC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 5B42E303B65FD7B78AFCEF2F /* PrivacyInfo.xcprivacy */; };
+		33C8AFC4C913BFC0DDC3992B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 71B14FC7814E66A745273A50 /* Localizable.xcstrings */; };
 		3403559622138EF20F1F7335 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D5A8C9C025AE4FA559E7A8 /* SettingsView.swift */; };
 		347583F7E4F146C5BEEE9D21 /* MonitoredFolders.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E14736E3A91B0759B66C0E /* MonitoredFolders.swift */; };
 		395985D6C5DDC4E3B5D4030A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F183182221315A53A467D /* Category.swift */; };
@@ -38,9 +39,12 @@
 		4C9949F5496F3CCF5E69CA98 /* ExtensionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E13D1032CE6C26DB0310BC0 /* ExtensionStatusTests.swift */; };
 		608EF8B223395F0AAD5C8E7D /* ScriptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F2CF6B85D8D243EB9C017C /* ScriptTests.swift */; };
 		6A4703AFD7F066FE54ACC7D2 /* SaneClickExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7095158AE118884DC2F266BB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 71B14FC7814E66A745273A50 /* Localizable.xcstrings */; };
 		7A98271CEF2DBF64523D9EC1 /* SaneUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9B8390F8830A9BA53FD66F1F /* SaneUI */; };
 		803A6EFC382E0445C1D9CCA4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D5A8C9C025AE4FA559E7A8 /* SettingsView.swift */; };
 		80B217DEAF5CAE7469AFE1F1 /* SaneClickApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2315CC9340FA3A69BDDE3F79 /* SaneClickApp.swift */; };
+		813EF3E3058263CA064C98D2 /* SaneClickSettingsCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A78AA43537E7247FEB43C7 /* SaneClickSettingsCopy.swift */; };
+		86ED16E61603FF4DAF743AC3 /* SaneClickSettingsCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A78AA43537E7247FEB43C7 /* SaneClickSettingsCopy.swift */; };
 		8F04B14A86B9911E8790F68D /* MonitoredFolderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B70939D4CC943905E332A2 /* MonitoredFolderService.swift */; };
 		91FB048A84A797926306E11E /* ScriptStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B341F823B9E6117E2232E2D /* ScriptStoreTests.swift */; };
 		96FF0C54A60D14A759E109CB /* FinderControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3657A493D18F7FE8C14A6434 /* FinderControl.swift */; };
@@ -156,12 +160,14 @@
 		6B341F823B9E6117E2232E2D /* ScriptStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptStoreTests.swift; sourceTree = "<group>"; };
 		6BEC056477ED451BA3A4C710 /* SaneColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaneColors.swift; sourceTree = "<group>"; };
 		700D47CED971DFCF509DB68A /* FinderSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderSync.swift; sourceTree = "<group>"; };
+		71B14FC7814E66A745273A50 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		73CAB9648AF325258DC7FE8E /* ScriptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptStore.swift; sourceTree = "<group>"; };
 		7561E69DFD12512C70D2215B /* ProFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProFeature.swift; sourceTree = "<group>"; };
 		78E5BF6A55A10C30604680D2 /* SaneClickExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaneClickExtension.entitlements; sourceTree = "<group>"; };
 		8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SaneClickExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8894C708FDE7B61CCCD4E9D9 /* AppStoreScreenshotRenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreScreenshotRenderTests.swift; sourceTree = "<group>"; };
 		901F888200D7C1EC63210408 /* CategoryEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditorView.swift; sourceTree = "<group>"; };
+		91A78AA43537E7247FEB43C7 /* SaneClickSettingsCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaneClickSettingsCopy.swift; sourceTree = "<group>"; };
 		9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultScripts.swift; sourceTree = "<group>"; };
 		9CFB4E957BD2DB0D8CBB4671 /* SaneClickExtension.debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaneClickExtension.debug.entitlements; sourceTree = "<group>"; };
 		A0292252BEA20E38AA9D5AD5 /* ScriptEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptEditorView.swift; sourceTree = "<group>"; };
@@ -227,6 +233,7 @@
 			children = (
 				A4375D086296589FD9E2EE58 /* Assets.xcassets */,
 				9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */,
+				71B14FC7814E66A745273A50 /* Localizable.xcstrings */,
 				5B42E303B65FD7B78AFCEF2F /* PrivacyInfo.xcprivacy */,
 			);
 			path = Resources;
@@ -244,6 +251,7 @@
 				F78158E7B9726147A68C2FD1 /* Models */,
 				4C7586AE9B542B84D1686C25 /* Resources */,
 				66F372BAC2D4EF2869CD36D1 /* Services */,
+				DFE6CB7CECDF013D429D69EB /* Support */,
 				214B9F39F3300CEB720EBE9A /* Theme */,
 				2D5B27E238D72547A0453A3B /* Views */,
 			);
@@ -314,6 +322,14 @@
 				645C9DEFF575C6CA72B4358E /* Tests */,
 				5B3DA58DADBE6A8D7B5F2080 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		DFE6CB7CECDF013D429D69EB /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				91A78AA43537E7247FEB43C7 /* SaneClickSettingsCopy.swift */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 		E43EE5BFE2983895396BE905 /* Shared */ = {
@@ -466,7 +482,17 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
+				de,
 				en,
+				"es-419",
+				fr,
+				it,
+				ja,
+				ko,
+				nl,
+				"pt-BR",
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = CFD110473EC892FF733EC67F;
 			minimizedProjectReferenceProxies = 1;
@@ -493,6 +519,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C94E2F1B3ACA6C7E0BD129AA /* Assets.xcassets in Resources */,
+				33C8AFC4C913BFC0DDC3992B /* Localizable.xcstrings in Resources */,
 				31AC9D9565D351875B198DDC /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -502,6 +529,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5DA8CBA16326530ED642F7C /* Assets.xcassets in Resources */,
+				7095158AE118884DC2F266BB /* Localizable.xcstrings in Resources */,
 				B2528D20E9949935D53FCF49 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -536,6 +564,7 @@
 				C6AF9FAE601D4CFD944911CB /* MonitoredFolders.swift in Sources */,
 				A4AFD157125E508753899D83 /* ProFeature.swift in Sources */,
 				80B217DEAF5CAE7469AFE1F1 /* SaneClickApp.swift in Sources */,
+				86ED16E61603FF4DAF743AC3 /* SaneClickSettingsCopy.swift in Sources */,
 				27421E21068E3EF12E4DC3EF /* SaneColors.swift in Sources */,
 				AFBD400DBECC4B913690E29E /* Script.swift in Sources */,
 				CCE34A091108F9B0E4A55F18 /* ScriptEditorView.swift in Sources */,
@@ -566,6 +595,7 @@
 				347583F7E4F146C5BEEE9D21 /* MonitoredFolders.swift in Sources */,
 				0227BF1EF92C137AF9F4E394 /* ProFeature.swift in Sources */,
 				A32EFFBFF6ED1304526BF32F /* SaneClickApp.swift in Sources */,
+				813EF3E3058263CA064C98D2 /* SaneClickSettingsCopy.swift in Sources */,
 				3C26D6534EF5533C89A950A6 /* SaneColors.swift in Sources */,
 				F52F937E1B88C7672C3470CA /* Script.swift in Sources */,
 				A2814B7D8E5C998434A68C28 /* ScriptEditorView.swift in Sources */,
@@ -638,7 +668,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1102;
+				CURRENT_PROJECT_VERSION = 1103;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
@@ -755,9 +785,10 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1102;
+				CURRENT_PROJECT_VERSION = 1103;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "SaneClick/Info-AppStore.plist";
+				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.actions.v4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -831,10 +862,11 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1102;
+				CURRENT_PROJECT_VERSION = 1103;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "SaneClick/Info-AppStore.plist";
+				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.actions.v4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -946,7 +978,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1102;
+				CURRENT_PROJECT_VERSION = 1103;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
@@ -973,10 +1005,11 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1102;
+				CURRENT_PROJECT_VERSION = 1103;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "SaneClick/Info-AppStore.plist";
+				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.actions.v4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1023,7 +1056,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1102;
+				CURRENT_PROJECT_VERSION = 1103;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
@@ -1075,7 +1108,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1102;
+				CURRENT_PROJECT_VERSION = 1103;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
@@ -1130,7 +1163,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1102;
+				CURRENT_PROJECT_VERSION = 1103;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1156,7 +1189,7 @@
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1102;
+				CURRENT_PROJECT_VERSION = 1103;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
@@ -1182,7 +1215,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1102;
+				CURRENT_PROJECT_VERSION = 1103;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -1208,10 +1241,11 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1102;
+				CURRENT_PROJECT_VERSION = 1103;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "SaneClick/Info-AppStore.plist";
+				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.actions.v4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1297,7 +1331,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1102;
+				CURRENT_PROJECT_VERSION = 1103;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;

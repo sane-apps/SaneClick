@@ -26,7 +26,7 @@ release:
 appstore:
   enabled: true
   app_id: "6759330868"
-  product_id: "com.saneclick.app.pro.unlock.v3"
+  product_id: "com.saneclick.app.pro.actions.v4"
   scheme: SaneClick-AppStore
   configuration: Release-AppStore
   platforms: [macos]
@@ -74,9 +74,9 @@ appstore:
       The App Store build no longer runs user-created scripts.
       There are no Apple Events or automation entitlements in this build.
   iap:
-    display_name: "SaneClick Pro Actions"
+    display_name: "SaneClick Pro Access"
     description: "Unlock 9 more built-in file actions."
-    review_note: "SaneClick Pro Unlock is a one-time non-consumable StoreKit purchase. It adds 9 more built-in native file actions, including advanced hashing and extra file and folder utilities. It does not unlock scripts, external checkout, or license keys."
+    review_note: "SaneClick Pro Access is a one-time non-consumable StoreKit purchase. It adds 9 more built-in native file actions, including advanced hashing and extra file and folder utilities. It does not unlock scripts, external checkout, or license keys."
   accessibility_declarations:
     publish: true
     mac:

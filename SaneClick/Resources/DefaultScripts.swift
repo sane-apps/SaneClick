@@ -682,6 +682,24 @@ enum ScriptLibrary {
             description: "Get file's unique fingerprint (SHA256)"
         ),
         LibraryScript(
+            name: "Create SHA256 File",
+            type: .bash,
+            content: """
+            for f in "$@"; do
+                DIR=$(dirname -- "$f")
+                NAME=$(basename -- "$f")
+                HASH=$(shasum -a 256 -- "$f" | awk '{print $1}')
+                printf '%s  %s\n' "$HASH" "$NAME" > "$DIR/$NAME.sha256"
+            done
+            osascript -e 'display notification "SHA256 file created" with title "SaneClick"'
+            """,
+            icon: "doc.badge.shield.checkmark",
+            appliesTo: .filesOnly,
+            fileExtensions: [],
+            category: .powerUser,
+            description: "Create a .sha256 checksum file next to the item"
+        ),
+        LibraryScript(
             name: "Compress to ZIP",
             type: .bash,
             content: """
@@ -735,6 +753,22 @@ enum ScriptLibrary {
             fileExtensions: [],
             category: .powerUser,
             description: "Create .tar.gz archive (Linux-friendly)"
+        ),
+        LibraryScript(
+            name: "Extract TAR.GZ Here",
+            type: .bash,
+            content: """
+            for f in "$@"; do
+                tar -xzf "$f" -C "$(dirname -- "$f")"
+            done
+            osascript -e 'display notification "TAR.GZ extracted" with title "SaneClick"'
+            """,
+            icon: "arrow.down.doc",
+            appliesTo: .filesOnly,
+            fileExtensions: ["tar.gz", "tgz"],
+            extensionMatchMode: .any,
+            category: .powerUser,
+            description: "Extract .tar.gz or .tgz archives here"
         ),
         LibraryScript(
             name: "Lock File",
@@ -884,6 +918,23 @@ enum ScriptLibrary {
             maxSelection: 1,
             category: .organization,
             description: "Move all nested files to root folder"
+        ),
+        LibraryScript(
+            name: "Remove Empty Folders",
+            type: .bash,
+            content: """
+            for folder in "$@"; do
+                if [ -d "$folder" ] && [ ! -L "$folder" ]; then
+                    find "$folder" -depth -type d -empty -delete
+                fi
+            done
+            osascript -e 'display notification "Empty folders removed" with title "SaneClick"'
+            """,
+            icon: "folder.badge.minus",
+            appliesTo: .foldersOnly,
+            fileExtensions: [],
+            category: .organization,
+            description: "Delete empty folders inside the selected folder"
         ),
         LibraryScript(
             name: "Organize by Extension",

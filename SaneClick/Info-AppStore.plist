@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>AppStoreProductID</key>
-	<string>com.saneclick.app.pro.unlock.v3</string>
+	<string>com.saneclick.app.pro.actions.v4</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -20,9 +20,9 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>UIPrefersShowingLanguageSettings</key>
+	<true/>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.utilities</string>
-	<key>NSAppleEventsUsageDescription</key>
-	<string>SaneClick runs user-created automation scripts that can control other apps (for example Finder actions and notifications) when you choose those scripts.</string>
 </dict>
 </plist>

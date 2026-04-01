@@ -87,6 +87,8 @@ struct ScriptLibraryTests {
 
         #expect(names.contains("SHA256 Hash"), "Should have hash script")
         #expect(names.contains("Compress to ZIP"), "Should have compress script")
+        #expect(names.contains("Create SHA256 File"), "Should have checksum file script")
+        #expect(names.contains("Extract TAR.GZ Here"), "Should have tar.gz extract script")
     }
 
     @Test("Organization category has file management")
@@ -96,6 +98,7 @@ struct ScriptLibraryTests {
 
         #expect(names.contains("Flatten Folder"), "Should have flatten folder script")
         #expect(names.contains("Organize by Extension"), "Should have organize script")
+        #expect(names.contains("Remove Empty Folders"), "Should have empty folder cleanup script")
     }
 
     // MARK: - Script Content Validation

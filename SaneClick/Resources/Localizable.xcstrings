@@ -1,0 +1,291 @@
+{
+  "sourceLanguage" : "en",
+  "version" : "1.0",
+  "strings" : {
+    "saneclick.settings.button.add_folder" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ordner hinzufügen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add Folder" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Agregar carpeta" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ajouter un dossier" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Aggiungi cartella" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "フォルダを追加" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "폴더 추가" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Map toevoegen" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Adicionar pasta" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "添加文件夹" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "新增資料夾" } }
+      }
+    },
+    "saneclick.settings.button.open_system_settings" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Einstellungen öffnen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open Settings" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Abrir ajustes" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ouvrir les réglages" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Apri impostazioni" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "設定を開く" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "설정 열기" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Instellingen openen" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Abrir ajustes" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "打开设置" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "打開設定" } }
+      }
+    },
+    "saneclick.settings.button.refresh" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Aktualisieren" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Refresh" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Actualizar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Actualiser" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Aggiorna" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "更新" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "새로 고침" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Vernieuwen" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Atualizar" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "刷新" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "重新整理" } }
+      }
+    },
+    "saneclick.settings.button.refreshing" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Wird aktualisiert..." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Refreshing..." } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Actualizando..." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Actualisation..." } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Aggiornamento..." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "更新中..." } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "새로 고치는 중..." } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Bezig met vernieuwen..." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Atualizando..." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在刷新..." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "正在重新整理..." } }
+      }
+    },
+    "saneclick.settings.button.remove" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Entfernen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Remove" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Eliminar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprimer" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Rimuovi" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "削除" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "삭제" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Verwijderen" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Remover" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "移除" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "移除" } }
+      }
+    },
+    "saneclick.settings.button.restart_finder" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Finder neu starten" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Restart Finder" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Reiniciar Finder" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Relancer Finder" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Riavvia Finder" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Finder を再起動" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "Finder 다시 시작" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Finder opnieuw starten" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Reiniciar o Finder" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "重新启动 Finder" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "重新啟動 Finder" } }
+      }
+    },
+    "saneclick.settings.help.open_system_settings" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "SaneClick in den Systemeinstellungen ein- oder ausschalten" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Enable or disable SaneClick in System Settings" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Activa o desactiva SaneClick en Configuración del Sistema" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Activez ou désactivez SaneClick dans Réglages Système" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Attiva o disattiva SaneClick in Impostazioni di Sistema" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "システム設定で SaneClick を有効または無効にします" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "시스템 설정에서 SaneClick을 켜거나 끄세요" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Schakel SaneClick in of uit in Systeeminstellingen" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Ative ou desative o SaneClick nos Ajustes do Sistema" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "在系统设置中启用或停用 SaneClick" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "在系統設定中啟用或停用 SaneClick" } }
+      }
+    },
+    "saneclick.settings.help.refresh" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Den Status der Finder-Erweiterung aktualisieren" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Refresh the Finder extension status" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Actualiza el estado de la extensión de Finder" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Actualiser l’état de l’extension Finder" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Aggiorna lo stato dell’estensione di Finder" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Finder 拡張の状態を更新します" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "Finder 확장 상태를 새로 고칩니다" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Vernieuw de status van de Finder-extensie" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Atualize o status da extensão do Finder" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "刷新 Finder 扩展状态" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "重新整理 Finder 延伸模組狀態" } }
+      }
+    },
+    "saneclick.settings.help.restart_finder" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Finder neu starten, wenn die Erweiterung aktiviert ist, aber noch nicht läuft" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Restart Finder if the extension is enabled but not yet running" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Reinicia Finder si la extensión está activada pero aún no se está ejecutando" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Relancez Finder si l’extension est activée mais pas encore en cours d’exécution" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Riavvia Finder se l’estensione è attiva ma non è ancora in esecuzione" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "拡張機能が有効でもまだ実行されていない場合は Finder を再起動します" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "확장 프로그램이 켜져 있지만 아직 실행 중이 아니면 Finder를 다시 시작하세요" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Start Finder opnieuw als de extensie is ingeschakeld maar nog niet actief is" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Reinicie o Finder se a extensão estiver ativada, mas ainda não estiver em execução" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "如果扩展已启用但尚未运行，请重新启动 Finder" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "如果延伸模組已啟用但尚未執行，請重新啟動 Finder" } }
+      }
+    },
+    "saneclick.settings.hint.hidden_icons" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Wenn du beide Symbole ausblendest, öffne SaneClick wieder über Programme." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "If you hide both icons, reopen SaneClick from Applications." } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Si ocultas ambos iconos, vuelve a abrir SaneClick desde Aplicaciones." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Si vous masquez les deux icônes, rouvrez SaneClick depuis Applications." } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Se nascondi entrambe le icone, riapri SaneClick da Applicazioni." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "両方のアイコンを非表示にした場合は、アプリケーションから SaneClick を開き直してください。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "두 아이콘을 모두 숨기면 응용 프로그램에서 SaneClick을 다시 여세요." } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Als je beide pictogrammen verbergt, open SaneClick dan opnieuw vanuit Apps." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Se você ocultar os dois ícones, reabra o SaneClick em Aplicativos." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "如果你隐藏了两个图标，请从“应用程序”中重新打开 SaneClick。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "如果你隱藏了兩個圖示，請從「應用程式」重新打開 SaneClick。" } }
+      }
+    },
+    "saneclick.settings.hint.monitored_folders_empty" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Wähle die Ordner aus, in denen SaneClick im Finder angezeigt werden soll." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Choose the folders where SaneClick should appear in Finder." } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Elige las carpetas donde SaneClick debe aparecer en Finder." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Choisissez les dossiers où SaneClick doit apparaître dans Finder." } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Scegli le cartelle in cui SaneClick deve apparire nel Finder." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Finder に SaneClick を表示するフォルダを選択します。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "Finder에서 SaneClick이 표시되어야 하는 폴더를 선택하세요." } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Kies de mappen waarin SaneClick in Finder moet verschijnen." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Escolha as pastas em que o SaneClick deve aparecer no Finder." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "选择 SaneClick 应在 Finder 中显示的文件夹。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "選擇 SaneClick 應在 Finder 中顯示的資料夾。" } }
+      }
+    },
+    "saneclick.settings.label.active_actions" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Aktive Aktionen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Active actions" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Acciones activas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Actions actives" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Azioni attive" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "有効なアクション" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "활성 동작" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Actieve acties" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Ações ativas" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "启用的操作" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "已啟用的動作" } }
+      }
+    },
+    "saneclick.settings.label.total_actions" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Aktionen insgesamt" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Total actions" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Acciones totales" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Actions totales" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Azioni totali" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アクション合計" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "전체 동작" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Totaal acties" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Total de ações" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "操作总数" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "動作總數" } }
+      }
+    },
+    "saneclick.settings.section.app_behavior" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "App-Verhalten" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "App Behavior" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Comportamiento de la app" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Comportement de l’app" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Comportamento dell’app" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "App の動作" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "앱 동작" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "App-gedrag" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Comportamento do app" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "App 行为" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "App 行為" } }
+      }
+    },
+    "saneclick.settings.section.monitored_folders" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Beobachtete Ordner" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Monitored Folders" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Carpetas vigiladas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Dossiers surveillés" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Cartelle monitorate" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "監視するフォルダ" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "감시 중인 폴더" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Bewaakte mappen" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Pastas monitoradas" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "受监视的文件夹" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "受監視的資料夾" } }
+      }
+    },
+    "saneclick.settings.section.right_click_menu" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Rechtsklick-Menü" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Right-Click Menu" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Menú de clic derecho" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Menu clic droit" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Menu clic destro" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "右クリックメニュー" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "오른쪽 클릭 메뉴" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Rechtermuisknopmenu" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Menu do botão direito" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "右键菜单" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "右鍵選單" } }
+      }
+    },
+    "saneclick.settings.section.your_actions" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Deine Aktionen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your Actions" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Tus acciones" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Vos actions" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Le tue azioni" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "あなたのアクション" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "내 동작" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Je acties" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Suas ações" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "你的操作" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你的動作" } }
+      }
+    },
+    "saneclick.settings.toggle.show_action_confirmations" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Aktionsbestätigungen anzeigen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Show action confirmations" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Mostrar confirmaciones de acciones" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Afficher les confirmations d’action" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Mostra conferme delle azioni" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アクションの確認を表示" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "동작 확인 표시" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Actiebevestigingen tonen" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Mostrar confirmações de ação" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "显示操作确认" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "顯示動作確認" } }
+      }
+    },
+    "saneclick.settings.toggle.show_menu_bar_icon" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Menüleisten-Symbol anzeigen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Show menu bar icon" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Mostrar icono de la barra de menús" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Afficher l’icône de la barre des menus" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Mostra icona nella barra dei menu" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "メニューバーアイコンを表示" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "메뉴 막대 아이콘 표시" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Menubalkpictogram tonen" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Mostrar ícone na barra de menus" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "显示菜单栏图标" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "顯示選單列圖示" } }
+      }
+    }
+  }
+}
