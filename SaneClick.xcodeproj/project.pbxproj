@@ -1202,7 +1202,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick.FinderSync;
 				PRODUCT_NAME = SaneClickExtension;
-				PROVISIONING_PROFILE_SPECIFIER = "SaneClick Finder Sync Mac App Store";
+				PROVISIONING_PROFILE_SPECIFIER = "SaneClick Finder Sync Mac App Store 1775091927";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;

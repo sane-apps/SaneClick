@@ -271,9 +271,9 @@ targets:
           CODE_SIGN_ENTITLEMENTS: SaneClickExtension/SaneClickExtension.entitlements
         Release-AppStore:
           DEVELOPMENT_TEAM: M78L6FXD48
-          CODE_SIGN_IDENTITY: "Apple Distribution"
           CODE_SIGN_STYLE: Manual
-          PROVISIONING_PROFILE_SPECIFIER: "SaneClick Finder Sync Mac App Store"
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+          PROVISIONING_PROFILE_SPECIFIER: "SaneClick Finder Sync Mac App Store 1775091927"
           CODE_SIGN_ENTITLEMENTS: SaneClickExtension/SaneClickExtension.entitlements
           OTHER_SWIFT_FLAGS: "$(inherited) -D APP_STORE"
 
