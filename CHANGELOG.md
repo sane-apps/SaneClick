@@ -4,6 +4,12 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.1.4] - 2026-04-03
+
+Fixes Finder extension status refresh so the app updates correctly after returning from System Settings, and repairs the macOS App Store signing lane for the Finder Sync target.
+
+---
+
 ## [1.1.3] - 2026-04-01
 
 Adds a Finder footer toggle, restores custom action management in the Mac app, and improves built-in action icon rendering.

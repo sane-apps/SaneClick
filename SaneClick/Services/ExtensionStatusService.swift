@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(SwiftUI)
+    import SwiftUI
+#endif
 
 /// Service to check the status of the Finder Sync extension
 enum ExtensionStatusService {
@@ -78,6 +81,12 @@ enum ExtensionStatusService {
             return .disabled
         }
     }
+
+    #if canImport(SwiftUI)
+        static func shouldRefreshStatusOnScenePhaseChange(oldPhase: ScenePhase, newPhase: ScenePhase) -> Bool {
+            oldPhase != .active && newPhase == .active
+        }
+    #endif
 }
 
 /// Extension status states

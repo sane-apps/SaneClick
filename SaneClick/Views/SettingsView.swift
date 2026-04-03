@@ -33,6 +33,7 @@ struct SettingsView: View {
     }
 
     var licenseService: LicenseService
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(ScriptStore.self) private var scriptStore
     @Environment(MonitoredFolderService.self) private var monitoredFolderService
     #if !APP_STORE
@@ -246,6 +247,14 @@ struct SettingsView: View {
                 automaticallyChecksForUpdates = updateService.automaticallyChecksForUpdates
                 updateCheckFrequency = updateService.updateCheckFrequency
             #endif
+        }
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if ExtensionStatusService.shouldRefreshStatusOnScenePhaseChange(oldPhase: oldPhase, newPhase: newPhase) {
+                refreshExtensionStatus()
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            refreshExtensionStatus()
         }
     }
 

@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 import Testing
 @testable import SaneClick
 
@@ -21,6 +22,38 @@ struct ExtensionStatusTests {
         """
 
         #expect(ExtensionStatusService.parsePluginKitEnabled(output) == false)
+    }
+
+    @Test("scene phase auto-refreshes when app becomes active again")
+    func refreshOnSceneActivation() {
+        #expect(
+            ExtensionStatusService.shouldRefreshStatusOnScenePhaseChange(
+                oldPhase: .inactive,
+                newPhase: .active
+            ) == true
+        )
+        #expect(
+            ExtensionStatusService.shouldRefreshStatusOnScenePhaseChange(
+                oldPhase: .background,
+                newPhase: .active
+            ) == true
+        )
+    }
+
+    @Test("scene phase does not refresh for non-activation transitions")
+    func noRefreshForNonActivationTransitions() {
+        #expect(
+            ExtensionStatusService.shouldRefreshStatusOnScenePhaseChange(
+                oldPhase: .active,
+                newPhase: .inactive
+            ) == false
+        )
+        #expect(
+            ExtensionStatusService.shouldRefreshStatusOnScenePhaseChange(
+                oldPhase: .inactive,
+                newPhase: .background
+            ) == false
+        )
     }
 
     // MARK: - ExtensionStatus Enum Tests
