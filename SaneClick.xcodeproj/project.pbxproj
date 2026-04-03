@@ -468,9 +468,6 @@
 					13DD2C4526993B29DEC1B7B0 = {
 						ProvisioningStyle = Manual;
 					};
-					263057A7946DC444B1EC8233 = {
-						ProvisioningStyle = Manual;
-					};
 					2964F8430D462CA61E76DB02 = {
 						ProvisioningStyle = Manual;
 					};
@@ -1190,8 +1187,7 @@
 			buildSettings = {
 				ARCHS = arm64;
 				CODE_SIGN_ENTITLEMENTS = SaneClickExtension/SaneClickExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1104;
 				DEVELOPMENT_TEAM = M78L6FXD48;
@@ -1202,7 +1198,6 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick.FinderSync;
 				PRODUCT_NAME = SaneClickExtension;
-				PROVISIONING_PROFILE_SPECIFIER = "Mac Team Store Provisioning Profile: com.saneclick.SaneClick.FinderSync";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
