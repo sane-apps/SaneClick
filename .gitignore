@@ -91,6 +91,7 @@ releases/
 .claude/read_history.json
 .claude/user_patterns.json
 .claude/bypass_mode.txt
+.claude/sop-verify-state.json
 .claude/saneloop-archive/
 .claude/research/
 .claude/rule_tracking.jsonl
