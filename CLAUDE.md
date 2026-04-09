@@ -37,7 +37,7 @@
 | **Shared UI** | `~/SaneApps/infra/SaneUI/` |
 | **Hooks/tooling** | `~/SaneApps/infra/SaneProcess/` |
 
-**Sister apps:** SaneBar, SaneClip, SaneVideo, SaneSync, SaneHosts, SaneAI
+**Sister apps:** SaneBar, SaneClip, SaneVideo, SaneSync, SaneHosts, SaneAI, SaneSales
 
 ---
 
