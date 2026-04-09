@@ -1,4 +1,15 @@
-# Session Handoff - February 3, 2026
+# Session Handoff — SaneClick
+
+**Last updated:** 2026-04-09
+**Current version:** `1.1.4` (build `1104`)
+
+## Current State
+
+- Use `CHANGELOG.md` for current release history and `project.yml` for the authoritative version/build.
+- The old MCP migration and January org-audit notes below are archival; they are not the current product or release summary.
+- Keep this file focused on current operational state going forward.
+
+## Archived Notes
 
 ## ✅ COMPLETED: Xcode 26.3 MCP Migration (Feb 13, 2026)
 
