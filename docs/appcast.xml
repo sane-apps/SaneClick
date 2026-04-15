@@ -3,7 +3,27 @@
     <channel>
         <title>SaneClick Changelog</title>
 
-                                            <item>
+                                                    <item>
+            <title>1.1.5</title>
+            <link>https://saneclick.com/download</link>
+            <pubDate>Wed, 15 Apr 2026 00:10:17 -0400</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description>
+                <![CDATA[
+                <h2>What's New</h2>
+                <ul>
+                <li>Updated pricing screens and upgrade messaging clarity.</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.1.5.zip"
+                       sparkle:version="1105"
+                       sparkle:shortVersionString="1.1.5"
+                       length="2279390"
+                       type="application/octet-stream"
+                       sparkle:edSignature="crls2guch96rlVZQSzzVocBAYDK/8a++TW05Q2OVs62NMZOEcRTHa6mlqdPwqxArrPYw5iENqzy2B0Er3UsDAA=="/>
+        </item>
+<item>
             <title>1.1.4</title>
             <pubDate>Fri, 03 Apr 2026 15:14:46 -0400</pubDate>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
