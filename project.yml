@@ -120,8 +120,8 @@ targets:
         PRODUCT_NAME: SaneClick
         PRODUCT_BUNDLE_IDENTIFIER: com.saneclick.SaneClick
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        MARKETING_VERSION: "1.1.4"
-        CURRENT_PROJECT_VERSION: "1104"
+        MARKETING_VERSION: "1.1.5"
+        CURRENT_PROJECT_VERSION: "1105"
         ENABLE_PREVIEWS: YES
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
@@ -182,8 +182,8 @@ targets:
         INFOPLIST_KEY_AppStoreProductID: com.saneclick.app.pro.actions.v4
         PRODUCT_NAME: SaneClick
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        MARKETING_VERSION: "1.1.4"
-        CURRENT_PROJECT_VERSION: "1104"
+        MARKETING_VERSION: "1.1.5"
+        CURRENT_PROJECT_VERSION: "1105"
         ENABLE_PREVIEWS: YES
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
@@ -247,8 +247,8 @@ targets:
         INFOPLIST_FILE: SaneClickExtension/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.saneclick.SaneClick.FinderSync
         PRODUCT_NAME: SaneClickExtension
-        MARKETING_VERSION: "1.1.4"
-        CURRENT_PROJECT_VERSION: "1104"
+        MARKETING_VERSION: "1.1.5"
+        CURRENT_PROJECT_VERSION: "1105"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
         MACOSX_DEPLOYMENT_TARGET: "14.0"

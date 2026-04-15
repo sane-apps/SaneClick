@@ -296,7 +296,7 @@ struct ScriptLibraryView: View {
                         HStack(spacing: 5) {
                             Image(systemName: "lock.fill")
                                 .font(.system(size: 11))
-                            Text("Unlock Pro")
+                            Text("Unlock Pro — \(licenseService.displayPriceLabel)")
                                 .font(.system(size: 12, weight: .semibold))
                         }
                         .foregroundStyle(.white)
@@ -355,7 +355,7 @@ struct ScriptLibraryView: View {
                             Button {
                                 proUpsellFeature = proFeatureForCategory(category)
                             } label: {
-                                Label("Unlock Pro", systemImage: "lock.fill")
+                                Label("Unlock Pro — \(licenseService.displayPriceLabel)", systemImage: "lock.fill")
                                     .font(.system(size: 13, weight: .semibold))
                             }
                             .buttonStyle(.borderedProminent)

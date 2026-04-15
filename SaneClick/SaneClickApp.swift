@@ -356,8 +356,8 @@ struct MainWindowCaptureView: NSViewRepresentable {
 }
 
 enum SaneClickWelcomeCopy {
-    static let basicPrice = "Included"
-    static let proPrice = "One-time unlock"
+    static let basicPrice = "Free"
+    static let proPrice = "$9.99 once"
 
     static let freeFeatures: [(String, String)] = {
         #if APP_STORE

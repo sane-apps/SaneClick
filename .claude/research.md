@@ -794,3 +794,35 @@ Button("Import Scripts...") {
 - `./scripts/SaneMaster.rb verify` passed on the mini with 70 tests after the redesign and new action regression tests.
 - `./scripts/SaneMaster.rb appstore_preflight` passed all technical gates after the redesign.
 - Remaining preflight warning was only the dirty worktree count during local development.
+
+## Upgrade Surface Verify Recovery | Updated: 2026-04-14 | Status: verified | TTL: 7d
+
+### Sources
+
+- Docs: Swift package / build verification workflow already documented in local `infra/SaneProcess/DEVELOPMENT.md`
+- Web: current Swift docs search for generic/nested type usage did not surface any conflicting requirement with the local package path fix
+- GitHub: current GitHub search did not show a better pattern than explicit local package references plus direct label interpolation for upgrade buttons
+- Local: Mini `xcodebuild`, local project audit, and pricing-surface sweep across onboarding, library locks, and settings
+
+### Findings
+
+- The real Mini compile failure after the pricing copy pass was not the `displayPriceLabel` API itself; the Mini project was still resolving remote `SaneUI` instead of the local monorepo package.
+- Syncing `project.yml` plus `SaneClick.xcodeproj/project.pbxproj` to the Mini switched package resolution to `/Users/stephansmac/SaneApps/infra/SaneUI`, after which `xcodebuild -project SaneClick.xcodeproj -scheme SaneClick -configuration Debug -destination platform=macOS build` succeeded.
+- The remaining upgrade-surface drift was app-local copy, not package behavior: the welcome gate override used `One-time unlock` instead of the approved numeric price, and several locked-feature CTAs already routed through shared/upgraded price labels.
+- Current app-owned onboarding source of truth is `SaneClickWelcomeCopy`; use that for the welcome sheet copy, but keep button labels wired to `licenseService.displayPriceLabel` so StoreKit/local fallback remains centralized.
+
+## Remote SaneUI Source-Build Recovery | Updated: 2026-04-14 | Status: verified | TTL: 7d
+
+### Sources
+
+- Docs: Apple testing docs for [known issues](https://developer.apple.com/documentation/testing/known-issues) and [running tests](https://developer.apple.com/documentation/xcode/running-tests-and-interpreting-results)
+- Web: current Swift forums examples showing Swift Testing reports `failed after ... with 1 issue` when a test records an issue even if the suite body otherwise looks clean
+- GitHub: current lightweight search did not surface a better SaneClick-specific upstream fix than refreshing the package pin and inspecting the recorded issue directly
+- Local: Mini `verify --quiet`, Mini `xcodebuild -resolvePackageDependencies`, local `xcodegen generate`, and live `Package.resolved` comparison
+
+### Findings
+
+- Public source-build release guardrails now require SaneClick to point at `https://github.com/sane-apps/SaneUI.git` instead of the temporary monorepo path.
+- Publishing `SaneUI` commit `df151bb842ac785a693fd3e4f440a2e90ab956d9` and resolving packages against that remote commit removed the earlier `displayPriceLabel` compile failure on the Mini.
+- The remaining Mini `verify --quiet` failure is not a package-resolution failure. The test run reaches `Test Suite 'All tests' passed` and then Swift Testing reports `Test run with 96 tests in 16 suites failed ... with 1 issue`, so the next diagnosis target is the single recorded issue in the xcresult rather than package wiring.
+- Current `test_output.txt` no longer shows the earlier `LicenseService` member error after the remote package pin refresh, so release follow-up should focus on the one Swift Testing issue, not on `SaneUI` drift.

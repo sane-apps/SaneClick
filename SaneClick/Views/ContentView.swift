@@ -131,7 +131,7 @@ struct ContentView: View {
                     if !licenseService.isPro {
                         QuickActionRow(
                             title: "Unlock Pro",
-                            subtitle: "Get 9 more built-in file actions",
+                            subtitle: "Get 9 more built-in file actions • \(licenseService.displayPriceLabel) once",
                             icon: "lock.open.fill",
                             color: .teal
                         ) {
@@ -327,13 +327,13 @@ struct ContentView: View {
 
                     if isLocked {
                         // Unlock button for Pro categories
-                        Button {
-                            proUpsellFeature = proFeatureForCategory(category)
-                        } label: {
-                            HStack(spacing: 6) {
-                                Image(systemName: "lock.fill")
-                                    .font(.system(size: 12))
-                                Text("Unlock Pro")
+                    Button {
+                        proUpsellFeature = proFeatureForCategory(category)
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 12))
+                                Text("Unlock Pro — \(licenseService.displayPriceLabel)")
                                     .font(.system(size: 13, weight: .semibold))
                             }
                             .foregroundStyle(.white)
@@ -429,7 +429,7 @@ struct ContentView: View {
                 Button {
                     proUpsellFeature = proFeatureForCategory(category)
                 } label: {
-                    Label("Unlock Pro", systemImage: "lock.fill")
+                    Label("Unlock Pro — \(licenseService.displayPriceLabel)", systemImage: "lock.fill")
                         .font(.system(size: 13, weight: .semibold))
                 }
                 .buttonStyle(.borderedProminent)
@@ -540,7 +540,7 @@ struct ContentView: View {
                     Button {
                         proUpsellFeature = .organizationScripts
                     } label: {
-                        Label("Unlock Pro", systemImage: "lock.open.fill")
+                        Label("Unlock Pro — \(licenseService.displayPriceLabel)", systemImage: "lock.open.fill")
                             .font(.headline)
                     }
                     .buttonStyle(.bordered)

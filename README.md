@@ -8,7 +8,7 @@
 [![macOS 14+](https://img.shields.io/badge/macOS-14%2B-brightgreen)](https://www.apple.com/macos)
 [![Listed on awesome-macos](https://img.shields.io/badge/Listed%20on-open--source--mac--os--apps%20(40k%E2%98%85)-black)](https://github.com/serhii-londar/open-source-mac-os-apps)
 
-> **⭐ Star this repo if it's useful!** · **[💰 Buy for $6.99](https://saneclick.com)** · Keeps development alive
+> **⭐ Star this repo if it's useful!** · **[💰 Buy for $9.99](https://saneclick.com)** · Keeps development alive
 
 ![SaneClick Main Window](docs/screenshots/main-window.png)
 
@@ -42,7 +42,7 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 
 **100% local. We never see your data.**
 
-> *I wanted to make it $5, but processing fees and taxes were... insane. — Mr. Sane*
+> Pay once. Keep the full Pro toolset. No subscription.
 
 ---
 

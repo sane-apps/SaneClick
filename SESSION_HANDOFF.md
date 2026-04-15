@@ -1,10 +1,13 @@
 # Session Handoff — SaneClick
 
-**Last updated:** 2026-04-09
+**Last updated:** 2026-04-14
 **Current version:** `1.1.4` (build `1104`)
 
 ## Current State
 
+- Pricing rollout approved on 2026-04-14: direct and App Store copy should present `Basic free + Pro $9.99 once`. Keep StoreKit product ID `com.saneclick.app.pro.actions.v4`.
+- Pricing language should stay consistent across README, `docs/index.html`, long-tail guide CTAs, and App Store-facing copy. No apology pricing copy.
+- Track rollout impact with three simple checks: direct checkout conversion from website CTA traffic, App Store unlock rate, and activation-to-paid conversion after the copy update goes live.
 - Use `CHANGELOG.md` for current release history and `project.yml` for the authoritative version/build.
 - The old MCP migration and January org-audit notes below are archival; they are not the current product or release summary.
 - Keep this file focused on current operational state going forward.
