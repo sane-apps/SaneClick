@@ -826,3 +826,18 @@ Button("Import Scripts...") {
 - Publishing `SaneUI` commit `df151bb842ac785a693fd3e4f440a2e90ab956d9` and resolving packages against that remote commit removed the earlier `displayPriceLabel` compile failure on the Mini.
 - The remaining Mini `verify --quiet` failure is not a package-resolution failure. The test run reaches `Test Suite 'All tests' passed` and then Swift Testing reports `Test run with 96 tests in 16 suites failed ... with 1 issue`, so the next diagnosis target is the single recorded issue in the xcresult rather than package wiring.
 - Current `test_output.txt` no longer shows the earlier `LicenseService` member error after the remote package pin refresh, so release follow-up should focus on the one Swift Testing issue, not on `SaneUI` drift.
+
+## Pricing Guardrail Test Drift | Updated: 2026-04-15 | Status: verified | TTL: 7d
+
+### Sources
+
+- Docs: local `infra/SaneProcess/scripts/sanemaster/verify.rb` result handling and Swift Testing xcresult inspection workflow
+- Web: current Swift Testing behavior docs and issue summaries still treat recorded issues as a failed run even when all test bodies pass
+- GitHub: no upstream SaneClick-specific fix was needed; this was local test expectation drift
+- Local: Mini `verify --quiet`, Mini xcresult inspection, and direct source diff in `Tests/AppStoreReviewGuardrailTests.swift`
+
+### Findings
+
+- The current Mini verify failure after the pricing rollout is a real test expectation mismatch, not another `SaneUI` package problem.
+- `AppStoreReviewGuardrailTests.appStoreUpsellIsVisibleAcrossPrimarySurfaces()` still expected `Text("Unlock Pro")` inside `ScriptLibraryView`, but the shipped pricing copy now renders `Unlock Pro — \(licenseService.displayPriceLabel)`.
+- Once the test expectation matches the new centralized pricing label, this verify lane should stop failing on the pricing change itself.

@@ -132,7 +132,7 @@ struct AppStoreReviewGuardrailTests {
         #expect(appSource.contains("proTierPriceOverride: SaneClickWelcomeCopy.proPrice"))
         #expect(contentSource.contains("title: \"Unlock Pro\""))
         #expect(contentSource.contains("isLocked: true"))
-        #expect(librarySource.contains("Text(\"Unlock Pro\")"))
+        #expect(librarySource.contains("Unlock Pro — \\(licenseService.displayPriceLabel)"))
         #expect(librarySource.contains("Text(\"\\(totalInCategory) scripts included with Pro\")"))
         #expect(librarySource.contains("isLocked: true"))
         #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab)"))
