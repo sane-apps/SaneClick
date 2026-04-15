@@ -4,6 +4,12 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.1.5] - 2026-04-15
+
+Updates the Pro pricing copy so onboarding, locked actions, and upgrade prompts all show the current $9.99 one-time unlock consistently.
+
+---
+
 ## [1.1.4] - 2026-04-03
 
 Fixes Finder extension status refresh so the app updates correctly after returning from System Settings, and repairs the macOS App Store signing lane for the Finder Sync target.
