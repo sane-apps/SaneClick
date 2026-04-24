@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaneClick — Right-Click Automation for Mac | 50+ Finder Actions</title>
-    <meta name="description" content="Add 50+ actions to your Mac's right-click menu. Run scripts, convert files, automate Finder. 100% On-Device, No Subscriptions, 100% Public Code. Pro is $9.99 once.">
+    <title>SaneClick — Right-Click Automation for Mac | 53 Finder Actions</title>
+    <meta name="description" content="Add 53 actions to your Mac's right-click menu. Run scripts, convert files, organize Finder, and automate your Mac. 100% On-Device, No Subscriptions, 100% Public Code. Pro is $9.99 once.">
     <link rel="canonical" href="https://saneclick.com">
-    <meta property="og:title" content="SaneClick — Right-Click Automation for Mac | 50+ Finder Actions">
-    <meta property="og:description" content="Add 50+ actions to your Mac's right-click menu. Run scripts, convert files, automate Finder. 100% On-Device, No Subscriptions, 100% Public Code. Pro is $9.99 once.">
+    <meta property="og:title" content="SaneClick — Right-Click Automation for Mac | 53 Finder Actions">
+    <meta property="og:description" content="Add 53 actions to your Mac's right-click menu. Run scripts, convert files, organize Finder, and automate your Mac. 100% On-Device, No Subscriptions, 100% Public Code. Pro is $9.99 once.">
     <meta property="og:url" content="https://saneclick.com">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="SaneClick">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SaneClick — Right-Click Automation for Mac | 50+ Finder Actions">
-    <meta name="twitter:description" content="Add 50+ actions to your Mac's right-click menu. Run scripts, convert files, automate Finder. 100% On-Device, No Subscriptions, 100% Public Code. Pro is $9.99 once.">
+    <meta name="twitter:title" content="SaneClick — Right-Click Automation for Mac | 53 Finder Actions">
+    <meta name="twitter:description" content="Add 53 actions to your Mac's right-click menu. Run scripts, convert files, organize Finder, and automate your Mac. 100% On-Device, No Subscriptions, 100% Public Code. Pro is $9.99 once.">
     <meta name="keywords" content="Finder context menu, right-click menu Mac, macOS automation, Mac scripts, Finder extension, custom right-click, Automator alternative, Mac productivity, context menu customization">
     <meta name="author" content="Mr. Sane">
     <meta name="robots" content="index, follow">
@@ -46,7 +46,7 @@
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "SaneClick",
-      "description": "Bring sanity to your Mac's right-click menu. Run scripts, convert files, and automate your Mac directly from Finder. 50+ pre-built actions, 100% On-Device.",
+      "description": "Bring sanity to your Mac's right-click menu. Run scripts, convert files, organize Finder, and automate your Mac directly from Finder. 53 built-in actions, 100% On-Device.",
       "operatingSystem": "macOS",
       "applicationCategory": "UtilitiesApplication",
       "offers": {
@@ -56,10 +56,10 @@
       },
       "softwareVersion": "1.1.5",
       "featureList": [
-        "50+ Pre-built Actions",
-        "Custom Scripts",
-        "Smart File Filtering",
-        "Finder Context Menu Integration",
+        "53 built-in actions across 5 categories",
+        "Custom scripts and test-before-save workflow",
+        "Smart file filtering and selection-aware actions",
+        "Finder context menu integration",
         "100% On-Device Privacy",
         "100% Public Code (PolyForm Shield)"
       ],
@@ -195,7 +195,7 @@
         .btn-donate svg { margin-right: 6px; }
 
         /* Hero */
-        .hero { padding: 180px 0 100px; text-align: center; }
+        .hero { padding: 180px 0 68px; text-align: center; }
         .hero h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2.75rem, 7vw, 4.5rem); font-weight: 600; margin-bottom: 24px; letter-spacing: -0.03em; line-height: 1.1; }
         .hero h1 em { font-style: italic; color: var(--accent); }
         .hero .subtitle { font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 48px; font-weight: 400; line-height: 1.8; }
@@ -216,51 +216,240 @@
         .trust-badges a { color: inherit; text-decoration: none; transition: color 0.2s; }
         .trust-badges a:hover { color: var(--accent); }
 
-        /* Interactive Demo */
-        .demo-box {
-            max-width: 600px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: 24px; padding: 80px 40px; position: relative; cursor: pointer;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            transition: border-color 0.3s, transform 0.3s;
+        /* Product Proof */
+        .proof-section {
+            padding: 10px 0 88px;
         }
-        .demo-box:hover { border-color: var(--accent); transform: translateY(-2px); }
-
-        .file-icon {
-            width: 120px; height: 140px;
-            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-            border-radius: 12px; margin: 0 auto; position: relative;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-            display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px;
+        .proof-header {
+            max-width: 760px;
+            margin: 0 auto 22px;
+            text-align: center;
         }
-        .file-icon::before {
-            content: ''; position: absolute; top: 0; right: 0;
-            width: 40px; height: 40px; background: rgba(255,255,255,0.3);
-            clip-path: polygon(0 0, 0% 100%, 100% 100%);
-            border-radius: 0 0 0 8px;
+        .proof-shell {
+            display: grid;
+            grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.95fr);
+            gap: 24px;
+            align-items: stretch;
         }
-        .file-icon::after {
-            content: '\1F4F8'; position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 40px; opacity: 0.8;
+        .proof-hero-card,
+        .proof-side-card,
+        .use-case-card {
+            background: linear-gradient(160deg, rgba(22, 22, 31, 0.95) 0%, rgba(12, 12, 20, 0.98) 100%);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 18px 50px rgba(0,0,0,0.32);
         }
-
-        .file-label {
-            background: rgba(0,0,0,0.3); padding: 6px 14px; border-radius: 6px;
-            font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: bold; color: #fff;
-            backdrop-filter: blur(4px); border: 0.5px solid rgba(255,255,255,0.2);
+        .proof-hero-card {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            background:
+                radial-gradient(circle at top right, rgba(79, 143, 250, 0.18) 0%, transparent 34%),
+                linear-gradient(180deg, rgba(11, 14, 22, 0.96) 0%, rgba(8, 10, 18, 0.98) 100%);
         }
-
-        .mock-menu {
-            position: absolute; top: 60px; left: 55%; background: rgba(30, 30, 32, 0.98);
-            backdrop-filter: blur(20px); border-radius: 12px;
-            width: 260px; box-shadow: 0 25px 60px rgba(0,0,0,0.7); border: 0.5px solid rgba(255,255,255,0.15);
-            padding: 8px; display: none; z-index: 10; opacity: 0; transform: translateY(-10px); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        .proof-hero-card img,
+        .use-case-image img {
+            display: block;
+            width: 100%;
+            height: auto;
         }
-        .mock-menu.active { display: block; opacity: 1; transform: translateY(0); }
-        .menu-item { padding: 10px 14px; font-size: 14px; color: #fff; display: flex; align-items: center; justify-content: space-between; border-radius: 8px; transition: background 0.1s; }
-        .menu-item:hover { background: #007aff; }
-        .menu-sep { height: 1px; background: rgba(255,255,255,0.1); margin: 8px 6px; }
-        .menu-item.sane { color: var(--accent); font-weight: 600; }
-        .menu-item .shortcut { opacity: 0.4; font-size: 12px; font-weight: 400; }
+        .proof-image-wrap {
+            position: relative;
+            min-height: 390px;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .proof-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 18%;
+            filter: saturate(1.03) contrast(1.04);
+        }
+        .proof-overlay {
+            padding: 18px 24px 22px;
+            background:
+                radial-gradient(circle at bottom right, rgba(79, 143, 250, 0.12) 0%, transparent 36%),
+                linear-gradient(180deg, rgba(7, 10, 18, 0.96) 0%, rgba(6, 8, 14, 1) 100%);
+        }
+        .proof-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(79, 143, 250, 0.14);
+            border: 1px solid rgba(79, 143, 250, 0.22);
+            color: #dbe9ff;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .proof-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(1.8rem, 3.6vw, 2.7rem);
+            line-height: 1.08;
+            margin-bottom: 16px;
+            max-width: 12ch;
+        }
+        .proof-body {
+            max-width: 36rem;
+            color: var(--text-secondary);
+            font-size: 1.02rem;
+            line-height: 1.8;
+            margin-bottom: 22px;
+        }
+        .proof-caption {
+            color: var(--text-secondary);
+            font-size: 0.98rem;
+            line-height: 1.7;
+        }
+        .proof-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .proof-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .proof-side-card {
+            padding: 26px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 22px;
+            background:
+                radial-gradient(circle at top right, rgba(79, 143, 250, 0.14) 0%, transparent 34%),
+                linear-gradient(165deg, rgba(14, 20, 35, 0.96) 0%, rgba(8, 11, 19, 0.98) 100%);
+        }
+        .proof-side-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .proof-side-copy {
+            color: var(--text-secondary);
+            font-size: 0.97rem;
+            line-height: 1.7;
+        }
+        .category-list {
+            display: grid;
+            gap: 12px;
+        }
+        .category-item {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .category-item strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.98rem;
+        }
+        .category-item span {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+        .category-count {
+            flex-shrink: 0;
+            min-width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: rgba(79, 143, 250, 0.12);
+            border: 1px solid rgba(79, 143, 250, 0.18);
+            color: #dbe9ff;
+            font-weight: 700;
+        }
+        .proof-note {
+            padding: 18px 20px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .proof-note strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .proof-note p {
+            color: var(--text-secondary);
+            font-size: 0.94rem;
+            line-height: 1.65;
+        }
+        .use-cases {
+            padding: 0 0 92px;
+        }
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+        }
+        .use-case-card {
+            display: flex;
+            flex-direction: column;
+        }
+        .use-case-image {
+            background: linear-gradient(180deg, rgba(79, 143, 250, 0.06), rgba(79, 143, 250, 0.01));
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            min-height: 220px;
+        }
+        .use-case-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+        .use-case-copy {
+            padding: 24px;
+        }
+        .use-case-copy h3 {
+            font-size: 1.08rem;
+            margin-bottom: 10px;
+        }
+        .use-case-copy p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.65;
+            margin-bottom: 14px;
+        }
+        .use-case-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .use-case-tags span {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 10px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            line-height: 1;
+        }
 
         /* Comparison */
         .comparison { padding: 100px 0; }
@@ -274,6 +463,7 @@
         .comparison-table td.highlight-col { background: rgba(59, 130, 246, 0.05); }
         .highlight-col { color: var(--accent); }
         .check { color: var(--success); font-weight: bold; }
+        .cross { color: var(--text-muted); }
 
         /* Feature Cards */
         .feature-card {
@@ -448,7 +638,15 @@
             .hero { padding: 120px 0 60px; }
             .cta-buttons { flex-direction: column; align-items: center; }
             .btn { width: 100%; max-width: 300px; justify-content: center; }
-            .mock-menu { left: 5%; width: 90%; }
+            .proof-section { padding: 18px 0 54px; }
+            .proof-shell { grid-template-columns: 1fr; }
+            .proof-hero-card { min-height: auto; }
+            .proof-image-wrap { min-height: 300px; }
+            .proof-overlay { padding: 24px; }
+            .proof-title { max-width: none; }
+            .proof-header { margin-bottom: 24px; }
+            .use-case-grid { grid-template-columns: 1fr; }
+            .use-case-image { min-height: 200px; }
             .comparison-table { min-width: 560px; }
             .sustainability-options { grid-template-columns: 1fr; }
             .more-apps-grid { grid-template-columns: 1fr; }
@@ -687,7 +885,7 @@
                     <p class="pricing-price-note">One-time — yours forever</p>
                     <ul class="pricing-features">
                         <li>Everything in Basic, plus:</li>
-                        <li class="extra">All 50+ scripts across every category</li>
+                        <li class="extra">All 53 built-in actions across 5 categories</li>
                         <li class="extra">Coding tools (Git, JSON, diff, and more)</li>
                         <li class="extra">Image &amp; media scripts (resize, convert, compress)</li>
                         <li class="extra">Advanced tools (hashing, compression, system)</li>
@@ -699,33 +897,114 @@
                     <a href="https://go.saneapps.com/buy/saneclick?ref=website-hero" class="pricing-cta pricing-cta-pro" data-cta="buy_pro">Buy Pro</a>
                 </div>
             </div>
-            <p class="animate-in delay-5 hero-pricing-footer" style="color: var(--text-muted); font-size: 0.85rem; margin-top: var(--phi-sm); margin-bottom: 36px;">
+            <p class="animate-in delay-5 hero-pricing-footer" style="color: var(--text-muted); font-size: 0.85rem; margin-top: var(--phi-sm); margin-bottom: 14px;">
                 <code style="background: var(--bg-card); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; border: 1px solid var(--border); color: var(--text-muted); cursor: pointer;" onclick="copyToClipboard(this)" title="Click to copy">brew install --cask sane-apps/tap/saneclick</code>
             </p>
+        </div>
+    </section>
 
-            <div class="demo-box animate-in delay-5" onclick="toggleMenu()">
-                <div class="file-icon">
-                    <span class="file-label">DESIGN_FINAL.PNG</span>
-                </div>
-                <p style="margin-top: 32px; color: var(--text-muted); font-size: 1rem; font-weight: 500;">Click the design asset to see SaneClick in action</p>
+    <section class="proof-section">
+        <div class="container">
+            <div class="proof-header">
+                <h2 class="section-title">Real Finder actions.<br>Real file workflows.</h2>
+                <p class="section-subtitle" style="margin-bottom: 0;">Copy paths, resize images, organize folders,<br>and run useful Mac actions without leaving Finder.</p>
+            </div>
+            <div class="proof-shell">
+                <article class="proof-hero-card animate-in delay-4">
+                    <div class="proof-image-wrap">
+                        <img src="screenshots/finder-context-menu.png" alt="SaneClick actions inside the real Finder right-click menu">
+                    </div>
+                    <div class="proof-overlay">
+                        <span class="proof-kicker">&#9889; 53 built-in actions across 5 categories</span>
+                        <p class="proof-caption">The real Finder context menu, expanded with practical actions you can install once and use every day.</p>
+                    </div>
+                </article>
+                <aside class="proof-side-card animate-in delay-5">
+                    <div>
+                        <h3 class="proof-side-title">Built for real Mac work</h3>
+                        <p class="proof-side-copy">The actions are grouped by the kinds of tasks<br>people actually want to do in Finder.</p>
+                    </div>
+                    <div class="category-list">
+                        <div class="category-item">
+                            <div>
+                                <strong>Essentials</strong>
+                                <span>Copy paths, open Terminal, duplicate with timestamps, and clean up everyday Finder friction.</span>
+                            </div>
+                            <div class="category-count">10</div>
+                        </div>
+                        <div class="category-item">
+                            <div>
+                                <strong>Files &amp; Folders</strong>
+                                <span>Rename, organize, sort, and fix directory clutter without leaving Finder.</span>
+                            </div>
+                            <div class="category-count">9</div>
+                        </div>
+                        <div class="category-item">
+                            <div>
+                                <strong>Images, Coding, Advanced</strong>
+                                <span>Resize and convert media, run dev helpers, hash files, compress archives, and more.</span>
+                            </div>
+                            <div class="category-count">34</div>
+                        </div>
+                    </div>
+                    <div class="proof-note">
+                        <strong>Install once. Right-click forever.</strong>
+                        <p>Keep the actions you use, hide the ones you do not, and turn Finder into a faster workspace without subscriptions, accounts, or automation setup headaches.</p>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
 
-                <div class="mock-menu" id="mockMenu">
-                    <div class="menu-item">Open <span class="shortcut">&#8984;O</span></div>
-                    <div class="menu-item">Move to Trash <span class="shortcut">&#8984;&#9003;</span></div>
-                    <div class="menu-sep"></div>
-                    <div class="menu-item sane"><span>&#9889; Open in Terminal</span></div>
-                    <div class="menu-item sane"><span>&#128187; Open in VS Code</span></div>
-                    <div class="menu-sep"></div>
-                    <div class="menu-item sane"><span>&#128444;&#65039; Resize Image (800px)</span></div>
-                    <div class="menu-item sane"><span>&#128260; Convert to WebP</span></div>
-                    <div class="menu-sep"></div>
-                    <div class="menu-item sane"><span>&#128221; Copy as Markdown Link</span></div>
-                    <div class="menu-item sane"><span>&#9729;&#65039; Upload to Cloudflare R2</span></div>
-                    <div class="menu-sep"></div>
-                    <div class="menu-item sane"><span>&#128295; Run Custom Script...</span></div>
-                    <div class="menu-sep"></div>
-                    <div class="menu-item">Get Info <span class="shortcut">&#8984;I</span></div>
-                </div>
+    <section class="use-cases">
+        <div class="container">
+            <h2 class="section-title">What You Can Actually Do</h2>
+            <p class="section-subtitle">This is not a toy script runner. It is a practical Finder toolkit for everyday file work, creative assets, and developer workflows.</p>
+            <div class="use-case-grid">
+                <article class="use-case-card animate-in delay-2">
+                    <div class="use-case-image">
+                        <img src="screenshots/finder-context-menu.png" alt="Finder menu showing SaneClick essentials like Open in Terminal and Copy Path">
+                    </div>
+                    <div class="use-case-copy">
+                        <h3>Finder Essentials</h3>
+                        <p>Use the right-click menu you already trust to copy paths, open Terminal, duplicate files with timestamps, and clear repetitive Finder busywork.</p>
+                        <div class="use-case-tags">
+                            <span>Copy Path</span>
+                            <span>Open in Terminal</span>
+                            <span>Duplicate with Timestamp</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="use-case-card animate-in delay-3">
+                    <div class="use-case-image">
+                        <img src="screenshots/script-library.png" alt="SaneClick script library showing categories like Images and Media, Coding, and Advanced">
+                    </div>
+                    <div class="use-case-copy">
+                        <h3>Images, Media, and Organization</h3>
+                        <p>Install exactly the tools you need for image cleanup, conversion, compression, and file organization without writing a single script.</p>
+                        <div class="use-case-tags">
+                            <span>Resize</span>
+                            <span>Convert</span>
+                            <span>Compress</span>
+                            <span>Files &amp; Folders</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="use-case-card animate-in delay-4">
+                    <div class="use-case-image">
+                        <img src="screenshots/main-window.png" alt="SaneClick main window showing enabled scripts and category filtering">
+                    </div>
+                    <div class="use-case-copy">
+                        <h3>Coding and Power User Workflows</h3>
+                        <p>Unlock the deeper toolkit when you need it: dev utilities, custom scripts, test-before-save, and import/export for a setup you can actually grow.</p>
+                        <div class="use-case-tags">
+                            <span>Git / JSON / Diff</span>
+                            <span>Custom Scripts</span>
+                            <span>Test Before Save</span>
+                            <span>Import / Export</span>
+                        </div>
+                    </div>
+                </article>
             </div>
         </div>
     </section>
@@ -734,7 +1013,7 @@
         <div class="container">
             <h2 class="section-title">The Sane Way to Automate</h2>
             <p class="section-subtitle">Why fight with Automator when you can just right-click?</p>
-            <p class="section-subtitle" style="margin-top: -10px; font-size: 0.95rem;">This table reflects SaneClick Pro. For plan details, see the Basic vs Pro comparison below.</p>
+            <p class="section-subtitle" style="margin-top: -10px; font-size: 0.95rem;">This table reflects SaneClick Pro. For plan details, see the Basic vs Pro pricing above.</p>
             <div class="comparison-table-wrapper">
             <table class="comparison-table">
                 <thead>
@@ -753,10 +1032,28 @@
                         <td>Slow</td>
                     </tr>
                     <tr>
-                        <td>50+ Pre-built Actions</td>
+                        <td>53 Built-in Actions</td>
                         <td class="highlight-col"><span class="check">&#10003;</span></td>
                         <td><span class="cross">&#10007;</span></td>
                         <td><span class="cross">&#10007;</span></td>
+                    </tr>
+                    <tr>
+                        <td>5 Action Categories</td>
+                        <td class="highlight-col"><span class="check">&#10003;</span></td>
+                        <td><span class="cross">&#10007;</span></td>
+                        <td><span class="cross">&#10007;</span></td>
+                    </tr>
+                    <tr>
+                        <td>Image &amp; Media Workflows</td>
+                        <td class="highlight-col"><span class="check">&#10003;</span></td>
+                        <td>Limited</td>
+                        <td>Limited</td>
+                    </tr>
+                    <tr>
+                        <td>Coding Workflows</td>
+                        <td class="highlight-col"><span class="check">&#10003;</span></td>
+                        <td>Hidden</td>
+                        <td>Hidden</td>
                     </tr>
                     <tr>
                         <td>Smart File Filtering</td>
@@ -765,16 +1062,34 @@
                         <td>Limited</td>
                     </tr>
                     <tr>
-                        <td>Custom Scripts</td>
+                        <td>Custom Script Editor</td>
                         <td class="highlight-col"><span class="check">&#10003;</span></td>
                         <td>Complex</td>
-                        <td>Hidden</td>
+                        <td>Limited</td>
+                    </tr>
+                    <tr>
+                        <td>Test Before Save</td>
+                        <td class="highlight-col"><span class="check">&#10003;</span></td>
+                        <td><span class="cross">&#10007;</span></td>
+                        <td><span class="cross">&#10007;</span></td>
+                    </tr>
+                    <tr>
+                        <td>Import / Export Library</td>
+                        <td class="highlight-col"><span class="check">&#10003;</span></td>
+                        <td><span class="cross">&#10007;</span></td>
+                        <td><span class="cross">&#10007;</span></td>
                     </tr>
                     <tr>
                         <td>Privacy (Local Only)</td>
                         <td class="highlight-col"><span class="check">&#10003;</span></td>
                         <td><span class="check">&#10003;</span></td>
                         <td>Cloud-tied</td>
+                    </tr>
+                    <tr>
+                        <td>Price</td>
+                        <td class="highlight-col">$9.99 once</td>
+                        <td>Free</td>
+                        <td>Free</td>
                     </tr>
                 </tbody>
             </table>
@@ -1048,17 +1363,6 @@
             var nav = document.getElementById('mobileNav');
             nav.classList.toggle('open');
             document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
-        }
-
-        // Demo Menu Toggle
-        function toggleMenu() {
-            var menu = document.getElementById('mockMenu');
-            menu.classList.toggle('active');
-        }
-        window.onclick = function(event) {
-            if (!event.target.closest('.demo-box')) {
-                document.getElementById('mockMenu').classList.remove('active');
-            }
         }
 
         const APP_ID = 'saneclick';
