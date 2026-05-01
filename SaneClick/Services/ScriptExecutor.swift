@@ -1,5 +1,6 @@
 import Foundation
 import os.log
+import SaneUI
 @preconcurrency import UserNotifications
 
 private let executorLogger = Logger(subsystem: "com.saneclick.SaneClick", category: "ScriptExecutor")
@@ -304,6 +305,18 @@ final class ScriptExecutor: @unchecked Sendable {
         }
 
         maybeNotifyUser(for: executionResult, script: script)
+        if executionResult.success {
+            logFirstValueActionIfNeeded()
+        }
+    }
+
+    private func logFirstValueActionIfNeeded() {
+        let key = "SaneApps.EventTracker.logged.saneclick.first_value_action"
+        guard !UserDefaults.standard.bool(forKey: key) else { return }
+        UserDefaults.standard.set(true, forKey: key)
+        Task.detached {
+            await EventTracker.log("first_value_action", app: "saneclick")
+        }
     }
 
     // MARK: - User Notifications
