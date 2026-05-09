@@ -1,9 +1,17 @@
 # Session Handoff — SaneClick
 
-**Last updated:** 2026-04-14
-**Current version:** `1.1.4` (build `1104`)
+**Last updated:** 2026-05-09
+**Current version:** `1.1.5` (build `1105`)
 
 ## Current State
+
+- 2026-05-09 shared menu/settings parity is the current operational baseline:
+  - Dock right-click and menu-bar right-click are backed by the same SaneClick context-menu builder and expose the customer-critical path: Settings, License, Check for Updates, About / Report a Bug, and Quit, plus app-specific utilities where they are useful.
+  - SaneClick settings uses the shared SaneUI settings chrome and a larger default window size so the content is not cramped.
+  - The Finder extension readiness/settings block is intentionally compact and inline; avoid reintroducing a large explanatory wall of text.
+  - Dock hidden by default and launch-at-login behavior should follow the shared SaneUI/SaneApps policy for utility-style menu-bar apps.
+  - Latest recorded Mini verification for this parity pass: SaneClick verify passed with 103 tests; the repo was clean at closeout.
+  - Live GitHub state at closeout: no open SaneClick issues returned by `gh issue list`.
 
 - Pricing rollout approved on 2026-04-14: direct and App Store copy should present `Basic free + Pro $9.99 once`. Keep StoreKit product ID `com.saneclick.app.pro.actions.v4`.
 - Pricing language should stay consistent across README, `docs/index.html`, long-tail guide CTAs, and App Store-facing copy. No apology pricing copy.
