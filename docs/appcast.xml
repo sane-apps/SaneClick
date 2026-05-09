@@ -3,7 +3,27 @@
     <channel>
         <title>SaneClick Changelog</title>
 
-                                                    <item>
+                                                            <item>
+            <title>1.1.6</title>
+            <link>https://saneclick.com/download</link>
+            <pubDate>Sat, 09 May 2026 19:28:15 -0400</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description>
+                <![CDATA[
+                <h2>What's New</h2>
+                <ul>
+                <li>Adds Settings, License, About, and bug report access from the Dock and menu bar menus; prevents hiding both app access points at once; improves Finder extension permission scoping; and makes the settings/reporting flow easier to recover from.</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.1.6.zip"
+                       sparkle:version="1106"
+                       sparkle:shortVersionString="1.1.6"
+                       length="2369513"
+                       type="application/octet-stream"
+                       sparkle:edSignature="GXXAX6X665bwXebksmsy9ob8vMThjJ+bjORy/MUe87hm9osN8NfcFpXATQyRF4VWKeHMTvSGxmndbayY6V8rDQ=="/>
+        </item>
+<item>
             <title>1.1.5</title>
             <link>https://saneclick.com/download</link>
             <pubDate>Wed, 15 Apr 2026 00:10:17 -0400</pubDate>
