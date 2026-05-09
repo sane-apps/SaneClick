@@ -4,6 +4,12 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.1.6] - 2026-05-09
+
+Adds Settings, License, About, and bug report access from the Dock and menu bar menus; prevents hiding both app access points at once; improves Finder extension permission scoping; and makes the settings/reporting flow easier to recover from.
+
+---
+
 ## [1.1.5] - 2026-04-15
 
 Updates the Pro pricing copy so onboarding, locked actions, and upgrade prompts all show the current $9.99 one-time unlock consistently.
