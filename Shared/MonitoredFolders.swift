@@ -54,6 +54,17 @@ struct MonitoredFolderAccessScope {
     }
 }
 
+enum MonitoredFolderError: LocalizedError, Equatable {
+    case privacyScopedAppData(URL)
+
+    var errorDescription: String? {
+        switch self {
+        case .privacyScopedAppData:
+            "Choose a normal folder such as Desktop, Documents, Downloads, or a project folder. macOS app-data folders inside Library are not supported because they can trigger repeated privacy prompts."
+        }
+    }
+}
+
 enum MonitoredFolders {
     static let appGroupID = "M78L6FXD48.group.com.saneclick.app"
     static let changedNotification = Notification.Name("com.saneclick.monitoredFoldersChanged")
@@ -80,7 +91,12 @@ enum MonitoredFolders {
             return []
         }
 
-        return folders.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        let validFolders = folders.filter { isSupportedMonitoredFolder(URL(fileURLWithPath: $0.path, isDirectory: true)) }
+        if validFolders.count != folders.count {
+            try? save(validFolders)
+        }
+
+        return validFolders.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
     }
 
     static func save(_ folders: [MonitoredFolder]) throws {
@@ -105,6 +121,10 @@ enum MonitoredFolders {
 
     static func addFolder(url: URL, to existingFolders: [MonitoredFolder]) throws -> [MonitoredFolder] {
         let standardizedURL = url.standardizedFileURL
+        guard isSupportedMonitoredFolder(standardizedURL) else {
+            throw MonitoredFolderError.privacyScopedAppData(standardizedURL)
+        }
+
         guard !existingFolders.contains(where: { $0.path == standardizedURL.path }) else {
             return existingFolders
         }
@@ -125,6 +145,20 @@ enum MonitoredFolders {
         )
         try save(folders)
         return load()
+    }
+
+    static func isSupportedMonitoredFolder(_ url: URL, homeDirectory: URL = FileManager.default.homeDirectoryForCurrentUser) -> Bool {
+        let standardizedPath = url.standardizedFileURL.path
+        let homePath = homeDirectory.standardizedFileURL.path
+        let libraryPath = homePath + "/Library"
+
+        guard standardizedPath != libraryPath,
+              !standardizedPath.hasPrefix(libraryPath + "/")
+        else {
+            return false
+        }
+
+        return true
     }
 
     static func removeFolder(id: UUID, from existingFolders: [MonitoredFolder]) throws -> [MonitoredFolder] {

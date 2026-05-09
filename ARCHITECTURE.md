@@ -111,6 +111,7 @@ stateDiagram-v2
 ## Permissions and Privacy
 
 - Finder Sync extension must be enabled in System Settings.
+- Treat `pluginkit` as the source of truth when debugging extension enablement. `FIFinderSyncController.isExtensionEnabled` has returned false while the extension was enabled, so do not auto-open System Settings or mark setup broken from that API alone.
 - Script execution is local-only; no telemetry.
 - Update checks use Sparkle; only version metadata is transmitted.
 
@@ -121,6 +122,7 @@ stateDiagram-v2
 - **Release**: `./scripts/SaneMaster.rb release` (delegates to SaneProcess `release.sh`).
 - **DMGs**: uploaded to Cloudflare R2 (not committed to GitHub).
 - **Appcast**: Sparkle reads `SUFeedURL` from `SaneClick/Info.plist` (saneclick.com).
+- **App Store posture**: App Store builds should rely on monitored folders, security-scoped bookmarks, app groups, and Finder Sync entitlements. Avoid scripting/temp-file workarounds or external purchase/support donation surfaces in Store builds.
 
 ## Testing Strategy
 

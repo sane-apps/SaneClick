@@ -8,7 +8,7 @@
 [![macOS 14+](https://img.shields.io/badge/macOS-14%2B-brightgreen)](https://www.apple.com/macos)
 [![Listed on awesome-macos](https://img.shields.io/badge/Listed%20on-open--source--mac--os--apps%20(40k%E2%98%85)-black)](https://github.com/serhii-londar/open-source-mac-os-apps)
 
-> **⭐ Star this repo if it's useful!** · **[💰 Buy for $9.99](https://saneclick.com)** · Keeps development alive
+> **⭐ Star this repo if it's useful!** · **[Download Basic free](https://saneclick.com)** · **[Unlock Pro for $9.99 once](https://saneclick.com)** · Keeps development alive
 
 ![SaneClick Main Window](docs/screenshots/main-window.png)
 
@@ -61,7 +61,7 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 | **Import/Export** | Share scripts as JSON (skip duplicates, update existing, or replace all) |
 | **Menu Bar Quick Access** | Status bar icon for quick settings, Finder restart, and updates |
 | **Extension Status Monitor** | Color-coded status (green/orange/red) with one-click Finder restart |
-| **App Visibility** | Show/hide menu bar icon and Dock icon independently |
+| **App Visibility** | Show/hide the menu bar icon or Dock icon while always keeping one entry point visible |
 
 ---
 
@@ -78,11 +78,11 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 
 ### Download
 
-[Buy SaneClick](https://saneclick.com) — Signed, notarized, ready to use. Supports sustainable development.
+[Download SaneClick](https://saneclick.com) — Basic is free, signed, notarized, and ready to use. Unlock Pro once when you want the full toolkit.
 
 ### Build from Source
 
-**Building from source?** Consider [buying the app](https://saneclick.com) to support continued development.
+**Building from source?** Consider [unlocking Pro](https://saneclick.com) to support continued development.
 
 ```bash
 # Clone the repository
@@ -193,7 +193,7 @@ Before opening a PR:
 
 **[⭐ Star the repo](https://github.com/sane-apps/SaneClick)** if SaneClick helps you. Stars help others discover quality software.
 
-**Cloning without starring?** For real bro? Gimme that star!
+Stars help SaneClick stay visible to people looking for a maintained Finder utility.
 
 - 🐛 [Report a Bug](https://github.com/sane-apps/SaneClick/issues/new?template=bug_report.md)
 - 💡 [Request a Feature](https://github.com/sane-apps/SaneClick/issues/new?template=feature_request.md)

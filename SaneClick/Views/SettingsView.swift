@@ -4,12 +4,28 @@ import SwiftUI
 struct SettingsView: View {
     enum Tab: String, SaneSettingsTab {
         case general = "General"
+        case visibility = "Visibility"
+        #if !APP_STORE
+            case updates = "Updates"
+        #endif
         case license = "License"
         case about = "About"
+
+        static var allCases: [Tab] {
+            #if APP_STORE
+                [.general, .visibility, .license, .about]
+            #else
+                [.general, .visibility, .updates, .license, .about]
+            #endif
+        }
 
         var title: String {
             switch self {
             case .general: SaneSettingsStrings.generalTabTitle
+            case .visibility: SaneClickSettingsCopy.visibilityTabTitle
+            #if !APP_STORE
+                case .updates: SaneSettingsStrings.softwareUpdatesSectionTitle
+            #endif
             case .license: SaneSettingsStrings.licenseTabTitle
             case .about: SaneSettingsStrings.aboutTabTitle
             }
@@ -18,6 +34,10 @@ struct SettingsView: View {
         var icon: String {
             switch self {
             case .general: "gearshape"
+            case .visibility: "menubar.rectangle"
+            #if !APP_STORE
+                case .updates: "arrow.triangle.2.circlepath"
+            #endif
             case .license: "key.fill"
             case .about: "info.circle"
             }
@@ -26,6 +46,10 @@ struct SettingsView: View {
         var iconColor: Color {
             switch self {
             case .general: SaneSettingsIconSemantic.general.color
+            case .visibility: SaneSettingsIconSemantic.general.color
+            #if !APP_STORE
+                case .updates: .saneAccent
+            #endif
             case .license: SaneSettingsIconSemantic.license.color
             case .about: SaneSettingsIconSemantic.about.color
             }
@@ -61,6 +85,12 @@ struct SettingsView: View {
             switch tab {
             case .general:
                 generalTab
+            case .visibility:
+                visibilityTab
+            #if !APP_STORE
+                case .updates:
+                    updatesTab
+            #endif
             case .license:
                 licenseTab
             case .about:
@@ -68,7 +98,7 @@ struct SettingsView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .frame(minWidth: 980, idealWidth: 980, minHeight: 760, idealHeight: 760)
+        .frame(minWidth: 820, idealWidth: 860, minHeight: 560, idealHeight: 600)
         .background(Color.saneNavy.opacity(0.3))
         .onAppear {
             applyPendingSettingsTab()
@@ -106,7 +136,7 @@ struct SettingsView: View {
 
                     CompactDivider()
 
-                    CompactRow(SaneSettingsStrings.actionsLabel, icon: "slider.horizontal.3", iconColor: .white) {
+                    CompactRow(SaneClickSettingsCopy.extensionControlsLabel, icon: "slider.horizontal.3", iconColor: .white) {
                         ViewThatFits(in: .horizontal) {
                             HStack(spacing: 8) {
                                 openSystemSettingsButton
@@ -190,47 +220,6 @@ struct SettingsView: View {
                     }
                 #endif
 
-                CompactSection(SaneClickSettingsCopy.appBehaviorSectionTitle, icon: "switch.2", iconColor: SaneSettingsIconSemantic.general.color) {
-                    SaneLoginItemToggle()
-                    CompactDivider()
-                    SaneDockIconToggle(showDockIcon: $showDockIcon)
-                    CompactDivider()
-                    CompactToggle(
-                        label: SaneClickSettingsCopy.showMenuBarIconLabel,
-                        icon: "menubar.rectangle",
-                        iconColor: .white,
-                        isOn: showMenuBarIconBinding
-                    )
-                    .help(SaneClickSettingsCopy.showMenuBarIconHelp)
-                    CompactDivider()
-                    CompactToggle(
-                        label: SaneClickSettingsCopy.showActionConfirmationsLabel,
-                        icon: "bell.badge.fill",
-                        iconColor: .white,
-                        isOn: $showActionNotifications
-                    )
-                    .help(SaneClickSettingsCopy.showActionConfirmationsHelp)
-                    CompactDivider()
-                    readableHint(SaneClickSettingsCopy.hiddenIconsHint)
-                }
-
-                SaneLanguageSettingsRow()
-
-                #if !APP_STORE
-                    CompactSection(SaneSettingsStrings.softwareUpdatesSectionTitle, icon: "arrow.triangle.2.circlepath", iconColor: .saneAccent) {
-                        SaneSparkleRow(
-                            automaticallyChecks: $automaticallyChecksForUpdates,
-                            checkFrequency: $updateCheckFrequency,
-                            onCheckNow: { updateService.checkForUpdates() }
-                        )
-                        .onChange(of: automaticallyChecksForUpdates) { _, newValue in
-                            updateService.automaticallyChecksForUpdates = newValue
-                        }
-                        .onChange(of: updateCheckFrequency) { _, newValue in
-                            updateService.updateCheckFrequency = newValue
-                        }
-                    }
-                #endif
             }
             .padding(.horizontal, 24)
             .padding(.top, 14)
@@ -255,6 +244,74 @@ struct SettingsView: View {
             refreshExtensionStatus()
         }
     }
+
+    private var visibilityTab: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 16) {
+                CompactSection(SaneClickSettingsCopy.appBehaviorSectionTitle, icon: "switch.2", iconColor: SaneSettingsIconSemantic.general.color) {
+                    SaneLoginItemToggle()
+                    CompactDivider()
+                    SaneDockIconToggle(showDockIcon: showDockIconBinding)
+                    CompactDivider()
+                    CompactToggle(
+                        label: SaneClickSettingsCopy.showMenuBarIconLabel,
+                        icon: "menubar.rectangle",
+                        iconColor: .white,
+                        isOn: showMenuBarIconBinding
+                    )
+                    .help(SaneClickSettingsCopy.showMenuBarIconHelp)
+                    CompactDivider()
+                    CompactToggle(
+                        label: SaneClickSettingsCopy.showActionConfirmationsLabel,
+                        icon: "bell.badge.fill",
+                        iconColor: .white,
+                        isOn: $showActionNotifications
+                    )
+                    .help(SaneClickSettingsCopy.showActionConfirmationsHelp)
+                    CompactDivider()
+                    readableHint(SaneClickSettingsCopy.visibleEntryPointHint)
+                }
+
+                SaneLanguageSettingsRow()
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 14)
+            .padding(.bottom, 20)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+    }
+
+    #if !APP_STORE
+        private var updatesTab: some View {
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 16) {
+                    CompactSection(SaneSettingsStrings.softwareUpdatesSectionTitle, icon: "arrow.triangle.2.circlepath", iconColor: .saneAccent) {
+                        SaneSparkleRow(
+                            automaticallyChecks: $automaticallyChecksForUpdates,
+                            checkFrequency: $updateCheckFrequency,
+                            onCheckNow: { updateService.checkForUpdates() }
+                        )
+                        .onChange(of: automaticallyChecksForUpdates) { _, newValue in
+                            updateService.automaticallyChecksForUpdates = newValue
+                        }
+                        .onChange(of: updateCheckFrequency) { _, newValue in
+                            updateService.updateCheckFrequency = newValue
+                        }
+                    }
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 14)
+                .padding(.bottom, 20)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .onAppear {
+                automaticallyChecksForUpdates = updateService.automaticallyChecksForUpdates
+                updateCheckFrequency = updateService.updateCheckFrequency
+            }
+        }
+    #endif
 
     @MainActor
     private func applyPendingSettingsTab() {
@@ -304,12 +361,23 @@ struct SettingsView: View {
         Binding(
             get: { showMenuBarIcon },
             set: { newValue in
-                showMenuBarIcon = newValue
-                Task { @MainActor in
-                    MenuBarController.shared.setEnabled(newValue)
-                }
+                syncVisibilityState(AppVisibilityCoordinator.setMenuBarIconVisible(newValue))
             }
         )
+    }
+
+    private var showDockIconBinding: Binding<Bool> {
+        Binding(
+            get: { showDockIcon },
+            set: { newValue in
+                syncVisibilityState(AppVisibilityCoordinator.setDockIconVisible(newValue))
+            }
+        )
+    }
+
+    private func syncVisibilityState(_ state: AppVisibilityState) {
+        showMenuBarIcon = state.showMenuBarIcon
+        showDockIcon = state.showDockIcon
     }
 
     private func readableHint(_ text: String) -> some View {

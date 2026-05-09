@@ -247,7 +247,7 @@ struct AppStoreScreenshotRenderTests {
         }
 
         try MonitoredFolders.save([])
-        let demoRoot = FileManager.default.temporaryDirectory.appendingPathComponent("SaneClick Screenshot Demo", isDirectory: true)
+        let demoRoot = URL(fileURLWithPath: "/tmp/SaneClick Screenshot Demo", isDirectory: true)
         try FileManager.default.createDirectory(at: demoRoot, withIntermediateDirectories: true)
         try "Client notes".write(to: demoRoot.appendingPathComponent("Client Notes.txt"), atomically: true, encoding: .utf8)
         _ = try MonitoredFolders.addFolder(url: demoRoot, to: [])

@@ -25,6 +25,9 @@ Packages/**/.swiftpm/
 *.xcresult/
 *.xccheckout/
 *.xcworkspace/contents.xcworkspacedata
+/Swift-*.swiftmodule
+/Swift-*.swiftdoc
+/Swift-*.abi.json
 
 # macOS
 .DS_Store
@@ -67,6 +70,7 @@ releases/
 
 # Claude Code - track project config, ignore user/transient state
 .claude/settings.local.json
+.claude/mcp_doctor_last.json
 .claude/edit_state.json
 .claude/memory.json
 .claude/state.json
@@ -85,17 +89,17 @@ releases/
 .claude/sanetrack.log.old
 .claude/sanetools.log.old
 .claude/research_*.json*
-.claude/research-locks.json
 .claude/enforcement_*.json
 .claude/memory_checked.json
 .claude/recent_actions.json
 .claude/read_history.json
+.claude/research-locks.json
 .claude/user_patterns.json
 .claude/bypass_mode.txt
-.claude/sop-verify-state.json
 .claude/saneloop-archive/
 .claude/research/
 .claude/rule_tracking.jsonl
+.claude/sop-verify-state.json
 .claude/bugs.md
 .claude/hook_*.md
 .claude/SOP*.md
@@ -113,6 +117,8 @@ releases/
 # Node/Wrangler
 node_modules/
 .wrangler/
+__pycache__/
+*.pyc
 
 # Serena
 .serena/
@@ -172,9 +178,6 @@ project.yml.ci_backup
 # Sparkle (never commit private key)
 sparkle_private_key.txt
 
-# Local hook overrides
-lefthook-local.yml
-
 # ═══════════════════════════════════════════════════════════════
 # Ephemeral docs (AI-generated, auto-cleaned)
 # ═══════════════════════════════════════════════════════════════
@@ -196,3 +199,8 @@ MinimalTest/
 *.bak
 project.yml.bak
 scripts/*.swift
+
+# Project-specific additions
+# Keep repo-only ignore rules inside this block so sync_check can preserve them.
+# BEGIN PROJECT-SPECIFIC .gitignore
+# END PROJECT-SPECIFIC .gitignore

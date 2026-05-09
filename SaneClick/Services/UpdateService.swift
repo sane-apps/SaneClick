@@ -1,5 +1,6 @@
-import Foundation
 #if !APP_STORE
+import AppKit
+import Foundation
     import Sparkle
 import os.log
 import SaneUI
@@ -18,14 +19,26 @@ final class UpdateService: NSObject, ObservableObject {
 
     #if !APP_STORE
         private var updaterController: SPUStandardUpdaterController?
+        private let updateEligibility: SaneUpdateEligibility
     #endif
 
     // MARK: - Initialization
 
     override private init() {
+        #if !APP_STORE
+            self.updateEligibility = Self.sparkleUpdateEligibility(
+                bundleIdentifier: Bundle.main.bundleIdentifier,
+                bundlePath: Bundle.main.bundlePath
+            )
+        #endif
         super.init()
 
         #if !APP_STORE
+            guard updateEligibility.canUseInAppUpdates else {
+                logger.info("Sparkle disabled: \(self.updateEligibility.userFacingStatus, privacy: .public)")
+                return
+            }
+
             updaterController = SPUStandardUpdaterController(
                 startingUpdater: true,
                 updaterDelegate: nil,
@@ -45,6 +58,11 @@ final class UpdateService: NSObject, ObservableObject {
 
     func checkForUpdates() {
         #if !APP_STORE
+            guard updateEligibility.canUseInAppUpdates else {
+                logger.info("Ignoring Check for Updates: \(self.updateEligibility.userFacingStatus, privacy: .public)")
+                NSSound.beep()
+                return
+            }
             logger.info("User triggered check for updates")
             updaterController?.checkForUpdates(nil)
         #endif
@@ -53,13 +71,14 @@ final class UpdateService: NSObject, ObservableObject {
     var automaticallyChecksForUpdates: Bool {
         get {
             #if !APP_STORE
-                updaterController?.updater.automaticallyChecksForUpdates ?? false
+                updateEligibility.canUseInAppUpdates && (updaterController?.updater.automaticallyChecksForUpdates ?? false)
             #else
                 false
             #endif
         }
         set {
             #if !APP_STORE
+                guard updateEligibility.canUseInAppUpdates else { return }
                 updaterController?.updater.automaticallyChecksForUpdates = newValue
             #endif
         }
@@ -76,10 +95,40 @@ final class UpdateService: NSObject, ObservableObject {
         }
         set {
             #if !APP_STORE
+                guard updateEligibility.canUseInAppUpdates else { return }
                 updaterController?.updater.updateCheckInterval = newValue.interval
             #endif
         }
     }
+
+    #if !APP_STORE
+        var isUpdateChannelEnabled: Bool {
+            updateEligibility.canUseInAppUpdates
+        }
+
+        var updateUnavailableStatus: String {
+            updateEligibility.userFacingStatus
+        }
+
+        var isMissingApplicationsInstall: Bool {
+            updateEligibility == .notInstalledInApplications
+        }
+
+        nonisolated static let releaseBundleIdentifier = "com.saneclick.SaneClick"
+
+        nonisolated static func sparkleUpdateEligibility(
+            bundleIdentifier: String?,
+            bundlePath: String = Bundle.main.bundlePath,
+            homeDirectory: String = NSHomeDirectory()
+        ) -> SaneUpdateEligibility {
+            SaneUpdateEligibility.resolve(
+                bundleIdentifier: bundleIdentifier,
+                releaseBundleIdentifier: releaseBundleIdentifier,
+                bundlePath: bundlePath,
+                homeDirectory: homeDirectory
+            )
+        }
+    #endif
 
     private func normalizeUpdateCheckFrequency() {
         guard let updater = updaterController?.updater else { return }

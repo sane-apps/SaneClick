@@ -339,9 +339,100 @@ struct SaneClickSharedDefaultsTests {
     }
 }
 
+struct MonitoredFoldersPrivacyScopeTests {
+    private let home = URL(fileURLWithPath: "/Users/sane", isDirectory: true)
+
+    @Test("Normal user folders are supported for monitoring")
+    func normalUserFoldersAreSupported() {
+        let documents = URL(fileURLWithPath: "/Users/sane/Documents/Projects", isDirectory: true)
+
+        #expect(MonitoredFolders.isSupportedMonitoredFolder(documents, homeDirectory: home))
+    }
+
+    @Test("Library folders are rejected for monitoring")
+    func libraryAppDataFoldersAreRejected() {
+        let containerTemp = URL(
+            fileURLWithPath: "/Users/sane/Library/Containers/com.saneclick.SaneClick/Data/tmp/SaneClick Screenshot Demo",
+            isDirectory: true
+        )
+        let groupContainer = URL(
+            fileURLWithPath: "/Users/sane/Library/Group Containers/M78L6FXD48.group.com.saneclick.app",
+            isDirectory: true
+        )
+        let appSupport = URL(fileURLWithPath: "/Users/sane/Library/Application Support/BraveSoftware", isDirectory: true)
+        let safari = URL(fileURLWithPath: "/Users/sane/Library/Safari", isDirectory: true)
+        let applicationScripts = URL(fileURLWithPath: "/Users/sane/Library/Application Scripts", isDirectory: true)
+        let genericNestedLibraryFolder = URL(fileURLWithPath: "/Users/sane/Library/Some Tool/Exports", isDirectory: true)
+
+        #expect(!MonitoredFolders.isSupportedMonitoredFolder(containerTemp, homeDirectory: home))
+        #expect(!MonitoredFolders.isSupportedMonitoredFolder(groupContainer, homeDirectory: home))
+        #expect(!MonitoredFolders.isSupportedMonitoredFolder(appSupport, homeDirectory: home))
+        #expect(!MonitoredFolders.isSupportedMonitoredFolder(safari, homeDirectory: home))
+        #expect(!MonitoredFolders.isSupportedMonitoredFolder(applicationScripts, homeDirectory: home))
+        #expect(!MonitoredFolders.isSupportedMonitoredFolder(genericNestedLibraryFolder, homeDirectory: home))
+    }
+
+    @Test("Adding app-data monitored folder fails before bookmark storage")
+    func addingAppDataFolderFailsBeforeBookmarkStorage() throws {
+        let containerTemp = URL(
+            fileURLWithPath: "\(FileManager.default.homeDirectoryForCurrentUser.path)/Library/Containers/com.saneclick.SaneClick/Data/tmp",
+            isDirectory: true
+        )
+
+        #expect(throws: MonitoredFolderError.self) {
+            _ = try MonitoredFolders.addFolder(url: containerTemp, to: [])
+        }
+    }
+}
+
 struct AppPreferencesTests {
     @Test("Dock icon default stays hidden")
     func dockIconDefaultIsHidden() {
         #expect(AppPreferences.defaultShowDockIcon == false)
+    }
+
+    @Test("Hiding menu bar icon keeps Dock icon visible")
+    func hidingMenuBarIconKeepsDockIconVisible() {
+        let state = AppPreferences.visibilityState(settingMenuBarIcon: false, currentDockIcon: false)
+
+        #expect(state.showMenuBarIcon == false)
+        #expect(state.showDockIcon == true)
+    }
+
+    @Test("Hiding Dock icon keeps menu bar icon visible")
+    func hidingDockIconKeepsMenuBarIconVisible() {
+        let state = AppPreferences.visibilityState(settingDockIcon: false, currentMenuBarIcon: false)
+
+        #expect(state.showMenuBarIcon == true)
+        #expect(state.showDockIcon == false)
+    }
+
+    @Test("Launch repairs persisted hidden entry points")
+    func launchRepairsPersistedHiddenEntryPoints() {
+        let defaults = UserDefaults.standard
+        let originalMenu = defaults.object(forKey: AppPreferences.showMenuBarIconKey)
+        let originalDock = defaults.object(forKey: AppPreferences.showDockIconKey)
+        defer {
+            restore(originalMenu, forKey: AppPreferences.showMenuBarIconKey)
+            restore(originalDock, forKey: AppPreferences.showDockIconKey)
+        }
+
+        defaults.set(false, forKey: AppPreferences.showMenuBarIconKey)
+        defaults.set(false, forKey: AppPreferences.showDockIconKey)
+
+        let state = AppPreferences.repairHiddenEntryPoints()
+
+        #expect(state.showMenuBarIcon == true)
+        #expect(state.showDockIcon == false)
+        #expect(AppPreferences.showMenuBarIcon == true)
+        #expect(AppPreferences.showDockIcon == false)
+    }
+
+    private func restore(_ value: Any?, forKey key: String) {
+        if let value {
+            UserDefaults.standard.set(value, forKey: key)
+        } else {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
 }

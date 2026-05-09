@@ -56,6 +56,11 @@ enum SaneClickSettingsCopy {
         defaultValue: "App Behavior"
     )
 
+    static let visibilityTabTitle = String(
+        localized: "saneclick.settings.tab.visibility",
+        defaultValue: "Visibility"
+    )
+
     static let showMenuBarIconLabel = String(
         localized: "saneclick.settings.toggle.show_menu_bar_icon",
         defaultValue: "Show menu bar icon"
@@ -76,19 +81,24 @@ enum SaneClickSettingsCopy {
         defaultValue: "Show a notification when an action finishes"
     )
 
-    static let hiddenIconsHint = String(
+    static let visibleEntryPointHint = String(
         localized: "saneclick.settings.hint.hidden_icons",
-        defaultValue: "If you hide both icons, reopen SaneClick from Applications."
+        defaultValue: "SaneClick always keeps either the Dock icon or the menu bar icon available."
     )
 
     static let openSettingsButtonTitle = String(
         localized: "saneclick.settings.button.open_system_settings",
-        defaultValue: "Open Settings"
+        defaultValue: "Manage Finder Extension"
     )
 
     static let openSettingsHelp = String(
         localized: "saneclick.settings.help.open_system_settings",
-        defaultValue: "Enable or disable SaneClick in System Settings"
+        defaultValue: "Open macOS Extensions settings to enable or disable SaneClick in Finder"
+    )
+
+    static let extensionControlsLabel = String(
+        localized: "saneclick.settings.label.extension_controls",
+        defaultValue: "Finder Extension"
     )
 
     static let refreshButtonTitle = String(

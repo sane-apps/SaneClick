@@ -68,8 +68,6 @@ final class ScriptExecutor: @unchecked Sendable {
         return containerURL.appendingPathComponent(".execution.lock")
     }
 
-    private var fileWatchSource: DispatchSourceFileSystemObject?
-    private var fileWatchFd: Int32 = -1 // Track fd for cleanup
     private let queue = DispatchQueue(label: "com.saneclick.executor", qos: .userInitiated)
 
     /// Track recently processed request IDs to prevent duplicates
@@ -92,66 +90,12 @@ final class ScriptExecutor: @unchecked Sendable {
             NSLog("[ScriptExecutor] Received executeScript signal, checking for pending request file...")
             self?.processPendingExecution()
         }
+    }
 
-        // Also check on startup for any pending requests, and set up file watcher
+    func processPendingExecutionAfterLaunchRequest() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.processPendingExecution()
-            self?.setupFileWatcher()
         }
-    }
-
-    /// Set up a file system watcher for the pending execution file
-    private func setupFileWatcher() {
-        // Cancel any existing watcher first to prevent fd leak
-        if let existingSource = fileWatchSource {
-            existingSource.cancel()
-            fileWatchSource = nil
-        }
-
-        guard let containerURL = FileManager.default.containerURL(
-            forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.saneclick.app"
-        ) else {
-            NSLog("[ScriptExecutor] Cannot set up file watcher: no App Group container")
-            return
-        }
-
-        let containerPath = containerURL.path
-        let fd = open(containerPath, O_EVTONLY)
-        guard fd >= 0 else {
-            NSLog("[ScriptExecutor] Cannot open container directory for watching")
-            return
-        }
-
-        // Track fd for cleanup
-        fileWatchFd = fd
-
-        let source = DispatchSource.makeFileSystemObjectSource(
-            fileDescriptor: fd,
-            eventMask: .write,
-            queue: queue // Use serial queue to prevent concurrent processing
-        )
-
-        source.setEventHandler { [weak self] in
-            NSLog("[ScriptExecutor] File system change detected in container")
-            self?.processPendingExecutionLocked() // Already on queue, call directly
-        }
-
-        source.setCancelHandler { [weak self] in
-            if let watchFd = self?.fileWatchFd, watchFd >= 0 {
-                close(watchFd)
-                self?.fileWatchFd = -1
-            }
-        }
-
-        source.resume()
-        fileWatchSource = source
-        NSLog("[ScriptExecutor] File watcher set up for: \(containerPath)")
-    }
-
-    deinit {
-        // Clean up file watcher
-        fileWatchSource?.cancel()
-        fileWatchSource = nil
     }
 
     /// Process pending execution request from file with proper locking

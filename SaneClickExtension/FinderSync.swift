@@ -43,35 +43,14 @@ class FinderSync: FIFinderSync {
         super.init()
         logger.info("FinderSync extension init() called")
 
-        let finderSync = FIFinderSyncController.default()
-        #if APP_STORE
-            finderSync.directoryURLs = Set(MonitoredFolders.monitoredURLs())
-            logger.info("Set directoryURLs to \(finderSync.directoryURLs.count) monitored folders")
-        #else
-            if let mountedVolumes = FileManager.default.mountedVolumeURLs(
-                includingResourceValuesForKeys: nil,
-                options: [.skipHiddenVolumes]
-            ) {
-                finderSync.directoryURLs = Set(mountedVolumes)
-                logger.info("Set directoryURLs to \(mountedVolumes.count) volumes")
-            } else {
-                finderSync.directoryURLs = [URL(fileURLWithPath: "/")]
-                logger.warning("mountedVolumeURLs returned nil, using root /")
-            }
-        #endif
+        reloadMonitoredFolders()
 
         NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didMountNotification,
             object: nil,
             queue: .main
-        ) { notification in
-            #if APP_STORE
-                self.reloadMonitoredFolders()
-            #else
-                if let volumeURL = notification.userInfo?[NSWorkspace.volumeURLUserInfoKey] as? URL {
-                    FIFinderSyncController.default().directoryURLs.insert(volumeURL)
-                }
-            #endif
+        ) { _ in
+            self.reloadMonitoredFolders()
         }
 
         DistributedNotificationCenter.default().addObserver(
@@ -81,14 +60,12 @@ class FinderSync: FIFinderSync {
             object: nil
         )
 
-        #if APP_STORE
-            DistributedNotificationCenter.default().addObserver(
-                self,
-                selector: #selector(monitoredFoldersDidChange),
-                name: MonitoredFolders.changedNotification,
-                object: nil
-            )
-        #endif
+        DistributedNotificationCenter.default().addObserver(
+            self,
+            selector: #selector(monitoredFoldersDidChange),
+            name: MonitoredFolders.changedNotification,
+            object: nil
+        )
     }
 
     deinit {
@@ -97,17 +74,15 @@ class FinderSync: FIFinderSync {
 
     @objc private func scriptsDidChange() {}
 
-    #if APP_STORE
-        @objc private func monitoredFoldersDidChange() {
-            reloadMonitoredFolders()
-        }
+    @objc private func monitoredFoldersDidChange() {
+        reloadMonitoredFolders()
+    }
 
-        private func reloadMonitoredFolders() {
-            let urls = Set(MonitoredFolders.monitoredURLs())
-            FIFinderSyncController.default().directoryURLs = urls
-            logger.info("Reloaded monitored folders: \(urls.count)")
-        }
-    #endif
+    private func reloadMonitoredFolders() {
+        let urls = Set(MonitoredFolders.monitoredURLs())
+        FIFinderSyncController.default().directoryURLs = urls
+        logger.info("Reloaded monitored folders: \(urls.count)")
+    }
 
     // MARK: - Context Menu
 
@@ -217,15 +192,28 @@ class FinderSync: FIFinderSync {
     private func ensureHostAppRunning() {
         let running = NSRunningApplication.runningApplications(withBundleIdentifier: "com.saneclick.SaneClick")
         if running.isEmpty {
-            launchHostApp(activate: false)
+            launchHostApp(activate: false, executionRequested: true)
+            for delay in [0.75, 1.5, 3.0] {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    DistributedNotificationCenter.default().postNotificationName(
+                        NSNotification.Name("com.saneclick.executeScript"),
+                        object: nil,
+                        userInfo: nil,
+                        deliverImmediately: true
+                    )
+                }
+            }
         }
     }
 
-    private func launchHostApp(activate: Bool) {
+    private func launchHostApp(activate: Bool, executionRequested: Bool = false) {
         if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.saneclick.SaneClick") {
             let configuration = NSWorkspace.OpenConfiguration()
             configuration.activates = activate
             configuration.addsToRecentItems = false
+            if executionRequested {
+                configuration.arguments = ["--saneclick-execution-requested"]
+            }
             NSWorkspace.shared.openApplication(at: appURL, configuration: configuration)
         }
     }

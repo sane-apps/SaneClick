@@ -12,12 +12,58 @@ enum SaneClickContextMenu {
         settingsAction: Selector,
         licenseAction: Selector,
         checkForUpdatesAction: Selector?,
+        configureCheckForUpdates: ((NSMenuItem) -> Void)? = nil,
         aboutAction: Selector,
         restartFinderAction: Selector?,
         toggleDockIconAction: Selector?,
         quitAction: Selector
     ) -> NSMenu {
         let menu = NSMenu()
+
+        #if APP_STORE
+            menu.addItem(NSMenuItem(
+                title: "Open SaneClick",
+                action: openAction,
+                keyEquivalent: ""
+            ))
+            menu.items.last?.target = target
+            menu.addItem(.separator())
+
+            menu.addItem(NSMenuItem(
+                title: "Settings...",
+                action: settingsAction,
+                keyEquivalent: ""
+            ))
+            menu.items.last?.target = target
+
+            menu.addItem(NSMenuItem(
+                title: "License...",
+                action: licenseAction,
+                keyEquivalent: ""
+            ))
+            menu.items.last?.target = target
+
+            menu.addItem(NSMenuItem(
+                title: "About / Report a Bug...",
+                action: aboutAction,
+                keyEquivalent: ""
+            ))
+            menu.items.last?.target = target
+
+            if let toggleDockIconAction {
+                menu.addItem(.separator())
+                menu.addItem(dockIconItem(target: target, action: toggleDockIconAction))
+            }
+
+            menu.addItem(.separator())
+            menu.addItem(NSMenuItem(
+                title: "Quit SaneClick",
+                action: quitAction,
+                keyEquivalent: "q"
+            ))
+            menu.items.last?.target = target
+            return menu
+        #endif
 
         menu.addItem(SaneStandardMenu.openAppItem(
             appName: "SaneClick",
@@ -45,6 +91,7 @@ enum SaneClickContextMenu {
             settingsAction: settingsAction,
             licenseAction: licenseAction,
             checkForUpdatesAction: checkForUpdatesAction,
+            configureCheckForUpdates: configureCheckForUpdates,
             aboutAndBugReportAction: aboutAction,
             extraUtilityItems: extraUtilityItems,
             quitAction: quitAction,
@@ -124,6 +171,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             settingsAction: #selector(openSettings),
             licenseAction: #selector(openLicense),
             checkForUpdatesAction: directUpdateAction,
+            configureCheckForUpdates: directUpdateConfigurator,
             aboutAction: #selector(openAbout),
             restartFinderAction: directRestartFinderAction,
             toggleDockIconAction: #selector(toggleDockIcon),
@@ -144,11 +192,20 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             #selector(checkForUpdates)
         }
 
+        private var directUpdateConfigurator: ((NSMenuItem) -> Void)? {
+            { item in
+                let updateService = UpdateService.shared
+                item.isEnabled = updateService.isUpdateChannelEnabled
+                item.toolTip = updateService.isUpdateChannelEnabled ? nil : updateService.updateUnavailableStatus
+            }
+        }
+
         private var directRestartFinderAction: Selector? {
             #selector(restartFinder)
         }
     #else
         private var directUpdateAction: Selector? { nil }
+        private var directUpdateConfigurator: ((NSMenuItem) -> Void)? { nil }
         private var directRestartFinderAction: Selector? { nil }
     #endif
 
@@ -185,9 +242,8 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     @MainActor
     @objc private func toggleDockIcon() {
         let newValue = !AppPreferences.showDockIcon
-        UserDefaults.standard.set(newValue, forKey: AppPreferences.showDockIconKey)
-        SaneActivationPolicy.applyPolicy(showDockIcon: newValue)
-        if newValue {
+        let state = AppVisibilityCoordinator.setDockIconVisible(newValue)
+        if state.showDockIcon {
             NSApp.activate(ignoringOtherApps: true)
         }
     }

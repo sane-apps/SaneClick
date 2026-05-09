@@ -1,6 +1,11 @@
 import Foundation
 import SaneUI
 
+struct AppVisibilityState: Equatable {
+    let showMenuBarIcon: Bool
+    let showDockIcon: Bool
+}
+
 enum ActionCatalog {
     private static let libraryScriptNames = Set(ScriptLibrary.allScripts.map(\.name))
 
@@ -33,5 +38,76 @@ enum AppPreferences {
 
     static var showDockIcon: Bool {
         UserDefaults.standard.object(forKey: showDockIconKey) as? Bool ?? defaultShowDockIcon
+    }
+
+    static func visibilityState(settingMenuBarIcon newValue: Bool, currentDockIcon: Bool) -> AppVisibilityState {
+        AppVisibilityState(
+            showMenuBarIcon: newValue,
+            showDockIcon: newValue ? currentDockIcon : true
+        )
+    }
+
+    static func visibilityState(settingDockIcon newValue: Bool, currentMenuBarIcon: Bool) -> AppVisibilityState {
+        AppVisibilityState(
+            showMenuBarIcon: newValue ? currentMenuBarIcon : true,
+            showDockIcon: newValue
+        )
+    }
+
+    @discardableResult
+    static func setMenuBarIconVisible(_ newValue: Bool) -> AppVisibilityState {
+        let state = visibilityState(settingMenuBarIcon: newValue, currentDockIcon: showDockIcon)
+        persistVisibility(state)
+        return state
+    }
+
+    @discardableResult
+    static func setDockIconVisible(_ newValue: Bool) -> AppVisibilityState {
+        let state = visibilityState(settingDockIcon: newValue, currentMenuBarIcon: showMenuBarIcon)
+        persistVisibility(state)
+        return state
+    }
+
+    @discardableResult
+    static func repairHiddenEntryPoints() -> AppVisibilityState {
+        let state = AppVisibilityState(
+            showMenuBarIcon: showMenuBarIcon || !showDockIcon,
+            showDockIcon: showDockIcon
+        )
+        persistVisibility(state)
+        return state
+    }
+
+    private static func persistVisibility(_ state: AppVisibilityState) {
+        UserDefaults.standard.set(state.showMenuBarIcon, forKey: showMenuBarIconKey)
+        UserDefaults.standard.set(state.showDockIcon, forKey: showDockIconKey)
+    }
+}
+
+@MainActor
+enum AppVisibilityCoordinator {
+    @discardableResult
+    static func setMenuBarIconVisible(_ newValue: Bool) -> AppVisibilityState {
+        let state = AppPreferences.setMenuBarIconVisible(newValue)
+        apply(state)
+        return state
+    }
+
+    @discardableResult
+    static func setDockIconVisible(_ newValue: Bool) -> AppVisibilityState {
+        let state = AppPreferences.setDockIconVisible(newValue)
+        apply(state)
+        return state
+    }
+
+    static func applyInitialVisibility() {
+        let state = AppPreferences.repairHiddenEntryPoints()
+        MenuBarController.shared.setEnabled(state.showMenuBarIcon)
+        SaneActivationPolicy.applyInitialPolicy(showDockIcon: state.showDockIcon)
+    }
+
+    private static func apply(_ state: AppVisibilityState) {
+        MenuBarController.shared.setEnabled(state.showMenuBarIcon)
+        SaneActivationPolicy.applyPolicy(showDockIcon: state.showDockIcon)
     }
 }

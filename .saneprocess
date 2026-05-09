@@ -16,6 +16,39 @@ release:
   r2_bucket: sanebar-downloads
   use_sparkle: true
   min_system_version: "14.0"
+  reviewed_auto_reconcile_stashes:
+    - stash_sha: "85401e38e0b484f64e6fbc84855446c2ebec692a"
+      subject: "On main: auto-reconcile-20260508-215529-stephans-macbook-air"
+      decision: recovered
+      reason: "Reviewed 2026-05-09 against current release candidate. Customer-facing menu parity, Settings/License/About routing, App Group launch deferral, Finder extension launch arguments, mutual visibility repair, direct-download lane docs, update rows, and tests are present in current code; stale oversized General-tab/App Store screenshot parts are intentionally superseded."
+    - stash_sha: "4420f3047f6257091127ea22ceb2d380e2b2a055"
+      subject: "On main: auto-reconcile-20260430-215529-stephans-macbook-air"
+      decision: superseded
+      reason: "Reviewed 2026-05-09. The only blocking file was a one-line docs/index.html deletion from older website copy; current website copy was later updated and verified against the direct-download channel."
+    - stash_sha: "d63d5617fed535fd506013f0a1d3abd759a62faf"
+      subject: "On main: auto-reconcile-20260429-215525-stephans-macbook-air"
+      decision: superseded
+      reason: "Reviewed 2026-05-09. This older helper/test cleanup is superseded by current ContentView/ScriptLibraryView implementation and passing SaneClick tests; it would regress current shared category presentation work."
+    - stash_sha: "174888a60992d2ed58cc2c04645408735a5fa2ff"
+      subject: "On main: auto-reconcile-20260425-215529-stephans-macbook-air"
+      decision: recovered
+      reason: "Reviewed 2026-05-09. Privacy and website wording updates from Public Code to Transparent Code/source-available wording are already present in the current docs/site release candidate."
+    - stash_sha: "75dc74a8322ee0dab07afab53441c81e40009127"
+      subject: "On main: auto-reconcile-20260424-153503-stephans-macbook-air"
+      decision: recovered
+      reason: "Reviewed 2026-05-09. Architecture and development notes represented release/test guidance already carried forward in current docs and the active SaneProcess release guard."
+    - stash_sha: "aeca764b633643fb8365f744ed48250358ca2e59"
+      subject: "On main: auto-reconcile-20260418-055526-stephans-macbook-air"
+      decision: deferred
+      reason: "Reviewed 2026-05-09. This is App Store screenshot/storyboard and App Store lane collateral; SaneClick is direct-download-only for this release, so this work is not part of the current release candidate."
+    - stash_sha: "279e615c23dcc45846078bd5700851b3034ec9e4"
+      subject: "On main: auto-reconcile-20260411-055525-stephans-macbook-air"
+      decision: superseded
+      reason: "Reviewed 2026-05-09. This old .claude/settings.json and .gitignore sync residue is superseded by current shared SaneProcess/Codex policy and should not affect the app release."
+    - stash_sha: "be45a2c618d3b6811dab61511b8660e9f8320211"
+      subject: "On main: auto-reconcile-20260410-215527-stephans-macbook-air"
+      decision: superseded
+      reason: "Reviewed 2026-05-09. This old .gitignore residue is superseded by current canonical shared ignore rules."
   dmg:
     volume_icon: Resources/DMGIcon.icns
     file_icon: Resources/DMGIcon.icns
@@ -24,7 +57,10 @@ release:
     drop_pos: "600 185"
 
 appstore:
-  enabled: true
+  enabled: false
+  # Current strategy: direct-download only.
+  # Do not route the current full-featured build through App Store release automation.
+  # App Store metadata below is retained only as dormant reference and is not an active lane.
   app_id: "6759330868"
   product_id: "com.saneclick.app.pro.actions.v4"
   scheme: SaneClick-AppStore
@@ -61,18 +97,7 @@ appstore:
       marketing_url: "https://saneclick.com"
   review_notes_by_platform:
     macos: >-
-      SaneClick is a freemium App Store app. Basic is free in the App Store build.
-      Review steps:
-      1. Launch SaneClick.
-      2. Continue onboarding to the final screen and click "Unlock Pro" to review the optional StoreKit purchase flow.
-      3. If onboarding has already been dismissed, use the visible "Unlock Pro" action in the sidebar Quick Actions section or open Settings > License.
-      4. To see what Pro includes before purchasing, open Browse Library and select a Pro category such as "Files & Folders" or "Advanced". The locked actions remain visible with Pro badges.
-      The free download includes 9 built-in Finder actions, monitored folders, and Finder Sync inside those selected folders.
-      SaneClick Pro is an optional one-time non-consumable StoreKit in-app purchase that adds 9 more built-in Finder actions, including batch rename, additional file-and-folder tools, and MD5 / SHA-256 hashing.
-      There is no Donate, Support the Developer, GitHub Sponsors, or other outside payment flow in this build.
-      No external checkout or license key flow exists in this build.
-      The App Store build no longer runs user-created scripts.
-      There are no Apple Events or automation entitlements in this build.
+      SaneClick's current public strategy is direct download only. The Mac App Store lane is intentionally inactive for the current full-featured build and should not be submitted from this repo state. If an App Store-safe variant is revisited later, re-validate sandbox-safe behavior, pricing, StoreKit, and reviewer guidance from scratch.
   iap:
     display_name: "SaneClick Pro Access"
     price_usd: 9.99

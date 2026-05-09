@@ -357,6 +357,11 @@ SaneClick/
 | Menu caching | NEVER cache menus - rebuild `NSMenu` on each `menu(for:)` call |
 | Script execution | Extension sends notification → host app executes script |
 
+**Status debugging:**
+- Use `pluginkit` and a real Finder right-click probe as the source of truth for extension enablement.
+- Do not trust `FIFinderSyncController.isExtensionEnabled` by itself; it has reported false for enabled extensions.
+- Do not auto-open System Settings on launch unless there is fresh evidence the extension is actually disabled and user action is required.
+
 **Testing the extension:**
 1. Build both targets (host app + extension)
 2. Launch host app
@@ -412,3 +417,9 @@ If automation can't find it → UX is broken → fix design first.
 3. Search memory MCP: `project: "SaneClick"`
 4. Kill stale processes: `killall SaneClick 2>/dev/null || true`
 5. Use subagents for heavy work, verify their output
+
+## App Store Review Notes
+
+- Review notes must point reviewers to the actual Pro entry points visible in the build.
+- App Store builds must not expose external purchase, GitHub Sponsors, crypto donation, or non-Store unlock paths.
+- If shared SaneUI About/license content changes, rerun `SaneMaster.rb appstore_preflight` before submission.

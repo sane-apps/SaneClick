@@ -61,6 +61,7 @@ final class ScriptStore {
 
     /// Whether there was an error loading data (shown in UI)
     private(set) var loadError: String?
+    private var hasLoaded = false
 
     /// Shared file location via App Group container (accessible by both app and extension)
     private static var containerURL: URL? {
@@ -107,7 +108,11 @@ final class ScriptStore {
         return containerURL.appendingPathComponent("categories.json")
     }
 
-    private init() {
+    private init() {}
+
+    func loadIfNeeded() {
+        guard !hasLoaded else { return }
+        hasLoaded = true
         loadCategories()
         loadScripts()
     }
@@ -115,6 +120,7 @@ final class ScriptStore {
     // MARK: - CRUD Operations
 
     func addScript(_ script: Script) {
+        loadIfNeeded()
         #if APP_STORE
             guard let sanitized = sanitizeForAppStore(script) else { return }
             scripts.append(sanitized)
@@ -126,6 +132,7 @@ final class ScriptStore {
     }
 
     func updateScript(_ script: Script) {
+        loadIfNeeded()
         guard let index = scripts.firstIndex(where: { $0.id == script.id }) else { return }
         #if APP_STORE
             guard let sanitized = sanitizeForAppStore(script) else { return }
@@ -138,12 +145,14 @@ final class ScriptStore {
     }
 
     func deleteScript(_ script: Script) {
+        loadIfNeeded()
         scripts.removeAll { $0.id == script.id }
         saveScripts()
         notifyExtension()
     }
 
     func moveScript(from source: IndexSet, to destination: Int) {
+        loadIfNeeded()
         scripts.move(fromOffsets: source, toOffset: destination)
         saveScripts()
         notifyExtension()
@@ -152,17 +161,20 @@ final class ScriptStore {
     // MARK: - ScriptCategory CRUD Operations
 
     func addScriptCategory(_ category: ScriptCategory) {
+        loadIfNeeded()
         categories.append(category)
         saveCategories()
     }
 
     func updateScriptCategory(_ category: ScriptCategory) {
+        loadIfNeeded()
         guard let index = categories.firstIndex(where: { $0.id == category.id }) else { return }
         categories[index] = category
         saveCategories()
     }
 
     func deleteScriptCategory(_ category: ScriptCategory) {
+        loadIfNeeded()
         // Move scripts in this category to uncategorized
         for index in scripts.indices where scripts[index].categoryId == category.id {
             scripts[index].categoryId = nil
@@ -174,6 +186,7 @@ final class ScriptStore {
     }
 
     func moveScriptCategory(from source: IndexSet, to destination: Int) {
+        loadIfNeeded()
         categories.move(fromOffsets: source, toOffset: destination)
         saveCategories()
     }
@@ -346,6 +359,7 @@ final class ScriptStore {
     // MARK: - Import / Export
 
     func exportScripts(to url: URL) throws {
+        loadIfNeeded()
         let bundle = ScriptExportBundle(scripts: scripts, categories: categories)
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
@@ -356,6 +370,7 @@ final class ScriptStore {
     }
 
     func importScripts(from url: URL, mode: ScriptImportMode) throws -> ScriptImportSummary {
+        loadIfNeeded()
         let data = try Data(contentsOf: url)
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
@@ -550,16 +565,19 @@ final class ScriptStore {
 extension ScriptStore {
     /// Get scripts that apply to a specific menu kind
     func scripts(for appliesTo: AppliesTo) -> [Script] {
-        scripts.filter { $0.isEnabled && ($0.appliesTo == appliesTo || $0.appliesTo == .allItems) }
+        loadIfNeeded()
+        return scripts.filter { $0.isEnabled && ($0.appliesTo == appliesTo || $0.appliesTo == .allItems) }
     }
 
     /// Get all enabled scripts
     var enabledScripts: [Script] {
-        scripts.filter { $0.isEnabled }
+        loadIfNeeded()
+        return scripts.filter { $0.isEnabled }
     }
 
     /// Get scripts for a specific category
     func scripts(in category: ScriptCategory?) -> [Script] {
+        loadIfNeeded()
         if let category = category {
             return scripts.filter { $0.categoryId == category.id }
         } else {
@@ -570,6 +588,7 @@ extension ScriptStore {
 
     /// Get scripts that are uncategorized
     var uncategorizedScripts: [Script] {
-        scripts.filter { $0.categoryId == nil }
+        loadIfNeeded()
+        return scripts.filter { $0.categoryId == nil }
     }
 }

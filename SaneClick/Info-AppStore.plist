@@ -24,5 +24,7 @@
 	<true/>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.utilities</string>
+	<key>NSAppDataUsageDescription</key>
+	<string>SaneClick shares your selected Finder folders and actions with its Finder extension so the right-click menu only appears where you choose.</string>
 </dict>
 </plist>

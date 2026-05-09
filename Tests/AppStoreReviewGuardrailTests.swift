@@ -145,22 +145,18 @@ struct AppStoreReviewGuardrailTests {
         #expect(description.localizedCaseInsensitiveContains("one-time purchase") == false)
     }
 
-    @Test("App Store review notes explain where review can find Pro")
-    func appStoreReviewNotesExplainProPath() throws {
+    @Test("Inactive App Store lane documents direct download strategy")
+    func inactiveAppStoreLaneDocumentsDirectDownloadStrategy() throws {
         let projectRoot = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
             .deletingLastPathComponent()
         let manifest = try String(contentsOf: projectRoot.appendingPathComponent(".saneprocess"), encoding: .utf8)
-        let source = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/ContentView.swift"), encoding: .utf8)
-        let settingsSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/SettingsView.swift"), encoding: .utf8)
 
-        #expect(manifest.localizedCaseInsensitiveContains("Settings > License"))
-        #expect(manifest.localizedCaseInsensitiveContains("Unlock Pro"))
-        #expect(manifest.localizedCaseInsensitiveContains("sidebar Quick Actions section"))
-        #expect(manifest.localizedCaseInsensitiveContains("Donate") || manifest.localizedCaseInsensitiveContains("GitHub Sponsors"))
-        #expect(source.contains("title: \"Unlock Pro\""))
-        #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab, windowSizing: .embedded)"))
-        #expect(settingsSource.contains("LicenseSettingsView(licenseService: licenseService, style: .panel)"))
+        #expect(manifest.contains("enabled: false"))
+        #expect(manifest.localizedCaseInsensitiveContains("direct download only"))
+        #expect(manifest.localizedCaseInsensitiveContains("intentionally inactive"))
+        #expect(!manifest.localizedCaseInsensitiveContains("Settings > License"))
+        #expect(!manifest.localizedCaseInsensitiveContains("sidebar Quick Actions section"))
     }
 
     @Test("App Store welcome claims match the actual native action split")
@@ -216,6 +212,26 @@ struct AppStoreReviewGuardrailTests {
         #expect(appSource.contains("WelcomeGateState.purgeRestoredSheetState()"))
     }
 
+    @Test("Normal app launch does not touch App Group execution files")
+    func normalLaunchDoesNotTouchAppGroupExecutionFiles() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let appSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/SaneClickApp.swift"), encoding: .utf8)
+        let executorSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Services/ScriptExecutor.swift"), encoding: .utf8)
+        let extensionSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClickExtension/FinderSync.swift"), encoding: .utf8)
+
+        #expect(appSource.contains("ProcessInfo.processInfo.arguments.contains(\"--saneclick-execution-requested\")"))
+        #expect(extensionSource.contains("configuration.arguments = [\"--saneclick-execution-requested\"]"))
+        #expect(executorSource.contains("processPendingExecutionAfterLaunchRequest()"))
+        let initStart = try #require(executorSource.range(of: "private init()"))
+        let launchRequestStart = try #require(executorSource.range(of: "func processPendingExecutionAfterLaunchRequest()"))
+        let initSection = String(executorSource[initStart.lowerBound..<launchRequestStart.lowerBound])
+        #expect(initSection.contains("addObserver"))
+        #expect(initSection.contains("asyncAfter") == false)
+        #expect(executorSource.contains("setupFileWatcher()") == false)
+    }
+
     @Test("Settings use shared SaneUI shell and standardized direct license copy")
     func settingsUseSharedShellAndStandardCopy() throws {
         let projectRoot = URL(fileURLWithPath: #filePath)
@@ -252,9 +268,11 @@ struct AppStoreReviewGuardrailTests {
         #expect(infoPlistSource.contains("<key>SUFeedURL</key>"))
         #expect(infoPlistSource.contains("<key>SUPublicEDKey</key>"))
         #expect(infoPlistSource.contains("<key>AppStoreProductID</key>") == false)
+        #expect(infoPlistSource.contains("<key>NSAppDataUsageDescription</key>"))
         #expect(appStoreInfoPlistSource.contains("<key>AppStoreProductID</key>"))
         #expect(appStoreInfoPlistSource.contains("com.saneclick.app.pro.actions.v4"))
         #expect(appStoreInfoPlistSource.contains("<key>NSAppleEventsUsageDescription</key>") == false)
+        #expect(appStoreInfoPlistSource.contains("<key>NSAppDataUsageDescription</key>"))
         #expect(appStoreInfoPlistSource.contains("<key>SUFeedURL</key>") == false)
         #expect(projectManifest.contains("INFOPLIST_FILE: SaneClick/Info.plist"))
         #expect(projectManifest.contains("INFOPLIST_FILE: SaneClick/Info-AppStore.plist"))

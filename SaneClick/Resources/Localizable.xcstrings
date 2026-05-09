@@ -19,17 +19,17 @@
     },
     "saneclick.settings.button.open_system_settings" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Einstellungen öffnen" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open Settings" } },
-        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Abrir ajustes" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ouvrir les réglages" } },
-        "it" : { "stringUnit" : { "state" : "translated", "value" : "Apri impostazioni" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "設定を開く" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "설정 열기" } },
-        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Instellingen openen" } },
-        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Abrir ajustes" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "打开设置" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "打開設定" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Finder-Erweiterung verwalten" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Manage Finder Extension" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Administrar extensión de Finder" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Gérer l’extension Finder" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Gestisci estensione Finder" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Finder拡張機能を管理" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "Finder 확장 관리" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Finder-extensie beheren" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Gerenciar extensão do Finder" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "管理 Finder 扩展" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "管理 Finder 延伸功能" } }
       }
     },
     "saneclick.settings.button.refresh" : {
@@ -94,17 +94,17 @@
     },
     "saneclick.settings.help.open_system_settings" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "SaneClick in den Systemeinstellungen ein- oder ausschalten" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Enable or disable SaneClick in System Settings" } },
-        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Activa o desactiva SaneClick en Configuración del Sistema" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Activez ou désactivez SaneClick dans Réglages Système" } },
-        "it" : { "stringUnit" : { "state" : "translated", "value" : "Attiva o disattiva SaneClick in Impostazioni di Sistema" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "システム設定で SaneClick を有効または無効にします" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "시스템 설정에서 SaneClick을 켜거나 끄세요" } },
-        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Schakel SaneClick in of uit in Systeeminstellingen" } },
-        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Ative ou desative o SaneClick nos Ajustes do Sistema" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "在系统设置中启用或停用 SaneClick" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "在系統設定中啟用或停用 SaneClick" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Öffnet die macOS-Erweiterungseinstellungen zum Aktivieren oder Deaktivieren von SaneClick im Finder" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open macOS Extensions settings to enable or disable SaneClick in Finder" } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Abre la configuración de extensiones de macOS para activar o desactivar SaneClick en Finder" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ouvrir les réglages d’extensions macOS pour activer ou désactiver SaneClick dans Finder" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Apri le impostazioni Estensioni di macOS per attivare o disattivare SaneClick nel Finder" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "macOSの拡張機能設定を開いて、FinderでSaneClickを有効または無効にします" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "macOS 확장 설정을 열어 Finder에서 SaneClick을 켜거나 끕니다" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Open macOS-extensie-instellingen om SaneClick in Finder in of uit te schakelen" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Abra os ajustes de extensões do macOS para ativar ou desativar o SaneClick no Finder" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "打开 macOS 扩展设置，以在 Finder 中启用或停用 SaneClick" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "打開 macOS 延伸功能設定，以在 Finder 中啟用或停用 SaneClick" } }
       }
     },
     "saneclick.settings.help.refresh" : {
@@ -139,17 +139,17 @@
     },
     "saneclick.settings.hint.hidden_icons" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Wenn du beide Symbole ausblendest, öffne SaneClick wieder über Programme." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "If you hide both icons, reopen SaneClick from Applications." } },
-        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Si ocultas ambos iconos, vuelve a abrir SaneClick desde Aplicaciones." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Si vous masquez les deux icônes, rouvrez SaneClick depuis Applications." } },
-        "it" : { "stringUnit" : { "state" : "translated", "value" : "Se nascondi entrambe le icone, riapri SaneClick da Applicazioni." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "両方のアイコンを非表示にした場合は、アプリケーションから SaneClick を開き直してください。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "두 아이콘을 모두 숨기면 응용 프로그램에서 SaneClick을 다시 여세요." } },
-        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Als je beide pictogrammen verbergt, open SaneClick dan opnieuw vanuit Apps." } },
-        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Se você ocultar os dois ícones, reabra o SaneClick em Aplicativos." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "如果你隐藏了两个图标，请从“应用程序”中重新打开 SaneClick。" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "如果你隱藏了兩個圖示，請從「應用程式」重新打開 SaneClick。" } }
+        "de" : { "stringUnit" : { "state" : "needs_review", "value" : "SaneClick always keeps either the Dock icon or the menu bar icon available." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "SaneClick always keeps either the Dock icon or the menu bar icon available." } },
+        "es-419" : { "stringUnit" : { "state" : "needs_review", "value" : "SaneClick always keeps either the Dock icon or the menu bar icon available." } },
+        "fr" : { "stringUnit" : { "state" : "needs_review", "value" : "SaneClick always keeps either the Dock icon or the menu bar icon available." } },
+        "it" : { "stringUnit" : { "state" : "needs_review", "value" : "SaneClick always keeps either the Dock icon or the menu bar icon available." } },
+        "ja" : { "stringUnit" : { "state" : "needs_review", "value" : "SaneClick always keeps either the Dock icon or the menu bar icon available." } },
+        "ko" : { "stringUnit" : { "state" : "needs_review", "value" : "SaneClick always keeps either the Dock icon or the menu bar icon available." } },
+        "nl" : { "stringUnit" : { "state" : "needs_review", "value" : "SaneClick always keeps either the Dock icon or the menu bar icon available." } },
+        "pt-BR" : { "stringUnit" : { "state" : "needs_review", "value" : "SaneClick always keeps either the Dock icon or the menu bar icon available." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "needs_review", "value" : "SaneClick always keeps either the Dock icon or the menu bar icon available." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "needs_review", "value" : "SaneClick always keeps either the Dock icon or the menu bar icon available." } }
       }
     },
     "saneclick.settings.hint.monitored_folders_empty" : {
@@ -255,6 +255,21 @@
         "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Suas ações" } },
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "你的操作" } },
         "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你的動作" } }
+      }
+    },
+    "saneclick.settings.tab.visibility" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "needs_review", "value" : "Visibility" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Visibility" } },
+        "es-419" : { "stringUnit" : { "state" : "needs_review", "value" : "Visibility" } },
+        "fr" : { "stringUnit" : { "state" : "needs_review", "value" : "Visibility" } },
+        "it" : { "stringUnit" : { "state" : "needs_review", "value" : "Visibility" } },
+        "ja" : { "stringUnit" : { "state" : "needs_review", "value" : "Visibility" } },
+        "ko" : { "stringUnit" : { "state" : "needs_review", "value" : "Visibility" } },
+        "nl" : { "stringUnit" : { "state" : "needs_review", "value" : "Visibility" } },
+        "pt-BR" : { "stringUnit" : { "state" : "needs_review", "value" : "Visibility" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "needs_review", "value" : "Visibility" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "needs_review", "value" : "Visibility" } }
       }
     },
     "saneclick.settings.toggle.show_action_confirmations" : {

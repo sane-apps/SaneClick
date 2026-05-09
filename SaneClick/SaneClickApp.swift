@@ -154,6 +154,7 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
             settingsAction: #selector(openSettings),
             licenseAction: #selector(openLicense),
             checkForUpdatesAction: directUpdateAction,
+            configureCheckForUpdates: directUpdateConfigurator,
             aboutAction: #selector(openAbout),
             restartFinderAction: directRestartFinderAction,
             toggleDockIconAction: #selector(toggleDockIcon),
@@ -170,6 +171,14 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
             #selector(checkForUpdates)
         }
 
+        private var directUpdateConfigurator: ((NSMenuItem) -> Void)? {
+            { item in
+                let updateService = UpdateService.shared
+                item.isEnabled = updateService.isUpdateChannelEnabled
+                item.toolTip = updateService.isUpdateChannelEnabled ? nil : updateService.updateUnavailableStatus
+            }
+        }
+
         private var directRestartFinderAction: Selector? {
             #selector(restartFinder)
         }
@@ -183,6 +192,7 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
         }
     #else
         private var directUpdateAction: Selector? { nil }
+        private var directUpdateConfigurator: ((NSMenuItem) -> Void)? { nil }
         private var directRestartFinderAction: Selector? { nil }
     #endif
 
@@ -200,9 +210,8 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
 
     @MainActor @objc private func toggleDockIcon() {
         let newValue = !AppPreferences.showDockIcon
-        UserDefaults.standard.set(newValue, forKey: AppPreferences.showDockIconKey)
-        SaneActivationPolicy.applyPolicy(showDockIcon: newValue)
-        if newValue {
+        let state = AppVisibilityCoordinator.setDockIconVisible(newValue)
+        if state.showDockIcon {
             NSApp.activate(ignoringOtherApps: true)
         }
     }
@@ -254,13 +263,15 @@ struct SaneClickApp: App {
         // Menu bar icon + Dock visibility
         DispatchQueue.main.async {
             Task { @MainActor in
-                MenuBarController.shared.setEnabled(AppPreferences.showMenuBarIcon)
-                SaneActivationPolicy.applyInitialPolicy(showDockIcon: AppPreferences.showDockIcon)
+                AppVisibilityCoordinator.applyInitialVisibility()
             }
         }
 
         // Initialize ScriptExecutor to register notification listener for extension requests
         _ = ScriptExecutor.shared
+        if ProcessInfo.processInfo.arguments.contains("--saneclick-execution-requested") {
+            ScriptExecutor.shared.processPendingExecutionAfterLaunchRequest()
+        }
 
     }
 
@@ -285,7 +296,7 @@ struct SaneClickApp: App {
             }
         }
         // .windowStyle(.hiddenTitleBar) // Temporarily disabled to test file picker
-        .defaultSize(width: 600, height: 500)
+        .defaultSize(width: 1040, height: 720)
         .commands {
             AppCommands()
         }
@@ -449,8 +460,15 @@ enum SaneClickWelcomeCopy {
 
 struct AppCommands: Commands {
     var body: some Commands {
+        CommandGroup(replacing: .appTermination) {
+            Button("Quit SaneClick") {
+                NSApplication.shared.terminate(nil)
+            }
+            .keyboardShortcut("q", modifiers: .command)
+        }
+
         CommandGroup(replacing: .appSettings) {
-            Button(SaneStandardMenu.settingsTitle) {
+            Button(settingsCommandTitle) {
                 SettingsActionStorage.shared.showSettings()
             }
             .keyboardShortcut(",", modifiers: .command)
@@ -461,6 +479,8 @@ struct AppCommands: Commands {
                 Button(SaneStandardMenu.checkForUpdatesTitle) {
                     UpdateService.shared.checkForUpdates()
                 }
+                .disabled(!UpdateService.shared.isUpdateChannelEnabled)
+                .help(UpdateService.shared.isUpdateChannelEnabled ? "" : UpdateService.shared.updateUnavailableStatus)
             }
             CommandGroup(after: .newItem) {
                 Button("Import Actions...") {
@@ -473,6 +493,14 @@ struct AppCommands: Commands {
                 }
                 .keyboardShortcut("e", modifiers: [.command, .shift])
             }
+        #endif
+    }
+
+    private var settingsCommandTitle: String {
+        #if APP_STORE
+            "Settings..."
+        #else
+            SaneStandardMenu.settingsTitle
         #endif
     }
 }
