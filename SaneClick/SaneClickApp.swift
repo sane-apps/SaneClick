@@ -3,6 +3,7 @@ import SwiftUI
 
 extension Notification.Name {
     static let openSettings = Notification.Name("openSettings")
+    static let openSettingsTab = Notification.Name("openSettingsTab")
     static let openMainWindow = Notification.Name("openMainWindow")
 }
 
@@ -49,6 +50,7 @@ enum WelcomeGateState {
 final class SettingsActionStorage {
     static let shared = SettingsActionStorage()
     var openSettings: (() -> Void)?
+    private var pendingTab: SettingsView.Tab?
 
     func capture(_ action: OpenSettingsAction) {
         openSettings = {
@@ -56,7 +58,11 @@ final class SettingsActionStorage {
         }
     }
 
-    func showSettings() {
+    func showSettings(tab: SettingsView.Tab? = nil) {
+        if let tab {
+            pendingTab = tab
+        }
+
         if let openSettings {
             openSettings()
         } else {
@@ -64,7 +70,18 @@ final class SettingsActionStorage {
             NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
         }
 
+        if let tab {
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .openSettingsTab, object: tab)
+            }
+        }
         NSApp.activate(ignoringOtherApps: true)
+    }
+
+    func consumePendingTab() -> SettingsView.Tab? {
+        let tab = pendingTab
+        pendingTab = nil
+        return tab
     }
 }
 
@@ -106,6 +123,7 @@ final class WindowActionStorage {
     }
 }
 
+@MainActor
 class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_: Notification) {
         NSApp.appearance = NSAppearance(named: .darkAqua)
@@ -130,28 +148,17 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDockMenu(_: NSApplication) -> NSMenu? {
-        let dockMenu = NSMenu()
-
-        // Open SaneClick
-        let openItem = NSMenuItem(title: "Open SaneClick", action: #selector(openMainWindow), keyEquivalent: "")
-        openItem.target = self
-        dockMenu.addItem(openItem)
-
-        dockMenu.addItem(.separator())
-
-        #if !APP_STORE
-            // Check for Updates
-            let updateItem = NSMenuItem(title: "Check for Updates...", action: #selector(checkForUpdates), keyEquivalent: "")
-            updateItem.target = self
-            dockMenu.addItem(updateItem)
-        #endif
-
-        // Settings
-        let settingsItem = NSMenuItem(title: "Settings...", action: #selector(openSettings), keyEquivalent: "")
-        settingsItem.target = self
-        dockMenu.addItem(settingsItem)
-
-        return dockMenu
+        SaneClickContextMenu.make(
+            target: self,
+            openAction: #selector(openMainWindow),
+            settingsAction: #selector(openSettings),
+            licenseAction: #selector(openLicense),
+            checkForUpdatesAction: directUpdateAction,
+            aboutAction: #selector(openAbout),
+            restartFinderAction: directRestartFinderAction,
+            toggleDockIconAction: #selector(toggleDockIcon),
+            quitAction: #selector(quitApp)
+        )
     }
 
     @MainActor @objc private func openMainWindow() {
@@ -159,13 +166,49 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
     }
 
     #if !APP_STORE
+        private var directUpdateAction: Selector? {
+            #selector(checkForUpdates)
+        }
+
+        private var directRestartFinderAction: Selector? {
+            #selector(restartFinder)
+        }
+
         @MainActor @objc private func checkForUpdates() {
             UpdateService.shared.checkForUpdates()
         }
+
+        @MainActor @objc private func restartFinder() {
+            FinderControl.restartFinder()
+        }
+    #else
+        private var directUpdateAction: Selector? { nil }
+        private var directRestartFinderAction: Selector? { nil }
     #endif
 
     @MainActor @objc private func openSettings() {
         SettingsActionStorage.shared.showSettings()
+    }
+
+    @MainActor @objc private func openLicense() {
+        SettingsActionStorage.shared.showSettings(tab: .license)
+    }
+
+    @MainActor @objc private func openAbout() {
+        SettingsActionStorage.shared.showSettings(tab: .about)
+    }
+
+    @MainActor @objc private func toggleDockIcon() {
+        let newValue = !AppPreferences.showDockIcon
+        UserDefaults.standard.set(newValue, forKey: AppPreferences.showDockIconKey)
+        SaneActivationPolicy.applyPolicy(showDockIcon: newValue)
+        if newValue {
+            NSApp.activate(ignoringOtherApps: true)
+        }
+    }
+
+    @MainActor @objc private func quitApp() {
+        NSApplication.shared.terminate(nil)
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -289,8 +332,8 @@ struct SaneClickApp: App {
                 let hasSeenWelcome = WelcomeGateState.hasSeenWelcome()
                 let isPro = licenseService.isPro
                 let isFirstLaunch = !hasSeenWelcome
-                if SaneBackgroundAppDefaults.launchAtLogin {
-                    _ = SaneLoginItemPolicy.enableByDefaultIfNeeded(isFirstLaunch: isFirstLaunch)
+                if isFirstLaunch, SaneBackgroundAppDefaults.launchAtLogin {
+                    SaneLoginItemPolicy.scheduleDefaultLaunchAtLoginPrompt(appName: "SaneClick")
                 }
                 Task.detached {
                     await EventTracker.log(
@@ -406,19 +449,26 @@ enum SaneClickWelcomeCopy {
 
 struct AppCommands: Commands {
     var body: some Commands {
+        CommandGroup(replacing: .appSettings) {
+            Button(SaneStandardMenu.settingsTitle) {
+                SettingsActionStorage.shared.showSettings()
+            }
+            .keyboardShortcut(",", modifiers: .command)
+        }
+
         #if !APP_STORE
             CommandGroup(after: .appInfo) {
-                Button("Check for Updates...") {
+                Button(SaneStandardMenu.checkForUpdatesTitle) {
                     UpdateService.shared.checkForUpdates()
                 }
             }
             CommandGroup(after: .newItem) {
-                Button("Import Scripts...") {
+                Button("Import Actions...") {
                     NotificationCenter.default.post(name: .importScriptsRequested, object: nil)
                 }
                 .keyboardShortcut("o", modifiers: .command)
 
-                Button("Export All Scripts...") {
+                Button("Export All Actions...") {
                     NotificationCenter.default.post(name: .exportAllScriptsRequested, object: nil)
                 }
                 .keyboardShortcut("e", modifiers: [.command, .shift])

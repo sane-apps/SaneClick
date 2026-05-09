@@ -10,8 +10,11 @@
   - SaneClick settings uses the shared SaneUI settings chrome and a larger default window size so the content is not cramped.
   - The Finder extension readiness/settings block is intentionally compact and inline; avoid reintroducing a large explanatory wall of text.
   - Dock hidden by default and launch-at-login behavior should follow the shared SaneUI/SaneApps policy for utility-style menu-bar apps.
-  - Latest recorded Mini verification for this parity pass: SaneClick verify passed with 103 tests; the repo was clean at closeout.
-  - Live GitHub state at closeout: no open SaneClick issues returned by `gh issue list`.
+  - 2026-05-09 recovery note: the prior closeout overstated this work as shipped; the actual source/tag `v1.1.5` did not contain the shared context-menu implementation. The missing customer path was recovered into source on 2026-05-09.
+  - Shared dependency requirement: SaneClick `Package.resolved` must point at SaneUI `ce1df3c2b03d8ade3b300e907fbcf37320a847bc` or newer for `SaneStandardMenu` and embedded settings sizing.
+  - Latest recorded Mini verification for the recovered parity pass: `./scripts/SaneMaster.rb verify --timeout 1200` passed 98 tests, and `./scripts/SaneMaster.rb test_mode --release --no-logs` launched the signed Release app from `/Applications/SaneClick.app`.
+  - Release remains blocked until unresolved `auto-reconcile-*` stashes are triaged. SaneProcess release preflight now detects stashed source/docs/tests that differ from `HEAD`.
+  - Live GitHub state from the prior closeout reported no open SaneClick issues; recheck before any public release or customer reply.
 
 - Pricing rollout approved on 2026-04-14: direct and App Store copy should present `Basic free + Pro $9.99 once`. Keep StoreKit product ID `com.saneclick.app.pro.actions.v4`.
 - Pricing language should stay consistent across README, `docs/index.html`, long-tail guide CTAs, and App Store-facing copy. No apology pricing copy.

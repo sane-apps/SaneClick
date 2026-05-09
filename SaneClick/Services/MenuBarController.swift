@@ -3,6 +3,72 @@ import os.log
 import SaneUI
 
 @MainActor
+enum SaneClickContextMenu {
+    static let showDockIconTitle = "Show Dock Icon"
+
+    static func make(
+        target: AnyObject,
+        openAction: Selector,
+        settingsAction: Selector,
+        licenseAction: Selector,
+        checkForUpdatesAction: Selector?,
+        aboutAction: Selector,
+        restartFinderAction: Selector?,
+        toggleDockIconAction: Selector?,
+        quitAction: Selector
+    ) -> NSMenu {
+        let menu = NSMenu()
+
+        menu.addItem(SaneStandardMenu.openAppItem(
+            appName: "SaneClick",
+            target: target,
+            action: openAction
+        ))
+        menu.addItem(.separator())
+
+        var extraUtilityItems: [NSMenuItem] = []
+        if let restartFinderAction {
+            extraUtilityItems.append(SaneStandardMenu.item(
+                title: "Restart Finder",
+                target: target,
+                action: restartFinderAction
+            ))
+        }
+        if let toggleDockIconAction {
+            extraUtilityItems.append(dockIconItem(target: target, action: toggleDockIconAction))
+        }
+
+        SaneStandardMenu.addCoreUtilityItems(
+            to: menu,
+            appName: "SaneClick",
+            target: target,
+            settingsAction: settingsAction,
+            licenseAction: licenseAction,
+            checkForUpdatesAction: checkForUpdatesAction,
+            aboutAndBugReportAction: aboutAction,
+            extraUtilityItems: extraUtilityItems,
+            quitAction: quitAction,
+            settingsKeyEquivalent: ""
+        )
+
+        return menu
+    }
+
+    static func refreshDynamicItems(in menu: NSMenu) {
+        menu.item(withTitle: showDockIconTitle)?.state = AppPreferences.showDockIcon ? .on : .off
+    }
+
+    private static func dockIconItem(target: AnyObject, action: Selector) -> NSMenuItem {
+        SaneStandardMenu.item(
+            title: showDockIconTitle,
+            target: target,
+            action: action,
+            state: AppPreferences.showDockIcon ? .on : .off
+        )
+    }
+}
+
+@MainActor
 final class MenuBarController: NSObject, NSMenuDelegate {
     static let shared = MenuBarController()
 
@@ -52,66 +118,58 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
     private func rebuildMenu() {
         menu.removeAllItems()
-
-        let openItem = NSMenuItem(
-            title: "Open SaneClick",
-            action: #selector(openApp),
-            keyEquivalent: ""
+        let rebuiltMenu = SaneClickContextMenu.make(
+            target: self,
+            openAction: #selector(openApp),
+            settingsAction: #selector(openSettings),
+            licenseAction: #selector(openLicense),
+            checkForUpdatesAction: directUpdateAction,
+            aboutAction: #selector(openAbout),
+            restartFinderAction: directRestartFinderAction,
+            toggleDockIconAction: #selector(toggleDockIcon),
+            quitAction: #selector(quitApp)
         )
-        openItem.target = self
-        menu.addItem(openItem)
-
-        #if !APP_STORE
-            let updatesItem = NSMenuItem(
-                title: "Check for Updates...",
-                action: #selector(checkForUpdates),
-                keyEquivalent: ""
-            )
-            updatesItem.target = self
-            menu.addItem(updatesItem)
-        #endif
-
-        menu.addItem(NSMenuItem.separator())
-
-        #if !APP_STORE
-            let restartItem = NSMenuItem(
-                title: "Restart Finder",
-                action: #selector(restartFinder),
-                keyEquivalent: ""
-            )
-            restartItem.target = self
-            menu.addItem(restartItem)
-        #endif
-
-        let dockItem = NSMenuItem(
-            title: "Show Dock Icon",
-            action: #selector(toggleDockIcon),
-            keyEquivalent: ""
-        )
-        dockItem.target = self
-        dockItem.state = AppPreferences.showDockIcon ? .on : .off
-        menu.addItem(dockItem)
-
-        menu.addItem(NSMenuItem.separator())
-
-        let quitItem = NSMenuItem(
-            title: "Quit SaneClick",
-            action: #selector(quitApp),
-            keyEquivalent: "q"
-        )
-        quitItem.target = self
-        menu.addItem(quitItem)
+        rebuiltMenu.items.forEach { item in
+            rebuiltMenu.removeItem(item)
+            menu.addItem(item)
+        }
     }
 
     func menuWillOpen(_ menu: NSMenu) {
-        for item in menu.items where item.title == "Show Dock Icon" {
-            item.state = AppPreferences.showDockIcon ? .on : .off
-        }
+        SaneClickContextMenu.refreshDynamicItems(in: menu)
     }
+
+    #if !APP_STORE
+        private var directUpdateAction: Selector? {
+            #selector(checkForUpdates)
+        }
+
+        private var directRestartFinderAction: Selector? {
+            #selector(restartFinder)
+        }
+    #else
+        private var directUpdateAction: Selector? { nil }
+        private var directRestartFinderAction: Selector? { nil }
+    #endif
 
     @MainActor
     @objc private func openApp() {
         WindowActionStorage.shared.showMainWindow()
+    }
+
+    @MainActor
+    @objc private func openSettings() {
+        SettingsActionStorage.shared.showSettings()
+    }
+
+    @MainActor
+    @objc private func openLicense() {
+        SettingsActionStorage.shared.showSettings(tab: .license)
+    }
+
+    @MainActor
+    @objc private func openAbout() {
+        SettingsActionStorage.shared.showSettings(tab: .about)
     }
 
     #if !APP_STORE

@@ -34,7 +34,6 @@ struct SettingsView: View {
 
     var licenseService: LicenseService
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(ScriptStore.self) private var scriptStore
     @Environment(MonitoredFolderService.self) private var monitoredFolderService
     #if !APP_STORE
         @StateObject private var updateService = UpdateService.shared
@@ -58,7 +57,7 @@ struct SettingsView: View {
     }
 
     var body: some View {
-        SaneSettingsContainer(defaultTab: .general, selection: $selectedTab) { tab in
+        SaneSettingsContainer(defaultTab: .general, selection: $selectedTab, windowSizing: .embedded) { tab in
             switch tab {
             case .general:
                 generalTab
@@ -67,6 +66,16 @@ struct SettingsView: View {
             case .about:
                 aboutTab
             }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .frame(minWidth: 980, idealWidth: 980, minHeight: 760, idealHeight: 760)
+        .background(Color.saneNavy.opacity(0.3))
+        .onAppear {
+            applyPendingSettingsTab()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openSettingsTab)) { notification in
+            guard let tab = notification.object as? Tab else { return }
+            selectedTab = tab
         }
     }
 
@@ -181,18 +190,6 @@ struct SettingsView: View {
                     }
                 #endif
 
-                CompactSection(SaneClickSettingsCopy.yourActionsSectionTitle, icon: "square.stack.3d.up.fill", iconColor: SaneSettingsIconSemantic.content.color) {
-                    CompactRow(SaneClickSettingsCopy.totalActionsLabel, icon: "square.stack.3d.up.fill", iconColor: .white) {
-                        valueText("\(scriptStore.scripts.count)")
-                    }
-
-                    CompactDivider()
-
-                    CompactRow(SaneClickSettingsCopy.activeActionsLabel, icon: "checkmark.circle.fill", iconColor: .green) {
-                        valueText("\(scriptStore.enabledScripts.count)")
-                    }
-                }
-
                 CompactSection(SaneClickSettingsCopy.appBehaviorSectionTitle, icon: "switch.2", iconColor: SaneSettingsIconSemantic.general.color) {
                     SaneLoginItemToggle()
                     CompactDivider()
@@ -242,6 +239,7 @@ struct SettingsView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .onAppear {
+            monitoredFolderService.refresh()
             refreshExtensionStatus()
             #if !APP_STORE
                 automaticallyChecksForUpdates = updateService.automaticallyChecksForUpdates
@@ -255,6 +253,13 @@ struct SettingsView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             refreshExtensionStatus()
+        }
+    }
+
+    @MainActor
+    private func applyPendingSettingsTab() {
+        if let pendingTab = SettingsActionStorage.shared.consumePendingTab() {
+            selectedTab = pendingTab
         }
     }
 

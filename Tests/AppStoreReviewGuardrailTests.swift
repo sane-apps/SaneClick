@@ -1,7 +1,13 @@
 import AppKit
 import Foundation
+import SaneUI
 import Testing
 @testable import SaneClick
+
+@MainActor
+private final class MenuActionTarget: NSObject {
+    @objc func action() {}
+}
 
 @MainActor
 struct AppStoreReviewGuardrailTests {
@@ -33,6 +39,63 @@ struct AppStoreReviewGuardrailTests {
         SettingsActionStorage.shared.showSettings()
 
         #expect(invocationCount == 1)
+    }
+
+    @Test("Stored settings action can route directly to License and About tabs")
+    func storedSettingsActionRoutesTabs() {
+        let originalSettingsAction = SettingsActionStorage.shared.openSettings
+        var invocationCount = 0
+        SettingsActionStorage.shared.openSettings = {
+            invocationCount += 1
+        }
+        defer { SettingsActionStorage.shared.openSettings = originalSettingsAction }
+
+        SettingsActionStorage.shared.showSettings(tab: .license)
+
+        #expect(invocationCount == 1)
+        #expect(SettingsActionStorage.shared.consumePendingTab() == .license)
+    }
+
+    @Test("Dock and menu bar context menus share customer-critical settings order")
+    func dockAndMenuBarContextMenusShareCustomerCriticalOrder() {
+        let delegate = SaneClickAppDelegate()
+        let dockMenu = delegate.applicationDockMenu(NSApplication.shared)
+        let target = MenuActionTarget()
+        #if !APP_STORE
+            let updateAction: Selector? = #selector(MenuActionTarget.action)
+            let restartAction: Selector? = #selector(MenuActionTarget.action)
+        #else
+            let updateAction: Selector? = nil
+            let restartAction: Selector? = nil
+        #endif
+        let menuBarMenu = SaneClickContextMenu.make(
+            target: target,
+            openAction: #selector(MenuActionTarget.action),
+            settingsAction: #selector(MenuActionTarget.action),
+            licenseAction: #selector(MenuActionTarget.action),
+            checkForUpdatesAction: updateAction,
+            aboutAction: #selector(MenuActionTarget.action),
+            restartFinderAction: restartAction,
+            toggleDockIconAction: #selector(MenuActionTarget.action),
+            quitAction: #selector(MenuActionTarget.action)
+        )
+        var expectedOrder = [
+            "Open SaneClick",
+            SaneStandardMenu.settingsTitle,
+            SaneStandardMenu.licenseTitle
+        ]
+        #if !APP_STORE
+            expectedOrder.append(SaneStandardMenu.checkForUpdatesTitle)
+        #endif
+        expectedOrder.append(SaneStandardMenu.aboutAndBugReportTitle)
+        #if !APP_STORE
+            expectedOrder.append("Restart Finder")
+        #endif
+        expectedOrder.append(SaneClickContextMenu.showDockIconTitle)
+        expectedOrder.append("Quit SaneClick")
+
+        #expect(dockMenu?.items.map(\.title).filter { !$0.isEmpty } == expectedOrder)
+        #expect(menuBarMenu.items.map(\.title).filter { !$0.isEmpty } == expectedOrder)
     }
 
     @Test("Menu bar open action uses shared main-window path")
@@ -96,7 +159,7 @@ struct AppStoreReviewGuardrailTests {
         #expect(manifest.localizedCaseInsensitiveContains("sidebar Quick Actions section"))
         #expect(manifest.localizedCaseInsensitiveContains("Donate") || manifest.localizedCaseInsensitiveContains("GitHub Sponsors"))
         #expect(source.contains("title: \"Unlock Pro\""))
-        #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab)"))
+        #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab, windowSizing: .embedded)"))
         #expect(settingsSource.contains("LicenseSettingsView(licenseService: licenseService, style: .panel)"))
     }
 
@@ -135,7 +198,7 @@ struct AppStoreReviewGuardrailTests {
         #expect(librarySource.contains("Unlock Pro — \\(licenseService.displayPriceLabel)"))
         #expect(librarySource.contains("Text(\"\\(totalInCategory) scripts included with Pro\")"))
         #expect(librarySource.contains("isLocked: true"))
-        #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab)"))
+        #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab, windowSizing: .embedded)"))
         #expect(settingsSource.contains("LicenseSettingsView(licenseService: licenseService, style: .panel)"))
         #expect(licenseSettingsSource.contains("Unlock Pro —"))
         #expect(licenseSettingsSource.contains("Restore Purchases"))
@@ -161,11 +224,12 @@ struct AppStoreReviewGuardrailTests {
         let settingsSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/SettingsView.swift"), encoding: .utf8)
         let directSupportSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/DirectDistributionSupport.swift"), encoding: .utf8)
 
-        #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab)"))
+        #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab, windowSizing: .embedded)"))
         #expect(settingsSource.contains("SaneClickSettingsCopy.appBehaviorSectionTitle"))
         #expect(settingsSource.contains("SaneLanguageSettingsRow()"))
         #expect(settingsSource.contains("SaneClickSettingsCopy.openSettingsButtonTitle"))
         #expect(settingsSource.contains("SaneSparkleRow("))
+        #expect(settingsSource.contains("SaneClickSettingsCopy.yourActionsSectionTitle") == false)
         #expect(settingsSource.contains("Enter License Key") == false)
         #expect(settingsSource.contains("TabView(selection: $selectedTab)") == false)
         #expect(directSupportSource.contains("struct SaneSparkleRow") == false)
