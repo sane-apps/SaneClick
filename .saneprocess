@@ -17,6 +17,38 @@ release:
   use_sparkle: true
   min_system_version: "14.0"
   reviewed_auto_reconcile_stashes:
+    - stash_sha: "22f0f9c46e2e4ac5b806f47a77c264fb9b2058eb"
+      subject: "On main: auto-reconcile-20260508-215519-stephans-mac-mini"
+      decision: superseded
+      reason: "Reviewed 2026-05-09. Key runtime files revert HEAD away from the live 1.1.6 direct-download state: .saneprocess flips App Store back on, menu/settings routing loses current Settings/License/About access patterns, and release metadata/docs regress. Current HEAD already carries the intended menu parity and direct-download behavior."
+    - stash_sha: "b8bb31a8e4f8295c455e88b13d9d8aabe3ffaad1"
+      subject: "On main: auto-reconcile-20260425-215520-stephans-mac-mini"
+      decision: superseded
+      reason: "Reviewed 2026-05-09. Docs/README residue is older than the live release: docs/index.html points back to 1.1.5 download URLs and README says Dock/menu bar visibility is fully independent, which conflicts with the current 1.1.6 behavior that preserves at least one access point."
+    - stash_sha: "57a6709456963c7341533741c4c891e2f1fb0b07"
+      subject: "On main: auto-reconcile-20260424-215517-stephans-mac-mini"
+      decision: superseded
+      reason: "Reviewed 2026-05-09. Website copy is stale and conflicts with current release docs: it reverts to 1.1.5 links and older Public Code wording, while HEAD/live docs use the current 1.1.6 direct-download links and Transparent Code positioning."
+    - stash_sha: "d57327aadd1d8b4937340f4ef4f9b36f1347e688"
+      subject: "On main: auto-reconcile-20260417-055518-stephans-mac-mini"
+      decision: deferred
+      reason: "Reviewed 2026-05-09. This stash is App Store screenshot/storyboard collateral plus older 1.1.5 project metadata. SaneClick current release lane is direct-download-only with appstore disabled in .saneprocess, so this work is not part of the live 1.1.6 release candidate."
+    - stash_sha: "42ad70538ed01a3c05cfddb8a16b1fafb8e4afb6"
+      subject: "On main: auto-reconcile-20260416-215512-stephans-mac-mini"
+      decision: deferred
+      reason: "Reviewed 2026-05-09. Mostly App Store screenshot harness work for an inactive lane: screenshot storyboard/assets, screenshot validation scripts, and temporary monitored-folder state for capture runs. Not part of the direct-download 1.1.6 release path."
+    - stash_sha: "acae4bb5029e61ff301c92eed0e9679a1954a792"
+      subject: "On main: auto-reconcile-20260416-055517-stephans-mac-mini"
+      decision: superseded
+      reason: "Reviewed 2026-05-09. Only changes .claude/research.md with an older long-form research document. Current repo state uses the compact research cache plus promoted findings; this is not release behavior or live docs."
+    - stash_sha: "fef590105b91cc92b93a0635b9faeead1cf64eec"
+      subject: "On main: auto-reconcile-20260415-215519-stephans-mac-mini"
+      decision: superseded
+      reason: "Reviewed 2026-05-09. Removes the current 1.1.6 changelog entry. HEAD already documents the live release notes for 1.1.6, so this stash is older release-note residue."
+    - stash_sha: "8e7d4432007773028fe939fa2e011b593b0d3080"
+      subject: "On main: auto-reconcile-20260415-055522-stephans-mac-mini"
+      decision: superseded
+      reason: "Reviewed 2026-05-09. Older pre-1.1.5/pre-1.1.6 state: .saneprocess re-enables the App Store lane, CHANGELOG loses the 1.1.5/1.1.6 entries, README/site copy regresses, and key app/menu files drop the current Dock/menu Settings/License/About flow now present in HEAD."
     - stash_sha: "85401e38e0b484f64e6fbc84855446c2ebec692a"
       subject: "On main: auto-reconcile-20260508-215529-stephans-macbook-air"
       decision: recovered
