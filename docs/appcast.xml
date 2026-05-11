@@ -3,7 +3,27 @@
     <channel>
         <title>SaneClick Changelog</title>
 
-                                                                    <item>
+                                                                            <item>
+            <title>1.1.8</title>
+            <link>https://saneclick.com/download</link>
+            <pubDate>Mon, 11 May 2026 16:14:03 -0400</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description>
+                <![CDATA[
+                <h2>What's New</h2>
+                <ul>
+                <li>Fixes category and library Enable All reliability, repairs Finder right-click filtering for file-only and folder-only actions, and restores image conversion actions.</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.1.8.zip"
+                       sparkle:version="1108"
+                       sparkle:shortVersionString="1.1.8"
+                       length="2374044"
+                       type="application/octet-stream"
+                       sparkle:edSignature="cFdwGACrBpFUa2nt20LCOXeRyQ4bHsi4tCglit2W78GifhkZNUCA9CTXwqaxTcOGCUfZqjVC799j9cqRyfGHDQ=="/>
+        </item>
+<item>
             <title>1.1.7</title>
             <link>https://saneclick.com/download</link>
             <pubDate>Mon, 11 May 2026 14:20:05 -0400</pubDate>
