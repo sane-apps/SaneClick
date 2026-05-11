@@ -131,6 +131,24 @@ final class ScriptStore {
         notifyExtension()
     }
 
+    func setLibraryScript(_ libraryScript: ScriptLibrary.LibraryScript, isEnabled: Bool) {
+        loadIfNeeded()
+        guard reconcileLibraryScript(libraryScript, isEnabled: isEnabled) else { return }
+        saveScripts()
+        notifyExtension()
+    }
+
+    func setLibraryScripts(_ libraryScripts: [ScriptLibrary.LibraryScript], isEnabled: Bool) {
+        loadIfNeeded()
+        var didChange = false
+        for libraryScript in libraryScripts {
+            didChange = reconcileLibraryScript(libraryScript, isEnabled: isEnabled) || didChange
+        }
+        guard didChange else { return }
+        saveScripts()
+        notifyExtension()
+    }
+
     func updateScript(_ script: Script) {
         loadIfNeeded()
         guard let index = scripts.firstIndex(where: { $0.id == script.id }) else { return }
@@ -224,6 +242,10 @@ final class ScriptStore {
             loadError = nil
             storeLogger.info("Loaded \(self.scripts.count) scripts")
             applyLibraryDefaultsIfNeeded()
+            if normalizeLibraryScriptDuplicates() {
+                saveScripts()
+                notifyExtension()
+            }
         } catch {
             storeLogger.error("Failed to decode scripts: \(error.localizedDescription)")
             // Save corrupted file for recovery
@@ -233,6 +255,90 @@ final class ScriptStore {
             loadError = "Scripts file corrupted. Backup saved to: \(backupURL.lastPathComponent)"
             scripts = []  // Don't overwrite - let user decide
         }
+    }
+
+    @discardableResult
+    private func reconcileLibraryScript(_ libraryScript: ScriptLibrary.LibraryScript, isEnabled: Bool) -> Bool {
+        let matches = scripts.indices.filter {
+            ActionCatalog.isLibraryRecord(scripts[$0], matching: libraryScript)
+        }
+
+        if matches.isEmpty {
+            guard isEnabled else { return false }
+            scripts.append(canonicalScript(from: libraryScript, isEnabled: true))
+            return true
+        }
+
+        let canonicalIndex = matches[0]
+        let existing = scripts[canonicalIndex]
+        let canonical = canonicalScript(
+            from: libraryScript,
+            id: existing.id,
+            isEnabled: isEnabled,
+            categoryId: existing.categoryId
+        )
+        var didChange = scripts[canonicalIndex] != canonical
+        scripts[canonicalIndex] = canonical
+
+        for index in matches.dropFirst().reversed() {
+            scripts.remove(at: index)
+            didChange = true
+        }
+
+        return didChange
+    }
+
+    @discardableResult
+    private func normalizeLibraryScriptDuplicates() -> Bool {
+        var didChange = false
+
+        for libraryScript in ScriptLibrary.allScripts {
+            let matches = scripts.indices.filter {
+                ActionCatalog.isLibraryRecord(scripts[$0], matching: libraryScript)
+            }
+            guard let canonicalIndex = matches.first else { continue }
+
+            let shouldBeEnabled = matches.contains { scripts[$0].isEnabled }
+            let canonical = canonicalScript(
+                from: libraryScript,
+                id: scripts[canonicalIndex].id,
+                isEnabled: shouldBeEnabled,
+                categoryId: scripts[canonicalIndex].categoryId
+            )
+            if scripts[canonicalIndex] != canonical {
+                scripts[canonicalIndex] = canonical
+                didChange = true
+            }
+
+            for index in matches.dropFirst().reversed() {
+                scripts.remove(at: index)
+                didChange = true
+            }
+        }
+
+        return didChange
+    }
+
+    private func canonicalScript(
+        from libraryScript: ScriptLibrary.LibraryScript,
+        id: UUID = UUID(),
+        isEnabled: Bool,
+        categoryId: UUID? = nil
+    ) -> Script {
+        Script(
+            id: id,
+            name: libraryScript.name,
+            type: libraryScript.type,
+            content: libraryScript.content,
+            isEnabled: isEnabled,
+            icon: libraryScript.icon,
+            appliesTo: libraryScript.appliesTo,
+            fileExtensions: libraryScript.fileExtensions,
+            extensionMatchMode: libraryScript.extensionMatchMode,
+            minSelection: libraryScript.minSelection,
+            maxSelection: libraryScript.maxSelection,
+            categoryId: categoryId
+        )
     }
 
     private func saveScripts() {

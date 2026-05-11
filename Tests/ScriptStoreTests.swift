@@ -14,6 +14,16 @@ struct ScriptStoreTests {
         return ScriptStore.shared
     }
 
+    private func resetScripts(in store: ScriptStore, to scripts: [Script]) {
+        for script in Array(store.scripts) {
+            store.deleteScript(script)
+        }
+
+        for script in scripts {
+            store.addScript(script)
+        }
+    }
+
     // MARK: - CRUD Tests
 
     @Test("Script can be added to store")
@@ -114,6 +124,77 @@ struct ScriptStoreTests {
         // Cleanup
         store.deleteScript(enabled)
         store.deleteScript(disabled)
+    }
+
+    @Test("Library activation is live and deduplicates stale installed copies")
+    func libraryActivationDeduplicatesStaleInstalledCopies() async throws {
+        let store = createTestStore()
+        let originalScripts = Array(store.scripts)
+        defer {
+            resetScripts(in: store, to: originalScripts)
+        }
+        resetScripts(in: store, to: [])
+
+        let libraryScript = try #require(ScriptLibrary.availableScripts(for: .universal).first)
+        var staleDisabledCopy = libraryScript.toScript()
+        staleDisabledCopy.isEnabled = false
+        var staleEnabledCopy = libraryScript.toScript()
+        staleEnabledCopy.isEnabled = true
+
+        store.addScript(staleDisabledCopy)
+        store.addScript(staleEnabledCopy)
+        #expect(ActionCatalog.libraryScripts(in: .universal, from: store.scripts).count == 1)
+
+        store.setLibraryScript(libraryScript, isEnabled: false)
+        var matches = store.scripts.filter { $0.name == libraryScript.name }
+        #expect(matches.count == 1)
+        #expect(matches.first?.isEnabled == false)
+        #expect(matches.first?.content == libraryScript.content)
+        #expect(matches.first?.extensionMatchMode == libraryScript.extensionMatchMode)
+        #expect(matches.first?.minSelection == libraryScript.minSelection)
+        #expect(matches.first?.maxSelection == libraryScript.maxSelection)
+
+        store.setLibraryScript(libraryScript, isEnabled: true)
+        matches = store.scripts.filter { $0.name == libraryScript.name }
+        #expect(matches.count == 1)
+        #expect(matches.first?.isEnabled == true)
+    }
+
+    @Test("Library activation preserves custom action with same name")
+    func libraryActivationPreservesCustomActionWithSameName() async throws {
+        let store = createTestStore()
+        let originalScripts = Array(store.scripts)
+        defer {
+            resetScripts(in: store, to: originalScripts)
+        }
+        resetScripts(in: store, to: [])
+
+        let libraryScript = try #require(ScriptLibrary.availableScripts(for: .universal).first)
+        let customScript = Script(
+            name: libraryScript.name,
+            type: .bash,
+            content: "echo customer-owned action",
+            isEnabled: true,
+            icon: "wand.and.stars",
+            appliesTo: .filesOnly
+        )
+
+        store.addScript(customScript)
+        store.setLibraryScript(libraryScript, isEnabled: true)
+
+        let matches = store.scripts.filter { $0.name == libraryScript.name }
+        #expect(matches.count == 2)
+        #expect(matches.contains(customScript))
+        #expect(matches.contains { ActionCatalog.isLibraryRecord($0, matching: libraryScript) })
+
+        store.setLibraryScript(libraryScript, isEnabled: false)
+
+        let customAfterDisable = store.scripts.first { $0.id == customScript.id }
+        let libraryAfterDisable = store.scripts.first {
+            $0.id != customScript.id && ActionCatalog.isLibraryRecord($0, matching: libraryScript)
+        }
+        #expect(customAfterDisable == customScript)
+        #expect(libraryAfterDisable?.isEnabled == false)
     }
 
     // MARK: - Import / Export Tests

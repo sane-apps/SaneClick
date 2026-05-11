@@ -300,11 +300,23 @@ struct ExtensionScript: Codable {
     }
 
     func matchesFiles(_ urls: [URL]) -> Bool {
+        let hasFiles = urls.contains { !$0.hasDirectoryPath }
+        let hasFolders = urls.contains { $0.hasDirectoryPath }
+
+        switch appliesTo {
+        case "Files Only":
+            guard hasFiles && !hasFolders else { return false }
+        case "Folders Only", "Inside Folder":
+            guard hasFolders && !hasFiles else { return false }
+        default:
+            break
+        }
+
         guard !fileExtensions.isEmpty else { return true }
 
         let fileURLs = urls.filter { !$0.hasDirectoryPath }
         guard !fileURLs.isEmpty else {
-            return appliesTo == "Folders Only" || appliesTo == "Files & Folders"
+            return false
         }
 
         let normalizedExtensions = Set(fileExtensions.map { $0.lowercased().trimmingCharacters(in: CharacterSet(charactersIn: ".")) })

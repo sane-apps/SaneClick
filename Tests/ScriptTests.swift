@@ -80,6 +80,19 @@ struct ScriptTests {
         #expect(script.matchesFiles(urls) == true)
     }
 
+    @Test("AppliesTo rejects wrong Finder selection kind")
+    func appliesToRejectsWrongFinderSelectionKind() {
+        let file = URL(fileURLWithPath: "/test/file.txt", isDirectory: false)
+        let folder = URL(fileURLWithPath: "/test/folder", isDirectory: true)
+
+        #expect(Script(name: "Files", appliesTo: .filesOnly).matchesFiles([file]) == true)
+        #expect(Script(name: "Files", appliesTo: .filesOnly).matchesFiles([folder]) == false)
+        #expect(Script(name: "Folders", appliesTo: .foldersOnly).matchesFiles([folder]) == true)
+        #expect(Script(name: "Folders", appliesTo: .foldersOnly).matchesFiles([file]) == false)
+        #expect(Script(name: "Folders", appliesTo: .foldersOnly).matchesFiles([file, folder]) == false)
+        #expect(Script(name: "All", appliesTo: .allItems).matchesFiles([file, folder]) == true)
+    }
+
     @Test("Script with extensions matches files with those extensions (any mode)")
     func extensionsMatchAnyMode() {
         let script = Script(
@@ -153,9 +166,8 @@ struct ScriptTests {
         #expect(script.matchesFiles(file) == true)
     }
 
-    @Test("Script with file filter shows for folders when appliesTo allows")
-    func fileFilterWithFolders() {
-        // Script set to foldersOnly should match even with file extensions
+    @Test("Script with file filter does not match folder-only selection")
+    func fileFilterRejectsFolderOnlySelection() {
         let foldersOnlyScript = Script(
             name: "Folder Script",
             appliesTo: .foldersOnly,
@@ -163,9 +175,8 @@ struct ScriptTests {
             extensionMatchMode: .any
         )
 
-        // Directory URL (trailing slash convention for test)
         let folderURL = URL(fileURLWithPath: "/test/folder", isDirectory: true)
-        #expect(foldersOnlyScript.matchesFiles([folderURL]) == true)
+        #expect(foldersOnlyScript.matchesFiles([folderURL]) == false)
     }
 
     @Test("Selection count filter respects min and max")

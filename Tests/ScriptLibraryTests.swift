@@ -294,12 +294,19 @@ struct ActionCatalogTests {
         #expect(customScripts == [custom])
     }
 
+    @Test("Custom action with built-in name stays custom")
+    func customActionWithBuiltInNameStaysCustom() throws {
+        let libraryScript = try #require(ScriptLibrary.universalScripts.first)
+        let custom = Script(name: libraryScript.name, content: "echo customer-owned")
+
+        #expect(ActionCatalog.libraryScripts(in: .universal, from: [custom]).isEmpty)
+        #expect(ActionCatalog.customScripts(from: [custom]) == [custom])
+    }
+
     @Test("Category scripts only include matching built-in actions")
     func categoryScriptsOnlyIncludeMatchingBuiltIns() throws {
-        let universalName = try #require(ScriptLibrary.universalScripts.first).name
-        let organizationName = try #require(ScriptLibrary.organizationScripts.first).name
-        let universalScript = Script(name: universalName, content: "echo universal")
-        let organizationScript = Script(name: organizationName, content: "echo organization")
+        let universalScript = try #require(ScriptLibrary.universalScripts.first).toScript()
+        let organizationScript = try #require(ScriptLibrary.organizationScripts.first).toScript()
         let customScript = Script(name: "My Special Action", content: "echo custom")
 
         let universalScripts = ActionCatalog.libraryScripts(
@@ -308,6 +315,24 @@ struct ActionCatalogTests {
         )
 
         #expect(universalScripts == [universalScript])
+    }
+
+    @Test("Category scripts are deduplicated by library action name")
+    func categoryScriptsAreDeduplicatedByLibraryActionName() throws {
+        let libraryScript = try #require(ScriptLibrary.universalScripts.first)
+        var disabledDuplicate = libraryScript.toScript()
+        disabledDuplicate.isEnabled = false
+        var enabledDuplicate = libraryScript.toScript()
+        enabledDuplicate.isEnabled = true
+
+        let universalScripts = ActionCatalog.libraryScripts(
+            in: .universal,
+            from: [disabledDuplicate, enabledDuplicate]
+        )
+
+        #expect(universalScripts.count == 1)
+        #expect(universalScripts.first?.name == libraryScript.name)
+        #expect(universalScripts.first?.isEnabled == true)
     }
 }
 

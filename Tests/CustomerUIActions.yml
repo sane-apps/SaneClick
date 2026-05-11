@@ -1,0 +1,111 @@
+version: 1
+app: SaneClick
+actions:
+  - id: main-category-enable-all
+    title: Main category Enable All controls are live
+    surfaces:
+      - Main window category detail
+    steps:
+      - Click each category in the sidebar.
+      - Toggle Enable All off and on for Essentials, Files & Folders, Images & Media, Coding, and Advanced.
+    assertions:
+      - Header enabled count changes immediately.
+      - Row toggles match the header count.
+      - Enabled count never exceeds available count.
+      - Locked Pro categories open an upgrade gate for Basic users instead of pretending to activate Pro actions.
+    evidence:
+      - Mini AX click transcript
+      - Screenshot of at least one all-on category state
+
+  - id: main-individual-action-toggle
+    title: Individual built-in action toggles are live
+    surfaces:
+      - Main window action rows
+    steps:
+      - Toggle at least one built-in action off and on from the main detail list.
+    assertions:
+      - The row switch changes state.
+      - The category header count updates both directions.
+      - The action remains present after toggling and relaunch.
+    evidence:
+      - Mini AX click transcript
+
+  - id: script-library-global-enable-all
+    title: Script Library global Enable All is scoped and live
+    surfaces:
+      - Script Library sheet
+    steps:
+      - Open Browse Library.
+      - Toggle All Scripts off and on.
+    assertions:
+      - Basic mode counts and toggles only Basic-actionable scripts.
+      - Pro mode counts and toggles all available library scripts.
+      - Visible All Scripts rows agree with the header count.
+      - Enabled count never exceeds available count.
+    evidence:
+      - Mini AX click transcript
+      - Screenshot of Script Library all-on state
+
+  - id: script-library-category-controls
+    title: Script Library category controls are live
+    surfaces:
+      - Script Library sheet category rows
+    steps:
+      - Expand every category.
+      - Toggle category Enable All controls and individual rows where available.
+    assertions:
+      - Category counts agree with visible rows.
+      - Locked Pro category controls route to the Pro upgrade gate in Basic mode.
+      - No category can report more enabled actions than total actions.
+    evidence:
+      - Mini AX click transcript
+
+  - id: custom-action-management
+    title: Custom action management preserves customer actions
+    surfaces:
+      - Custom Actions manager
+      - Script editor
+    steps:
+      - Open custom action management.
+      - Create, edit, disable, re-enable, and delete a custom action.
+      - Create or import a custom action whose title matches a built-in action.
+    assertions:
+      - Custom action edits persist after relaunch.
+      - Built-in reconciliation does not overwrite same-title custom action content.
+      - Deleted custom actions disappear from the menu.
+    evidence:
+      - Mini AX click transcript
+      - Screenshot of custom action manager
+
+  - id: settings-tabs-and-status
+    title: Settings tabs and status actions are reachable
+    surfaces:
+      - Settings window
+    steps:
+      - Open Settings.
+      - Select every tab.
+      - Click Refresh Status.
+      - Exercise License, Updates, About, Report a Bug, and Quit access points where non-destructive.
+    assertions:
+      - Each tab renders the expected content.
+      - Refresh Status updates without hanging.
+      - Non-destructive support/update/license/about actions open the intended surface.
+    evidence:
+      - Mini AX click transcript
+      - Screenshot of settings state
+
+  - id: finder-menu-action-execution
+    title: Finder context menu actions execute correctly
+    surfaces:
+      - Finder right-click extension menu
+      - Dock/menu-bar access points
+    steps:
+      - Seed representative files and folders.
+      - Trigger representative Essentials, Files & Folders, Images & Media, Coding, and Advanced actions.
+    assertions:
+      - Each action type performs the promised file operation or opens the promised destination.
+      - Actions only appear for matching file types and selection counts.
+      - No action triggers unexpected permission prompts in normal use.
+    evidence:
+      - Mini Finder execution transcript
+      - Before/after file-state receipt

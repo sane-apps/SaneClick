@@ -1,4 +1,7 @@
 import Foundation
+import CoreGraphics
+import ImageIO
+import UniformTypeIdentifiers
 import Testing
 @testable import SaneClick
 
@@ -149,7 +152,82 @@ struct ScriptExecutorTests {
         }
     }
 
+    @Test("Representative right-click actions complete for every category")
+    func representativeRightClickActionsCompleteForEveryCategory() async throws {
+        let root = try temporaryDirectory()
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        let duplicateFile = root.appendingPathComponent("duplicate.txt")
+        try "duplicate".write(to: duplicateFile, atomically: true, encoding: .utf8)
+        try await runLibraryScript("Duplicate with Timestamp", paths: [duplicateFile.path])
+        #expect(try FileManager.default.contentsOfDirectory(atPath: root.path).contains { $0.hasPrefix("duplicate_") })
+
+        let spacedFile = root.appendingPathComponent("hello world.txt")
+        try "rename".write(to: spacedFile, atomically: true, encoding: .utf8)
+        try await runLibraryScript("Replace Spaces with Underscores", paths: [spacedFile.path])
+        #expect(FileManager.default.fileExists(atPath: root.appendingPathComponent("hello_world.txt").path))
+
+        let imageURL = root.appendingPathComponent("image.png")
+        try makePNGFixture().write(to: imageURL)
+        try await runLibraryScript("Convert to JPEG", paths: [imageURL.path])
+        #expect(
+            FileManager.default.fileExists(atPath: root.appendingPathComponent("image.jpg").path),
+            "Convert to JPEG should create image.jpg. Directory contents: \(directoryContents(at: root))"
+        )
+
+        let projectFolder = root.appendingPathComponent("Project", isDirectory: true)
+        try FileManager.default.createDirectory(at: projectFolder, withIntermediateDirectories: true)
+        try await runLibraryScript("Create .gitignore", paths: [projectFolder.path])
+        #expect(FileManager.default.fileExists(atPath: projectFolder.appendingPathComponent(".gitignore").path))
+
+        let hashFile = root.appendingPathComponent("hash-me.txt")
+        try "hash".write(to: hashFile, atomically: true, encoding: .utf8)
+        try await runLibraryScript("Create SHA256 File", paths: [hashFile.path])
+        #expect(FileManager.default.fileExists(atPath: root.appendingPathComponent("hash-me.txt.sha256").path))
+    }
+
     // MARK: - Helper Functions (duplicated from ScriptExecutor for testing)
+
+    private func runLibraryScript(_ name: String, paths: [String]) async throws {
+        let libraryScript = try #require(ScriptLibrary.allScripts.first { $0.name == name })
+        let result = await executeBashDirectly(content: libraryScript.content, paths: paths)
+        if case .failure(let error) = result {
+            Issue.record("\(name) failed: \(error.localizedDescription)")
+            throw error
+        }
+    }
+
+    private func temporaryDirectory() throws -> URL {
+        let directoryURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+        return directoryURL
+    }
+
+    private func makePNGFixture() throws -> Data {
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let context = try #require(CGContext(
+            data: nil,
+            width: 8,
+            height: 8,
+            bitsPerComponent: 8,
+            bytesPerRow: 0,
+            space: colorSpace,
+            bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue
+        ))
+        context.setFillColor(CGColor(red: 0.1, green: 0.3, blue: 0.8, alpha: 1.0))
+        context.fill(CGRect(x: 0, y: 0, width: 8, height: 8))
+        let image = try #require(context.makeImage())
+        let data = NSMutableData()
+        let destination = try #require(CGImageDestinationCreateWithData(data, UTType.png.identifier as CFString, 1, nil))
+        CGImageDestinationAddImage(destination, image, nil)
+        #expect(CGImageDestinationFinalize(destination))
+        return data as Data
+    }
+
+    private func directoryContents(at url: URL) -> String {
+        let names = (try? FileManager.default.contentsOfDirectory(atPath: url.path)) ?? []
+        return names.sorted().joined(separator: ", ")
+    }
 
     private func executeBashDirectly(content: String, paths: [String]) async -> Result<String, ScriptError> {
         let process = Process()

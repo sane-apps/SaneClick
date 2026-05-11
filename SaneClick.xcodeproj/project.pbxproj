@@ -69,6 +69,7 @@
 		CCE34A091108F9B0E4A55F18 /* ScriptEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0292252BEA20E38AA9D5AD5 /* ScriptEditorView.swift */; };
 		CED119D09B9E882EE37AEA8B /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF1B4BB43599FDB2D286ADF /* AppPreferences.swift */; };
 		D2804ED379719BFC7420BA98 /* ImportExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037A92156BFEE353DE83DB29 /* ImportExportView.swift */; };
+		D5B5485014F3AC68999CB9EE /* CustomerUIActions.yml in Resources */ = {isa = PBXBuildFile; fileRef = FA92CD5000F8F9C3ACF0837A /* CustomerUIActions.yml */; };
 		D5DA8CBA16326530ED642F7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4375D086296589FD9E2EE58 /* Assets.xcassets */; };
 		D934D0819D52D0C810281548 /* SaneUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9F1286E819DE20012553BDE1 /* SaneUI */; };
 		DBD8078B3161A28696C81530 /* VisualVerificationRenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C83DAB25F21AC8F5CBF893 /* VisualVerificationRenderTests.swift */; };
@@ -186,6 +187,7 @@
 		C9E14736E3A91B0759B66C0E /* MonitoredFolders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitoredFolders.swift; sourceTree = "<group>"; };
 		E68AE3D3E5F32A83827F08A7 /* SaneClick-AppStore.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "SaneClick-AppStore.entitlements"; sourceTree = "<group>"; };
 		F447D4BFE5ACB557CE976F11 /* Script.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Script.swift; sourceTree = "<group>"; };
+		FA92CD5000F8F9C3ACF0837A /* CustomerUIActions.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = CustomerUIActions.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -279,6 +281,7 @@
 				B4BD1719C49E8BC6550B2C0C /* AppStoreReviewGuardrailTests.swift */,
 				8894C708FDE7B61CCCD4E9D9 /* AppStoreScreenshotRenderTests.swift */,
 				1306B2DA996D2CA07D8026B4 /* CategoryTests.swift */,
+				FA92CD5000F8F9C3ACF0837A /* CustomerUIActions.yml */,
 				4E13D1032CE6C26DB0310BC0 /* ExtensionStatusTests.swift */,
 				621E58252D45C086455F4CA1 /* ScriptExecutorTests.swift */,
 				07C04403C1E09F0D5028384E /* ScriptLibraryTests.swift */,
@@ -440,6 +443,7 @@
 			buildConfigurationList = 7882A228C72BC541A5D61145 /* Build configuration list for PBXNativeTarget "SaneClickTests" */;
 			buildPhases = (
 				97570ABD86D60DC89334F60A /* Sources */,
+				C0573D519CA7D827848F4198 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -534,6 +538,14 @@
 				D5DA8CBA16326530ED642F7C /* Assets.xcassets in Resources */,
 				7095158AE118884DC2F266BB /* Localizable.xcstrings in Resources */,
 				B2528D20E9949935D53FCF49 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C0573D519CA7D827848F4198 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5B5485014F3AC68999CB9EE /* CustomerUIActions.yml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,7 +684,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1107;
+				CURRENT_PROJECT_VERSION = 1108;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
@@ -681,7 +693,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
 				PRODUCT_NAME = SaneClick;
 				SDKROOT = macosx;
@@ -789,7 +801,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1107;
+				CURRENT_PROJECT_VERSION = 1108;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "SaneClick/Info-AppStore.plist";
 				INFOPLIST_KEY_AppStoreProductID = com.saneclick.app.pro.actions.v4;
@@ -798,7 +810,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
 				PRODUCT_NAME = SaneClick;
@@ -866,7 +878,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1107;
+				CURRENT_PROJECT_VERSION = 1108;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "SaneClick/Info-AppStore.plist";
@@ -876,7 +888,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
 				PRODUCT_NAME = SaneClick;
@@ -982,12 +994,12 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1107;
+				CURRENT_PROJECT_VERSION = 1108;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick.FinderSync;
 				PRODUCT_NAME = SaneClickExtension;
 				SDKROOT = macosx;
@@ -1009,7 +1021,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1107;
+				CURRENT_PROJECT_VERSION = 1108;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "SaneClick/Info-AppStore.plist";
@@ -1019,7 +1031,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
 				PRODUCT_NAME = SaneClick;
@@ -1060,12 +1072,12 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1107;
+				CURRENT_PROJECT_VERSION = 1108;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick.FinderSync;
 				PRODUCT_NAME = SaneClickExtension;
 				SDKROOT = macosx;
@@ -1112,7 +1124,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1107;
+				CURRENT_PROJECT_VERSION = 1108;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
@@ -1121,7 +1133,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
 				PRODUCT_NAME = SaneClick;
 				PROVISIONING_PROFILE_SPECIFIER = "SaneClick Mac App Store";
@@ -1167,7 +1179,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1107;
+				CURRENT_PROJECT_VERSION = 1108;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1175,7 +1187,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
 				PRODUCT_NAME = SaneClick;
 				SDKROOT = macosx;
@@ -1193,12 +1205,12 @@
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1107;
+				CURRENT_PROJECT_VERSION = 1108;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick.FinderSync;
 				PRODUCT_NAME = SaneClickExtension;
@@ -1219,11 +1231,11 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1107;
+				CURRENT_PROJECT_VERSION = 1108;
 				INFOPLIST_FILE = SaneClickExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick.FinderSync;
 				PRODUCT_NAME = SaneClickExtension;
 				SDKROOT = macosx;
@@ -1245,7 +1257,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1107;
+				CURRENT_PROJECT_VERSION = 1108;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "SaneClick/Info-AppStore.plist";
@@ -1255,7 +1267,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
 				PRODUCT_NAME = SaneClick;
@@ -1335,7 +1347,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1107;
+				CURRENT_PROJECT_VERSION = 1108;
 				DEVELOPMENT_TEAM = M78L6FXD48;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SaneClick/Info.plist;
@@ -1344,7 +1356,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClick;
 				PRODUCT_NAME = SaneClick;
 				SDKROOT = macosx;

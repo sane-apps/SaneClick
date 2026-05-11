@@ -45,6 +45,18 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
 
     /// Check if this script applies to the given file URLs
     func matchesFiles(_ urls: [URL]) -> Bool {
+        let hasFiles = urls.contains { !$0.hasDirectoryPath }
+        let hasFolders = urls.contains { $0.hasDirectoryPath }
+
+        switch appliesTo {
+        case .filesOnly:
+            guard hasFiles && !hasFolders else { return false }
+        case .foldersOnly, .container:
+            guard hasFolders && !hasFiles else { return false }
+        case .allItems:
+            break
+        }
+
         // No filter = matches everything
         guard !fileExtensions.isEmpty else { return true }
 
@@ -52,7 +64,7 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
         let fileURLs = urls.filter { !$0.hasDirectoryPath }
         guard !fileURLs.isEmpty else {
             // If only folders selected and script has file filters, don't show
-            return appliesTo == .foldersOnly || appliesTo == .allItems
+            return false
         }
 
         let normalizedExtensions = Set(fileExtensions.map { $0.lowercased().trimmingCharacters(in: CharacterSet(charactersIn: ".")) })

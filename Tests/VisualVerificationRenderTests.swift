@@ -71,6 +71,25 @@ struct VisualVerificationRenderTests {
             to: outputDirectory.appendingPathComponent("content-custom-actions.png")
         )
 
+        resetScripts(in: scriptStore, to: ScriptLibrary.availableAllScripts.map { $0.toScript() })
+
+        try renderPNG(
+            ContentView(licenseService: licenseService)
+                .environment(scriptStore)
+                .environment(monitoredFolderService)
+                .preferredColorScheme(.dark),
+            size: CGSize(width: 1100, height: 760),
+            to: outputDirectory.appendingPathComponent("content-all-actions.png")
+        )
+
+        try renderPNG(
+            ScriptLibraryView(licenseService: licenseService)
+                .environment(scriptStore)
+                .preferredColorScheme(.dark),
+            size: CGSize(width: 780, height: 680),
+            to: outputDirectory.appendingPathComponent("library-all-actions.png")
+        )
+
         try renderPNG(
             CustomActionsManagerView(
                 scripts: [customScript],
@@ -109,6 +128,8 @@ struct VisualVerificationRenderTests {
         #expect(FileManager.default.fileExists(atPath: outputDirectory.appendingPathComponent("settings-footer-on.png").path))
         #expect(FileManager.default.fileExists(atPath: outputDirectory.appendingPathComponent("settings-footer-off.png").path))
         #expect(FileManager.default.fileExists(atPath: outputDirectory.appendingPathComponent("content-custom-actions.png").path))
+        #expect(FileManager.default.fileExists(atPath: outputDirectory.appendingPathComponent("content-all-actions.png").path))
+        #expect(FileManager.default.fileExists(atPath: outputDirectory.appendingPathComponent("library-all-actions.png").path))
         #expect(FileManager.default.fileExists(atPath: outputDirectory.appendingPathComponent("custom-actions-manager.png").path))
         #expect(FileManager.default.fileExists(atPath: outputDirectory.appendingPathComponent("replace-spaces-row.png").path))
     }

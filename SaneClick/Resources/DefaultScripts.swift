@@ -473,7 +473,7 @@ enum ScriptLibrary {
             content: """
             for f in "$@"; do
                 BASENAME="${f%.*}"
-                sips -s format png -- "$f" --out "${BASENAME}.png"
+                sips -s format png "$f" --out "${BASENAME}.png"
             done
             osascript -e 'display notification "Converted to PNG" with title "SaneClick"'
             """,
@@ -489,7 +489,7 @@ enum ScriptLibrary {
             content: """
             for f in "$@"; do
                 BASENAME="${f%.*}"
-                sips -s format jpeg -s formatOptions 85 -- "$f" --out "${BASENAME}.jpg"
+                sips -s format jpeg -s formatOptions 85 "$f" --out "${BASENAME}.jpg"
             done
             osascript -e 'display notification "Converted to JPEG" with title "SaneClick"'
             """,
@@ -505,7 +505,7 @@ enum ScriptLibrary {
             content: """
             for f in "$@"; do
                 BASENAME="${f%.*}"
-                sips -s format jpeg -- "$f" --out "${BASENAME}.jpg"
+                sips -s format jpeg "$f" --out "${BASENAME}.jpg"
             done
             osascript -e 'display notification "HEIC converted to JPEG" with title "SaneClick"'
             """,
@@ -520,9 +520,9 @@ enum ScriptLibrary {
             type: .bash,
             content: """
             for f in "$@"; do
-                W=$(sips -g pixelWidth -- "$f" | awk '/pixelWidth/{print $2}')
+                W=$(sips -g pixelWidth "$f" | awk '/pixelWidth/{print $2}')
                 NEW_W=$((W / 2))
-                sips --resampleWidth $NEW_W -- "$f"
+                sips --resampleWidth $NEW_W "$f"
             done
             osascript -e 'display notification "Images resized to 50%" with title "SaneClick"'
             """,
@@ -537,7 +537,7 @@ enum ScriptLibrary {
             type: .bash,
             content: """
             for f in "$@"; do
-                sips --resampleWidth 1920 -- "$f"
+                sips --resampleWidth 1920 "$f"
             done
             osascript -e 'display notification "Images resized to 1920px width" with title "SaneClick"'
             """,
@@ -554,7 +554,7 @@ enum ScriptLibrary {
             for f in "$@"; do
                 BASENAME="${f%.*}"
                 EXT="${f##*.}"
-                sips -Z 256 -- "$f" --out "${BASENAME}_thumb.${EXT}"
+                sips -Z 256 "$f" --out "${BASENAME}_thumb.${EXT}"
             done
             osascript -e 'display notification "Thumbnails created" with title "SaneClick"'
             """,
@@ -572,7 +572,7 @@ enum ScriptLibrary {
                 # Create clean copy by re-encoding (strips EXIF)
                 EXT="${f##*.}"
                 TEMP=$(mktemp).$EXT
-                sips -s format ${EXT,,} -- "$f" --out "$TEMP" 2>/dev/null && mv -f -- "$TEMP" "$f"
+                sips -s format ${EXT,,} "$f" --out "$TEMP" 2>/dev/null && mv -f -- "$TEMP" "$f"
             done
             osascript -e 'display notification "Photo info removed" with title "SaneClick"'
             """,
@@ -588,7 +588,7 @@ enum ScriptLibrary {
             content: """
             INFO=""
             for f in "$@"; do
-                SIZE=$(sips -g pixelWidth -g pixelHeight -- "$f" | awk '/pixelWidth/{w=$2}/pixelHeight/{h=$2}END{print w"x"h}')
+                SIZE=$(sips -g pixelWidth -g pixelHeight "$f" | awk '/pixelWidth/{w=$2}/pixelHeight/{h=$2}END{print w"x"h}')
                 NAME=$(basename -- "$f")
                 INFO="$INFO$NAME: $SIZE
             "
@@ -611,7 +611,7 @@ enum ScriptLibrary {
             type: .bash,
             content: """
             for f in "$@"; do
-                sips -r 90 -- "$f"
+                sips -r 90 "$f"
             done
             osascript -e 'display notification "Images rotated" with title "SaneClick"'
             """,
@@ -630,9 +630,9 @@ enum ScriptLibrary {
                 EXT="${f##*.}"
                 cp -n -- "$f" "${BASENAME}@2x.${EXT}"
                 # Resize original to 50% (making it the @1x version)
-                W=$(sips -g pixelWidth -- "$f" | awk '/pixelWidth/{print $2}')
+                W=$(sips -g pixelWidth "$f" | awk '/pixelWidth/{print $2}')
                 NEW_W=$((W / 2))
-                sips --resampleWidth $NEW_W -- "$f"
+                sips --resampleWidth $NEW_W "$f"
             done
             osascript -e 'display notification "Created @2x versions" with title "SaneClick"'
             """,

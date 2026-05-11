@@ -10,14 +10,49 @@ enum ActionCatalog {
     private static let libraryScriptNames = Set(ScriptLibrary.allScripts.map(\.name))
 
     static func libraryScripts(in category: ScriptLibrary.ScriptCategory, from scripts: [Script]) -> [Script] {
-        let categoryScriptNames = Set(ScriptLibrary.availableScripts(for: category).map(\.name))
-        return scripts.filter { categoryScriptNames.contains($0.name) }
+        let categoryScriptsByName = Dictionary(
+            uniqueKeysWithValues: ScriptLibrary.availableScripts(for: category).map { ($0.name, $0) }
+        )
+        return uniqueScriptsByName(
+            scripts.filter { script in
+                guard let libraryScript = categoryScriptsByName[script.name] else { return false }
+                return isLibraryRecord(script, matching: libraryScript)
+            }
+        )
     }
 
     static func customScripts(from scripts: [Script]) -> [Script] {
         scripts
-            .filter { !libraryScriptNames.contains($0.name) }
+            .filter { script in
+                guard libraryScriptNames.contains(script.name),
+                      let libraryScript = ScriptLibrary.libraryScript(named: script.name)
+                else { return true }
+                return !isLibraryRecord(script, matching: libraryScript)
+            }
             .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+
+    static func isLibraryRecord(_ script: Script, matching libraryScript: ScriptLibrary.LibraryScript) -> Bool {
+        script.name == libraryScript.name &&
+            script.type == libraryScript.type &&
+            script.content == libraryScript.content
+    }
+
+    private static func uniqueScriptsByName(_ scripts: [Script]) -> [Script] {
+        var byName: [String: Script] = [:]
+        var orderedNames: [String] = []
+
+        for script in scripts {
+            let key = script.name.lowercased()
+            if byName[key] == nil {
+                orderedNames.append(key)
+                byName[key] = script
+            } else if script.isEnabled == true, byName[key]?.isEnabled == false {
+                byName[key] = script
+            }
+        }
+
+        return orderedNames.compactMap { byName[$0] }
     }
 }
 

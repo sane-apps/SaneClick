@@ -1,12 +1,26 @@
 # Session Handoff — SaneClick
 
 **Last updated:** 2026-05-11
-**Current public version:** `1.1.6` (build `1106`)
-**Next release candidate:** `1.1.7` (build `1107`)
+**Current public version:** `1.1.7` (build `1107`)
+**Next release candidate:** none
 
 ## Current State
 
-- 2026-05-11 SaneClick `#4` duplicate app-menu Settings item is fixed in the `1.1.7` release candidate, not publicly commented yet:
+- 2026-05-11 SaneClick library activation fix is implemented locally but not yet released after `1.1.7`:
+  - User-reported symptom: category Enable All buttons were intermittently ineffective and the UI could show impossible counts such as `30 of 10 enabled`.
+  - Root cause: stale duplicate installed records for built-in library actions could accumulate, while some UI counts and toggles matched by action name instead of reconciling the canonical library action record.
+  - Patch: `ScriptStore` now provides store-level single/bulk library activation APIs, canonicalizes built-in library scripts, deduplicates stale copies on load, and preserves a single live record per library action. `ContentView`, `ScriptLibraryView`, and `ActionCatalog` now use the canonical store path and deduped counts.
+  - Verification on the Mini: `./scripts/SaneMaster.rb verify --timeout 1200` passed `108` tests; Release `test_mode` built/staged/launched `/Applications/SaneClick.app`; live AX click QA toggled Enable All off/on for all five categories, one individual action, the Script Library global control, all Settings tabs, and Refresh Status.
+  - Screenshot evidence: SwiftUI render outputs generated at `/tmp/saneclick-visual-check/content-all-actions.png` and `/tmp/saneclick-visual-check/library-all-actions.png`. SSH live `screencapture` is currently blocked by Screen Recording permission on the Mini.
+
+- 2026-05-11 SaneClick `1.1.7` is live across the direct-download release lane:
+  - Release artifact: `https://dist.saneclick.com/updates/SaneClick-1.1.7.zip`; GitHub release `v1.1.7`; Homebrew cask `1.1.7`; appcast has exactly one `1.1.7` item; website download links are updated.
+  - Release ZIP SHA256: `fdf1aa95c84ce7046a987678348a48cb1569c8211fc6cfb7fe1a4dcb8496b0b7`; size `2368514`; Sparkle signature `PDWTiKJlUKLan/hak+xZC2+f0LwWjHK+AXjuwHteX2WJ/AnDhJlfwh6HviIGYmCDqhEOY0Uoo7LwCtSpwN0RCg==`.
+  - Mini release verification passed `106` tests, signed archive/export, notarization, R2 upload, appcast propagation, checkout redirect, GitHub release, website deploy, and Homebrew update.
+  - Public GitHub reply posted to `sane-apps/SaneClick#4`; keep the issue open until reporter confirms. Work-email `#697` reply to Margot Olson was reviewed, reconciled, fact-verified, approved, and delivered; leave it pending customer confirmation/logs.
+  - Release script published app/site/Homebrew successfully but initially failed at the email webhook push because the routed worker checkout used a stale local Mini remote. The canonical `sane-email-automation` worker was manually updated to `SaneClick-1.1.7.zip`, tested, pushed, and deployed. Signed SaneClick customer download URL now includes `/updates/SaneClick-1.1.7.zip` and downloads the expected artifact.
+
+- 2026-05-11 SaneClick `#4` duplicate app-menu Settings item fixed in `1.1.7`:
   - GitHub `sane-apps/SaneClick#4` reported that app version `1.1.6` showed two `Settings` entries in the top-left app menu when the GUI was visible.
   - Root cause: the SwiftUI `Settings { ... }` scene already owns the app-menu Settings item, while `AppCommands` also replaced `.appSettings` with a custom Settings command.
   - Patch: removed the custom `.appSettings` command from `SaneClickApp.swift` and kept the SwiftUI Settings scene as the sole owner.

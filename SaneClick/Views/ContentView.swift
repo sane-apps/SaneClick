@@ -101,6 +101,9 @@ struct ContentView: View {
                 proUpsellFeature = .importExport
             }
         }
+        .onAppear {
+            scriptStore.loadIfNeeded()
+        }
     }
 
     private var detailBackground: some View {
@@ -466,47 +469,21 @@ struct ContentView: View {
     }
 
     /// Handle toggle: add script if enabling and not installed, or toggle existing
-    private func handleScriptToggle(libraryScript: ScriptLibrary.LibraryScript, installedScript: Script?, enable: Bool) {
-        if enable {
-            if let script = installedScript {
-                // Already installed, just enable
-                if !script.isEnabled {
-                    var updated = script
-                    updated.isEnabled = true
-                    scriptStore.updateScript(updated)
-                }
-            } else {
-                // Not installed, add it enabled
-                let newScript = Script(
-                    name: libraryScript.name,
-                    type: libraryScript.type,
-                    content: libraryScript.content,
-                    isEnabled: true,
-                    icon: libraryScript.icon,
-                    appliesTo: libraryScript.appliesTo,
-                    fileExtensions: libraryScript.fileExtensions
-                )
-                scriptStore.addScript(newScript)
-            }
-        } else {
-            // Disabling - just disable, don't remove
-            if let script = installedScript, script.isEnabled {
-                var updated = script
-                updated.isEnabled = false
-                scriptStore.updateScript(updated)
-            }
+    private func handleScriptToggle(libraryScript: ScriptLibrary.LibraryScript, installedScript _: Script?, enable: Bool) {
+        if enable, libraryScript.category != .universal, !licenseService.isPro {
+            proUpsellFeature = proFeatureForCategory(libraryScript.category)
+            return
         }
+        scriptStore.setLibraryScript(libraryScript, isEnabled: enable)
     }
 
     /// Enable or disable all scripts in a category
     private func toggleAllScripts(in category: ScriptLibrary.ScriptCategory, enable: Bool) {
-        let libraryScripts = ScriptLibrary.availableScripts(for: category)
-        let installedScripts = scriptsForCategory(category)
-
-        for libraryScript in libraryScripts {
-            let installedScript = installedScripts.first { $0.name == libraryScript.name }
-            handleScriptToggle(libraryScript: libraryScript, installedScript: installedScript, enable: enable)
+        if enable, category != .universal, !licenseService.isPro {
+            proUpsellFeature = proFeatureForCategory(category)
+            return
         }
+        scriptStore.setLibraryScripts(ScriptLibrary.availableScripts(for: category), isEnabled: enable)
     }
 
     private var emptyState: some View {
