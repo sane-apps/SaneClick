@@ -4,6 +4,12 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.1.7] - 2026-05-11
+
+Shows a single Settings item in the app menu and keeps the settings shortcut behavior consistent.
+
+---
+
 ## [1.1.6] - 2026-05-09
 
 Adds Settings, License, About, and bug report access from the Dock and menu bar menus; prevents hiding both app access points at once; improves Finder extension permission scoping; and makes the settings/reporting flow easier to recover from.
