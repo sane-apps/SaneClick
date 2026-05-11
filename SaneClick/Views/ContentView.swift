@@ -142,15 +142,16 @@ struct ContentView: View {
                         }
                     }
 
-                    QuickActionRow(
-                        title: "Manage Folders",
-                        subtitle: monitoredFolderSubtitle,
-                        icon: "folder.badge.gearshape",
-                        color: .green
-                    ) {
-                        openSettingsWindow()
-                    }
                 #endif
+
+                QuickActionRow(
+                    title: "Manage Folders",
+                    subtitle: monitoredFolderSubtitle,
+                    icon: "folder.badge.gearshape",
+                    color: .green
+                ) {
+                    openSettingsWindow()
+                }
 
                 #if !APP_STORE
                     if !customScripts.isEmpty {
@@ -367,11 +368,9 @@ struct ContentView: View {
                 }
                 .padding(.bottom, 8)
 
-                #if APP_STORE
-                    if monitoredFolderService.monitoredFolderCount == 0 {
-                        monitoredFoldersNotice
-                    }
-                #endif
+                if monitoredFolderService.monitoredFolderCount == 0 {
+                    monitoredFoldersNotice
+                }
 
                 if isLocked {
                     // Locked state — show the actual scripts with clear Pro tagging
@@ -558,31 +557,25 @@ struct ContentView: View {
     }
 
     private var emptyStateBody: String {
-        #if APP_STORE
-            "Choose built-in actions from the library, then add monitored folders in Settings so they appear in Finder."
-        #else
-            "Add actions to your Finder right-click menu from our curated library."
-        #endif
+        "Choose actions from the library, then add monitored folders in Settings so they appear in Finder."
     }
 
-    #if APP_STORE
-        private var monitoredFoldersNotice: some View {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Add at least one monitored folder in Settings before testing actions in Finder.")
-                    .font(.subheadline)
-                    .foregroundStyle(.white)
+    private var monitoredFoldersNotice: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Add at least one monitored folder in Settings before testing actions in Finder.")
+                .font(.subheadline)
+                .foregroundStyle(.white)
 
-                Button("Open Settings") {
-                    openSettingsWindow()
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.saneTeal)
+            Button("Open Settings") {
+                openSettingsWindow()
             }
-            .padding(16)
-            .background(RoundedRectangle(cornerRadius: 12).fill(Color.saneCarbon))
-            .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(Color.saneSmoke, lineWidth: 1))
+            .buttonStyle(.borderedProminent)
+            .tint(.saneTeal)
         }
-    #endif
+        .padding(16)
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color.saneCarbon))
+        .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(Color.saneSmoke, lineWidth: 1))
+    }
 
     private func openSettingsWindow() {
         SettingsActionStorage.shared.showSettings()

@@ -68,6 +68,7 @@ enum MonitoredFolderError: LocalizedError, Equatable {
 enum MonitoredFolders {
     static let appGroupID = "M78L6FXD48.group.com.saneclick.app"
     static let changedNotification = Notification.Name("com.saneclick.monitoredFoldersChanged")
+    static let monitoredFoldersConfiguredKey = "monitoredFoldersUserConfigured"
 
     private static var storageURL: URL {
         if let containerURL = FileManager.default.containerURL(
@@ -82,26 +83,53 @@ enum MonitoredFolders {
         return saneClickDir.appendingPathComponent("monitored_folders.json")
     }
 
+    private static var userDefaults: UserDefaults? {
+        UserDefaults(suiteName: appGroupID)
+    }
+
+    private static var hasUserConfiguredFolders: Bool {
+        userDefaults?.bool(forKey: monitoredFoldersConfiguredKey) ?? false
+    }
+
+    private static var isRunningTests: Bool {
+        let env = ProcessInfo.processInfo.environment
+        return env["XCTestConfigurationFilePath"] != nil || env["XCTestSessionIdentifier"] != nil
+    }
+
     static func load() -> [MonitoredFolder] {
         let fileURL = storageURL
-        guard FileManager.default.fileExists(atPath: fileURL.path),
-              let data = try? Data(contentsOf: fileURL),
+        guard FileManager.default.fileExists(atPath: fileURL.path) else {
+            return seedInitialDefaultFoldersIfNeeded()
+        }
+
+        guard let data = try? Data(contentsOf: fileURL),
               let folders = try? JSONDecoder().decode([MonitoredFolder].self, from: data)
         else {
-            return []
+            return seedInitialDefaultFoldersIfNeeded()
         }
 
         let validFolders = folders.filter { isSupportedMonitoredFolder(URL(fileURLWithPath: $0.path, isDirectory: true)) }
         if validFolders.count != folders.count {
-            try? save(validFolders)
+            try? write(validFolders, markUserConfigured: false)
+        }
+
+        if validFolders.isEmpty, !hasUserConfiguredFolders {
+            return seedInitialDefaultFoldersIfNeeded()
         }
 
         return validFolders.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
     }
 
     static func save(_ folders: [MonitoredFolder]) throws {
+        try write(folders, markUserConfigured: true)
+    }
+
+    private static func write(_ folders: [MonitoredFolder], markUserConfigured: Bool) throws {
         let data = try JSONEncoder().encode(folders)
         try data.write(to: storageURL, options: .atomic)
+        if markUserConfigured {
+            userDefaults?.set(true, forKey: monitoredFoldersConfiguredKey)
+        }
 
         DistributedNotificationCenter.default().postNotificationName(
             changedNotification,
@@ -117,6 +145,56 @@ enum MonitoredFolders {
 
     static func monitoredURLs() -> [URL] {
         load().map(\.url)
+    }
+
+    @discardableResult
+    static func seedInitialDefaultFoldersIfNeeded() -> [MonitoredFolder] {
+        guard !isRunningTests else { return [] }
+
+        if FileManager.default.fileExists(atPath: storageURL.path),
+           let data = try? Data(contentsOf: storageURL),
+           let folders = try? JSONDecoder().decode([MonitoredFolder].self, from: data) {
+            let validFolders = folders.filter { isSupportedMonitoredFolder(URL(fileURLWithPath: $0.path, isDirectory: true)) }
+            if !validFolders.isEmpty || hasUserConfiguredFolders {
+                return validFolders.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+            }
+        }
+
+        let folders = initialDefaultFolders()
+        if !folders.isEmpty {
+            try? write(folders, markUserConfigured: false)
+        }
+        return folders
+    }
+
+    static func initialDefaultFolders(
+        homeDirectory: URL = FileManager.default.homeDirectoryForCurrentUser,
+        fileManager: FileManager = .default
+    ) -> [MonitoredFolder] {
+        #if APP_STORE
+            return []
+        #else
+            let home = homeDirectory.standardizedFileURL
+            let candidates = [
+                home.appendingPathComponent("Desktop", isDirectory: true),
+                home.appendingPathComponent("Documents", isDirectory: true),
+                home.appendingPathComponent("Downloads", isDirectory: true),
+                home.appendingPathComponent("Pictures", isDirectory: true),
+                home.appendingPathComponent("Movies", isDirectory: true)
+            ]
+
+            return candidates
+                .map(\.standardizedFileURL)
+                .filter { isSupportedMonitoredFolder($0, homeDirectory: home) }
+                .map { url in
+                    MonitoredFolder(
+                        name: fileManager.displayName(atPath: url.path),
+                        path: url.path,
+                        bookmarkData: Data()
+                    )
+                }
+                .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        #endif
     }
 
     static func addFolder(url: URL, to existingFolders: [MonitoredFolder]) throws -> [MonitoredFolder] {

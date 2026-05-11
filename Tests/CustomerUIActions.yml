@@ -109,3 +109,24 @@ actions:
     evidence:
       - Mini Finder execution transcript
       - Before/after file-state receipt
+
+  - id: fresh-direct-install-finder-availability
+    title: Fresh direct installs expose Finder actions without hidden monitored-folder setup
+    surfaces:
+      - Direct-download first launch
+      - Finder right-click extension menu
+      - Settings monitored folders
+    steps:
+      - Move any existing monitored_folders.json aside on the Mini instead of deleting it.
+      - Launch the signed direct Release build.
+      - Verify SaneClick computes default monitored folders for Desktop, Documents, Downloads, Pictures, and Movies when the storage file is missing.
+      - Right-click a representative image under Downloads and verify SaneClick actions are available.
+      - Open Settings and verify monitored-folder controls are visible in the direct build.
+    assertions:
+      - Missing monitored-folder storage cannot leave the direct app with an empty FinderSync directoryURLs set.
+      - Direct users can see and change the folders where SaneClick appears.
+      - Finder Recents is treated as a smart view; users are guided to monitor the backing folder.
+    evidence:
+      - Mini clean-state transcript
+      - Unit guard for direct default monitored folders
+      - Settings render with monitored-folder controls

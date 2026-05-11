@@ -259,6 +259,7 @@ struct SaneClickApp: App {
         }
         _showWelcomeGate = State(initialValue: WelcomeGateState.initialPresentation())
         AppPreferences.registerDefaults()
+        MonitoredFolders.seedInitialDefaultFoldersIfNeeded()
 
         // Menu bar icon + Dock visibility
         DispatchQueue.main.async {

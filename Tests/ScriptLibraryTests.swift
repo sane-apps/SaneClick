@@ -303,6 +303,28 @@ struct ActionCatalogTests {
         #expect(ActionCatalog.customScripts(from: [custom]) == [custom])
     }
 
+    @Test("Legacy built-in records remain library actions after content updates")
+    func legacyBuiltInRecordsRemainLibraryActionsAfterContentUpdates() throws {
+        let libraryScript = try #require(ScriptLibrary.libraryScript(named: "Copy Path"))
+        let legacyBuiltIn = Script(
+            name: libraryScript.name,
+            type: libraryScript.type,
+            content: #"echo -n "$@" | pbcopy"#,
+            icon: libraryScript.icon,
+            appliesTo: libraryScript.appliesTo
+        )
+        let sameNameCustom = Script(
+            name: libraryScript.name,
+            type: libraryScript.type,
+            content: "echo customer-owned action",
+            icon: libraryScript.icon,
+            appliesTo: libraryScript.appliesTo
+        )
+
+        #expect(ActionCatalog.libraryScripts(in: .universal, from: [legacyBuiltIn]).count == 1)
+        #expect(ActionCatalog.customScripts(from: [sameNameCustom]) == [sameNameCustom])
+    }
+
     @Test("Category scripts only include matching built-in actions")
     func categoryScriptsOnlyIncludeMatchingBuiltIns() throws {
         let universalScript = try #require(ScriptLibrary.universalScripts.first).toScript()
@@ -372,6 +394,20 @@ struct MonitoredFoldersPrivacyScopeTests {
         let documents = URL(fileURLWithPath: "/Users/sane/Documents/Projects", isDirectory: true)
 
         #expect(MonitoredFolders.isSupportedMonitoredFolder(documents, homeDirectory: home))
+    }
+
+    @Test("Direct builds seed common user folders when monitoring storage is missing")
+    func directBuildsSeedCommonUserFoldersWhenStorageIsMissing() {
+        #if APP_STORE
+            #expect(MonitoredFolders.initialDefaultFolders(homeDirectory: home).isEmpty)
+        #else
+            let folders = MonitoredFolders.initialDefaultFolders(homeDirectory: FileManager.default.homeDirectoryForCurrentUser)
+            let paths = Set(folders.map(\.path))
+            let homePath = FileManager.default.homeDirectoryForCurrentUser.standardizedFileURL.path
+
+            #expect(paths.contains("\(homePath)/Desktop") || paths.contains("\(homePath)/Downloads") || paths.contains("\(homePath)/Pictures"))
+            #expect(!paths.contains("\(homePath)/Library"))
+        #endif
     }
 
     @Test("Library folders are rejected for monitoring")

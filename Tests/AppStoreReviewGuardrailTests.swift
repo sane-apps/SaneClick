@@ -266,6 +266,27 @@ struct AppStoreReviewGuardrailTests {
         #expect(directSupportSource.contains("accessManagementLabel: \"Deactivate Pro\""))
     }
 
+    @Test("Direct builds expose monitored folder setup instead of silent empty Finder registration")
+    func directBuildsExposeMonitoredFolderSetup() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let settingsSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/SettingsView.swift"), encoding: .utf8)
+        let contentSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/ContentView.swift"), encoding: .utf8)
+        let monitoredFoldersSource = try String(contentsOf: projectRoot.appendingPathComponent("Shared/MonitoredFolders.swift"), encoding: .utf8)
+
+        #expect(settingsSource.contains("SaneClickSettingsCopy.monitoredFoldersSectionTitle"))
+        #expect(settingsSource.contains("#if APP_STORE\n                    CompactSection(SaneClickSettingsCopy.monitoredFoldersSectionTitle") == false)
+        #expect(contentSource.contains("QuickActionRow(\n                    title: \"Manage Folders\""))
+        #expect(contentSource.contains("if monitoredFolderService.monitoredFolderCount == 0"))
+        #expect(contentSource.contains("#if APP_STORE\n        private var monitoredFoldersNotice") == false)
+        #expect(monitoredFoldersSource.contains("seedInitialDefaultFoldersIfNeeded()"))
+        #expect(monitoredFoldersSource.contains("monitoredFoldersUserConfigured"))
+        #expect(monitoredFoldersSource.contains("initialDefaultFolders()"))
+        #expect(monitoredFoldersSource.contains("Downloads"))
+        #expect(monitoredFoldersSource.contains("Pictures"))
+    }
+
     @Test("Direct source build metadata stays on the direct lane")
     func directSourceBuildMetadataStaysDirect() throws {
         let projectRoot = URL(fileURLWithPath: #filePath)

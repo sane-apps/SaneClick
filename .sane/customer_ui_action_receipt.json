@@ -2,9 +2,9 @@
   "app": "SaneClick",
   "status": "passed",
   "host": "mini",
-  "generated_at": "2026-05-11T19:59:35Z",
-  "manifest_sha256": "2179b90d831bd8d6480a536cc3b15cffd08ef0c1fba955f6d95f35b6376d44f8",
-  "source_fingerprint": "8503bfe849478e1ff4da13245138b0620b57d7b410803dde78c455f889f6357c",
+  "generated_at": "2026-05-11T22:02:39Z",
+  "manifest_sha256": "5be1dc5563f974457d882d39844716dc8e806eec383bf9957b03f95c47f84a04",
+  "source_fingerprint": "0873733f3b6a6afa476a5d6a980445641a9d500504e37b4383cb26692b0ec3c4",
   "tested_action_ids": [
     "main-category-enable-all",
     "main-individual-action-toggle",
@@ -12,7 +12,8 @@
     "script-library-category-controls",
     "custom-action-management",
     "settings-tabs-and-status",
-    "finder-menu-action-execution"
+    "finder-menu-action-execution",
+    "fresh-direct-install-finder-availability"
   ],
   "screenshots": [
     "outputs/customer-ui/content-all-actions.png",
@@ -20,12 +21,14 @@
     "outputs/customer-ui/finder-menu-plain-file.png",
     "outputs/customer-ui/finder-menu-image-file.png",
     "outputs/customer-ui/finder-menu-json-file.png",
-    "outputs/customer-ui/finder-menu-folder.png"
+    "outputs/customer-ui/finder-menu-folder.png",
+    "outputs/customer-ui/settings-fresh-direct-monitored-folders.png",
+    "outputs/customer-ui/fresh-direct-downloads-menu-clean.png"
   ],
   "evidence": {
     "app_version": "1.1.8",
     "app_build": "1108",
-    "mini_verify": "112 Swift tests passed on 2026-05-11 15:57 Mini run",
+    "mini_verify": "116 Swift tests passed on 2026-05-11 17:44 Mini run",
     "ax_click_qa": [
       "Essentials Enable All off/on passed",
       "Essentials individual action toggle off/on passed",
@@ -42,6 +45,11 @@
       "images_and_media": "/tmp/saneclick-finder-qa/image.png.qa-image-copy existed with 69 bytes",
       "coding": "/tmp/saneclick-finder-qa/data.json.pretty contained pretty JSON",
       "advanced": "/tmp/saneclick-finder-qa/AdvancedFolder.zip existed"
+    },
+    "fresh_direct_install_results": {
+      "clean_state": "Moved monitored_folders.json aside and cleared monitoredFoldersUserConfigured on the Mini before launch.",
+      "seeded_defaults": "Direct Release launch created monitored_folders.json with Desktop, Documents, Downloads, Movies, and Pictures.",
+      "finder_menu": "Mini GUI-session screenshot fresh-direct-downloads-menu-clean.png shows SaneClick actions in Finder for a PNG under Downloads."
     },
     "representative_built_in_action_test": "Tests/ScriptExecutorTests.swift executes one built-in action per category: Duplicate with Timestamp, Replace Spaces with Underscores, Convert to JPEG, Create .gitignore, Create SHA256 File."
   }

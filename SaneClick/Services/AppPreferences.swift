@@ -8,6 +8,20 @@ struct AppVisibilityState: Equatable {
 
 enum ActionCatalog {
     private static let libraryScriptNames = Set(ScriptLibrary.allScripts.map(\.name))
+    private static let legacyLibrarySignatures: [String: [String]] = [
+        "Copy Path": ["pbcopy"],
+        "Open in Terminal": ["open -a Terminal"],
+        "Convert to PNG": ["sips -s format png"],
+        "Convert to JPEG": ["sips -s format jpeg"],
+        "HEIC to JPEG": ["sips -s format jpeg"],
+        "Resize 50%": ["sips", "--resampleWidth"],
+        "Resize to 1920px": ["sips --resampleWidth 1920"],
+        "Create Thumbnail (256px)": ["sips -Z 256"],
+        "Remove Photo Info": ["sips -s format"],
+        "Get Image Dimensions": ["sips -g pixelWidth", "pixelHeight"],
+        "Rotate 90° Clockwise": ["sips -r 90"],
+        "Create @2x Copy": ["@2x"]
+    ]
 
     static func libraryScripts(in category: ScriptLibrary.ScriptCategory, from scripts: [Script]) -> [Script] {
         let categoryScriptsByName = Dictionary(
@@ -33,9 +47,25 @@ enum ActionCatalog {
     }
 
     static func isLibraryRecord(_ script: Script, matching libraryScript: ScriptLibrary.LibraryScript) -> Bool {
-        script.name == libraryScript.name &&
-            script.type == libraryScript.type &&
-            script.content == libraryScript.content
+        guard script.name == libraryScript.name,
+              script.type == libraryScript.type
+        else { return false }
+
+        if script.content == libraryScript.content {
+            return true
+        }
+
+        return isLegacyLibraryRecord(script, matching: libraryScript)
+    }
+
+    private static func isLegacyLibraryRecord(_ script: Script, matching libraryScript: ScriptLibrary.LibraryScript) -> Bool {
+        guard script.icon == libraryScript.icon,
+              let signatures = legacyLibrarySignatures[libraryScript.name]
+        else { return false }
+
+        return signatures.allSatisfy { signature in
+            script.content.localizedCaseInsensitiveContains(signature)
+        }
     }
 
     private static func uniqueScriptsByName(_ scripts: [Script]) -> [Script] {

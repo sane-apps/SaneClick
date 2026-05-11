@@ -167,59 +167,56 @@ struct SettingsView: View {
                     .help(SaneClickSettingsCopy.showOpenMainWindowMenuItemHelp)
                 }
 
-                #if APP_STORE
-                    CompactSection(SaneClickSettingsCopy.monitoredFoldersSectionTitle, icon: "folder.badge.gearshape", iconColor: SaneSettingsIconSemantic.content.color) {
-                        if monitoredFolderService.folders.isEmpty {
-                            readableHint(SaneClickSettingsCopy.monitoredFoldersEmptyStateHint)
-                        } else {
-                            let folders = monitoredFolderService.folders
-                            ForEach(Array(folders.enumerated()), id: \.element.id) { index, folder in
-                                VStack(alignment: .leading, spacing: 6) {
-                                    HStack(spacing: 12) {
-                                        Text(folder.name)
-                                            .font(.system(size: 13, weight: .semibold))
-                                            .foregroundStyle(.white)
-
-                                        Spacer(minLength: 12)
-
-                                        Button(SaneClickSettingsCopy.removeButtonTitle) {
-                                            monitoredFolderService.removeFolder(folder)
-                                        }
-                                        .buttonStyle(SaneActionButtonStyle(destructive: true, compact: true))
-                                    }
-
-                                    Text(folder.path)
-                                        .font(.system(size: 13, weight: .medium))
+                CompactSection(SaneClickSettingsCopy.monitoredFoldersSectionTitle, icon: "folder.badge.gearshape", iconColor: SaneSettingsIconSemantic.content.color) {
+                    if monitoredFolderService.folders.isEmpty {
+                        readableHint(SaneClickSettingsCopy.monitoredFoldersEmptyStateHint)
+                    } else {
+                        let folders = monitoredFolderService.folders
+                        ForEach(Array(folders.enumerated()), id: \.element.id) { index, folder in
+                            VStack(alignment: .leading, spacing: 6) {
+                                HStack(spacing: 12) {
+                                    Text(folder.name)
+                                        .font(.system(size: 13, weight: .semibold))
                                         .foregroundStyle(.white)
-                                        .lineLimit(1)
+
+                                    Spacer(minLength: 12)
+
+                                    Button(SaneClickSettingsCopy.removeButtonTitle) {
+                                        monitoredFolderService.removeFolder(folder)
+                                    }
+                                    .buttonStyle(SaneActionButtonStyle(destructive: true, compact: true))
                                 }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 10)
 
-                                if index < folders.count - 1 {
-                                    CompactDivider()
-                                }
+                                Text(folder.path)
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundStyle(.white)
+                                    .lineLimit(1)
                             }
-                        }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 10)
 
-                        if !monitoredFolderService.folders.isEmpty {
-                            CompactDivider()
-                        }
-
-                        CompactRow(SaneSettingsStrings.actionsLabel, icon: "plus.circle.fill", iconColor: .saneAccent) {
-                            Button(SaneClickSettingsCopy.addFolderButtonTitle) {
-                                monitoredFolderService.addFolders()
+                            if index < folders.count - 1 {
+                                CompactDivider()
                             }
-                            .buttonStyle(SaneActionButtonStyle())
-                        }
-
-                        if let lastError = monitoredFolderService.lastError {
-                            CompactDivider()
-                            readableHint(lastError)
                         }
                     }
-                #endif
 
+                    if !monitoredFolderService.folders.isEmpty {
+                        CompactDivider()
+                    }
+
+                    CompactRow(SaneSettingsStrings.actionsLabel, icon: "plus.circle.fill", iconColor: .saneAccent) {
+                        Button(SaneClickSettingsCopy.addFolderButtonTitle) {
+                            monitoredFolderService.addFolders()
+                        }
+                        .buttonStyle(SaneActionButtonStyle())
+                    }
+
+                    if let lastError = monitoredFolderService.lastError {
+                        CompactDivider()
+                        readableHint(lastError)
+                    }
+                }
             }
             .padding(.horizontal, 24)
             .padding(.top, 14)

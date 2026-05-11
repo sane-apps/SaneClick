@@ -197,6 +197,37 @@ struct ScriptStoreTests {
         #expect(libraryAfterDisable?.isEnabled == false)
     }
 
+    @Test("Library activation canonicalizes legacy built-in content")
+    func libraryActivationCanonicalizesLegacyBuiltInContent() async throws {
+        let store = createTestStore()
+        let originalScripts = Array(store.scripts)
+        defer {
+            resetScripts(in: store, to: originalScripts)
+        }
+        resetScripts(in: store, to: [])
+
+        let libraryScript = try #require(ScriptLibrary.libraryScript(named: "Copy Path"))
+        let legacyBuiltIn = Script(
+            name: libraryScript.name,
+            type: libraryScript.type,
+            content: #"echo -n "$@" | pbcopy"#,
+            isEnabled: true,
+            icon: libraryScript.icon,
+            appliesTo: libraryScript.appliesTo
+        )
+        var canonicalDisabled = libraryScript.toScript()
+        canonicalDisabled.isEnabled = false
+
+        store.addScript(legacyBuiltIn)
+        store.addScript(canonicalDisabled)
+        store.setLibraryScript(libraryScript, isEnabled: true)
+
+        let matches = store.scripts.filter { $0.name == libraryScript.name }
+        #expect(matches.count == 1)
+        #expect(matches.first?.content == libraryScript.content)
+        #expect(matches.first?.isEnabled == true)
+    }
+
     // MARK: - Import / Export Tests
 
     @Test("Import scripts adds new actions")

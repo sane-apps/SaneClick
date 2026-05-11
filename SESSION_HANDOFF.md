@@ -1,12 +1,21 @@
 # Session Handoff — SaneClick
 
 **Last updated:** 2026-05-11
-**Current public version:** `1.1.7` (build `1107`)
-**Next release candidate:** none
+**Current public version:** `1.1.8` (build `1108`)
+**Next release candidate:** `1.1.9` (build `1109`)
 
 ## Current State
 
-- 2026-05-11 SaneClick library activation fix is implemented locally but not yet released after `1.1.7`:
+- 2026-05-11 SaneClick direct Finder menu hotfix is implemented locally for `1.1.9`:
+  - User-reported symptom: a direct-install MacBook Air had SaneClick 1.1.8 installed with actions enabled, but right-clicking an image in Finder/Recents showed no SaneClick actions.
+  - Confirmed root cause: the direct app required `monitored_folders.json` for Finder Sync registration, but direct UI hid monitored-folder setup behind `#if APP_STORE`. Fresh or upgraded direct users could therefore have enabled actions and an enabled extension with no monitored Finder roots.
+  - Missed-test cause: prior Mini QA manually seeded `/tmp/saneclick-finder-qa`, so it verified action execution only after monitoring was already configured and did not test the fresh direct install/no monitored-folder state.
+  - Patch: direct builds now expose Manage Folders and Settings monitored-folder controls, seed standard user folders into App Group storage on startup unless the user has explicitly configured folders, preserve intentional empty user choices, and explain that Finder Recents is a smart view requiring the backing folder.
+  - Additional cleanup: legacy built-in records whose content changed are recognized and canonicalized so old built-ins do not remain as duplicate custom-looking actions.
+  - Verification so far: Mini `./scripts/SaneMaster.rb verify --timeout 1200` passed `116` Swift tests; release-mode clean-state launch created default monitored folders; GUI-session screenshot `outputs/customer-ui/fresh-direct-downloads-menu-clean.png` shows SaneClick actions in Finder for a PNG under Downloads; `./scripts/SaneMaster.rb customer_ui_contract --no-exit` passes with 8 required actions covered.
+  - Release status: version bumped to `1.1.9` / `1109`; needs final release preflight and full publish.
+
+- 2026-05-11 SaneClick library activation fix shipped in `1.1.8`:
   - User-reported symptom: category Enable All buttons were intermittently ineffective and the UI could show impossible counts such as `30 of 10 enabled`.
   - Root cause: stale duplicate installed records for built-in library actions could accumulate, while some UI counts and toggles matched by action name instead of reconciling the canonical library action record.
   - Patch: `ScriptStore` now provides store-level single/bulk library activation APIs, canonicalizes built-in library scripts, deduplicates stale copies on load, and preserves a single live record per library action. `ContentView`, `ScriptLibraryView`, and `ActionCatalog` now use the canonical store path and deduped counts.

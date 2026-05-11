@@ -24,3 +24,9 @@
 - Current SaneUI `SaneLoginItemPolicy` exposes `scheduleDefaultLaunchAtLoginPrompt(appName:)` and `offerDefaultLaunchAtLoginIfNeeded(appName:)`; the older `enableByDefaultIfNeeded(isFirstLaunch:)` call site is stale.
 - SaneUI shared menu/settings support was committed and pushed as `ce1df3c` on `sane-apps/SaneUI.git` main, so SaneClick `Package.resolved` must resolve SaneUI to `ce1df3c2b03d8ade3b300e907fbcf37320a847bc` or newer before using `SaneStandardMenu`.
 - Verification target after this research: rerun Mini `./scripts/SaneMaster.rb verify --timeout 1200` from SaneClick after syncing the compile fixes and package pin.
+
+## Direct Finder Menu Missing After Enabled Actions | Updated: 2026-05-11 | Status: verified | TTL: 30d
+- Root cause: direct 1.1.8 could show enabled actions and an enabled Finder extension while no Finder menu appeared because `monitored_folders.json` was missing or empty and the monitored-folder setup UI was hidden behind `#if APP_STORE`.
+- Second-order cause: QA manually seeded `/tmp/saneclick-finder-qa`, so it tested action execution in an already-monitored folder and missed fresh direct install/upgrade state with no monitored folders.
+- Fix direction: monitored-folder UI is channel-neutral; direct builds seed Desktop, Documents, Downloads, Movies, and Pictures into App Group storage on startup unless the user has explicitly configured folders; Finder Recents is documented as a smart view requiring the backing folder.
+- Verification added: `Tests/CustomerUIActions.yml` now includes `fresh-direct-install-finder-availability`; receipt must include Mini clean-state screenshot evidence before release.
