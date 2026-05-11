@@ -1,9 +1,18 @@
 # Session Handoff — SaneClick
 
-**Last updated:** 2026-05-09
-**Current version:** `1.1.5` (build `1105`)
+**Last updated:** 2026-05-11
+**Current public version:** `1.1.6` (build `1106`)
+**Next release candidate:** `1.1.7` (build `1107`)
 
 ## Current State
+
+- 2026-05-11 SaneClick `#4` duplicate app-menu Settings item is fixed in the `1.1.7` release candidate, not publicly commented yet:
+  - GitHub `sane-apps/SaneClick#4` reported that app version `1.1.6` showed two `Settings` entries in the top-left app menu when the GUI was visible.
+  - Root cause: the SwiftUI `Settings { ... }` scene already owns the app-menu Settings item, while `AppCommands` also replaced `.appSettings` with a custom Settings command.
+  - Patch: removed the custom `.appSettings` command from `SaneClickApp.swift` and kept the SwiftUI Settings scene as the sole owner.
+  - Test: `Tests/AppStoreReviewGuardrailTests.swift` now guards that `CommandGroup(replacing: .appSettings)` and the duplicate command-comma Settings shortcut are not reintroduced.
+  - Verification on the Mini: `./scripts/SaneMaster.rb verify --timeout 1200` passed `106` tests; `./scripts/SaneMaster.rb test_mode --release --no-logs` built/staged/launched `/Applications/SaneClick.app`; menu inspection showed exactly one Settings item.
+  - GitHub and email follow-ups are approved to post after `1.1.7` is live. Email `#697` from Margot Olson should not be claimed fixed without logs; reply should ask for an in-app bug report/logs from the updated build.
 
 - 2026-05-09 shared menu/settings parity is the current operational baseline:
   - Dock right-click and menu-bar right-click are backed by the same SaneClick context-menu builder and expose the customer-critical path: Settings, License, Check for Updates, About / Report a Bug, and Quit, plus app-specific utilities where they are useful.

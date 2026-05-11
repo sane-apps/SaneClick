@@ -467,13 +467,6 @@ struct AppCommands: Commands {
             .keyboardShortcut("q", modifiers: .command)
         }
 
-        CommandGroup(replacing: .appSettings) {
-            Button(settingsCommandTitle) {
-                SettingsActionStorage.shared.showSettings()
-            }
-            .keyboardShortcut(",", modifiers: .command)
-        }
-
         #if !APP_STORE
             CommandGroup(after: .appInfo) {
                 Button(SaneStandardMenu.checkForUpdatesTitle) {
@@ -493,14 +486,6 @@ struct AppCommands: Commands {
                 }
                 .keyboardShortcut("e", modifiers: [.command, .shift])
             }
-        #endif
-    }
-
-    private var settingsCommandTitle: String {
-        #if APP_STORE
-            "Settings..."
-        #else
-            SaneStandardMenu.settingsTitle
         #endif
     }
 }

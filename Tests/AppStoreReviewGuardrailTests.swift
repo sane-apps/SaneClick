@@ -56,6 +56,18 @@ struct AppStoreReviewGuardrailTests {
         #expect(SettingsActionStorage.shared.consumePendingTab() == .license)
     }
 
+    @Test("App menu settings item is owned only by the Settings scene")
+    func appMenuSettingsItemIsOwnedOnlyBySettingsScene() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let appSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/SaneClickApp.swift"), encoding: .utf8)
+
+        #expect(appSource.contains("Settings {"))
+        #expect(appSource.contains("CommandGroup(replacing: .appSettings)") == false)
+        #expect(appSource.contains("keyboardShortcut(\",\", modifiers: .command)") == false)
+    }
+
     @Test("Dock and menu bar context menus share customer-critical settings order")
     func dockAndMenuBarContextMenusShareCustomerCriticalOrder() {
         let delegate = SaneClickAppDelegate()
