@@ -21,6 +21,10 @@ release:
       subject: "On main: auto-reconcile-20260508-215519-stephans-mac-mini"
       decision: superseded
       reason: "Reviewed 2026-05-09. Key runtime files revert HEAD away from the live 1.1.6 direct-download state: .saneprocess flips App Store back on, menu/settings routing loses current Settings/License/About access patterns, and release metadata/docs regress. Current HEAD already carries the intended menu parity and direct-download behavior."
+    - stash_sha: "dc659a6b51b6b5fe5fafb8b8db51b06eb490389c"
+      subject: "On main: auto-reconcile-20260501-215526-stephans-macbook-air"
+      decision: recovered
+      reason: "Reviewed 2026-05-11. The stash only adds first_value_action analytics in ScriptExecutor; current HEAD already contains that analytics hook and later replaces the stale file-watcher startup path with launch-request-scoped execution handling, so no unique release work remains."
     - stash_sha: "b8bb31a8e4f8295c455e88b13d9d8aabe3ffaad1"
       subject: "On main: auto-reconcile-20260425-215520-stephans-mac-mini"
       decision: superseded
