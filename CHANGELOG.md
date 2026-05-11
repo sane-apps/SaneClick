@@ -6,6 +6,12 @@ All notable changes to SaneClick are documented here.
 
 ## [1.1.9] - 2026-05-11
 
+Restores Finder action availability for direct-download installs, shows monitored-folder setup in the app, and keeps built-in actions organized after updates.
+
+---
+
+## [1.1.9] - 2026-05-11
+
 Repairs fresh direct-download installs where Finder actions could be enabled in SaneClick but absent from Finder because no monitored folders were registered. Direct builds now expose monitored-folder setup, seed standard user folders on startup, preserve user folder choices, and clean up legacy duplicate built-in actions after library updates.
 
 Fixes category and library Enable All reliability, repairs Finder right-click filtering for file-only and folder-only actions, and restores image conversion actions that use macOS `sips`.
