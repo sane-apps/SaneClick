@@ -6,6 +6,12 @@ All notable changes to SaneClick are documented here.
 
 ## [1.1.8] - 2026-05-11
 
+Fixes category and library Enable All reliability, repairs Finder right-click filtering for file-only and folder-only actions, and restores image conversion actions.
+
+---
+
+## [1.1.8] - 2026-05-11
+
 Fixes category and library Enable All reliability, repairs Finder right-click filtering for file-only and folder-only actions, and restores image conversion actions that use macOS `sips`.
 
 ---
