@@ -3,7 +3,27 @@
     <channel>
         <title>SaneClick Changelog</title>
 
-                                                            <item>
+                                                                    <item>
+            <title>1.1.7</title>
+            <link>https://saneclick.com/download</link>
+            <pubDate>Mon, 11 May 2026 14:20:05 -0400</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description>
+                <![CDATA[
+                <h2>What's New</h2>
+                <ul>
+                <li>Shows a single Settings item in the app menu and keeps the settings shortcut behavior consistent.</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.1.7.zip"
+                       sparkle:version="1107"
+                       sparkle:shortVersionString="1.1.7"
+                       length="2368514"
+                       type="application/octet-stream"
+                       sparkle:edSignature="PDWTiKJlUKLan/hak+xZC2+f0LwWjHK+AXjuwHteX2WJ/AnDhJlfwh6HviIGYmCDqhEOY0Uoo7LwCtSpwN0RCg=="/>
+        </item>
+<item>
             <title>1.1.6</title>
             <link>https://saneclick.com/download</link>
             <pubDate>Sat, 09 May 2026 19:28:15 -0400</pubDate>
