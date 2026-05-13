@@ -1,19 +1,27 @@
 # Session Handoff — SaneClick
 
-**Last updated:** 2026-05-11
-**Current public version:** `1.1.8` (build `1108`)
-**Next release candidate:** `1.1.9` (build `1109`)
+**Last updated:** 2026-05-12
+**Current public version:** `1.1.9` (build `1109`)
+**Next release candidate:** none pending
 
 ## Current State
 
-- 2026-05-11 SaneClick direct Finder menu hotfix is implemented locally for `1.1.9`:
+- 2026-05-12 SaneClick `1.1.9` fresh direct-install Finder menu proof is recorded:
+  - GitHub release `v1.1.9` is published and `docs/appcast.xml` / `docs/index.html` point at `https://dist.saneclick.com/updates/SaneClick-1.1.9.zip`.
+  - Fresh direct-install regression state was recreated on the Mini by moving aside existing monitored-folder storage, clearing `monitoredFoldersUserConfigured`, killing `cfprefsd`, then launching the signed Release app through `./scripts/SaneMaster.rb test_mode --release --no-logs`.
+  - Fixed behavior was verified: SaneClick regenerated the standard monitored folders for Desktop, Documents, Downloads, Movies, and Pictures; Finder right-click on a PNG under Downloads showed SaneClick actions.
+  - Clean visual evidence: `outputs/customer-ui/fresh-direct-proof-20260512T210332Z/fresh-direct-finder-menu-final-crop.png` and promoted copy `outputs/customer-ui/fresh-direct-downloads-menu-clean.png`.
+  - `./scripts/SaneMaster.rb customer_ui_sweep --no-exit` and `./scripts/SaneMaster.rb customer_ui_contract --no-exit` pass with 8 release-required actions covered; receipt generated `2026-05-12T21:21:29Z` on host `mini`.
+  - Mini `./scripts/SaneMaster.rb verify --timeout 1200` passed `116` tests after the fresh-install proof.
+
+- 2026-05-11 SaneClick direct Finder menu hotfix shipped in `1.1.9`:
   - User-reported symptom: a direct-install MacBook Air had SaneClick 1.1.8 installed with actions enabled, but right-clicking an image in Finder/Recents showed no SaneClick actions.
   - Confirmed root cause: the direct app required `monitored_folders.json` for Finder Sync registration, but direct UI hid monitored-folder setup behind `#if APP_STORE`. Fresh or upgraded direct users could therefore have enabled actions and an enabled extension with no monitored Finder roots.
   - Missed-test cause: prior Mini QA manually seeded `/tmp/saneclick-finder-qa`, so it verified action execution only after monitoring was already configured and did not test the fresh direct install/no monitored-folder state.
   - Patch: direct builds now expose Manage Folders and Settings monitored-folder controls, seed standard user folders into App Group storage on startup unless the user has explicitly configured folders, preserve intentional empty user choices, and explain that Finder Recents is a smart view requiring the backing folder.
   - Additional cleanup: legacy built-in records whose content changed are recognized and canonicalized so old built-ins do not remain as duplicate custom-looking actions.
-  - Verification so far: Mini `./scripts/SaneMaster.rb verify --timeout 1200` passed `116` Swift tests; release-mode clean-state launch created default monitored folders; GUI-session screenshot `outputs/customer-ui/fresh-direct-downloads-menu-clean.png` shows SaneClick actions in Finder for a PNG under Downloads; `./scripts/SaneMaster.rb customer_ui_contract --no-exit` passes with 8 required actions covered.
-  - Release status: version bumped to `1.1.9` / `1109`; needs final release preflight and full publish.
+  - Verification: Mini `./scripts/SaneMaster.rb verify --timeout 1200` passed `116` Swift tests; release-mode clean-state launch created default monitored folders; GUI-session screenshot `outputs/customer-ui/fresh-direct-downloads-menu-clean.png` shows SaneClick actions in Finder for a PNG under Downloads; `./scripts/SaneMaster.rb customer_ui_contract --no-exit` passes with 8 required actions covered.
+  - Release status: published as GitHub release `v1.1.9` on 2026-05-11; leave GitHub/customer follow-up open until reporter confirms unless the user approves closing/replying from this proof.
 
 - 2026-05-11 SaneClick library activation fix shipped in `1.1.8`:
   - User-reported symptom: category Enable All buttons were intermittently ineffective and the UI could show impossible counts such as `30 of 10 enabled`.

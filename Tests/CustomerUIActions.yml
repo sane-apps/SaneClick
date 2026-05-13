@@ -1,132 +1,369 @@
+---
 version: 1
 app: SaneClick
 actions:
-  - id: main-category-enable-all
-    title: Main category Enable All controls are live
-    surfaces:
-      - Main window category detail
-    steps:
-      - Click each category in the sidebar.
-      - Toggle Enable All off and on for Essentials, Files & Folders, Images & Media, Coding, and Advanced.
-    assertions:
-      - Header enabled count changes immediately.
-      - Row toggles match the header count.
-      - Enabled count never exceeds available count.
-      - Locked Pro categories open an upgrade gate for Basic users instead of pretending to activate Pro actions.
-    evidence:
-      - Mini AX click transcript
-      - Screenshot of at least one all-on category state
-
-  - id: main-individual-action-toggle
-    title: Individual built-in action toggles are live
-    surfaces:
-      - Main window action rows
-    steps:
-      - Toggle at least one built-in action off and on from the main detail list.
-    assertions:
-      - The row switch changes state.
-      - The category header count updates both directions.
-      - The action remains present after toggling and relaunch.
-    evidence:
-      - Mini AX click transcript
-
-  - id: script-library-global-enable-all
-    title: Script Library global Enable All is scoped and live
-    surfaces:
-      - Script Library sheet
-    steps:
-      - Open Browse Library.
-      - Toggle All Scripts off and on.
-    assertions:
-      - Basic mode counts and toggles only Basic-actionable scripts.
-      - Pro mode counts and toggles all available library scripts.
-      - Visible All Scripts rows agree with the header count.
-      - Enabled count never exceeds available count.
-    evidence:
-      - Mini AX click transcript
-      - Screenshot of Script Library all-on state
-
-  - id: script-library-category-controls
-    title: Script Library category controls are live
-    surfaces:
-      - Script Library sheet category rows
-    steps:
-      - Expand every category.
-      - Toggle category Enable All controls and individual rows where available.
-    assertions:
-      - Category counts agree with visible rows.
-      - Locked Pro category controls route to the Pro upgrade gate in Basic mode.
-      - No category can report more enabled actions than total actions.
-    evidence:
-      - Mini AX click transcript
-
-  - id: custom-action-management
-    title: Custom action management preserves customer actions
-    surfaces:
-      - Custom Actions manager
-      - Script editor
-    steps:
-      - Open custom action management.
-      - Create, edit, disable, re-enable, and delete a custom action.
-      - Create or import a custom action whose title matches a built-in action.
-    assertions:
-      - Custom action edits persist after relaunch.
-      - Built-in reconciliation does not overwrite same-title custom action content.
-      - Deleted custom actions disappear from the menu.
-    evidence:
-      - Mini AX click transcript
-      - Screenshot of custom action manager
-
-  - id: settings-tabs-and-status
-    title: Settings tabs and status actions are reachable
-    surfaces:
-      - Settings window
-    steps:
-      - Open Settings.
-      - Select every tab.
-      - Click Refresh Status.
-      - Exercise License, Updates, About, Report a Bug, and Quit access points where non-destructive.
-    assertions:
-      - Each tab renders the expected content.
-      - Refresh Status updates without hanging.
-      - Non-destructive support/update/license/about actions open the intended surface.
-    evidence:
-      - Mini AX click transcript
-      - Screenshot of settings state
-
-  - id: finder-menu-action-execution
-    title: Finder context menu actions execute correctly
-    surfaces:
-      - Finder right-click extension menu
-      - Dock/menu-bar access points
-    steps:
-      - Seed representative files and folders.
-      - Trigger representative Essentials, Files & Folders, Images & Media, Coding, and Advanced actions.
-    assertions:
-      - Each action type performs the promised file operation or opens the promised destination.
-      - Actions only appear for matching file types and selection counts.
-      - No action triggers unexpected permission prompts in normal use.
-    evidence:
-      - Mini Finder execution transcript
-      - Before/after file-state receipt
-
-  - id: fresh-direct-install-finder-availability
-    title: Fresh direct installs expose Finder actions without hidden monitored-folder setup
-    surfaces:
-      - Direct-download first launch
-      - Finder right-click extension menu
-      - Settings monitored folders
-    steps:
-      - Move any existing monitored_folders.json aside on the Mini instead of deleting it.
-      - Launch the signed direct Release build.
-      - Verify SaneClick computes default monitored folders for Desktop, Documents, Downloads, Pictures, and Movies when the storage file is missing.
-      - Right-click a representative image under Downloads and verify SaneClick actions are available.
-      - Open Settings and verify monitored-folder controls are visible in the direct build.
-    assertions:
-      - Missing monitored-folder storage cannot leave the direct app with an empty FinderSync directoryURLs set.
-      - Direct users can see and change the folders where SaneClick appears.
-      - Finder Recents is treated as a smart view; users are guided to monitor the backing folder.
-    evidence:
-      - Mini clean-state transcript
-      - Unit guard for direct default monitored folders
-      - Settings render with monitored-folder controls
+- id: main-category-enable-all
+  title: Main category Enable All controls are live
+  surfaces:
+  - Main window category detail
+  steps:
+  - Click each category in the sidebar.
+  - Toggle Enable All off and on for Essentials, Files & Folders, Images & Media,
+    Coding, and Advanced.
+  assertions:
+  - Header enabled count changes immediately.
+  - Row toggles match the header count.
+  - Enabled count never exceeds available count.
+  - Locked Pro categories open an upgrade gate for Basic users instead of pretending
+    to activate Pro actions.
+  evidence:
+  - Mini AX click transcript
+  - Screenshot of at least one all-on category state
+  required_proof_level: runtime_visual
+  required_evidence_types:
+  - mini_click
+  - screenshot
+  historical_failure_classes:
+  - persistence_or_relaunch_reset
+  - layout_visual_regression
+  - pro_basic_gate_drift
+  - state_count_drift
+  - activation_noop
+  functional_state:
+    description: Seeded Finder fixture with representative files, folders, images,
+      code files, and enabled Basic/Pro action states.
+    setup_steps:
+    - Create the Finder test folder tree on the Mini.
+    - Enable the direct build Finder extension and select representative fixture files
+      before context-menu actions.
+    fixture_paths:
+    - Tests/Fixtures/customer-ui/finder-actions/
+  user_inputs:
+  - Click each category in the sidebar.
+  - Toggle Enable All off and on for Essentials, Files & Folders, Images & Media,
+    Coding, and Advanced.
+  expected_outputs:
+  - Header enabled count changes immediately.
+  - Row toggles match the header count.
+  - Enabled count never exceeds available count.
+- id: main-individual-action-toggle
+  title: Individual built-in action toggles are live
+  surfaces:
+  - Main window action rows
+  steps:
+  - Toggle at least one built-in action off and on from the main detail list.
+  assertions:
+  - The row switch changes state.
+  - The category header count updates both directions.
+  - The action remains present after toggling and relaunch.
+  evidence:
+  - Mini AX click transcript
+  required_proof_level: safe_first_surface
+  required_evidence_types:
+  - mini_click
+  - screenshot
+  historical_failure_classes:
+  - install_update_packaging
+  - persistence_or_relaunch_reset
+  - layout_visual_regression
+  - state_count_drift
+  - activation_noop
+  functional_state:
+    description: Seeded Finder fixture with representative files, folders, images,
+      code files, and enabled Basic/Pro action states.
+    setup_steps:
+    - Create the Finder test folder tree on the Mini.
+    - Enable the direct build Finder extension and select representative fixture files
+      before context-menu actions.
+    fixture_paths:
+    - Tests/Fixtures/customer-ui/finder-actions/
+  user_inputs:
+  - Toggle at least one built-in action off and on from the main detail list.
+  expected_outputs:
+  - The row switch changes state.
+  - The category header count updates both directions.
+  - The action remains present after toggling and relaunch.
+- id: script-library-global-enable-all
+  title: Script Library global Enable All is scoped and live
+  surfaces:
+  - Script Library sheet
+  steps:
+  - Open Browse Library.
+  - Toggle All Scripts off and on.
+  assertions:
+  - Basic mode counts and toggles only Basic-actionable scripts.
+  - Pro mode counts and toggles all available library scripts.
+  - Visible All Scripts rows agree with the header count.
+  - Enabled count never exceeds available count.
+  evidence:
+  - Mini AX click transcript
+  - Screenshot of Script Library all-on state
+  required_proof_level: runtime_visual
+  required_evidence_types:
+  - mini_click
+  - screenshot
+  historical_failure_classes:
+  - persistence_or_relaunch_reset
+  - layout_visual_regression
+  - pro_basic_gate_drift
+  - state_count_drift
+  - activation_noop
+  functional_state:
+    description: Seeded Finder fixture with representative files, folders, images,
+      code files, and enabled Basic/Pro action states.
+    setup_steps:
+    - Create the Finder test folder tree on the Mini.
+    - Enable the direct build Finder extension and select representative fixture files
+      before context-menu actions.
+    fixture_paths:
+    - Tests/Fixtures/customer-ui/finder-actions/
+  user_inputs:
+  - Open Browse Library.
+  - Toggle All Scripts off and on.
+  expected_outputs:
+  - Basic mode counts and toggles only Basic-actionable scripts.
+  - Pro mode counts and toggles all available library scripts.
+  - Visible All Scripts rows agree with the header count.
+- id: script-library-category-controls
+  title: Script Library category controls are live
+  surfaces:
+  - Script Library sheet category rows
+  steps:
+  - Expand every category.
+  - Toggle category Enable All controls and individual rows where available.
+  assertions:
+  - Category counts agree with visible rows.
+  - Locked Pro category controls route to the Pro upgrade gate in Basic mode.
+  - No category can report more enabled actions than total actions.
+  evidence:
+  - Mini AX click transcript
+  required_proof_level: runtime_visual
+  required_evidence_types:
+  - mini_click
+  - screenshot
+  historical_failure_classes:
+  - persistence_or_relaunch_reset
+  - layout_visual_regression
+  - pro_basic_gate_drift
+  - state_count_drift
+  - docs_promise_drift
+  - activation_noop
+  functional_state:
+    description: Seeded Finder fixture with representative files, folders, images,
+      code files, and enabled Basic/Pro action states.
+    setup_steps:
+    - Create the Finder test folder tree on the Mini.
+    - Enable the direct build Finder extension and select representative fixture files
+      before context-menu actions.
+    fixture_paths:
+    - Tests/Fixtures/customer-ui/finder-actions/
+  user_inputs:
+  - Expand every category.
+  - Toggle category Enable All controls and individual rows where available.
+  expected_outputs:
+  - Category counts agree with visible rows.
+  - Locked Pro category controls route to the Pro upgrade gate in Basic mode.
+  - No category can report more enabled actions than total actions.
+- id: custom-action-management
+  title: Custom action management preserves customer actions
+  surfaces:
+  - Custom Actions manager
+  - Script editor
+  steps:
+  - Open custom action management.
+  - Create, edit, disable, re-enable, and delete a custom action.
+  - Create or import a custom action whose title matches a built-in action.
+  assertions:
+  - Custom action edits persist after relaunch.
+  - Built-in reconciliation does not overwrite same-title custom action content.
+  - Deleted custom actions disappear from the menu.
+  evidence:
+  - Mini AX click transcript
+  - Screenshot of custom action manager
+  required_proof_level: full_runtime_completion
+  required_evidence_types:
+  - mini_click
+  - screenshot
+  - fixture
+  historical_failure_classes:
+  - duplicate_or_stale_menu_item
+  - menu_entry_missing
+  - data_loss_or_unexpected_mutation
+  - persistence_or_relaunch_reset
+  - activation_noop
+  functional_state:
+    description: Seeded Finder fixture with representative files, folders, images,
+      code files, and enabled Basic/Pro action states.
+    setup_steps:
+    - Create the Finder test folder tree on the Mini.
+    - Enable the direct build Finder extension and select representative fixture files
+      before context-menu actions.
+    fixture_paths:
+    - Tests/Fixtures/customer-ui/finder-actions/
+  user_inputs:
+  - Open custom action management.
+  - Create, edit, disable, re-enable, and delete a custom action.
+  - Create or import a custom action whose title matches a built-in action.
+  expected_outputs:
+  - Custom action edits persist after relaunch.
+  - Built-in reconciliation does not overwrite same-title custom action content.
+  - Deleted custom actions disappear from the menu.
+- id: settings-tabs-and-status
+  title: Settings tabs and status actions are reachable
+  surfaces:
+  - Settings window
+  steps:
+  - Open Settings.
+  - Select every tab.
+  - Click Refresh Status.
+  - Exercise License, Updates, About, Report a Bug, and Quit access points where non-destructive.
+  assertions:
+  - Each tab renders the expected content.
+  - Refresh Status updates without hanging.
+  - Non-destructive support/update/license/about actions open the intended surface.
+  evidence:
+  - Mini AX click transcript
+  - Screenshot of settings state
+  required_proof_level: fixture_completion
+  required_evidence_types:
+  - fixture
+  - state_receipt
+  historical_failure_classes:
+  - install_update_packaging
+  - persistence_or_relaunch_reset
+  - layout_visual_regression
+  - pro_basic_gate_drift
+  - external_integration_stub
+  - state_count_drift
+  - docs_promise_drift
+  - activation_noop
+  functional_state:
+    description: Seeded Finder fixture with representative files, folders, images,
+      code files, and enabled Basic/Pro action states.
+    setup_steps:
+    - Create the Finder test folder tree on the Mini.
+    - Enable the direct build Finder extension and select representative fixture files
+      before context-menu actions.
+    fixture_paths:
+    - Tests/Fixtures/customer-ui/finder-actions/
+  user_inputs:
+  - Open Settings.
+  - Select every tab.
+  - Click Refresh Status.
+  expected_outputs:
+  - Each tab renders the expected content.
+  - Refresh Status updates without hanging.
+  - Non-destructive support/update/license/about actions open the intended surface.
+- id: finder-menu-action-execution
+  title: Finder context menu actions execute correctly
+  surfaces:
+  - Finder right-click extension menu
+  - Dock/menu-bar access points
+  steps:
+  - Seed representative files and folders.
+  - Trigger representative Essentials, Files & Folders, Images & Media, Coding, and
+    Advanced actions.
+  assertions:
+  - Each action type performs the promised file operation or opens the promised destination.
+  - Actions only appear for matching file types and selection counts.
+  - No action triggers unexpected permission prompts in normal use.
+  evidence:
+  - Mini Finder execution transcript
+  - Before/after file-state receipt
+  required_proof_level: full_runtime_completion
+  required_evidence_types:
+  - mini_click
+  - screenshot
+  - fixture
+  - log
+  historical_failure_classes:
+  - context_menu_extension_missing
+  - duplicate_or_stale_menu_item
+  - menu_entry_missing
+  - permission_recovery_dead_end
+  - data_loss_or_unexpected_mutation
+  - layout_visual_regression
+  - pro_basic_gate_drift
+  - state_count_drift
+  - docs_promise_drift
+  - activation_noop
+  functional_state:
+    description: Seeded Finder fixture with representative files, folders, images,
+      code files, and enabled Basic/Pro action states.
+    setup_steps:
+    - Create the Finder test folder tree on the Mini.
+    - Enable the direct build Finder extension and select representative fixture files
+      before context-menu actions.
+    fixture_paths:
+    - Tests/Fixtures/customer-ui/finder-actions/
+  user_inputs:
+  - Seed representative files and folders.
+  - Trigger representative Essentials, Files & Folders, Images & Media, Coding, and
+    Advanced actions.
+  expected_outputs:
+  - Each action type performs the promised file operation or opens the promised destination.
+  - Actions only appear for matching file types and selection counts.
+  - No action triggers unexpected permission prompts in normal use.
+- id: fresh-direct-install-finder-availability
+  title: Fresh direct installs expose Finder actions without hidden monitored-folder
+    setup
+  surfaces:
+  - Direct-download first launch
+  - Finder right-click extension menu
+  - Settings monitored folders
+  steps:
+  - Move any existing monitored_folders.json aside on the Mini instead of deleting
+    it.
+  - Launch the signed direct Release build.
+  - Verify SaneClick computes default monitored folders for Desktop, Documents, Downloads,
+    Pictures, and Movies when the storage file is missing.
+  - Right-click a representative image under Downloads and verify SaneClick actions
+    are available.
+  - Open Settings and verify monitored-folder controls are visible in the direct build.
+  assertions:
+  - Missing monitored-folder storage cannot leave the direct app with an empty FinderSync
+    directoryURLs set.
+  - Direct users can see and change the folders where SaneClick appears.
+  - Finder Recents is treated as a smart view; users are guided to monitor the backing
+    folder.
+  evidence:
+  - Mini clean-state transcript
+  - Unit guard for direct default monitored folders
+  - Settings render with monitored-folder controls
+  required_proof_level: full_runtime_completion
+  required_evidence_types:
+  - mini_click
+  - screenshot
+  - fixture
+  - log
+  historical_failure_classes:
+  - context_menu_extension_missing
+  - duplicate_or_stale_menu_item
+  - menu_entry_missing
+  - install_update_packaging
+  - data_loss_or_unexpected_mutation
+  - persistence_or_relaunch_reset
+  - layout_visual_regression
+  - state_count_drift
+  - activation_noop
+  functional_state:
+    description: Seeded Finder fixture with representative files, folders, images,
+      code files, and enabled Basic/Pro action states.
+    setup_steps:
+    - Create the Finder test folder tree on the Mini.
+    - Enable the direct build Finder extension and select representative fixture files
+      before context-menu actions.
+    fixture_paths:
+    - Tests/Fixtures/customer-ui/finder-actions/
+  user_inputs:
+  - Move any existing monitored_folders.json aside on the Mini instead of deleting
+    it.
+  - Launch the signed direct Release build.
+  - Verify SaneClick computes default monitored folders for Desktop, Documents, Downloads,
+    Pictures, and Movies when the storage file is missing.
+  expected_outputs:
+  - Missing monitored-folder storage cannot leave the direct app with an empty FinderSync
+    directoryURLs set.
+  - Direct users can see and change the folders where SaneClick appears.
+  - Finder Recents is treated as a smart view; users are guided to monitor the backing
+    folder.
