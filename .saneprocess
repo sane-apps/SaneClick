@@ -144,7 +144,7 @@ appstore:
     mac:
       supports_dark_interface: true
   screenshots:
-    macos: docs/screenshots/*.png
+    macos: docs/screenshots/appstore-*.png
   contact:
     name: "Stephan Joseph"
     phone: "+17277589785"

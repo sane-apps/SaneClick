@@ -69,4 +69,4 @@ You can:
 
 ## Contact
 
-Questions about privacy? Open an issue on [GitHub](https://github.com/sane-apps/SaneClick/issues/new?template=bug_report.md).
+Questions about privacy? Email [hi@saneapps.com](mailto:hi@saneapps.com). Do not put private file names, paths, or customer data in a public issue.

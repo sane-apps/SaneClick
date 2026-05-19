@@ -1,6 +1,17 @@
 # SaneClick Outreach Configuration
 # Target: Users frustrated with complex, broken, or expensive Finder context menu tools
 
+project:
+  name: "SaneClick"
+  url: "https://saneclick.com"
+  github: "sane-apps/SaneClick"
+  tagline: "Bring sanity to your right-click menu."
+
+positioning:
+  one_liner: "Private native Finder actions without Automator clutter."
+  pricing: "Basic is free. Pro is $9.99 once."
+  privacy_claim: "SaneClick keeps scripts, selected files, and automation contents on the Mac."
+
 competitors:
   # Direct Open Source Competitors
   - "zerodivisi0n/FinderMenu"
@@ -30,6 +41,43 @@ launches:
     status: "submitted"
     notes: "17.8k star repo. PR #697."
 
+launch_calendar:
+  timezone: "America/New_York"
+  classification: "released_but_no_meaningful_public_launch_yet"
+  rule: "Do not treat curated GitHub listings as a launch. SaneClick needs a crisp Finder workflow demo and current pricing proof before a PH/HN/IH push."
+  current_release_state:
+    version: "1.1.9"
+    status: "live_direct_download"
+    evidence: "SESSION_HANDOFF says v1.1.9 is published and Mini customer UI sweep/contract passed."
+  required_before_meaningful_launch:
+    - "Human visual approval plus hosted/public URL for the 30-second Finder workflow video candidate."
+    - "Final Product Hunt maker comment and day-of reply checklist approved."
+  scheduled:
+    - date: "2026-05-22"
+      time: "10:00"
+      channel: "Launch readiness package"
+      status: "scheduled_by_cross_product_launch_ops"
+      action: "Audit website/pricing/screenshots, build or update the short demo asset, and prepare Product Hunt/HN/IH copy. Do not submit yet."
+      gate: "Must pass Mini verify/customer UI proof and visual marketing review before public launch scheduling."
+      success_metric: "Launch package exists with assets, pricing proof, and exact day-of checklist."
+    - date: "2026-05-26"
+      time: "10:00"
+      channel: "Product Hunt / HN decision"
+      status: "conditional"
+      action: "If launch package is complete and no urgent support issues are open, schedule Product Hunt for the next Tuesday-Thursday 12:01 AM PT or choose Show HN as fallback."
+      gate: "No same-day blast without package and active monitoring window."
+      success_metric: "Public launch scheduled with exact time or explicit no-go reason."
+  last_launch_readiness:
+    date: "2026-05-18"
+    status: "no_go"
+    launch_readiness_exit: 1
+    blocker_summary:
+      - "Human visual approval plus a hosted/public URL are still missing for the 30-second Finder workflow video candidate."
+      - "The Product Hunt maker comment and day-of reply checklist still need final exact approval."
+      - "The staged docs/videos workflow clip still needs public website deploy after visual approval."
+      - "Mini launch gate remains no-go even though release_preflight only has warning-level cleanup (3 warnings)."
+    next_date: "2026-05-22"
+
 search_terms:
   # Problems
   - "finder context menu custom script"
@@ -49,3 +97,66 @@ search_terms:
   - "finder extension script runner"
   - "execute bash script finder selection"
   - "finder context menu submenu"
+
+x_search_keywords:
+  - "\"Finder\" \"right click\" (script OR automation OR action) lang:en -is:retweet"
+  - "\"Automator\" \"Quick Action\" (broken OR missing OR slow) macOS lang:en -is:retweet"
+  - "\"Service Station\" alternative macOS lang:en -is:retweet"
+  - "\"Finder context menu\" macOS automation lang:en -is:retweet"
+
+public_posting_policy:
+  approval_required: true
+  disclosure_required: "Always say 'I built SaneClick' when recommending it publicly."
+
+launch_package:
+  status: "package_defined_assets_needed"
+  audience: "Mac users who want useful Finder right-click actions without maintaining Automator workflows."
+  problem: "Finder automation is powerful but buried in fragile Quick Actions, scripts, and context menu clutter."
+  solution: "SaneClick adds a native script library and right-click actions for files, folders, images, media, coding, and paths."
+  primary_story: "Useful Finder automation as a clean native app, not a pile of hidden Automator services."
+  pricing_proof: "Website shows Basic free and Pro $9.99 once; free ZIP and Buy Pro links are present."
+  privacy_proof: "Privacy page says scripts, files, and automations stay on the Mac and are not sent to SaneApps."
+  proof_assets:
+    - type: "website_hero"
+      status: "current"
+      path: "docs/index.html"
+    - type: "og_image"
+      status: "current"
+      path: "docs/images/og-image.png"
+    - type: "product_screenshot"
+      status: "current"
+      path: "docs/screenshots/finder-context-menu.png"
+    - type: "product_screenshot"
+      status: "current"
+      path: "docs/screenshots/script-library.png"
+    - type: "video"
+      status: "local_candidate_generated_and_staged_needs_review_and_public_deploy"
+      path: "Videos/saneclick-finder-workflow-30s.mp4"
+      website_path: "docs/videos/saneclick-finder-workflow-30s.mp4"
+      sha256: "c4c73b2f16a2ad75b6b02da93b273497ee870d255059ab3459426f8e88e0ce23"
+    - type: "product_hunt_thumbnail"
+      status: "current"
+      path: "docs/images/product-hunt-thumbnail-240.png"
+    - type: "product_hunt_gallery"
+      status: "current"
+      path: "docs/images/product-hunt-gallery-01.png"
+    - type: "product_hunt_gallery"
+      status: "current"
+      path: "docs/images/product-hunt-gallery-02.png"
+    - type: "product_hunt_gallery"
+      status: "current"
+      path: "docs/images/product-hunt-gallery-03.png"
+  channel_plan:
+    product_hunt: "prepare_after_video_review_and_final_copy_approval"
+    hacker_news: "fallback_show_hn_after_package_review"
+    indie_hackers: "feedback_story_after_package_review"
+    x_replies: "targeted_only_when_user_reports_Finder_or_Automator_pain"
+  go_no_go:
+    rule: "No public launch until the 30-45 second Finder workflow video, PH gallery, exact maker comment, pricing proof, and fresh Mini customer UI receipt exist."
+  weak_launch_blockers:
+    - "30-second video is staged in docs/videos but still needs human visual approval and public website deploy."
+    - "Product Hunt maker comment and day-of reply checklist still need final approval."
+
+x_tweet_drafts:
+  - "I built SaneClick for Mac users who keep fighting Finder Quick Actions and Automator. It puts useful file actions and scripts in one private native right-click menu. Basic is free; Pro is a one-time unlock."
+  - "If Finder automation feels hidden, fragile, or scattered across scripts, SaneClick gives it a real native home: right-click actions, script library, paths, images, media, and coding helpers."

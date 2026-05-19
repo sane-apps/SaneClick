@@ -1,10 +1,22 @@
 # Session Handoff — SaneClick
 
-**Last updated:** 2026-05-12
+**Last updated:** 2026-05-18
 **Current public version:** `1.1.9` (build `1109`)
 **Next release candidate:** none pending
 
 ## Current State
+
+- 2026-05-17 App Store listing repair attempt:
+  - Generated valid macOS App Store screenshots at `docs/screenshots/appstore-*.png` and updated `.saneprocess` so the dormant/live-listing reference no longer points at general docs screenshots with invalid Apple sizes.
+  - Verified the new screenshot set with `appstore_submit.rb --test-screenshots`; all four resize to Apple's `2880x1800` desktop target.
+  - App Store Connect refused screenshot replacement on live `1.1.5` because the version is `READY_FOR_SALE`; current live screenshots are locked.
+  - ASC currently has no `1.1.9` App Store version/build. Listing current direct `1.1.9` on the App Store requires a new App Store build/upload path, not metadata-only sync.
+
+- 2026-05-15 launch-readiness cleanup:
+  - Mini customer UI sweep passed and regenerated `outputs/customer_ui_action_receipt.json` with 8 covered actions.
+  - Mini release preflight passed with warning-level cleanup only: uncommitted files, UserDefaults/migration upgrade-path warning, and pending customer emails.
+  - The 30-second Finder workflow video was staged to `docs/videos/saneclick-finder-workflow-30s.mp4` with SHA-256 `c4c73b2f16a2ad75b6b02da93b273497ee870d255059ab3459426f8e88e0ce23`.
+  - Remaining launch blockers are marketing/public-action gates: human visual approval and public deploy for the video, plus final Product Hunt maker comment and day-of checklist approval.
 
 - 2026-05-12 SaneClick `1.1.9` fresh direct-install Finder menu proof is recorded:
   - GitHub release `v1.1.9` is published and `docs/appcast.xml` / `docs/index.html` point at `https://dist.saneclick.com/updates/SaneClick-1.1.9.zip`.
@@ -128,3 +140,37 @@ Apple released **Xcode 26.3 RC** with `xcrun mcpbridge` — official MCP replaci
 - **Model strategy:** Sonnet for subagents, Opus for main, Gemini Flash for memory
 - **Skills are global:** `~/.claude/skills/` is single source of truth, never duplicate into projects
 - **One Sparkle key:** `7Pl/8cwfb2vm4Dm65AByslkMCScLJ9tbGlwGGx81qYU=` for ALL SaneApps
+
+## Launch Ops Calendar - 2026-05-14
+
+- `.outreach.yml` now classifies SaneClick as `released_but_no_meaningful_public_launch_yet`.
+- Scheduled gates: launch readiness package on 2026-05-22 and PH/HN decision on 2026-05-26. Required before launch: Finder workflow demo, pricing/checkout consistency, PH package, and fresh Mini customer UI proof less than 7 days old.
+- 2026-05-14 launch package update: generated local Product Hunt candidate assets at `docs/images/product-hunt-thumbnail-240.png` and `docs/images/product-hunt-gallery-01.png` through `03.png`, plus `Videos/saneclick-finder-workflow-30s.mp4` (1920x1080, 30.0s). Current launch gate remains no-go until human visual approval/hosting, final maker comment/day-of reply checklist approval, and fresh Mini verify/customer UI proof.
+
+## Launch Ops Calendar - 2026-05-15
+
+- Mini `./scripts/SaneMaster.rb launch_readiness` returned nonzero for SaneClick. No Product Hunt, Hacker News, directory, or public reply action was taken.
+- Launch blockers remain unchanged: the Finder workflow video is still local-only and needs human visual approval plus hosting, the Product Hunt maker comment/day-of reply checklist still needs exact approval, and the launch gate still reports the fresh Mini verify/customer UI receipt requirement as incomplete.
+- Existing listing URLs remain support surfaces only: [awesome-mac](https://github.com/jaywcjlove/awesome-mac/pull/1804) and [awesome-macOS](https://github.com/iCHAIT/awesome-macOS/pull/697).
+- Next launch-ops date stays 2026-05-22 for the package pass.
+
+## Launch Ops Calendar - 2026-05-16
+
+- Mini `./scripts/SaneMaster.rb launch_readiness --json` stayed red for SaneClick, so no Product Hunt, Hacker News, directory, or public reply action was taken.
+- Fresh blocker receipt: the Finder workflow video still needs human visual approval plus hosting, the Product Hunt maker comment/day-of reply checklist still needs exact approval, and the launch package is still incomplete even though `release_preflight` remains green with 3 warnings.
+- Existing listing URLs remain support surfaces only: [awesome-mac](https://github.com/jaywcjlove/awesome-mac/pull/1804) and [awesome-macOS](https://github.com/iCHAIT/awesome-macOS/pull/697).
+- Next launch-ops date stays 2026-05-22 for the package pass.
+
+## Launch Ops Calendar - 2026-05-17
+
+- Mini `./scripts/SaneMaster.rb launch_readiness --json` stayed red again for SaneClick, so no Product Hunt, Hacker News, directory, or public reply action was taken.
+- Fresh blocker receipt: the Finder workflow video still lacks human visual approval and a hosted public URL, the staged `docs/videos` asset is not deployed publicly yet, the Product Hunt maker comment/day-of reply checklist still needs exact approval, and `release_preflight` remains warning-only with 3 warnings.
+- Existing listing URLs remain support surfaces only: [awesome-mac](https://github.com/jaywcjlove/awesome-mac/pull/1804) and [awesome-macOS](https://github.com/iCHAIT/awesome-macOS/pull/697).
+- Next launch-ops date stays 2026-05-22 for the launch-package pass.
+
+## Launch Ops Calendar - 2026-05-18
+
+- Mini `./scripts/SaneMaster.rb launch_readiness` stayed red again for SaneClick, so no Product Hunt, Hacker News, directory, or public reply action was taken.
+- Fresh blocker receipt: the Finder workflow video still lacks human visual approval and a hosted public URL, the staged `docs/videos` asset is not deployed publicly yet, the Product Hunt maker comment/day-of reply checklist still needs exact approval, and `release_preflight` remains warning-only with 3 warnings.
+- Existing listing URLs remain support surfaces only: [awesome-mac](https://github.com/jaywcjlove/awesome-mac/pull/1804) and [awesome-macOS](https://github.com/iCHAIT/awesome-macOS/pull/697).
+- Next launch-ops date stays 2026-05-22 for the launch-package pass.

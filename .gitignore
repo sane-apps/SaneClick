@@ -158,6 +158,13 @@ marketing/*.jpg
 
 # Fastlane
 fastlane/coverage/
+
+# Local agent/research artifacts
+.claude/research.md
+.claude/.gitignore
+.codex/research.md
+DOCS_AUDIT_FINDINGS.md
+2025-01-01
 fastlane/keys/
 fastlane/report.xml
 fastlane/test_output/
