@@ -4,6 +4,12 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.1.10] - 2026-05-19
+
+Fixes license-key paste reliability in activation and settings.
+
+---
+
 ## [1.1.9] - 2026-05-11
 
 Restores Finder action availability for direct-download installs, shows monitored-folder setup in the app, and keeps built-in actions organized after updates.
