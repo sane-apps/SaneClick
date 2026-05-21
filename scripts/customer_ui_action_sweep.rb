@@ -87,13 +87,13 @@ class CustomerUIActionSweep
 
   SCREENSHOT_BY_ACTION = {
     'main-category-enable-all' => 'outputs/customer-ui/content-all-actions.png',
-    'main-individual-action-toggle' => 'outputs/customer-ui/content-all-actions.png',
+    'main-individual-action-toggle' => 'docs/screenshots/main-window.png',
     'script-library-global-enable-all' => 'outputs/customer-ui/library-all-actions.png',
-    'script-library-category-controls' => 'outputs/customer-ui/library-all-actions.png',
-    'custom-action-management' => 'outputs/customer-ui/library-all-actions.png',
+    'script-library-category-controls' => 'docs/screenshots/script-library.png',
+    'custom-action-management' => 'docs/screenshots/appstore-script-library.png',
     'settings-tabs-and-status' => 'outputs/customer-ui/settings-fresh-direct-monitored-folders.png',
     'finder-menu-action-execution' => 'outputs/customer-ui/finder-menu-image-file.png',
-    'fresh-direct-install-finder-availability' => 'outputs/customer-ui/fresh-direct-downloads-menu-clean.png'
+    'fresh-direct-install-finder-availability' => 'outputs/customer-ui/fresh-direct-downloads-menu.png'
   }.freeze
 
   SAFE_SURFACE_NOTES = {
