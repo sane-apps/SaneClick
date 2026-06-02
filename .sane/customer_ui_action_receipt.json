@@ -2,9 +2,9 @@
   "app": "SaneClick",
   "status": "passed",
   "host": "mini",
-  "generated_at": "2026-05-13T22:30:19Z",
+  "generated_at": "2026-06-02T02:33:48Z",
   "manifest_sha256": "28011cabd6dc94ba39f18d2f86f217df8d5e3daf0c8c47f8842d463719c722d3",
-  "source_fingerprint": "02243e4f0942a98b4b1a4c43c3524c77fef98f2da72f22098146d7dd3a6123c2",
+  "source_fingerprint": "5c50ad48e57277b0defdb615e1f143b37b6b8c4e99609e82281b0d2b104a3a42",
   "tested_action_ids": [
     "main-category-enable-all",
     "main-individual-action-toggle",
@@ -40,8 +40,8 @@
           "Toggle Enable All off and on for Essentials, Files & Folders, Images & Media, Coding, and Advanced."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json",
-          "outputs/customer-ui/finder-menu-image-file.png"
+          "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json",
+          "outputs/customer-ui/content-all-actions.png"
         ]
       },
       "evidence": [
@@ -52,12 +52,12 @@
         {
           "type": "mini_click",
           "detail": "Mini interaction transcript for main-category-enable-all",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json"
         },
         {
           "type": "screenshot",
           "detail": "Mini visual proof for main-category-enable-all",
-          "path": "outputs/customer-ui/finder-menu-image-file.png"
+          "path": "outputs/customer-ui/content-all-actions.png"
         }
       ]
     },
@@ -83,8 +83,8 @@
           "Toggle at least one built-in action off and on from the main detail list."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json",
-          "outputs/customer-ui/finder-menu-image-file.png"
+          "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json",
+          "docs/screenshots/main-window.png"
         ]
       },
       "evidence": [
@@ -95,12 +95,12 @@
         {
           "type": "mini_click",
           "detail": "Mini interaction transcript for main-individual-action-toggle",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json"
         },
         {
           "type": "screenshot",
           "detail": "Mini visual proof for main-individual-action-toggle",
-          "path": "outputs/customer-ui/finder-menu-image-file.png"
+          "path": "docs/screenshots/main-window.png"
         }
       ]
     },
@@ -128,8 +128,8 @@
           "Toggle All Scripts off and on."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json",
-          "outputs/customer-ui/finder-menu-image-file.png"
+          "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json",
+          "outputs/customer-ui/library-all-actions.png"
         ]
       },
       "evidence": [
@@ -140,12 +140,12 @@
         {
           "type": "mini_click",
           "detail": "Mini interaction transcript for script-library-global-enable-all",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json"
         },
         {
           "type": "screenshot",
           "detail": "Mini visual proof for script-library-global-enable-all",
-          "path": "outputs/customer-ui/finder-menu-image-file.png"
+          "path": "outputs/customer-ui/library-all-actions.png"
         }
       ]
     },
@@ -173,8 +173,8 @@
           "Toggle category Enable All controls and individual rows where available."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json",
-          "outputs/customer-ui/finder-menu-image-file.png"
+          "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json",
+          "docs/screenshots/script-library.png"
         ]
       },
       "evidence": [
@@ -185,12 +185,12 @@
         {
           "type": "mini_click",
           "detail": "Mini interaction transcript for script-library-category-controls",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json"
         },
         {
           "type": "screenshot",
           "detail": "Mini visual proof for script-library-category-controls",
-          "path": "outputs/customer-ui/finder-menu-image-file.png"
+          "path": "docs/screenshots/script-library.png"
         }
       ]
     },
@@ -220,9 +220,9 @@
           "Create or import a custom action whose title matches a built-in action."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json",
-          "outputs/customer-ui/finder-menu-image-file.png",
-          "outputs/customer-ui/sweep-20260513T223019Z/fixture-state.json"
+          "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json",
+          "docs/screenshots/appstore-script-library.png",
+          "outputs/customer-ui/sweep-20260602T023348Z/fixture-state.json"
         ]
       },
       "evidence": [
@@ -233,17 +233,17 @@
         {
           "type": "mini_click",
           "detail": "Mini interaction transcript for custom-action-management",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json"
         },
         {
           "type": "screenshot",
           "detail": "Mini visual proof for custom-action-management",
-          "path": "outputs/customer-ui/finder-menu-image-file.png"
+          "path": "docs/screenshots/appstore-script-library.png"
         },
         {
           "type": "fixture",
           "detail": "Established representative Finder fixture state for custom-action-management",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/fixture-state.json"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/fixture-state.json"
         },
         {
           "type": "safe_surface_boundary",
@@ -278,9 +278,9 @@
           "Exercise License, Updates, About, Report a Bug, and Quit access points where non-destructive."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260513T223019Z/fixture-state.json",
-          "outputs/customer-ui/sweep-20260513T223019Z/settings-state-receipt.json",
-          "outputs/customer-ui/finder-menu-image-file.png"
+          "outputs/customer-ui/sweep-20260602T023348Z/fixture-state.json",
+          "outputs/customer-ui/sweep-20260602T023348Z/settings-state-receipt.json",
+          "outputs/customer-ui/settings-fresh-direct-monitored-folders.png"
         ]
       },
       "evidence": [
@@ -291,17 +291,17 @@
         {
           "type": "fixture",
           "detail": "Established representative Finder fixture state for settings-tabs-and-status",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/fixture-state.json"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/fixture-state.json"
         },
         {
           "type": "state_receipt",
           "detail": "Settings/status state receipt for settings-tabs-and-status",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/settings-state-receipt.json"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/settings-state-receipt.json"
         },
         {
           "type": "screenshot",
           "detail": "Mini visual proof for settings-tabs-and-status",
-          "path": "outputs/customer-ui/finder-menu-image-file.png"
+          "path": "outputs/customer-ui/settings-fresh-direct-monitored-folders.png"
         },
         {
           "type": "safe_surface_boundary",
@@ -333,10 +333,10 @@
           "Trigger representative Essentials, Files & Folders, Images & Media, Coding, and Advanced actions."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json",
+          "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json",
           "outputs/customer-ui/finder-menu-image-file.png",
-          "outputs/customer-ui/sweep-20260513T223019Z/fixture-state.json",
-          "outputs/customer-ui/sweep-20260513T223019Z/finder-action-execution.log"
+          "outputs/customer-ui/sweep-20260602T023348Z/fixture-state.json",
+          "outputs/customer-ui/sweep-20260602T023348Z/finder-action-execution.log"
         ]
       },
       "evidence": [
@@ -347,7 +347,7 @@
         {
           "type": "mini_click",
           "detail": "Mini interaction transcript for finder-menu-action-execution",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json"
         },
         {
           "type": "screenshot",
@@ -357,12 +357,12 @@
         {
           "type": "fixture",
           "detail": "Established representative Finder fixture state for finder-menu-action-execution",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/fixture-state.json"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/fixture-state.json"
         },
         {
           "type": "log",
           "detail": "Runtime log for finder-menu-action-execution",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/finder-action-execution.log"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/finder-action-execution.log"
         },
         {
           "type": "safe_surface_boundary",
@@ -398,10 +398,10 @@
           "Open Settings and verify monitored-folder controls are visible in the direct build."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json",
-          "outputs/customer-ui/fresh-direct-downloads-menu-clean.png",
-          "outputs/customer-ui/sweep-20260513T223019Z/fixture-state.json",
-          "outputs/customer-ui/sweep-20260513T223019Z/fresh-direct-install.log"
+          "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json",
+          "outputs/customer-ui/fresh-direct-downloads-menu.png",
+          "outputs/customer-ui/sweep-20260602T023348Z/fixture-state.json",
+          "outputs/customer-ui/sweep-20260602T023348Z/fresh-direct-install.log"
         ]
       },
       "evidence": [
@@ -412,22 +412,22 @@
         {
           "type": "mini_click",
           "detail": "Mini interaction transcript for fresh-direct-install-finder-availability",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/mini-click-transcript.json"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/mini-click-transcript.json"
         },
         {
           "type": "screenshot",
           "detail": "Mini visual proof for fresh-direct-install-finder-availability",
-          "path": "outputs/customer-ui/fresh-direct-downloads-menu-clean.png"
+          "path": "outputs/customer-ui/fresh-direct-downloads-menu.png"
         },
         {
           "type": "fixture",
           "detail": "Established representative Finder fixture state for fresh-direct-install-finder-availability",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/fixture-state.json"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/fixture-state.json"
         },
         {
           "type": "log",
           "detail": "Runtime log for fresh-direct-install-finder-availability",
-          "path": "outputs/customer-ui/sweep-20260513T223019Z/fresh-direct-install.log"
+          "path": "outputs/customer-ui/sweep-20260602T023348Z/fresh-direct-install.log"
         },
         {
           "type": "safe_surface_boundary",
@@ -437,8 +437,12 @@
     }
   },
   "screenshots": [
+    "outputs/customer-ui/content-all-actions.png",
+    "outputs/customer-ui/library-all-actions.png",
     "outputs/customer-ui/finder-menu-image-file.png",
+    "outputs/customer-ui/finder-menu-folder.png",
     "outputs/customer-ui/fresh-direct-downloads-menu-clean.png",
+    "outputs/customer-ui/settings-fresh-direct-monitored-folders.png",
     "docs/screenshots/main-window.png",
     "docs/screenshots/finder-context-menu.png",
     "docs/screenshots/script-library.png"
