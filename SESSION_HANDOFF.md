@@ -1,11 +1,32 @@
 # Session Handoff — SaneClick
 
-**Last updated:** 2026-05-18
-**Current public version:** `1.1.9` (build `1109`)
+**Last updated:** 2026-06-08
+**Current public version:** `1.1.10` (build `1110`)
 **Next release candidate:** none pending
 
 ## Current State
 
+- 2026-06-08 status refresh:
+  - Live validation reports SaneClick `1.1.10` is consistent across appcast,
+    website, webhook, Homebrew, and Lemon.
+  - Release readiness is still blocked only by stale customer UI QA proof after
+    source fingerprint changes; rerun the Mini customer UI sweep when the Mini
+    is physically available.
+  - Open GitHub item remains `sane-apps/SaneClick#6` for folder-based actions;
+    it is an enhancement, not a current release blocker.
+- 2026-05-25 09:33 EDT cross-product launch ops reran canonical Mini
+  `launch_readiness`; it exited `1`, so the overdue launch-package lane stayed
+  no-go and no scheduling, submission, or public posting action was executed.
+  The blockers are unchanged: human visual approval plus a public URL are still
+  missing for `docs/videos/saneclick-finder-workflow-30s.mp4`, the Product Hunt
+  maker comment/day-of checklist still needs exact approval, Mini
+  `release_preflight` still carries `3` warnings, and the shared validation
+  report still flags stale SaneClick customer UI proof. Next checkpoint:
+  `2026-05-26`. No new public URL was created in this run.
+- 2026-05-24 23:23 EDT validation cleanup: Mini `customer_ui_sweep --json`
+  refreshed 8 customer action families at `2026-05-25T03:22:26Z`; strict visual
+  `customer_ui_contract` passed and `release_preflight` passed with warnings
+  only.
 - 2026-05-17 App Store listing repair attempt:
   - Generated valid macOS App Store screenshots at `docs/screenshots/appstore-*.png` and updated `.saneprocess` so the dormant/live-listing reference no longer points at general docs screenshots with invalid Apple sizes.
   - Verified the new screenshot set with `appstore_submit.rb --test-screenshots`; all four resize to Apple's `2880x1800` desktop target.
