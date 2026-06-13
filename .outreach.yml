@@ -60,8 +60,8 @@ launch_calendar:
       action: "Audit website/pricing/screenshots, build or update the short demo asset, and prepare Product Hunt/HN/IH copy. Do not submit yet."
       gate: "Must pass Mini verify/customer UI proof and visual marketing review before public launch scheduling."
       success_metric: "Launch package exists with assets, pricing proof, and exact day-of checklist."
-      last_reviewed: "2026-06-10"
-      result: "Late on 2026-06-10, canonical Mini `launch_readiness --json` reran from the repo root and returned `ok: false`: human visual approval plus a hosted/public URL are still missing for the 30-second Finder workflow video candidate, the Product Hunt maker comment and day-of reply checklist still need final exact approval, the staged docs/videos workflow clip still needs public website deploy after visual approval, and the latest `release_preflight` proof is stale at 16.95 days old with 3 warnings. No scheduling, submission, or public posting action was executed."
+      last_reviewed: "2026-06-13"
+      result: "On 2026-06-13, canonical Mini `launch_readiness --json` reran from the repo root and returned `ok: false`: human visual approval plus a hosted/public URL are still missing for the 30-second Finder workflow video candidate, the Product Hunt maker comment and day-of reply checklist still need final exact approval, the staged docs/videos workflow clip still needs public website deploy after visual approval, and the latest `release_preflight` proof is now stale at 19.42 days old with 3 warnings. No scheduling, submission, or public posting action was executed."
     - date: "2026-05-26"
       time: "10:00"
       channel: "Product Hunt / HN decision"
@@ -69,20 +69,20 @@ launch_calendar:
       action: "If launch package is complete and no urgent support issues are open, schedule Product Hunt for the next Tuesday-Thursday 12:01 AM PT or choose Show HN as fallback."
       gate: "No same-day blast without package and active monitoring window."
       success_metric: "Public launch scheduled with exact time or explicit no-go reason."
-      last_reviewed: "2026-06-10"
-      result: "Late on 2026-06-10, canonical Mini `launch_readiness --json` reran from the repo root and returned `ok: false`: human visual approval plus a hosted/public URL are still missing for the 30-second Finder workflow video candidate, the Product Hunt maker comment and day-of reply checklist still need final exact approval, the staged docs/videos workflow clip still needs public website deploy after visual approval, and the latest `release_preflight` proof is stale at 16.95 days old with 3 warnings. No scheduling, submission, public posting, or public reply action was executed."
+      last_reviewed: "2026-06-13"
+      result: "On 2026-06-13, canonical Mini `launch_readiness --json` reran from the repo root and returned `ok: false`: human visual approval plus a hosted/public URL are still missing for the 30-second Finder workflow video candidate, the Product Hunt maker comment and day-of reply checklist still need final exact approval, the staged docs/videos workflow clip still needs public website deploy after visual approval, and the latest `release_preflight` proof is now stale at 19.42 days old with 3 warnings. No scheduling, submission, public posting, or public reply action was executed."
   last_launch_readiness:
-    date: "2026-06-10"
+    date: "2026-06-13"
     status: "no_go"
     launch_readiness_exit: 1
     blocker_summary:
-      - "Canonical Mini `launch_readiness --json` reran on 2026-06-10 and exited nonzero."
+      - "Canonical Mini `launch_readiness --json` reran on 2026-06-13 and exited nonzero."
       - "Human visual approval plus a hosted/public URL are still missing for the 30-second Finder workflow video candidate."
       - "The Product Hunt maker comment and day-of reply checklist still need final exact approval."
       - "The staged docs/videos workflow clip still needs public website deploy after visual approval."
-      - "Local launch_readiness remains no-go even though `release_preflight` passed; the proof is now 16.95 days old, marked stale, and still carries 3 warnings."
+      - "Mini launch_readiness remains no-go even though `release_preflight` passed; the proof is now 19.42 days old, marked stale, and still carries 3 warnings."
       - "Both overdue launch slots from 2026-05-22 and 2026-05-26 remain blocked because the same packaging and proof blockers still stand."
-    next_date: "2026-06-17"
+    next_date: "2026-06-20"
 
 search_terms:
   # Problems
