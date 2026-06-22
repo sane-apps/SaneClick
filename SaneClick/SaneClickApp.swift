@@ -417,7 +417,7 @@ enum SaneClickWelcomeCopy {
         #if APP_STORE
             "$9.99 once"
         #else
-            "14-day Pro trial, then $9.99 once"
+            "14 days free. No credit card required."
         #endif
     }()
 

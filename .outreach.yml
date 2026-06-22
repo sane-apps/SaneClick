@@ -46,9 +46,9 @@ launch_calendar:
   classification: "released_but_no_meaningful_public_launch_yet"
   rule: "Do not treat curated GitHub listings as a launch. SaneClick needs a crisp Finder workflow demo and current pricing proof before a PH/HN/IH push."
   current_release_state:
-    version: "1.1.10"
+    version: "1.1.11"
     status: "live_direct_download"
-    evidence: "Morning report version consistency on 2026-05-20 shows 1.1.10 live across appcast, website, webhook, and Homebrew."
+    evidence: "Critical trial rollout check on 2026-06-22 shows 1.1.11 live across appcast, website, webhook, and Homebrew."
   required_before_meaningful_launch:
     - "Human visual approval plus hosted/public URL for the 30-second Finder workflow video candidate."
     - "Final Product Hunt maker comment and day-of reply checklist approved."

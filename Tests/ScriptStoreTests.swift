@@ -126,6 +126,17 @@ struct ScriptStoreTests {
         store.deleteScript(disabled)
     }
 
+    @Test("Basic execution only allows universal built-in scripts")
+    func basicExecutionOnlyAllowsUniversalBuiltIns() throws {
+        let universal = try #require(ScriptLibrary.availableScripts(for: .universal).first).toScript()
+        let proLibrary = try #require(ScriptLibrary.availableScripts(for: .developer).first).toScript()
+        let custom = Script(name: universal.name, type: .bash, content: "echo tampered")
+
+        #expect(ActionCatalog.isAvailableInBasic(universal))
+        #expect(ActionCatalog.isAvailableInBasic(proLibrary) == false)
+        #expect(ActionCatalog.isAvailableInBasic(custom) == false)
+    }
+
     @Test("Library activation is live and deduplicates stale installed copies")
     func libraryActivationDeduplicatesStaleInstalledCopies() async throws {
         let store = createTestStore()

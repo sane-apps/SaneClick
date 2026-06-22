@@ -46,6 +46,13 @@ enum ActionCatalog {
             .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
     }
 
+    static func isAvailableInBasic(_ script: Script) -> Bool {
+        guard let libraryScript = ScriptLibrary.libraryScript(named: script.name),
+              libraryScript.category == .universal
+        else { return false }
+        return isLibraryRecord(script, matching: libraryScript)
+    }
+
     static func isLibraryRecord(_ script: Script, matching libraryScript: ScriptLibrary.LibraryScript) -> Bool {
         guard script.name == libraryScript.name,
               script.type == libraryScript.type

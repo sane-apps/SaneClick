@@ -187,6 +187,15 @@ final class ScriptExecutor: @unchecked Sendable {
             // Find and execute the script on main thread
             DispatchQueue.main.async {
                 if let script = ScriptStore.shared.scripts.first(where: { $0.id == request.scriptId }) {
+                    guard self.canExecute(script: script) else {
+                        NSLog("[ScriptExecutor] Blocked Pro-only script without Pro access: \(script.name)")
+                        Task { @MainActor in
+                            Self.lastResult = .failure(scriptName: script.name, error: "This action requires SaneClick Pro.")
+                            NotificationCenter.default.post(name: Self.executionCompletedNotification, object: nil)
+                        }
+                        return
+                    }
+
                     NSLog("[ScriptExecutor] Found script: \(script.name), executing...")
                     Task {
                         await self.execute(script: script, withPaths: request.paths)
@@ -201,6 +210,34 @@ final class ScriptExecutor: @unchecked Sendable {
         } catch {
             NSLog("[ScriptExecutor] Failed to process pending execution: \(error)")
         }
+    }
+
+    @MainActor
+    private func canExecute(script: Script) -> Bool {
+        guard !currentLicenseService().isPro else { return true }
+        return ActionCatalog.isAvailableInBasic(script)
+    }
+
+    @MainActor
+    private func currentLicenseService() -> LicenseService {
+        let service: LicenseService
+        #if APP_STORE
+            service = LicenseService(
+                appName: "SaneClick",
+                purchaseBackend: .appStore(productID: "com.saneclick.app.pro.actions.v4"),
+                keychain: KeychainService(service: "com.saneclick.SaneClick")
+            )
+        #else
+            service = LicenseService(
+                appName: "SaneClick",
+                checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick"),
+                keychain: KeychainService(service: "com.saneclick.SaneClick"),
+                directCopy: LicenseService.DirectCopy.saneClick,
+                proTrial: .init(storageKeyPrefix: "saneclick.pro_trial")
+            )
+        #endif
+        service.checkCachedLicense()
+        return service
     }
 
     /// Remove processed request IDs older than maxProcessedIdAge
