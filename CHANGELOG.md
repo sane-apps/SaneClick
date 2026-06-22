@@ -4,6 +4,12 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.1.11] - 2026-06-22
+
+Pro is now free to try for 14 days. Basic remains included after the trial.
+
+---
+
 ## [1.1.10] - 2026-05-19
 
 Fixes license-key paste reliability in activation and settings.
