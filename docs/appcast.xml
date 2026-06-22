@@ -3,7 +3,27 @@
     <channel>
         <title>SaneClick Changelog</title>
 
-                                                                                                    <item>
+                                                                                                            <item>
+            <title>1.1.12</title>
+            <link>https://saneclick.com/download</link>
+            <pubDate>Mon, 22 Jun 2026 14:39:55 -0400</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:criticalUpdate/>            <description>
+                <![CDATA[
+                <h2>What's New</h2>
+                <ul>
+                <li>Pro is now free to try for 14 days. Basic remains included after the trial.</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.1.12.zip"
+                       sparkle:version="1112"
+                       sparkle:shortVersionString="1.1.12"
+                       length="2458534"
+                       type="application/octet-stream"
+                       sparkle:edSignature="3sJSTY6h0/6bEdBa++QZIvU19EHMslriP9/Ga99tNlJ18R5hC5tRde79i2HgqcXphNFaFcwztLn1YVFF2JteBw=="/>
+        </item>
+<item>
             <title>1.1.11</title>
             <link>https://saneclick.com/download</link>
             <pubDate>Mon, 22 Jun 2026 13:12:11 -0400</pubDate>
