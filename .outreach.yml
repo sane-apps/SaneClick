@@ -60,8 +60,8 @@ launch_calendar:
       action: "Audit website/pricing/screenshots, build or update the short demo asset, and prepare Product Hunt/HN/IH copy. Do not submit yet."
       gate: "Must pass Mini verify/customer UI proof and visual marketing review before public launch scheduling."
       success_metric: "Launch package exists with assets, pricing proof, and exact day-of checklist."
-      last_reviewed: "2026-06-20"
-      result: "On 2026-06-20, canonical Mini `launch_readiness --json` reran from the repo root and returned `ok: false`: human visual approval plus a hosted/public URL are still missing for the 30-second Finder workflow video candidate, the Product Hunt maker comment and day-of reply checklist still need final exact approval, the staged docs/videos workflow clip still needs public website deploy after visual approval, the latest `release_preflight` proof is now stale at 26.42 days old with 3 warnings, and the latest shared validation receipt at `/Users/sj/SaneApps/infra/SaneProcess/outputs/validation/2026-06-20.json` still flags stale SaneClick customer-UI proof. No scheduling, submission, or public posting action was executed."
+      last_reviewed: "2026-06-22"
+      result: "On 2026-06-22, canonical Mini `launch_readiness --json` reran from the repo root and returned `ok: false`: human visual approval plus a hosted/public URL are still missing for the 30-second Finder workflow video candidate, the Product Hunt maker comment and day-of reply checklist still need final exact approval, the staged docs/videos workflow clip still needs public website deploy after visual approval, the latest `release_preflight` proof is now stale at 28.42 days old with 3 warnings, and the fresh 2026-06-22 portfolio validation report still flags stale SaneClick customer-UI proof plus missing transcript/fixture artifacts. No scheduling, submission, or public posting action was executed."
     - date: "2026-05-26"
       time: "10:00"
       channel: "Product Hunt / HN decision"
@@ -69,21 +69,22 @@ launch_calendar:
       action: "If launch package is complete and no urgent support issues are open, schedule Product Hunt for the next Tuesday-Thursday 12:01 AM PT or choose Show HN as fallback."
       gate: "No same-day blast without package and active monitoring window."
       success_metric: "Public launch scheduled with exact time or explicit no-go reason."
-      last_reviewed: "2026-06-20"
-      result: "On 2026-06-20, canonical Mini `launch_readiness --json` reran from the repo root and returned `ok: false`: human visual approval plus a hosted/public URL are still missing for the 30-second Finder workflow video candidate, the Product Hunt maker comment and day-of reply checklist still need final exact approval, the staged docs/videos workflow clip still needs public website deploy after visual approval, the latest `release_preflight` proof is now stale at 26.42 days old with 3 warnings, and the latest shared validation receipt at `/Users/sj/SaneApps/infra/SaneProcess/outputs/validation/2026-06-20.json` still flags stale SaneClick customer-UI proof. No scheduling, submission, public posting, or public reply action was executed."
+      last_reviewed: "2026-06-22"
+      result: "On 2026-06-22, canonical Mini `launch_readiness --json` reran from the repo root and returned `ok: false`: human visual approval plus a hosted/public URL are still missing for the 30-second Finder workflow video candidate, the Product Hunt maker comment and day-of reply checklist still need final exact approval, the staged docs/videos workflow clip still needs public website deploy after visual approval, the latest `release_preflight` proof is now stale at 28.42 days old with 3 warnings, and the fresh 2026-06-22 portfolio validation report still flags stale SaneClick customer-UI proof plus missing transcript/fixture artifacts. No scheduling, submission, public posting, or public reply action was executed."
   last_launch_readiness:
-    date: "2026-06-20"
+    date: "2026-06-22"
     status: "no_go"
     launch_readiness_exit: 1
     blocker_summary:
-      - "Canonical Mini `launch_readiness --json` reran on 2026-06-20 and exited nonzero."
+      - "Canonical Mini `launch_readiness --json` reran on 2026-06-22 and exited nonzero."
       - "Human visual approval plus a hosted/public URL are still missing for the 30-second Finder workflow video candidate."
       - "The Product Hunt maker comment and day-of reply checklist still need final exact approval."
       - "The staged docs/videos workflow clip is still local/staged and still needs human visual approval plus public website deploy."
-      - "Mini launch_readiness remains no-go even though `release_preflight` passed; the proof is now 26.42 days old, marked stale, and still carries 3 warnings."
-      - "The latest shared validation receipt at `/Users/sj/SaneApps/infra/SaneProcess/outputs/validation/2026-06-20.json` still returned `NOT READY FOR RELEASE`, including stale customer-UI proof blockers for SaneClick."
-      - "Both overdue launch slots from 2026-05-22 and 2026-05-26 remain blocked because the same packaging and proof blockers still stand, so no scheduling, submission, public posting, or reply action ran on 2026-06-20."
-    next_date: "2026-06-27"
+      - "Mini launch_readiness remains no-go even though `release_preflight` passed; the proof is now 28.42 days old, marked stale, and still carries 3 warnings."
+      - "The fresh 2026-06-22 portfolio validation report still returned `NOT READY FOR RELEASE`, including stale customer-UI proof plus missing transcript/fixture artifacts for SaneClick."
+      - "Both overdue launch slots from 2026-05-22 and 2026-05-26 remain blocked because the same packaging and proof blockers still stand."
+      - "No scheduling, submission, public posting, or reply action ran on 2026-06-22."
+    next_date: "2026-06-29"
 
 search_terms:
   # Problems
@@ -114,6 +115,14 @@ x_search_keywords:
 public_posting_policy:
   approval_required: true
   disclosure_required: "Always say 'I built SaneClick' when recommending it publicly."
+
+x_tweet_history:
+  - date: "2026-06-21"
+    status: "posted"
+    id: "2068701295049859410"
+    url: "https://x.com/MrSaneApps/status/2068701295049859410"
+    source_url: "https://x.com/i/web/status/2068426932895486398"
+    text: "The problem with Finder automation is the useful part is easy and the setup is ridiculous. If a right-click action depends on PATH, Automator, and remembering where a script lives, normal people will call it broken."
 
 launch_package:
   status: "package_defined_assets_needed"
@@ -167,3 +176,12 @@ launch_package:
 x_tweet_drafts:
   - "Finder Quick Actions are powerful, but Apple made them feel like a scavenger hunt. I built SaneClick because right-clicking a file should be enough to run the scripts and actions you actually use. https://saneclick.com"
   - "Automator is one of those Mac features that is useful and somehow still feels abandoned. SaneClick is my attempt to make file actions feel like they belong in Finder. https://saneclick.com"
+
+x_tweet_history:
+  - date: "2026-06-21"
+    status: "posted"
+    id: "2068701295049859410"
+    url: "https://x.com/MrSaneApps/status/2068701295049859410"
+    source_url: "https://x.com/i/web/status/2068426932895486398"
+    note: "Autonomous X Opportunity Scout standalone post after a strong SaneClick-adjacent Finder automation pain-point query returned no valid summoned-reply target."
+    text: "The problem with Finder automation is the useful part is easy and the setup is ridiculous. If a right-click action depends on PATH, Automator, and remembering where a script lives, normal people will call it broken."

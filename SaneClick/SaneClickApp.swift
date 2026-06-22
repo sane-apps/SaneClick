@@ -248,7 +248,8 @@ struct SaneClickApp: App {
             appName: "SaneClick",
             checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick"),
             keychain: KeychainService(service: "com.saneclick.SaneClick"),
-            directCopy: LicenseService.DirectCopy.saneClick
+            directCopy: LicenseService.DirectCopy.saneClick,
+            proTrial: .init(storageKeyPrefix: "saneclick.pro_trial")
         )
     #endif
     @State private var showWelcomeGate: Bool
@@ -412,7 +413,13 @@ struct MainWindowCaptureView: NSViewRepresentable {
 
 enum SaneClickWelcomeCopy {
     static let basicPrice = "Free"
-    static let proPrice = "$9.99 once"
+    static let proPrice: String = {
+        #if APP_STORE
+            "$9.99 once"
+        #else
+            "14-day Pro trial, then $9.99 once"
+        #endif
+    }()
 
     static let freeFeatures: [(String, String)] = {
         #if APP_STORE
@@ -449,7 +456,7 @@ enum SaneClickWelcomeCopy {
                 .map { ScriptLibrary.availableScripts(for: $0).count }
                 .reduce(0, +)
             return [
-                ("checkmark", "Everything in Basic, plus:"),
+                ("checkmark", "Enjoy 14 days of Pro"),
                 ("folder.badge.plus", "\(proCount) more built-in Finder actions"),
                 ("square.stack.3d.up.fill", "Developer, media, advanced, and organization tools"),
                 ("square.and.pencil", "Build your own custom Finder scripts"),

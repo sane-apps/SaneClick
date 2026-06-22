@@ -632,7 +632,6 @@
             justify-content: center; border-bottom: none; box-shadow: 0 4px 16px var(--accent-glow);
         }
         .mobile-nav-close { position: absolute; top: 20px; right: 24px; background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 8px; font-size: 1.5rem; line-height: 1; z-index: 200; }
-
         /* Responsive */
         @media (max-width: 768px) {
             .hamburger { display: block; }
@@ -688,6 +687,7 @@
         }
 
         .pricing-card.featured {
+            order: -1;
             background:
                 radial-gradient(ellipse at 80% 20%, rgba(79, 143, 250, 0.12) 0%, transparent 50%),
                 linear-gradient(160deg, #0d1830 0%, #0a1225 100%);
@@ -843,30 +843,33 @@
         <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
         <a href="/privacy.html" onclick="toggleMobileNav()">Privacy</a>
         <p class="mobile-nav-section">More SaneApps</p>
-        <a href="https://sanebar.com">SaneBar &mdash; Menu Bar Manager</a>
-        <a href="https://saneclip.com">SaneClip &mdash; Clipboard Manager</a>
-        <a href="https://sanesales.com">SaneSales &mdash; Sales Tracker</a>
-        <a href="https://saneapps.com">See all SaneApps &rarr;</a>
-        <a href="https://dist.saneclick.com/updates/SaneClick-1.1.10.zip" class="mobile-nav-cta" style="background: var(--bg-secondary); border: 1px solid var(--border); box-shadow: none; margin-bottom: 12px;" data-cta="download_free">Download Free</a>
-        <a href="https://go.saneapps.com/buy/saneclick?ref=website-mobile" class="mobile-nav-cta" data-cta="buy_pro">Buy Pro &mdash; $9.99</a>
+        <a href="https://sanebar.com" data-cta="cross_sell_sanebar_mobile">SaneBar &mdash; Menu Bar Manager</a>
+        <a href="https://saneclip.com" data-cta="cross_sell_saneclip_mobile">SaneClip &mdash; Clipboard Manager</a>
+        <a href="https://sanehosts.com" data-cta="cross_sell_sanehosts_mobile">SaneHosts &mdash; Ad &amp; Tracker Blocker</a>
+        <a href="https://saneapps.com" data-cta="cross_sell_saneapps_mobile">See all SaneApps &rarr;</a>
+        <a href="https://dist.saneclick.com/updates/SaneClick-1.1.10.zip" class="mobile-nav-cta" data-cta="download_trial">Download Pro Trial</a>
     </div>
 
     <section class="hero">
         <div class="container">
             <h1 class="animate-in delay-2">Bring <em>Sanity</em> to your Right-Click</h1>
-            <p class="subtitle animate-in delay-3">Stop fighting Finder. Run scripts, convert files, and automate your Mac—directly from the menu.</p>
-
+            <p class="subtitle animate-in delay-3">Stop fighting Finder. Run scripts, convert files, and automate everyday file work right from Finder.</p>
             <div class="trust-badges animate-in delay-3">
                 <span>&#128187; 1,000+ Downloads/Month</span>
                 <span>&#128274; 100% On-Device &middot; &#128176; No Subscriptions &middot; &#128269; 100% Transparent Code</span>
                 <a href="https://github.com/sane-apps/SaneClick/blob/main/PRIVACY.md" target="_blank" rel="noopener">&#128737;&#65039; Privacy by Design</a>
             </div>
+            <div class="animate-in delay-4" style="margin: 22px auto 28px; text-align: center;">
+                <a href="https://dist.saneclick.com/updates/SaneClick-1.1.10.zip" class="pricing-cta pricing-cta-pro" style="display: inline-flex; align-items: center; justify-content: center; width: auto; min-width: 240px;" data-cta="download_trial">Download Pro Trial</a>
+                <p style="color: var(--text-muted); font-size: 0.92rem; margin: 12px 0 6px;">14 days free. No credit card required. Basic remains free after trial.</p>
+                <a href="https://go.saneapps.com/buy/saneclick?ref=website-hero" style="color: var(--accent); font-weight: 700; text-decoration: none;" data-cta="buy_pro">Buy Pro now — $9.99 once</a>
+            </div>
 
             <div class="hero-pricing-grid animate-in delay-4" id="pricing">
                 <div class="pricing-card">
-                    <p class="pricing-label">Basic</p>
+                    <p class="pricing-label">Basic after trial</p>
                     <p class="pricing-price">Free</p>
-                    <p class="pricing-price-note">Forever — no catch</p>
+                    <p class="pricing-price-note">Automatic fallback after 14 days</p>
                     <ul class="pricing-features">
                         <li>9 Essential Finder scripts</li>
                         <li>Copy Path, Open Terminal, and more</li>
@@ -874,19 +877,13 @@
                         <li>Basic Finder extension</li>
                         <li>100% On-Device privacy</li>
                     </ul>
-                    <a href="https://dist.saneclick.com/updates/SaneClick-1.1.10.zip" class="pricing-cta pricing-cta-free" data-cta="download_free">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 6px;">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-                        </svg>
-                        Download Free
-                    </a>
                 </div>
                 <div class="pricing-card featured">
-                    <p class="pricing-label">Pro</p>
+                    <p class="pricing-label">Pro trial</p>
                     <p class="pricing-price">$9.99<span class="price-note">*</span></p>
-                    <p class="pricing-price-note">One-time — yours forever</p>
+                    <p class="pricing-price-note">14 days free. No credit card required.</p>
                     <ul class="pricing-features">
-                        <li>Everything in Basic, plus:</li>
+                        <li>All 53 actions across 5 categories</li>
                         <li class="extra">All 53 built-in actions across 5 categories</li>
                         <li class="extra">Coding tools (Git, JSON, diff, and more)</li>
                         <li class="extra">Image &amp; media scripts (resize, convert, compress)</li>
@@ -896,7 +893,6 @@
                         <li class="extra">Script testing before deployment</li>
                         <li class="extra">Import / export script collections</li>
                     </ul>
-                    <a href="https://go.saneapps.com/buy/saneclick?ref=website-hero" class="pricing-cta pricing-cta-pro" data-cta="buy_pro">Buy Pro</a>
                 </div>
             </div>
             <p class="animate-in delay-5 hero-pricing-footer" style="color: var(--text-muted); font-size: 0.85rem; margin-top: var(--phi-sm); margin-bottom: 14px;">
@@ -1021,7 +1017,7 @@
         <div class="container">
             <h2 class="section-title">The Sane Way to Automate</h2>
             <p class="section-subtitle">Why fight with Automator when you can just right-click?</p>
-            <p class="section-subtitle" style="margin-top: -10px; font-size: 0.95rem;">This table reflects SaneClick Pro. For plan details, see the Basic vs Pro pricing above.</p>
+            <p class="section-subtitle" style="margin-top: -10px; font-size: 0.95rem;">This table reflects SaneClick Pro. Download starts a 14-day Pro trial, then Basic remains free if you do not upgrade.</p>
             <div class="comparison-table-wrapper">
             <table class="comparison-table">
                 <thead>
@@ -1141,15 +1137,15 @@
         <div class="container">
             <div class="sustainability-card">
                 <h2 style="font-family: 'Playfair Display', serif; font-size: 2.25rem; margin-bottom: 20px;">&#128269; 100% Transparent Code &#8800; Free</h2>
-                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 30px;">Great source-available tools die when developers can't sustain them. $9.99 keeps SaneClick alive and actively maintained.</p>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 30px;">Download starts 14 days of Pro. After the trial, keep Pro with a one-time purchase or continue with Basic for free.</p>
                 <div class="sustainability-options">
-                    <a href="https://dist.saneclick.com/updates/SaneClick-1.1.10.zip" class="sustainability-option" data-cta="download_free">
-                        <h4>Download Free</h4>
-                        <p>9 essential Finder scripts, 100% On-Device. No account, no catch.</p>
+                    <a href="https://dist.saneclick.com/updates/SaneClick-1.1.10.zip" class="sustainability-option" data-cta="download_trial">
+                        <h4>Download Pro Trial</h4>
+                        <p>All Finder actions for 14 days. No credit card required; Basic remains free after trial.</p>
                     </a>
                     <a href="https://go.saneapps.com/buy/saneclick?ref=website-sustainability" class="sustainability-option featured" data-cta="buy_pro">
-                        <h4>Upgrade to Pro — $9.99</h4>
-                        <p>Unlock all 50+ scripts, custom editor, and import/export. One-time purchase, yours forever.</p>
+                        <h4>Keep Pro — $9.99</h4>
+                        <p>After your trial, buy once to keep all 50+ scripts, the custom editor, and import/export.</p>
                     </a>
                 </div>
             </div>
@@ -1176,43 +1172,35 @@
     <section class="more-apps">
         <div class="container">
             <h2 class="section-title">More from SaneApps</h2>
-            <p class="more-apps-subtitle">Privacy-first Mac utilities that don't suck</p>
+            <p class="more-apps-subtitle">Simple Mac utilities that respect your time and privacy.</p>
             <div class="more-apps-grid">
-                <a href="https://sanebar.com" class="app-card">
+                <a href="https://sanebar.com" class="app-card" data-cta="cross_sell_sanebar_card">
                     <div class="app-card-header">
                         <img src="images/sanebar-icon.png" alt="SaneBar" class="app-card-icon">
                         <div class="app-card-name">SaneBar</div>
                     </div>
-                    <p class="app-card-tagline">Hide menu bar clutter, lock sensitive icons behind Touch ID, and find any app instantly.</p>
+                    <p class="app-card-tagline">Hide menu bar clutter fast. Lock sensitive icons behind Touch ID and find apps instantly.</p>
                     <span class="app-card-cta">Learn more &rarr;</span>
                 </a>
-                <a href="https://saneclip.com" class="app-card">
+                <a href="https://saneclip.com" class="app-card" data-cta="cross_sell_saneclip_card">
                     <div class="app-card-header">
                         <img src="images/saneclip-icon.png" alt="SaneClip" class="app-card-icon">
                         <div class="app-card-name">SaneClip</div>
                     </div>
-                    <p class="app-card-tagline">Clipboard history that never leaves your Mac. Touch ID protection, instant search, text transforms.</p>
+                    <p class="app-card-tagline">Save clipboard history privately. Touch ID protection, instant search, and quick text tools.</p>
                     <span class="app-card-cta">Learn more &rarr;</span>
                 </a>
-                <a href="https://sanehosts.com" class="app-card">
+                <a href="https://sanehosts.com" class="app-card" data-cta="cross_sell_sanehosts_card">
                     <div class="app-card-header">
                         <img src="images/sanehosts-icon.png" alt="SaneHosts" class="app-card-icon">
                         <div class="app-card-name">SaneHosts</div>
                     </div>
-                    <p class="app-card-tagline">Block ads, trackers, and data collectors at the system level. No Terminal. No commands. Works in every app.</p>
-                    <span class="app-card-cta">Learn more &rarr;</span>
-                </a>
-                <a href="https://sanesales.com" class="app-card">
-                    <div class="app-card-header">
-                        <img src="images/sanesales-icon.png" alt="SaneSales" class="app-card-icon">
-                        <div class="app-card-name">SaneSales</div>
-                    </div>
-                    <p class="app-card-tagline">Track your indie sales from LemonSqueezy, Gumroad, and Stripe in one beautiful, native app. Revenue charts, CSV export, 100% On-Device.</p>
+                    <p class="app-card-tagline">Block ads and trackers across your Mac with a simple local app. No Terminal. No commands.</p>
                     <span class="app-card-cta">Learn more &rarr;</span>
                 </a>
             </div>
             <div class="more-apps-hub">
-                <a href="https://saneapps.com">See all apps at saneapps.com &rarr;</a>
+                <a href="https://saneapps.com" data-cta="cross_sell_saneapps_hub">See all apps at saneapps.com &rarr;</a>
             </div>
         </div>
     </section>

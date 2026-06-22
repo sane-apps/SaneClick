@@ -484,7 +484,6 @@
 				};
 			};
 			buildConfigurationList = 443D26756623B9CA79D2727C /* Build configuration list for PBXProject "SaneClick" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -508,6 +507,7 @@
 				A1C361B2823E62E30B2E47AA /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			preferredProjectObjectVersion = 77;
+			productRefGroup = 5B3DA58DADBE6A8D7B5F2080 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -1531,7 +1531,7 @@
 			repositoryURL = "https://github.com/sane-apps/SaneUI.git";
 			requirement = {
 				kind = revision;
-				revision = 5a9c02152cfe155e3d6d06c1a489ef426e2250e1;
+				revision = 9e98b9f1e93400c5d5fe164b57643513bf7f16c3;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
