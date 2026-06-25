@@ -191,9 +191,17 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
             FinderControl.restartFinder()
         }
     #else
-        private var directUpdateAction: Selector? { nil }
-        private var directUpdateConfigurator: ((NSMenuItem) -> Void)? { nil }
-        private var directRestartFinderAction: Selector? { nil }
+        private var directUpdateAction: Selector? {
+            nil
+        }
+
+        private var directUpdateConfigurator: ((NSMenuItem) -> Void)? {
+            nil
+        }
+
+        private var directRestartFinderAction: Selector? {
+            nil
+        }
     #endif
 
     @MainActor @objc private func openSettings() {
@@ -220,7 +228,7 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
         NSApplication.shared.terminate(nil)
     }
 
-    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+    func applicationShouldHandleReopen(_: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         if !flag {
             if let openWindow = WindowActionStorage.shared.openWindow {
                 openWindow("main")
@@ -274,7 +282,6 @@ struct SaneClickApp: App {
         if ProcessInfo.processInfo.arguments.contains("--saneclick-execution-requested") {
             ScriptExecutor.shared.processPendingExecutionAfterLaunchRequest()
         }
-
     }
 
     var body: some Scene {
@@ -396,7 +403,7 @@ struct WindowActionCapture: ViewModifier {
 }
 
 struct MainWindowCaptureView: NSViewRepresentable {
-    func makeNSView(context: Context) -> NSView {
+    func makeNSView(context _: Context) -> NSView {
         let view = NSView()
         DispatchQueue.main.async {
             WindowActionStorage.shared.captureMainWindow(view.window)
@@ -404,7 +411,7 @@ struct MainWindowCaptureView: NSViewRepresentable {
         return view
     }
 
-    func updateNSView(_ nsView: NSView, context: Context) {
+    func updateNSView(_ nsView: NSView, context _: Context) {
         DispatchQueue.main.async {
             WindowActionStorage.shared.captureMainWindow(nsView.window)
         }
@@ -415,7 +422,7 @@ enum SaneClickWelcomeCopy {
     static let basicPrice = "Free"
     static let proPrice: String = {
         #if APP_STORE
-            "$9.99 once"
+            "$14.99 once"
         #else
             "14 days free. No credit card required."
         #endif

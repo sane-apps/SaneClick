@@ -118,7 +118,7 @@ struct AppStoreScreenshotRenderTests {
 
                     QuickActionRow(
                         title: "Unlock Pro",
-                        subtitle: "Get 9 more built-in file actions • $9.99 once",
+                        subtitle: "Get 9 more built-in file actions • $14.99 once",
                         icon: "lock.open.fill",
                         color: .teal
                     ) {}
@@ -208,7 +208,7 @@ struct AppStoreScreenshotRenderTests {
                             .foregroundStyle(.white.opacity(0.92))
 
                         HStack(spacing: 12) {
-                            Button("Unlock Pro — $9.99") {}
+                            Button("Unlock Pro — $14.99") {}
                                 .buttonStyle(.borderedProminent)
                                 .tint(.teal)
 
@@ -366,7 +366,7 @@ struct AppStoreScreenshotRenderTests {
                                 HStack(spacing: 5) {
                                     Image(systemName: "lock.fill")
                                         .font(.system(size: 11))
-                                    Text("Unlock Pro — $9.99")
+                                    Text("Unlock Pro — $14.99")
                                         .font(.system(size: 12, weight: .semibold))
                                 }
                                 .foregroundStyle(.white)

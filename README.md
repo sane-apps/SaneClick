@@ -8,7 +8,7 @@
 [![macOS 14+](https://img.shields.io/badge/macOS-14%2B-brightgreen)](https://www.apple.com/macos)
 [![Listed on macOS apps list](https://img.shields.io/badge/Listed%20on-macOS--apps--list%20(40k%E2%98%85)-black)](https://github.com/serhii-londar/open-source-mac-os-apps)
 
-> **⭐ Star this repo if it's useful!** · **[Download Basic free](https://saneclick.com)** · **[Unlock Pro for $9.99 once](https://saneclick.com)** · Keeps development alive
+> **⭐ Star this repo if it's useful!** · **[Download Basic free](https://saneclick.com)** · **[Unlock Pro for $14.99 once](https://saneclick.com)** · Keeps development alive
 
 ![SaneClick Main Window](docs/screenshots/main-window.png)
 
