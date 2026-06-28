@@ -3,7 +3,6 @@ import Foundation
 /// Curated library of pre-built scripts for SaneClick
 /// Organized by category for easy browsing and installation
 enum ScriptLibrary {
-
     /// Script template for library items
     struct LibraryScript {
         let name: String
@@ -76,33 +75,33 @@ enum ScriptLibrary {
 
         var icon: String {
             switch self {
-            case .universal: return "star.fill"
-            case .organization: return "folder.fill"
-            case .designer: return "photo.on.rectangle.angled"
-            case .developer: return "chevron.left.forwardslash.chevron.right"
-            case .powerUser: return "wrench.and.screwdriver.fill"
+            case .universal: "star.fill"
+            case .organization: "folder.fill"
+            case .designer: "photo.on.rectangle.angled"
+            case .developer: "chevron.left.forwardslash.chevron.right"
+            case .powerUser: "wrench.and.screwdriver.fill"
             }
         }
 
         var description: String {
             switch self {
-            case .universal: return "Everyday actions everyone needs"
-            case .organization: return "Sort, rename, and manage files"
-            case .designer: return "Resize, convert, and edit images"
-            case .developer: return "Tools for writing code"
-            case .powerUser: return "Compression, hashing, system tools"
+            case .universal: "Everyday actions everyone needs"
+            case .organization: "Sort, rename, and manage files"
+            case .designer: "Resize, convert, and edit images"
+            case .developer: "Tools for writing code"
+            case .powerUser: "Compression, hashing, system tools"
             }
         }
 
         /// Semantic color name for SwiftUI
-            /// Meanings: blue=essential, green=safe, pink=creative, teal=technical, orange=warning
+        /// Meanings: blue=essential, green=safe, pink=creative, teal=technical, orange=warning
         var colorName: String {
             switch self {
-            case .universal: return "blue"
-            case .organization: return "green"
-            case .designer: return "pink"
-            case .developer: return "purple"
-            case .powerUser: return "orange"
+            case .universal: "blue"
+            case .organization: "green"
+            case .designer: "pink"
+            case .developer: "purple"
+            case .powerUser: "orange"
             }
         }
     }
@@ -280,6 +279,49 @@ enum ScriptLibrary {
             fileExtensions: [],
             category: .universal,
             description: "Allow file to be run as a program"
+        ),
+        LibraryScript(
+            name: "Copy as File URL",
+            type: .bash,
+            content: "# Runs natively via SaneClick (Copy as File URL).",
+            icon: "link",
+            appliesTo: .allItems,
+            fileExtensions: [],
+            category: .universal,
+            description: "Copy the item as a file:// URL"
+        ),
+        LibraryScript(
+            name: "Copy Filename without Extension",
+            type: .bash,
+            content: "# Runs natively via SaneClick (Copy Filename without Extension).",
+            icon: "textformat.alt",
+            appliesTo: .allItems,
+            fileExtensions: [],
+            maxSelection: 1,
+            category: .universal,
+            description: "Copy the filename without its extension"
+        ),
+        LibraryScript(
+            name: "Copy Parent Folder Path",
+            type: .bash,
+            content: "# Runs natively via SaneClick (Copy Parent Folder Path).",
+            icon: "folder",
+            appliesTo: .allItems,
+            fileExtensions: [],
+            maxSelection: 1,
+            category: .universal,
+            description: "Copy the path of the enclosing folder"
+        ),
+        LibraryScript(
+            name: "Copy as Markdown Link",
+            type: .bash,
+            content: "# Runs natively via SaneClick (Copy as Markdown Link).",
+            icon: "text.badge.plus",
+            appliesTo: .allItems,
+            fileExtensions: [],
+            maxSelection: 1,
+            category: .universal,
+            description: "Copy the item as a Markdown link"
         )
     ]
 
@@ -641,6 +683,59 @@ enum ScriptLibrary {
             fileExtensions: ["png"],
             category: .designer,
             description: "Create @2x retina version from current size"
+        ),
+        LibraryScript(
+            name: "Copy Text from Image",
+            type: .bash,
+            content: "# Runs natively via SaneClick (Copy Text from Image).",
+            icon: "text.viewfinder",
+            appliesTo: .filesOnly,
+            fileExtensions: imageExtensions,
+            category: .designer,
+            description: "Recognize text in images and copy it"
+        ),
+        LibraryScript(
+            name: "Save Text from Image",
+            type: .bash,
+            content: "# Runs natively via SaneClick (Save Text from Image).",
+            icon: "doc.text.viewfinder",
+            appliesTo: .filesOnly,
+            fileExtensions: imageExtensions,
+            category: .designer,
+            description: "Recognize text and save a .txt next to each image"
+        ),
+        LibraryScript(
+            name: "Combine Images into PDF",
+            type: .bash,
+            content: "# Runs natively via SaneClick (Combine Images into PDF).",
+            icon: "doc.on.doc",
+            appliesTo: .filesOnly,
+            fileExtensions: imageExtensions,
+            minSelection: 2,
+            category: .designer,
+            description: "Merge selected images into a single PDF"
+        ),
+        LibraryScript(
+            name: "Split PDF into Pages",
+            type: .bash,
+            content: "# Runs natively via SaneClick (Split PDF into Pages).",
+            icon: "doc.on.doc.fill",
+            appliesTo: .filesOnly,
+            fileExtensions: ["pdf"],
+            maxSelection: 1,
+            category: .designer,
+            description: "Split a PDF into one file per page"
+        ),
+        LibraryScript(
+            name: "PDF to Images",
+            type: .bash,
+            content: "# Runs natively via SaneClick (PDF to Images).",
+            icon: "photo.stack",
+            appliesTo: .filesOnly,
+            fileExtensions: ["pdf"],
+            maxSelection: 1,
+            category: .designer,
+            description: "Render each PDF page as a PNG image"
         )
     ]
 
@@ -1073,11 +1168,11 @@ enum ScriptLibrary {
     /// Get scripts for a specific category
     static func scripts(for category: ScriptCategory) -> [LibraryScript] {
         switch category {
-        case .universal: return universalScripts
-        case .developer: return developerScripts
-        case .designer: return designerScripts
-        case .powerUser: return powerUserScripts
-        case .organization: return organizationScripts
+        case .universal: universalScripts
+        case .developer: developerScripts
+        case .designer: designerScripts
+        case .powerUser: powerUserScripts
+        case .organization: organizationScripts
         }
     }
 

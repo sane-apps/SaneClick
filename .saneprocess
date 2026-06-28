@@ -110,19 +110,20 @@ appstore:
   metadata:
     macos:
       subtitle: "Right-Click File Tools"
-      promotional_text: "Add native Finder actions to the folders you choose. Free includes 9 core actions; Pro adds batch rename, hashing, and more built-in file tools."
+      promotional_text: "Add native Finder actions to the folders you choose. Free includes 13 core actions; Pro adds OCR, PDF tools, batch rename, hashing, and more built-in file tools."
       description: >-
         Add native right-click actions to the folders you choose in Finder.
 
         SaneClick keeps your Finder context menu focused by only showing actions inside the folders you monitor. Copy paths, create text files, reveal items, rename in batches, hash files, and work faster without leaving Finder.
 
         Free includes:
-        • 9 built-in Finder actions
+        • 13 built-in Finder actions
         • Monitored folders
         • Finder Sync actions inside those selected folders
 
         Pro unlock adds:
-        • 9 more built-in Finder actions
+        • 14 more built-in Finder actions
+        • OCR text recognition and PDF tools
         • Batch rename and advanced file and folder tools
         • MD5 and SHA-256 hashing
         • Restore purchases across your Macs
@@ -137,8 +138,8 @@ appstore:
   iap:
     display_name: "SaneClick Pro Access"
     price_usd: 9.99
-    description: "Unlock 9 more built-in file actions."
-    review_note: "SaneClick Pro Access is a one-time non-consumable StoreKit purchase. It adds 9 more built-in native file actions, including advanced hashing and extra file and folder utilities. It does not unlock scripts, external checkout, or license keys."
+    description: "Unlock 14 more built-in file actions."
+    review_note: "SaneClick Pro Access is a one-time non-consumable StoreKit purchase. It adds 14 more built-in native file actions, including OCR text recognition, PDF tools, advanced hashing, and extra file and folder utilities. It does not unlock scripts, external checkout, or license keys."
   accessibility_declarations:
     publish: true
     mac:

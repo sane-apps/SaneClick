@@ -134,7 +134,7 @@ struct ContentView: View {
                     if !licenseService.isPro {
                         QuickActionRow(
                             title: "Unlock Pro",
-                            subtitle: "Get 9 more built-in file actions • \(licenseService.displayPriceLabel) once",
+                            subtitle: "Get 14 more built-in file actions • \(licenseService.displayPriceLabel) once",
                             icon: "lock.open.fill",
                             color: .teal
                         ) {
@@ -331,12 +331,12 @@ struct ContentView: View {
 
                     if isLocked {
                         // Unlock button for Pro categories
-                    Button {
-                        proUpsellFeature = proFeatureForCategory(category)
-                    } label: {
-                        HStack(spacing: 6) {
-                            Image(systemName: "lock.fill")
-                                .font(.system(size: 12))
+                        Button {
+                            proUpsellFeature = proFeatureForCategory(category)
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "lock.fill")
+                                    .font(.system(size: 12))
                                 Text("Unlock Pro — \(licenseService.displayPriceLabel)")
                                     .font(.system(size: 13, weight: .semibold))
                             }

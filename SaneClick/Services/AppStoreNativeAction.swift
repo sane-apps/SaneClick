@@ -1,8 +1,10 @@
 import AppKit
 import CryptoKit
 import Foundation
+import PDFKit
+import Vision
 
-enum AppStoreNativeAction: String, CaseIterable, Sendable {
+enum AppStoreNativeAction: String, CaseIterable {
     case copyPath = "Copy Path"
     case copyFilename = "Copy Filename"
     case openInTerminal = "Open in Terminal"
@@ -21,6 +23,54 @@ enum AppStoreNativeAction: String, CaseIterable, Sendable {
     case renameWithSequence = "Rename with Sequence"
     case lowercaseFilenames = "Lowercase Filenames"
     case replaceSpacesWithUnderscores = "Replace Spaces with Underscores"
+    // Native-only actions (no shell equivalent): these run through the native
+    // executor on BOTH the direct and App Store builds.
+    case copyTextFromImage = "Copy Text from Image"
+    case saveTextFromImage = "Save Text from Image"
+    case combineImagesIntoPDF = "Combine Images into PDF"
+    case splitPDFIntoPages = "Split PDF into Pages"
+    case pdfToImages = "PDF to Images"
+    case copyFileURL = "Copy as File URL"
+    case copyFilenameNoExtension = "Copy Filename without Extension"
+    case copyParentPath = "Copy Parent Folder Path"
+    case copyMarkdownLink = "Copy as Markdown Link"
+
+    /// Actions that have no shell/AppleScript equivalent (OCR, PDF) or are
+    /// cleaner native (path variants). These route through the native executor
+    /// on the direct build as well as the App Store build.
+    var requiresNativeRuntime: Bool {
+        switch self {
+        case .copyTextFromImage,
+             .saveTextFromImage,
+             .combineImagesIntoPDF,
+             .splitPDFIntoPages,
+             .pdfToImages,
+             .copyFileURL,
+             .copyFilenameNoExtension,
+             .copyParentPath,
+             .copyMarkdownLink:
+            true
+        case .copyPath,
+             .copyFilename,
+             .openInTerminal,
+             .newTextFile,
+             .deleteDSStoreFiles,
+             .duplicateWithTimestamp,
+             .getFileInfo,
+             .revealInFinder,
+             .makeExecutable,
+             .md5Hash,
+             .sha256Hash,
+             .createFolderFromSelection,
+             .flattenFolder,
+             .organizeByExtension,
+             .organizeByDate,
+             .renameWithSequence,
+             .lowercaseFilenames,
+             .replaceSpacesWithUnderscores:
+            false
+        }
+    }
 
     init?(script: Script) {
         guard let action = Self(rawValue: script.name),
@@ -45,7 +95,11 @@ enum AppStoreActionCatalog {
         .duplicateWithTimestamp,
         .getFileInfo,
         .revealInFinder,
-        .makeExecutable
+        .makeExecutable,
+        .copyFileURL,
+        .copyFilenameNoExtension,
+        .copyParentPath,
+        .copyMarkdownLink
     ]
 
     static let proActions: [AppStoreNativeAction] = [
@@ -57,7 +111,12 @@ enum AppStoreActionCatalog {
         .organizeByDate,
         .renameWithSequence,
         .lowercaseFilenames,
-        .replaceSpacesWithUnderscores
+        .replaceSpacesWithUnderscores,
+        .copyTextFromImage,
+        .saveTextFromImage,
+        .combineImagesIntoPDF,
+        .splitPDFIntoPages,
+        .pdfToImages
     ]
 }
 
@@ -101,6 +160,24 @@ enum AppStoreNativeActionExecutor {
             return try renameItems(urls) { $0.lowercased() }
         case .replaceSpacesWithUnderscores:
             return try renameItems(urls) { $0.replacingOccurrences(of: " ", with: "_") }
+        case .copyTextFromImage:
+            return try copyTextFromImage(urls)
+        case .saveTextFromImage:
+            return try saveTextFromImage(urls)
+        case .combineImagesIntoPDF:
+            return try combineImagesIntoPDF(urls)
+        case .splitPDFIntoPages:
+            return try splitPDFIntoPages(urls)
+        case .pdfToImages:
+            return try pdfToImages(urls)
+        case .copyFileURL:
+            return try copyFileURL(urls)
+        case .copyFilenameNoExtension:
+            return try copyFilenameNoExtension(urls)
+        case .copyParentPath:
+            return try copyParentPath(urls)
+        case .copyMarkdownLink:
+            return try copyMarkdownLink(urls)
         }
     }
 
@@ -228,12 +305,11 @@ enum AppStoreNativeActionExecutor {
         }
 
         let data = try Data(contentsOf: url, options: .mappedIfSafe)
-        let hash: String
-        switch algorithm {
+        let hash: String = switch algorithm {
         case .md5:
-            hash = Insecure.MD5.hash(data: data).map { String(format: "%02x", $0) }.joined()
+            Insecure.MD5.hash(data: data).map { String(format: "%02x", $0) }.joined()
         case .sha256:
-            hash = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+            SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
         }
 
         try copyToPasteboard(hash)
@@ -399,6 +475,238 @@ enum AppStoreNativeActionExecutor {
         }
 
         return "Renamed \(renamed) item(s)."
+    }
+
+    // MARK: - OCR (Vision)
+
+    private static func copyTextFromImage(_ urls: [URL]) throws -> String {
+        let images = imageURLsSortedByFilename(urls)
+        guard !images.isEmpty else {
+            throw ScriptError.executionFailed("No image selected.")
+        }
+
+        var lines: [String] = []
+        for url in images {
+            try lines.append(contentsOf: recognizeText(in: url))
+        }
+
+        let text = lines.joined(separator: "\n")
+        guard !text.isEmpty else {
+            return "No text found in the selected image(s)."
+        }
+
+        try copyToPasteboard(text)
+        return text
+    }
+
+    private static func saveTextFromImage(_ urls: [URL]) throws -> String {
+        let images = imageURLsSortedByFilename(urls)
+        guard !images.isEmpty else {
+            throw ScriptError.executionFailed("No image selected.")
+        }
+
+        var written = 0
+        for url in images {
+            let lines = try recognizeText(in: url)
+            let text = lines.joined(separator: "\n")
+            guard !text.isEmpty else { continue }
+
+            let destinationURL = uniqueDestinationURL(
+                in: url.deletingLastPathComponent(),
+                preferredName: url.deletingPathExtension().lastPathComponent,
+                pathExtension: "txt"
+            )
+            try text.write(to: destinationURL, atomically: true, encoding: .utf8)
+            written += 1
+        }
+
+        guard written > 0 else {
+            return "No text found in the selected image(s)."
+        }
+
+        return "Saved text for \(written) image(s)."
+    }
+
+    private static func recognizeText(in url: URL) throws -> [String] {
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
+              let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil)
+        else {
+            throw ScriptError.executionFailed("Could not read image: \(url.lastPathComponent)")
+        }
+
+        let request = VNRecognizeTextRequest()
+        request.recognitionLevel = .accurate
+        request.usesLanguageCorrection = true
+
+        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        try handler.perform([request])
+
+        guard let observations = request.results else { return [] }
+        return observations.compactMap { $0.topCandidates(1).first?.string }
+    }
+
+    // MARK: - PDF (PDFKit)
+
+    private static func combineImagesIntoPDF(_ urls: [URL]) throws -> String {
+        let images = imageURLsSortedByFilename(urls)
+        guard let firstImage = images.first else {
+            throw ScriptError.executionFailed("No image selected.")
+        }
+
+        let document = PDFDocument()
+        var pageIndex = 0
+        for url in images {
+            guard let nsImage = NSImage(contentsOf: url),
+                  let page = PDFPage(image: nsImage)
+            else { continue }
+            document.insert(page, at: pageIndex)
+            pageIndex += 1
+        }
+
+        guard pageIndex > 0 else {
+            throw ScriptError.executionFailed("None of the selected images could be read.")
+        }
+
+        let destinationURL = uniqueDestinationURL(
+            in: firstImage.deletingLastPathComponent(),
+            preferredName: "Combined",
+            pathExtension: "pdf"
+        )
+        guard document.write(to: destinationURL) else {
+            throw ScriptError.executionFailed("Failed to write the combined PDF.")
+        }
+
+        return "Created \(destinationURL.lastPathComponent) (\(pageIndex) page(s))."
+    }
+
+    private static func splitPDFIntoPages(_ urls: [URL]) throws -> String {
+        let pdfURL = try firstPDF(in: urls)
+        guard let document = PDFDocument(url: pdfURL) else {
+            throw ScriptError.executionFailed("Could not read PDF: \(pdfURL.lastPathComponent)")
+        }
+
+        let baseName = pdfURL.deletingPathExtension().lastPathComponent
+        let directory = pdfURL.deletingLastPathComponent()
+        var written = 0
+
+        for index in 0 ..< document.pageCount {
+            guard let page = document.page(at: index) else { continue }
+            let singlePageDocument = PDFDocument()
+            guard let copiedPage = page.copy() as? PDFPage else { continue }
+            singlePageDocument.insert(copiedPage, at: 0)
+
+            let pageNumber = String(format: "%03d", index + 1)
+            let destinationURL = uniqueDestinationURL(
+                in: directory,
+                preferredName: "\(baseName)-\(pageNumber)",
+                pathExtension: "pdf"
+            )
+            if singlePageDocument.write(to: destinationURL) {
+                written += 1
+            }
+        }
+
+        guard written > 0 else {
+            throw ScriptError.executionFailed("The PDF has no pages to split.")
+        }
+
+        return "Split into \(written) page(s)."
+    }
+
+    private static func pdfToImages(_ urls: [URL]) throws -> String {
+        let pdfURL = try firstPDF(in: urls)
+        guard let document = PDFDocument(url: pdfURL) else {
+            throw ScriptError.executionFailed("Could not read PDF: \(pdfURL.lastPathComponent)")
+        }
+
+        let baseName = pdfURL.deletingPathExtension().lastPathComponent
+        let directory = pdfURL.deletingLastPathComponent()
+        let dpi: CGFloat = 144
+        let scale = dpi / 72
+        var written = 0
+
+        for index in 0 ..< document.pageCount {
+            guard let page = document.page(at: index) else { continue }
+            let bounds = page.bounds(for: .mediaBox)
+            let pixelSize = NSSize(width: bounds.width * scale, height: bounds.height * scale)
+            guard pixelSize.width >= 1, pixelSize.height >= 1 else { continue }
+
+            let thumbnail = page.thumbnail(of: pixelSize, for: .mediaBox)
+            guard let tiffData = thumbnail.tiffRepresentation,
+                  let bitmap = NSBitmapImageRep(data: tiffData),
+                  let pngData = bitmap.representation(using: .png, properties: [:])
+            else { continue }
+
+            let pageNumber = String(format: "%03d", index + 1)
+            let destinationURL = uniqueDestinationURL(
+                in: directory,
+                preferredName: "\(baseName)-\(pageNumber)",
+                pathExtension: "png"
+            )
+            try pngData.write(to: destinationURL)
+            written += 1
+        }
+
+        guard written > 0 else {
+            throw ScriptError.executionFailed("The PDF has no pages to render.")
+        }
+
+        return "Rendered \(written) image(s)."
+    }
+
+    private static func firstPDF(in urls: [URL]) throws -> URL {
+        guard let pdfURL = urls.first(where: { $0.pathExtension.lowercased() == "pdf" }) else {
+            throw ScriptError.executionFailed("No PDF selected.")
+        }
+        return pdfURL
+    }
+
+    private static func imageURLsSortedByFilename(_ urls: [URL]) -> [URL] {
+        urls
+            .filter { imageExtensions.contains($0.pathExtension.lowercased()) }
+            .sorted { $0.lastPathComponent.localizedCaseInsensitiveCompare($1.lastPathComponent) == .orderedAscending }
+    }
+
+    private static let imageExtensions: Set<String> = [
+        "jpg", "jpeg", "png", "heic", "heif", "tiff", "tif", "gif", "bmp", "webp"
+    ]
+
+    // MARK: - Copy path variants
+
+    private static func copyFileURL(_ urls: [URL]) throws -> String {
+        guard !urls.isEmpty else {
+            throw ScriptError.executionFailed("No item selected.")
+        }
+        let value = urls.map(\.absoluteString).joined(separator: "\n")
+        try copyToPasteboard(value)
+        return value
+    }
+
+    private static func copyFilenameNoExtension(_ urls: [URL]) throws -> String {
+        guard let url = urls.first else {
+            throw ScriptError.executionFailed("No item selected.")
+        }
+        let value = url.deletingPathExtension().lastPathComponent
+        try copyToPasteboard(value)
+        return value
+    }
+
+    private static func copyParentPath(_ urls: [URL]) throws -> String {
+        guard let url = urls.first else {
+            throw ScriptError.executionFailed("No item selected.")
+        }
+        let value = url.deletingLastPathComponent().path
+        try copyToPasteboard(value)
+        return value
+    }
+
+    private static func copyMarkdownLink(_ urls: [URL]) throws -> String {
+        guard let url = urls.first else {
+            throw ScriptError.executionFailed("No item selected.")
+        }
+        let value = "[\(url.lastPathComponent)](\(url.absoluteString))"
+        try copyToPasteboard(value)
+        return value
     }
 
     private static func copyToPasteboard(_ string: String) throws {

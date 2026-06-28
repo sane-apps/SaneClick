@@ -6,7 +6,7 @@ import SaneUI
 private let executorLogger = Logger(subsystem: "com.saneclick.SaneClick", category: "ScriptExecutor")
 
 /// Result of script execution for UI feedback
-struct ScriptExecutionResult: Sendable {
+struct ScriptExecutionResult {
     let scriptName: String
     let success: Bool
     let output: String
@@ -257,13 +257,17 @@ final class ScriptExecutor: @unchecked Sendable {
         #if APP_STORE
             result = executeAppStoreAction(script: script, paths: paths)
         #else
-            result = switch script.type {
-            case .bash:
-                await executeBash(content: script.content, paths: paths)
-            case .applescript:
-                await executeAppleScript(content: script.content, paths: paths)
-            case .automator:
-                await executeAutomator(workflowPath: script.content, paths: paths)
+            if let nativeAction = AppStoreNativeAction(script: script), nativeAction.requiresNativeRuntime {
+                result = executeNativeAction(nativeAction, paths: paths)
+            } else {
+                result = switch script.type {
+                case .bash:
+                    await executeBash(content: script.content, paths: paths)
+                case .applescript:
+                    await executeAppleScript(content: script.content, paths: paths)
+                case .automator:
+                    await executeAutomator(workflowPath: script.content, paths: paths)
+                }
             }
         #endif
 
@@ -454,6 +458,20 @@ final class ScriptExecutor: @unchecked Sendable {
                 return .failure(.launchFailed(error.localizedDescription))
             }
         }
+
+        /// Runs a native-only action (OCR/PDF/copy-path) on the direct build.
+        /// The direct build is non-sandboxed, so no `MonitoredFolders.beginAccess`
+        /// scope is needed — these actions only read, copy to the clipboard, or
+        /// write new sidecar files next to the source.
+        private func executeNativeAction(_ action: AppStoreNativeAction, paths: [String]) -> Result<String, ScriptError> {
+            do {
+                return try .success(AppStoreNativeActionExecutor.execute(action, paths: paths))
+            } catch let error as ScriptError {
+                return .failure(error)
+            } catch {
+                return .failure(.executionFailed(error.localizedDescription))
+            }
+        }
     #else
 
         private func executeAppStoreAction(script: Script, paths: [String]) -> Result<String, ScriptError> {
@@ -467,7 +485,7 @@ final class ScriptExecutor: @unchecked Sendable {
             defer { accessScope.stop() }
 
             do {
-                return .success(try AppStoreNativeActionExecutor.execute(action, paths: paths))
+                return try .success(AppStoreNativeActionExecutor.execute(action, paths: paths))
             } catch let error as ScriptError {
                 return .failure(error)
             } catch {

@@ -118,7 +118,16 @@ struct ScriptLibraryTests {
 
     @Test("Bash scripts use proper arguments")
     func bashScriptsUseArguments() {
-        let bashScripts = ScriptLibrary.allScripts.filter { $0.type == .bash }
+        // Native-runtime actions (OCR/PDF/copy-path variants) run through the
+        // native executor on both builds; their `.bash` content is an inert,
+        // never-executed placeholder, so it does not reference shell arguments.
+        let bashScripts = ScriptLibrary.allScripts.filter { script in
+            guard script.type == .bash else { return false }
+            if let action = AppStoreNativeAction(rawValue: script.name), action.requiresNativeRuntime {
+                return false
+            }
+            return true
+        }
 
         for script in bashScripts {
             // Most bash scripts should reference $@ or $1

@@ -1,9 +1,9 @@
 import AppKit
 import Foundation
+@testable import SaneClick
 import SaneUI
 import SwiftUI
 import Testing
-@testable import SaneClick
 
 @MainActor
 struct AppStoreScreenshotRenderTests {
@@ -68,7 +68,7 @@ struct AppStoreScreenshotRenderTests {
     private func screenshotOutputDirectory() throws -> URL {
         let rawOutputDir =
             ProcessInfo.processInfo.environment["SANECLICK_SCREENSHOT_DIR"]?
-            .trimmingCharacters(in: .whitespacesAndNewlines)
+                .trimmingCharacters(in: .whitespacesAndNewlines)
 
         if let rawOutputDir, !rawOutputDir.isEmpty {
             return URL(fileURLWithPath: rawOutputDir, isDirectory: true)
@@ -76,8 +76,7 @@ struct AppStoreScreenshotRenderTests {
 
         if let hintedOutputDir = try? String(contentsOf: outputHintFile, encoding: .utf8)
             .trimmingCharacters(in: .whitespacesAndNewlines),
-            !hintedOutputDir.isEmpty
-        {
+            !hintedOutputDir.isEmpty {
             return URL(fileURLWithPath: hintedOutputDir, isDirectory: true)
         }
 
@@ -99,7 +98,7 @@ struct AppStoreScreenshotRenderTests {
         .preferredColorScheme(.dark)
     }
 
-    private func mainWindowShowcaseView(licenseService: LicenseService) -> some View {
+    private func mainWindowShowcaseView(licenseService _: LicenseService) -> some View {
         let essentials = Array(ScriptLibrary.availableScripts(for: .universal).prefix(8))
 
         return HStack(spacing: 0) {
@@ -118,7 +117,7 @@ struct AppStoreScreenshotRenderTests {
 
                     QuickActionRow(
                         title: "Unlock Pro",
-                        subtitle: "Get 9 more built-in file actions • $14.99 once",
+                        subtitle: "Get 14 more built-in file actions • $14.99 once",
                         icon: "lock.open.fill",
                         color: .teal
                     ) {}
@@ -361,8 +360,7 @@ struct AppStoreScreenshotRenderTests {
 
                             Spacer()
 
-                            Button {
-                            } label: {
+                            Button {} label: {
                                 HStack(spacing: 5) {
                                     Image(systemName: "lock.fill")
                                         .font(.system(size: 11))
@@ -415,7 +413,7 @@ struct AppStoreScreenshotRenderTests {
         .clipShape(Capsule())
     }
 
-    private func renderPNG<Content: View>(_ view: Content, size: CGSize, to url: URL) throws {
+    private func renderPNG(_ view: some View, size: CGSize, to url: URL) throws {
         let controller = NSHostingController(rootView: view.frame(width: size.width, height: size.height))
 
         let window = NSWindow(

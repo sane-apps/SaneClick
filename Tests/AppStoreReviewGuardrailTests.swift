@@ -1,8 +1,8 @@
 import AppKit
 import Foundation
+@testable import SaneClick
 import SaneUI
 import Testing
-@testable import SaneClick
 
 @MainActor
 private final class MenuActionTarget: NSObject {
@@ -153,7 +153,7 @@ struct AppStoreReviewGuardrailTests {
 
         #expect(productId == "com.saneclick.app.pro.actions.v4")
         #expect(displayName == "SaneClick Pro Access")
-        #expect(description == "Unlock 9 more built-in file actions.")
+        #expect(description == "Unlock 14 more built-in file actions.")
         #expect(description.localizedCaseInsensitiveContains("one-time purchase") == false)
     }
 
@@ -176,8 +176,8 @@ struct AppStoreReviewGuardrailTests {
         let basic = Set(AppStoreActionCatalog.basicActions)
         let pro = Set(AppStoreActionCatalog.proActions)
 
-        #expect(basic.count == 9)
-        #expect(pro.count == 9)
+        #expect(basic.count == 13)
+        #expect(pro.count == 14)
         #expect(basic.intersection(pro).isEmpty)
         #expect(basic.union(pro).count == AppStoreNativeAction.allCases.count)
     }
@@ -238,7 +238,7 @@ struct AppStoreReviewGuardrailTests {
         #expect(executorSource.contains("processPendingExecutionAfterLaunchRequest()"))
         let initStart = try #require(executorSource.range(of: "private init()"))
         let launchRequestStart = try #require(executorSource.range(of: "func processPendingExecutionAfterLaunchRequest()"))
-        let initSection = String(executorSource[initStart.lowerBound..<launchRequestStart.lowerBound])
+        let initSection = String(executorSource[initStart.lowerBound ..< launchRequestStart.lowerBound])
         #expect(initSection.contains("addObserver"))
         #expect(initSection.contains("asyncAfter") == false)
         #expect(executorSource.contains("setupFileWatcher()") == false)
@@ -321,7 +321,7 @@ struct AppStoreReviewGuardrailTests {
             .map { ScriptLibrary.availableScripts(for: $0).count }
             .reduce(0, +)
 
-        #expect(freeCount == 10)
-        #expect(proCount == 43)
+        #expect(freeCount == 14)
+        #expect(proCount == 48)
     }
 }
