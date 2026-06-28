@@ -1,7 +1,7 @@
 import Foundation
 
 /// Represents a custom script that can be executed from Finder context menu
-struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
+struct Script: Identifiable, Codable, Equatable, Hashable {
     let id: UUID
     var name: String
     var type: ScriptType
@@ -14,6 +14,8 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
     var minSelection: Int
     var maxSelection: Int?
     var categoryId: UUID? // nil = uncategorized
+    var outputMode: ScriptOutputMode // What to do with the action's output when it finishes
+    var confirmBeforeRun: Bool // Ask the user to confirm before running this action
 
     init(
         id: UUID = UUID(),
@@ -27,7 +29,9 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
         extensionMatchMode: ExtensionMatchMode = .any,
         minSelection: Int = 1,
         maxSelection: Int? = nil,
-        categoryId: UUID? = nil
+        categoryId: UUID? = nil,
+        outputMode: ScriptOutputMode = .standard,
+        confirmBeforeRun: Bool = false
     ) {
         self.id = id
         self.name = name
@@ -41,6 +45,8 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
         self.minSelection = minSelection
         self.maxSelection = maxSelection
         self.categoryId = categoryId
+        self.outputMode = outputMode
+        self.confirmBeforeRun = confirmBeforeRun
     }
 
     /// Check if this script applies to the given file URLs
@@ -50,9 +56,9 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
 
         switch appliesTo {
         case .filesOnly:
-            guard hasFiles && !hasFolders else { return false }
+            guard hasFiles, !hasFolders else { return false }
         case .foldersOnly, .container:
-            guard hasFolders && !hasFiles else { return false }
+            guard hasFolders, !hasFiles else { return false }
         case .allItems:
             break
         }
@@ -107,6 +113,8 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
         case minSelection
         case maxSelection
         case categoryId
+        case outputMode
+        case confirmBeforeRun
     }
 
     init(from decoder: Decoder) throws {
@@ -123,6 +131,8 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
         minSelection = try container.decodeIfPresent(Int.self, forKey: .minSelection) ?? 1
         maxSelection = try container.decodeIfPresent(Int.self, forKey: .maxSelection)
         categoryId = try container.decodeIfPresent(UUID.self, forKey: .categoryId)
+        outputMode = try container.decodeIfPresent(ScriptOutputMode.self, forKey: .outputMode) ?? .standard
+        confirmBeforeRun = try container.decodeIfPresent(Bool.self, forKey: .confirmBeforeRun) ?? false
     }
 
     func encode(to encoder: Encoder) throws {
@@ -139,34 +149,50 @@ struct Script: Identifiable, Codable, Equatable, Hashable, Sendable {
         try container.encode(minSelection, forKey: .minSelection)
         try container.encodeIfPresent(maxSelection, forKey: .maxSelection)
         try container.encodeIfPresent(categoryId, forKey: .categoryId)
+        try container.encode(outputMode, forKey: .outputMode)
+        try container.encode(confirmBeforeRun, forKey: .confirmBeforeRun)
     }
 }
 
+/// What SaneClick does with an action's output once it finishes.
+/// `.standard` preserves the historical behavior (optional completion notification,
+/// honoring scripts that surface their own notifications), so existing actions are
+/// unchanged. The other modes let a user opt a specific action into surfacing its
+/// result a particular way.
+enum ScriptOutputMode: String, Codable, CaseIterable {
+    case standard // Today's behavior: optional "completed" notification only.
+    case notifyResult // Post a notification whose body is the action's output.
+    case copyResult // Copy the action's output to the clipboard.
+    case showResult // Show the output in a result window.
+}
+
 /// How to match file extensions
-enum ExtensionMatchMode: String, Codable, CaseIterable, Sendable {
+enum ExtensionMatchMode: String, Codable, CaseIterable {
     case any = "Show if any selected file matches"
     case all = "Show only if all selected files match"
 
-    var description: String { rawValue }
+    var description: String {
+        rawValue
+    }
 }
 
 /// Type of script to execute
-enum ScriptType: String, Codable, CaseIterable, Sendable {
+enum ScriptType: String, Codable, CaseIterable {
     case bash = "Shell Command"
     case applescript = "Mac Automation"
     case automator = "Automator Workflow"
 
     var icon: String {
         switch self {
-        case .bash: return "terminal"
-        case .applescript: return "applescript"
-        case .automator: return "gearshape.2"
+        case .bash: "terminal"
+        case .applescript: "applescript"
+        case .automator: "gearshape.2"
         }
     }
 }
 
 /// What the script applies to
-enum AppliesTo: String, Codable, CaseIterable, Sendable {
+enum AppliesTo: String, Codable, CaseIterable {
     case allItems = "Files & Folders"
     case filesOnly = "Files Only"
     case foldersOnly = "Folders Only"
@@ -174,10 +200,10 @@ enum AppliesTo: String, Codable, CaseIterable, Sendable {
 
     var icon: String {
         switch self {
-        case .allItems: return "square.stack"
-        case .filesOnly: return "doc"
-        case .foldersOnly: return "folder"
-        case .container: return "rectangle"
+        case .allItems: "square.stack"
+        case .filesOnly: "doc"
+        case .foldersOnly: "folder"
+        case .container: "rectangle"
         }
     }
 }

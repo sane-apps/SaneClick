@@ -1,9 +1,8 @@
 import Foundation
-import Testing
 @testable import SaneClick
+import Testing
 
 struct ScriptTests {
-
     @Test("Script model initializes with defaults")
     func scriptInitializesWithDefaults() {
         let script = Script(name: "Test Script")
@@ -75,7 +74,7 @@ struct ScriptTests {
         let urls = [
             URL(fileURLWithPath: "/test/file.jpg"),
             URL(fileURLWithPath: "/test/file.pdf"),
-            URL(fileURLWithPath: "/test/file.txt")
+            URL(fileURLWithPath: "/test/file.txt"),
         ]
         #expect(script.matchesFiles(urls) == true)
     }
@@ -104,14 +103,14 @@ struct ScriptTests {
         // One matching file
         let mixedFiles = [
             URL(fileURLWithPath: "/test/image.jpg"),
-            URL(fileURLWithPath: "/test/document.pdf")
+            URL(fileURLWithPath: "/test/document.pdf"),
         ]
         #expect(script.matchesFiles(mixedFiles) == true)
 
         // No matching files
         let noMatch = [
             URL(fileURLWithPath: "/test/document.pdf"),
-            URL(fileURLWithPath: "/test/file.txt")
+            URL(fileURLWithPath: "/test/file.txt"),
         ]
         #expect(script.matchesFiles(noMatch) == false)
     }
@@ -127,14 +126,14 @@ struct ScriptTests {
         // All files match
         let allMatch = [
             URL(fileURLWithPath: "/test/image1.jpg"),
-            URL(fileURLWithPath: "/test/image2.png")
+            URL(fileURLWithPath: "/test/image2.png"),
         ]
         #expect(script.matchesFiles(allMatch) == true)
 
         // Mixed files - not all match
         let mixed = [
             URL(fileURLWithPath: "/test/image.jpg"),
-            URL(fileURLWithPath: "/test/document.pdf")
+            URL(fileURLWithPath: "/test/document.pdf"),
         ]
         #expect(script.matchesFiles(mixed) == false)
     }
@@ -208,6 +207,48 @@ struct ScriptTests {
 
         #expect(decoded.fileExtensions == original.fileExtensions)
         #expect(decoded.extensionMatchMode == original.extensionMatchMode)
+    }
+
+    // MARK: - Output Mode & Confirmation Codable
+
+    @Test("Script round-trips every outputMode and confirmBeforeRun", arguments: ScriptOutputMode.allCases)
+    func scriptRoundTripsOutputModeAndConfirm(_ mode: ScriptOutputMode) throws {
+        let original = Script(
+            name: "Behavior",
+            type: .bash,
+            content: "echo hi",
+            outputMode: mode,
+            confirmBeforeRun: true
+        )
+
+        let data = try JSONEncoder().encode(original)
+        let decoded = try JSONDecoder().decode(Script.self, from: data)
+
+        #expect(decoded.outputMode == mode)
+        #expect(decoded.confirmBeforeRun == true)
+    }
+
+    @Test("Script defaults outputMode/confirmBeforeRun when JSON omits both (back-compat)")
+    func scriptDecodesMissingBehaviorFieldsToDefaults() throws {
+        // A legacy payload that predates the two new fields. It must still decode,
+        // defaulting to .standard / false so older saved actions behave exactly
+        // as before.
+        let legacyJSON = """
+        {
+            "id": "11111111-1111-1111-1111-111111111111",
+            "name": "Legacy",
+            "type": "Shell Command",
+            "content": "echo hi",
+            "isEnabled": true,
+            "icon": "terminal",
+            "appliesTo": "Files & Folders"
+        }
+        """
+        let data = try #require(legacyJSON.data(using: .utf8))
+        let decoded = try JSONDecoder().decode(Script.self, from: data)
+
+        #expect(decoded.outputMode == .standard)
+        #expect(decoded.confirmBeforeRun == false)
     }
 
     @Test("ExtensionMatchMode has correct raw values")

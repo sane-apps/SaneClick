@@ -1,3 +1,4 @@
+import AppKit
 import Foundation
 import os.log
 import SaneUI
@@ -38,6 +39,18 @@ struct ExecutionRequest: Codable {
     }
 }
 
+/// Where an action's output should be surfaced once it finishes.
+/// This is the single, pure decision computed from a script's `outputMode`
+/// (and, for `.standard`, the existing self-notification suppression), so the
+/// surfacing logic stays unit-testable away from the side effects.
+enum OutputSink: Equatable {
+    case none // Surface nothing.
+    case standardNotification // Today's "<name> completed/failed" notification path.
+    case clipboard(String) // Copy this text to the clipboard.
+    case notification(String) // Post a notification whose body is this text.
+    case window(String) // Show this text in a result window.
+}
+
 /// Executes scripts with selected file paths
 final class ScriptExecutor: @unchecked Sendable {
     static let shared = ScriptExecutor()
@@ -47,6 +60,14 @@ final class ScriptExecutor: @unchecked Sendable {
 
     /// Notification posted when execution completes
     static let executionCompletedNotification = Notification.Name("com.saneclick.executionCompleted")
+
+    /// Notification posted when an action with `.showResult` finishes, so the host
+    /// app can present a result window. `userInfo["result"]` carries the
+    /// `ScriptExecutionResult`.
+    static let showResultNotification = Notification.Name("com.saneclick.showResult")
+
+    /// Output longer than this is trimmed before it goes into a notification body.
+    static let notificationOutputLimit = 240
 
     /// File-based IPC: extension writes here, host app reads
     private static var pendingExecutionURL: URL? {
@@ -196,6 +217,14 @@ final class ScriptExecutor: @unchecked Sendable {
                         return
                     }
 
+                    // Ask before running, if this action opts in. The decision
+                    // (`shouldConfirm`) is pure and unit-tested; only the alert
+                    // presentation here is non-headless. Cancel aborts the run.
+                    if Self.shouldConfirm(script), !self.confirmRun(of: script, itemCount: request.paths.count) {
+                        NSLog("[ScriptExecutor] User cancelled confirmed action: \(script.name)")
+                        return
+                    }
+
                     NSLog("[ScriptExecutor] Found script: \(script.name), executing...")
                     Task {
                         await self.execute(script: script, withPaths: request.paths)
@@ -289,10 +318,106 @@ final class ScriptExecutor: @unchecked Sendable {
             )
         }
 
-        maybeNotifyUser(for: executionResult, script: script)
+        // Surface the output according to the action's chosen output mode. The
+        // decision (which sink) is pure and unit-tested; only acting on it here
+        // touches AppKit/notifications. Acting on a non-standard sink replaces
+        // the standard completion notification so we never double-notify.
+        await surface(sink: Self.outputSink(for: script, result: executionResult), result: executionResult, script: script)
+
         if executionResult.success {
             logFirstValueActionIfNeeded()
         }
+    }
+
+    // MARK: - Output Surfacing
+
+    /// Pure decision: where this action's output should go once it finishes.
+    /// `.standard` keeps the existing behavior, including the self-notification
+    /// suppression (scripts that already raise their own notification stay silent).
+    /// Any explicitly chosen mode overrides that suppression and surfaces the
+    /// result the way the user asked.
+    static func outputSink(for script: Script, result: ScriptExecutionResult) -> OutputSink {
+        switch script.outputMode {
+        case .standard:
+            // Keep today's behavior: scripts that raise their own notification
+            // (display notification / osascript -e) stay silent so we don't
+            // double up. Any explicit mode below overrides this suppression.
+            scriptSelfNotifies(script) ? .none : .standardNotification
+        case .copyResult:
+            // On failure, don't wipe the clipboard with "" and claim success;
+            // surface the real error via the standard notification path.
+            result.success ? .clipboard(result.output) : .standardNotification
+        case .notifyResult:
+            // On failure, surface the real error instead of "Finished (no output)".
+            result.success ? .notification(result.output) : .standardNotification
+        case .showResult:
+            .window(result.output)
+        }
+    }
+
+    // MARK: - Run Confirmation
+
+    /// Pure decision: should the user be asked to confirm before this action runs?
+    /// Kept as a function (not just a property read) so it stays a unit-testable
+    /// seam and a future policy can extend it without touching call sites.
+    static func shouldConfirm(_ script: Script) -> Bool {
+        script.confirmBeforeRun
+    }
+
+    /// Presents the confirmation alert and returns whether the user chose to run.
+    /// This is intentionally the only non-headless part of the confirmation flow;
+    /// the decision of *whether* to confirm lives in `shouldConfirm`.
+    @MainActor
+    private func confirmRun(of script: Script, itemCount: Int) -> Bool {
+        NSApp.activate(ignoringOtherApps: true)
+
+        let alert = NSAlert()
+        let itemWord = itemCount == 1 ? "item" : "items"
+        alert.messageText = "Run \"\(script.name)\" on \(itemCount) \(itemWord)?"
+        alert.informativeText = "This action is set to ask before running."
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Run")
+        alert.addButton(withTitle: "Cancel")
+
+        return alert.runModal() == .alertFirstButtonReturn
+    }
+
+    /// Acts on a previously decided `OutputSink`. Kept off the pure decision path
+    /// so the decision stays testable.
+    private func surface(sink: OutputSink, result: ScriptExecutionResult, script: Script) async {
+        switch sink {
+        case .none:
+            break
+        case .standardNotification:
+            maybeNotifyUser(for: result, script: script)
+        case let .clipboard(text):
+            await MainActor.run {
+                let pasteboard = NSPasteboard.general
+                pasteboard.clearContents()
+                pasteboard.setString(text, forType: .string)
+            }
+            // Confirm the copy itself, since clipboard writes are otherwise silent.
+            postResultNotification(title: script.name, body: "Result copied to clipboard")
+        case let .notification(text):
+            let body = Self.truncatedForNotification(text)
+            postResultNotification(title: script.name, body: body.isEmpty ? "Finished (no output)" : body)
+        case .window:
+            await MainActor.run {
+                NotificationCenter.default.post(
+                    name: Self.showResultNotification,
+                    object: nil,
+                    userInfo: ["result": result]
+                )
+            }
+        }
+    }
+
+    /// Trim output to a notification-friendly length.
+    static func truncatedForNotification(_ text: String) -> String {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed.count > notificationOutputLimit else { return trimmed }
+        let endIndex = trimmed.index(trimmed.startIndex, offsetBy: notificationOutputLimit)
+        return String(trimmed[trimmed.startIndex ..< endIndex]) + "…"
     }
 
     private func logFirstValueActionIfNeeded() {
@@ -315,15 +440,31 @@ final class ScriptExecutor: @unchecked Sendable {
         guard defaults.bool(forKey: "showActionNotifications") else { return }
         guard shouldNotify(for: script) else { return }
 
-        let content = UNMutableNotificationContent()
-        content.title = "SaneClick"
-        if result.success {
-            content.body = "\(script.name) completed"
+        let body = if result.success {
+            "\(script.name) completed"
         } else if let error = result.error {
-            content.body = "\(script.name) failed: \(error)"
+            "\(script.name) failed: \(error)"
         } else {
-            content.body = "\(script.name) failed"
+            "\(script.name) failed"
         }
+
+        postNotification(title: "SaneClick", body: body)
+    }
+
+    /// Posts a result-bearing notification for an explicitly chosen output mode
+    /// (copy/notify). Unlike `maybeNotifyUser`, this intentionally does NOT gate
+    /// on `showActionNotifications` or the self-notification suppression: the user
+    /// opted this action into surfacing its result, so we always honor that.
+    private func postResultNotification(title: String, body: String) {
+        postNotification(title: title, body: body)
+    }
+
+    /// Builds and delivers a `UNUserNotification`, requesting authorization the
+    /// first time. Shared by the standard completion path and the result modes.
+    private func postNotification(title: String, body: String) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
 
         let request = UNNotificationRequest(
             identifier: UUID().uuidString,
@@ -349,17 +490,24 @@ final class ScriptExecutor: @unchecked Sendable {
     }
 
     private func shouldNotify(for script: Script) -> Bool {
+        !Self.scriptSelfNotifies(script)
+    }
+
+    /// Pure helper: does this script raise its own notification (so SaneClick's
+    /// standard completion notification would be redundant)? On the App Store
+    /// build, native actions run through the executor and never call
+    /// `osascript`, so they are never treated as self-notifying even though their
+    /// library content references it. Used by both `outputSink(.standard)` and
+    /// `shouldNotify`.
+    static func scriptSelfNotifies(_ script: Script) -> Bool {
         #if APP_STORE
             if AppStoreNativeAction(script: script) != nil {
-                return true
+                return false
             }
         #endif
 
         let lowerContent = script.content.lowercased()
-        if lowerContent.contains("display notification") || lowerContent.contains("osascript -e") {
-            return false
-        }
-        return true
+        return lowerContent.contains("display notification") || lowerContent.contains("osascript -e")
     }
 
     // MARK: - Execution Methods

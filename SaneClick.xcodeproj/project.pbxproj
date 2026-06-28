@@ -37,6 +37,7 @@
 		45A7BEE2D7D0A8619446CE10 /* ScriptExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621E58252D45C086455F4CA1 /* ScriptExecutorTests.swift */; };
 		4B0EC0F99E93A24B6D900856 /* CategoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1306B2DA996D2CA07D8026B4 /* CategoryTests.swift */; };
 		4C9949F5496F3CCF5E69CA98 /* ExtensionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E13D1032CE6C26DB0310BC0 /* ExtensionStatusTests.swift */; };
+		574CAAF11858725670C545B3 /* ScriptCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A1ED77BA76C02D0B07F55E /* ScriptCatalog.swift */; };
 		608EF8B223395F0AAD5C8E7D /* ScriptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F2CF6B85D8D243EB9C017C /* ScriptTests.swift */; };
 		6A4703AFD7F066FE54ACC7D2 /* SaneClickExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7095158AE118884DC2F266BB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 71B14FC7814E66A745273A50 /* Localizable.xcstrings */; };
@@ -61,6 +62,7 @@
 		B0561246A2A1957E7017B8B1 /* ScriptLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C04403C1E09F0D5028384E /* ScriptLibraryTests.swift */; };
 		B2528D20E9949935D53FCF49 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 5B42E303B65FD7B78AFCEF2F /* PrivacyInfo.xcprivacy */; };
 		B863B7721AC91FC4A31AD179 /* MonitoredFolderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B70939D4CC943905E332A2 /* MonitoredFolderService.swift */; };
+		BF2B0F750B692E85926A970C /* ScriptCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A1ED77BA76C02D0B07F55E /* ScriptCatalog.swift */; };
 		C34F834B549E53DABC8C3C86 /* AppStoreNativeActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FA2F0EB8086652DAA990F0 /* AppStoreNativeActionTests.swift */; };
 		C6AF9FAE601D4CFD944911CB /* MonitoredFolders.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E14736E3A91B0759B66C0E /* MonitoredFolders.swift */; };
 		C783F29A466DD724C8040AC0 /* FinderControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3657A493D18F7FE8C14A6434 /* FinderControl.swift */; };
@@ -180,6 +182,7 @@
 		B1D6405FA6195B48159C6502 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 		B1FA2F0EB8086652DAA990F0 /* AppStoreNativeActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreNativeActionTests.swift; sourceTree = "<group>"; };
 		B4BD1719C49E8BC6550B2C0C /* AppStoreReviewGuardrailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreReviewGuardrailTests.swift; sourceTree = "<group>"; };
+		B7A1ED77BA76C02D0B07F55E /* ScriptCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptCatalog.swift; sourceTree = "<group>"; };
 		BA8B50CEA8F97A893927BB7D /* DirectDistributionSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectDistributionSupport.swift; sourceTree = "<group>"; };
 		C19B414E55D6FF5FDF7690BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C430CF1913F9F056D1C42FD1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -239,6 +242,7 @@
 				9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */,
 				71B14FC7814E66A745273A50 /* Localizable.xcstrings */,
 				5B42E303B65FD7B78AFCEF2F /* PrivacyInfo.xcprivacy */,
+				B7A1ED77BA76C02D0B07F55E /* ScriptCatalog.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -582,6 +586,7 @@
 				86ED16E61603FF4DAF743AC3 /* SaneClickSettingsCopy.swift in Sources */,
 				27421E21068E3EF12E4DC3EF /* SaneColors.swift in Sources */,
 				AFBD400DBECC4B913690E29E /* Script.swift in Sources */,
+				574CAAF11858725670C545B3 /* ScriptCatalog.swift in Sources */,
 				CCE34A091108F9B0E4A55F18 /* ScriptEditorView.swift in Sources */,
 				24D18F95948C7B912B63B0CD /* ScriptExecutor.swift in Sources */,
 				2815FB85C50E7871E423FCA4 /* ScriptLibraryView.swift in Sources */,
@@ -613,6 +618,7 @@
 				813EF3E3058263CA064C98D2 /* SaneClickSettingsCopy.swift in Sources */,
 				3C26D6534EF5533C89A950A6 /* SaneColors.swift in Sources */,
 				F52F937E1B88C7672C3470CA /* Script.swift in Sources */,
+				BF2B0F750B692E85926A970C /* ScriptCatalog.swift in Sources */,
 				A2814B7D8E5C998434A68C28 /* ScriptEditorView.swift in Sources */,
 				2EB015FA609862A4838D87AF /* ScriptExecutor.swift in Sources */,
 				4293100EAB878ED0D89819E4 /* ScriptLibraryView.swift in Sources */,

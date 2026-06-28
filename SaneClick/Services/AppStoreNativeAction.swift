@@ -1,6 +1,7 @@
 import AppKit
 import CryptoKit
 import Foundation
+import ImageIO
 import PDFKit
 import Vision
 
@@ -534,11 +535,17 @@ enum AppStoreNativeActionExecutor {
             throw ScriptError.executionFailed("Could not read image: \(url.lastPathComponent)")
         }
 
+        // Honor the image's EXIF/TIFF orientation so rotated photos and scans
+        // (e.g. portrait iPhone shots) are OCR'd upright instead of sideways.
+        let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any]
+        let rawOrientation = (props?[kCGImagePropertyOrientation] as? UInt32) ?? 1
+        let orientation = CGImagePropertyOrientation(rawValue: rawOrientation) ?? .up
+
         let request = VNRecognizeTextRequest()
         request.recognitionLevel = .accurate
         request.usesLanguageCorrection = true
 
-        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        let handler = VNImageRequestHandler(cgImage: cgImage, orientation: orientation, options: [:])
         try handler.perform([request])
 
         guard let observations = request.results else { return [] }
@@ -628,7 +635,15 @@ enum AppStoreNativeActionExecutor {
         for index in 0 ..< document.pageCount {
             guard let page = document.page(at: index) else { continue }
             let bounds = page.bounds(for: .mediaBox)
-            let pixelSize = NSSize(width: bounds.width * scale, height: bounds.height * scale)
+            // `bounds` is the un-rotated mediaBox, but `thumbnail(of:for:)` applies
+            // the page `/Rotate`. For 90/270 rotations, swap width/height so the
+            // requested pixel size matches the rendered aspect ratio (no squish).
+            var width = bounds.width
+            var height = bounds.height
+            if abs(page.rotation % 180) == 90 {
+                swap(&width, &height)
+            }
+            let pixelSize = NSSize(width: width * scale, height: height * scale)
             guard pixelSize.width >= 1, pixelSize.height >= 1 else { continue }
 
             let thumbnail = page.thumbnail(of: pixelSize, for: .mediaBox)

@@ -145,6 +145,21 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
                 WindowActionStorage.shared.showMainWindow()
             }
         }
+
+        // Present a result window when an action with the "Show result" output
+        // mode finishes. ScriptExecutor is a singleton (not a view), so it posts
+        // this notification and the host presents the window, reusing the same
+        // TestOutputView the editor's test run uses.
+        NotificationCenter.default.addObserver(
+            forName: ScriptExecutor.showResultNotification,
+            object: nil,
+            queue: .main
+        ) { notification in
+            guard let result = notification.userInfo?["result"] as? ScriptExecutionResult else { return }
+            Task { @MainActor in
+                ResultWindowPresenter.shared.present(result)
+            }
+        }
     }
 
     func applicationDockMenu(_: NSApplication) -> NSMenu? {
@@ -520,4 +535,54 @@ struct AppCommands: Commands {
 extension Notification.Name {
     static let importScriptsRequested = Notification.Name("importScriptsRequested")
     static let exportAllScriptsRequested = Notification.Name("exportAllScriptsRequested")
+}
+
+/// Presents the result of a "Show result" action in a small, dismissible window,
+/// reusing the editor's `TestOutputView`. A single reusable window is kept so
+/// repeated actions don't stack windows.
+@MainActor
+final class ResultWindowPresenter {
+    static let shared = ResultWindowPresenter()
+
+    private var window: NSWindow?
+
+    func present(_ result: ScriptExecutionResult) {
+        // Reuse an existing window if the user already has one open (so we don't
+        // yank a window they moved); only size and center on first creation.
+        let isNewWindow = window == nil
+        let window = window ?? makeWindow()
+
+        let view = TestOutputView(
+            scriptName: result.scriptName,
+            output: result.output.isEmpty ? "(No output)" : result.output,
+            error: result.success ? nil : (result.error ?? "Action failed"),
+            onClose: { [weak window] in window?.performClose(nil) },
+            completedTitle: "Action Completed",
+            failedTitle: "Action Failed"
+        )
+
+        let hosting = NSHostingController(rootView: view.preferredColorScheme(.dark))
+
+        window.title = result.scriptName
+        window.contentViewController = hosting
+        if isNewWindow {
+            window.setContentSize(NSSize(width: 500, height: 350))
+            window.center()
+        }
+        window.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+        self.window = window
+    }
+
+    private func makeWindow() -> NSWindow {
+        let window = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 500, height: 350),
+            styleMask: [.titled, .closable, .miniaturizable],
+            backing: .buffered,
+            defer: false
+        )
+        window.isReleasedWhenClosed = false
+        window.appearance = NSAppearance(named: .darkAqua)
+        return window
+    }
 }

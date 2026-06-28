@@ -19,6 +19,8 @@ struct ScriptEditorView: View {
     @State private var maxSelection: Int
     @State private var limitSelection: Bool
     @State private var categoryId: UUID?
+    @State private var outputMode: ScriptOutputMode
+    @State private var confirmBeforeRun: Bool
     @State private var showingIconPicker = false
     @State private var showingTestOutput = false
     @State private var testOutput: String = ""
@@ -43,6 +45,8 @@ struct ScriptEditorView: View {
         _maxSelection = State(initialValue: script?.maxSelection ?? 1)
         _limitSelection = State(initialValue: script?.maxSelection != nil)
         _categoryId = State(initialValue: script?.categoryId)
+        _outputMode = State(initialValue: script?.outputMode ?? .standard)
+        _confirmBeforeRun = State(initialValue: script?.confirmBeforeRun ?? false)
     }
 
     var body: some View {
@@ -50,6 +54,7 @@ struct ScriptEditorView: View {
             generalSection
             fileFilterSection
             selectionFilterSection
+            behaviorSection
             scriptSection
             previewSection
         }
@@ -189,6 +194,25 @@ struct ScriptEditorView: View {
         }
     }
 
+    // MARK: - Behavior Section
+
+    private var behaviorSection: some View {
+        Section("Behavior") {
+            Picker(SaneClickSettingsCopy.outputModeLabel, selection: $outputMode) {
+                Text(SaneClickSettingsCopy.outputModeStandardOption).tag(ScriptOutputMode.standard)
+                Text(SaneClickSettingsCopy.outputModeShowOption).tag(ScriptOutputMode.showResult)
+                Text(SaneClickSettingsCopy.outputModeCopyOption).tag(ScriptOutputMode.copyResult)
+                Text(SaneClickSettingsCopy.outputModeNotifyOption).tag(ScriptOutputMode.notifyResult)
+            }
+            .accessibilityIdentifier("outputModeSelector")
+            .help(SaneClickSettingsCopy.outputModeHelp)
+
+            Toggle(SaneClickSettingsCopy.confirmBeforeRunLabel, isOn: $confirmBeforeRun)
+                .accessibilityIdentifier("confirmBeforeRunToggle")
+                .help(SaneClickSettingsCopy.confirmBeforeRunHelp)
+        }
+    }
+
     // MARK: - Script Section
 
     private var scriptSection: some View {
@@ -306,7 +330,9 @@ struct ScriptEditorView: View {
             extensionMatchMode: extensionMatchMode,
             minSelection: minSelection,
             maxSelection: limitSelection ? maxSelection : nil,
-            categoryId: categoryId
+            categoryId: categoryId,
+            outputMode: outputMode,
+            confirmBeforeRun: confirmBeforeRun
         )
         onSave(script)
 
@@ -507,6 +533,12 @@ struct TestOutputView: View {
     let scriptName: String
     let output: String
     let error: String?
+    /// When hosted in a hand-built `NSWindow` (the result-window presenter),
+    /// `@Environment(\.dismiss)` is inert, so the presenter passes a real closer.
+    /// The editor sheet leaves this nil and keeps using `dismiss()`.
+    var onClose: (() -> Void)?
+    var completedTitle = "Test Completed"
+    var failedTitle = "Test Failed"
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -515,7 +547,7 @@ struct TestOutputView: View {
                     .foregroundStyle(error == nil ? .green : .red)
                     .font(.title2)
 
-                Text(error == nil ? "Test Completed" : "Test Failed")
+                Text(error == nil ? completedTitle : failedTitle)
                     .font(.headline)
 
                 Spacer()
@@ -561,7 +593,7 @@ struct TestOutputView: View {
             HStack {
                 Spacer()
                 Button("Close") {
-                    dismiss()
+                    (onClose ?? { dismiss() })()
                 }
                 .keyboardShortcut(.escape)
                 .accessibilityIdentifier("closeTestOutputButton")

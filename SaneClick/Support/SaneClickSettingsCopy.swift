@@ -135,4 +135,46 @@ enum SaneClickSettingsCopy {
         localized: "saneclick.settings.help.restart_finder",
         defaultValue: "Restart Finder if the extension is enabled but not yet running"
     )
+
+    // MARK: - Action Behavior
+
+    static let outputModeLabel = String(
+        localized: "saneclick.editor.label.output_mode",
+        defaultValue: "When done"
+    )
+
+    static let outputModeStandardOption = String(
+        localized: "saneclick.editor.output_mode.standard",
+        defaultValue: "Standard"
+    )
+
+    static let outputModeShowOption = String(
+        localized: "saneclick.editor.output_mode.show",
+        defaultValue: "Show result"
+    )
+
+    static let outputModeCopyOption = String(
+        localized: "saneclick.editor.output_mode.copy",
+        defaultValue: "Copy result"
+    )
+
+    static let outputModeNotifyOption = String(
+        localized: "saneclick.editor.output_mode.notify",
+        defaultValue: "Notify with result"
+    )
+
+    static let outputModeHelp = String(
+        localized: "saneclick.editor.help.output_mode",
+        defaultValue: "Choose what happens with this action's output. Standard keeps the usual completion message. Show result opens a window, Copy result puts it on the clipboard, and Notify with result shows it in a notification."
+    )
+
+    static let confirmBeforeRunLabel = String(
+        localized: "saneclick.editor.label.confirm_before_run",
+        defaultValue: "Ask before running"
+    )
+
+    static let confirmBeforeRunHelp = String(
+        localized: "saneclick.editor.help.confirm_before_run",
+        defaultValue: "Show a confirmation first, so you can stop before this action changes your files."
+    )
 }

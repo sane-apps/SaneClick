@@ -1,12 +1,11 @@
-import Foundation
 import CoreGraphics
+import Foundation
 import ImageIO
-import UniformTypeIdentifiers
-import Testing
 @testable import SaneClick
+import Testing
+import UniformTypeIdentifiers
 
 struct ScriptExecutorTests {
-
     // MARK: - Bash Script Tests
 
     @Test("Bash script executes and returns output")
@@ -20,9 +19,9 @@ struct ScriptExecutorTests {
         let result = await executeBashDirectly(content: script.content, paths: [])
 
         switch result {
-        case .success(let output):
+        case let .success(output):
             #expect(output.trimmingCharacters(in: .whitespacesAndNewlines) == "Hello World")
-        case .failure(let error):
+        case let .failure(error):
             Issue.record("Bash execution failed: \(error)")
         }
     }
@@ -39,9 +38,9 @@ struct ScriptExecutorTests {
         let result = await executeBashDirectly(content: script.content, paths: [testPath])
 
         switch result {
-        case .success(let output):
+        case let .success(output):
             #expect(output.trimmingCharacters(in: .whitespacesAndNewlines) == testPath)
-        case .failure(let error):
+        case let .failure(error):
             Issue.record("Bash execution failed: \(error)")
         }
     }
@@ -58,9 +57,9 @@ struct ScriptExecutorTests {
         let result = await executeBashDirectly(content: script.content, paths: paths)
 
         switch result {
-        case .success(let output):
+        case let .success(output):
             #expect(output.trimmingCharacters(in: .whitespacesAndNewlines) == "3")
-        case .failure(let error):
+        case let .failure(error):
             Issue.record("Bash execution failed: \(error)")
         }
     }
@@ -97,9 +96,9 @@ struct ScriptExecutorTests {
         let result = await executeAppleScriptDirectly(content: script.content, paths: [])
 
         switch result {
-        case .success(let output):
+        case let .success(output):
             #expect(output.trimmingCharacters(in: .whitespacesAndNewlines) == "Hello from AppleScript")
-        case .failure(let error):
+        case let .failure(error):
             Issue.record("AppleScript execution failed: \(error)")
         }
     }
@@ -186,12 +185,117 @@ struct ScriptExecutorTests {
         #expect(FileManager.default.fileExists(atPath: root.appendingPathComponent("hash-me.txt.sha256").path))
     }
 
+    // MARK: - Output Sink Decision
+
+    @Test("Standard mode without self-notification posts the standard completion notification")
+    func standardModeNonSelfNotifyingUsesStandardNotification() {
+        let script = Script(name: "Plain", type: .bash, content: "echo hi", outputMode: .standard)
+        let result = ScriptExecutionResult.success(scriptName: "Plain", output: "hi")
+        #expect(ScriptExecutor.outputSink(for: script, result: result) == .standardNotification)
+    }
+
+    @Test("Standard mode honors self-suppression for scripts that notify themselves")
+    func standardModeSelfNotifyingIsSuppressed() {
+        let displayScript = Script(
+            name: "Self Notify",
+            type: .bash,
+            content: "echo done\nosascript -e 'display notification \"done\" with title \"SaneClick\"'",
+            outputMode: .standard
+        )
+        let result = ScriptExecutionResult.success(scriptName: "Self Notify", output: "done")
+        #expect(ScriptExecutor.outputSink(for: displayScript, result: result) == OutputSink.none)
+    }
+
+    @Test("Explicit modes map to their sink and override self-suppression")
+    func explicitModesMapAndOverrideSuppression() {
+        // A self-notifying script (would be suppressed under .standard) still
+        // surfaces when the user explicitly picks a non-standard mode.
+        let selfNotifyContent = "osascript -e 'display notification \"x\"'"
+        let result = ScriptExecutionResult.success(scriptName: "X", output: "payload")
+
+        let copy = Script(name: "X", type: .bash, content: selfNotifyContent, outputMode: .copyResult)
+        #expect(ScriptExecutor.outputSink(for: copy, result: result) == .clipboard("payload"))
+
+        let notify = Script(name: "X", type: .bash, content: selfNotifyContent, outputMode: .notifyResult)
+        #expect(ScriptExecutor.outputSink(for: notify, result: result) == .notification("payload"))
+
+        let window = Script(name: "X", type: .bash, content: selfNotifyContent, outputMode: .showResult)
+        #expect(ScriptExecutor.outputSink(for: window, result: result) == .window("payload"))
+    }
+
+    @Test("Failed copy/notify actions surface the error instead of wiping the clipboard or faking success")
+    func failedCopyAndNotifyFallBackToStandardNotification() {
+        // A failed result must not produce `.clipboard("")` (which would wipe the
+        // user's clipboard and post a false "Result copied" success) or
+        // `.notification("")` (which would show "Finished (no output)" and hide
+        // the real error). Both should fall back to the standard notification
+        // path, which surfaces the actual error.
+        let failure = ScriptExecutionResult.failure(scriptName: "X", error: "boom")
+
+        let copy = Script(name: "X", type: .bash, content: "exit 1", outputMode: .copyResult)
+        #expect(ScriptExecutor.outputSink(for: copy, result: failure) == .standardNotification)
+
+        let notify = Script(name: "X", type: .bash, content: "exit 1", outputMode: .notifyResult)
+        #expect(ScriptExecutor.outputSink(for: notify, result: failure) == .standardNotification)
+    }
+
+    @Test("Notification output is trimmed to the limit")
+    func notificationOutputIsTruncated() {
+        let long = String(repeating: "a", count: ScriptExecutor.notificationOutputLimit + 50)
+        let trimmed = ScriptExecutor.truncatedForNotification(long)
+        #expect(trimmed.count == ScriptExecutor.notificationOutputLimit + 1) // +1 for the ellipsis
+        #expect(trimmed.hasSuffix("…"))
+    }
+
+    // MARK: - Run Confirmation Decision
+
+    @Test("shouldConfirm is false by default and true when opted in")
+    func shouldConfirmReflectsScriptFlag() {
+        #expect(ScriptExecutor.shouldConfirm(Script(name: "Safe")) == false)
+        #expect(ScriptExecutor.shouldConfirm(Script(name: "Risky", confirmBeforeRun: true)) == true)
+    }
+
+    @Test("Destructive built-ins ship with confirm-before-run enabled")
+    func destructiveBuiltInsConfirmBeforeRun() throws {
+        let destructive = [
+            "Flatten Folder",
+            "Organize by Extension",
+            "Organize by Date",
+            "Rename with Sequence",
+            "Lowercase Filenames",
+            "Replace Spaces with Underscores",
+            "Create Folder from Selection",
+            "Delete .DS_Store Files",
+            "Secure Delete",
+            "Force Close Apps Using File"
+        ]
+        for name in destructive {
+            let library = try #require(ScriptLibrary.libraryScript(named: name))
+            #expect(ScriptExecutor.shouldConfirm(library.toScript()) == true, "\(name) should confirm before running")
+        }
+    }
+
+    @Test("Non-destructive built-ins do not ask before running")
+    func nonDestructiveBuiltInsDoNotConfirm() throws {
+        for name in ["Copy Path", "Reveal in Finder", "Convert to PNG", "SHA256 Hash"] {
+            let library = try #require(ScriptLibrary.libraryScript(named: name))
+            #expect(ScriptExecutor.shouldConfirm(library.toScript()) == false, "\(name) should not confirm")
+        }
+    }
+
+    @Test("Built-in actions never pre-set a non-standard output mode")
+    func builtInsKeepStandardOutputMode() {
+        for script in ScriptLibrary.allScripts {
+            #expect(script.outputMode == .standard, "\(script.name) should keep .standard output mode")
+        }
+    }
+
     // MARK: - Helper Functions (duplicated from ScriptExecutor for testing)
 
     private func runLibraryScript(_ name: String, paths: [String]) async throws {
         let libraryScript = try #require(ScriptLibrary.allScripts.first { $0.name == name })
         let result = await executeBashDirectly(content: libraryScript.content, paths: paths)
-        if case .failure(let error) = result {
+        if case let .failure(error) = result {
             Issue.record("\(name) failed: \(error.localizedDescription)")
             throw error
         }

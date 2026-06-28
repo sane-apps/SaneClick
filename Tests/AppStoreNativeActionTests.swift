@@ -2,9 +2,11 @@ import AppKit
 import CoreGraphics
 import CoreText
 import Foundation
+import ImageIO
 import PDFKit
 @testable import SaneClick
 import Testing
+import UniformTypeIdentifiers
 
 struct AppStoreNativeActionTests {
     @Test("App Store action catalog matches library items")
@@ -65,6 +67,26 @@ struct AppStoreNativeActionTests {
         }
     }
 
+    @Test("New behavior fields are guardrail-neutral for native-action matching")
+    func behaviorFieldsDoNotAffectNativeMatching() throws {
+        // Every library script must still resolve to its native action regardless
+        // of the new outputMode / confirmBeforeRun fields, because matching keys
+        // only on name + type + content. This covers the pre-enabled destructive
+        // built-ins (which now carry confirmBeforeRun: true).
+        for action in AppStoreNativeAction.allCases {
+            let library = try #require(ScriptLibrary.libraryScript(named: action.rawValue))
+            #expect(AppStoreNativeAction(script: library.toScript()) == action, "\(action.rawValue) should still match")
+        }
+
+        // Flipping the new fields on a copy of a native library script must not
+        // break the match either.
+        let flatten = try #require(ScriptLibrary.libraryScript(named: "Flatten Folder")).toScript()
+        var modified = flatten
+        modified.outputMode = .showResult
+        modified.confirmBeforeRun = false
+        #expect(AppStoreNativeAction(script: modified) == .flattenFolder)
+    }
+
     @Test("Copy as File URL copies a percent-encoded file URL")
     func copyFileURLReturnsAbsoluteString() throws {
         let root = try temporaryDirectory()
@@ -116,6 +138,21 @@ struct AppStoreNativeActionTests {
         let root = try temporaryDirectory()
         let imageURL = root.appendingPathComponent("scan.png")
         try writePNG(text: "HELLO", to: imageURL)
+
+        let output = try AppStoreNativeActionExecutor.execute(.copyTextFromImage, paths: [imageURL.path])
+
+        #expect(output.uppercased().contains("HELLO"))
+    }
+
+    @Test("Copy Text from Image honors EXIF orientation on a rotated image")
+    func copyTextFromImageHonorsOrientation() throws {
+        // The pixels are stored rotated 90 degrees with an EXIF orientation tag
+        // that says "display rotated upright". Without orientation-aware OCR,
+        // Vision reads sideways pixels and finds little/no text; with the fix it
+        // recognizes the upright "HELLO".
+        let root = try temporaryDirectory()
+        let imageURL = root.appendingPathComponent("rotated.png")
+        try writeRotatedPNG(text: "HELLO", to: imageURL)
 
         let output = try AppStoreNativeActionExecutor.execute(.copyTextFromImage, paths: [imageURL.path])
 
@@ -273,6 +310,61 @@ struct AppStoreNativeActionTests {
             throw NSError(domain: "test", code: 3)
         }
         try data.write(to: url)
+    }
+
+    /// Render `text` upright but store the pixels rotated 90 degrees, then tag the
+    /// file with EXIF orientation 6 (rotate 90 degrees CW to display upright).
+    /// Orientation-blind OCR sees sideways pixels; orientation-aware OCR recovers
+    /// the upright text. Used to prove the orientation fix in `recognizeText`.
+    private func writeRotatedPNG(text: String, to url: URL) throws {
+        // Stored pixel buffer is portrait (the upright image rotated 90 deg CCW).
+        let storedWidth = 200
+        let storedHeight = 600
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        guard let context = CGContext(
+            data: nil,
+            width: storedWidth,
+            height: storedHeight,
+            bitsPerComponent: 8,
+            bytesPerRow: 0,
+            space: colorSpace,
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        ) else {
+            throw NSError(domain: "test", code: 1)
+        }
+
+        context.setFillColor(CGColor(red: 1, green: 1, blue: 1, alpha: 1))
+        context.fill(CGRect(x: 0, y: 0, width: storedWidth, height: storedHeight))
+
+        // Draw the text rotated 90 deg CCW into the portrait buffer so that, after
+        // the EXIF orientation-6 rotation, it reads upright.
+        context.translateBy(x: CGFloat(storedWidth), y: 0)
+        context.rotate(by: .pi / 2)
+
+        let font = CTFontCreateWithName("Helvetica-Bold" as CFString, 96, nil)
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: CGColor(red: 0, green: 0, blue: 0, alpha: 1)
+        ]
+        let attributed = NSAttributedString(string: text, attributes: attributes)
+        let line = CTLineCreateWithAttributedString(attributed)
+        context.textPosition = CGPoint(x: 40, y: 70)
+        CTLineDraw(line, context)
+
+        guard let cgImage = context.makeImage() else {
+            throw NSError(domain: "test", code: 2)
+        }
+
+        let type = UTType.png.identifier as CFString
+        guard let destination = CGImageDestinationCreateWithURL(url as CFURL, type, 1, nil) else {
+            throw NSError(domain: "test", code: 3)
+        }
+        // 6 = rotate 90 deg CW to display upright.
+        let properties = [kCGImagePropertyOrientation: 6] as CFDictionary
+        CGImageDestinationAddImage(destination, cgImage, properties)
+        guard CGImageDestinationFinalize(destination) else {
+            throw NSError(domain: "test", code: 4)
+        }
     }
 
     /// Build a simple multi-page PDF with a labelled box on each page.
