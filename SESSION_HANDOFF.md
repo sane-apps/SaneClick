@@ -1,10 +1,41 @@
 # Session Handoff — SaneClick
 
-**Last updated:** 2026-06-27
+**Last updated:** 2026-06-28
 **Current public version:** `1.1.12` (build `1112`)
-**Next release candidate:** keychain data-protection fix staged for Monday release
+**Next release candidate:** `1.2.0` — combined feature release, code on `origin/main` (`ccc5005`), pending signed build + owner sign-off
 
 ## Current State
+
+- 2026-06-28 **SaneClick 1.2.0 BUILT + on `origin/main` (`ccc5005`), verify-by-release pending.**
+  Combined release line: keychain DP fix (`17bfa4a`) + #6 folder grouping (`321dbbf`) + 9 native
+  actions (`ecb42f9`) + per-action output handling & ask-before-running + adversarial-review fixes
+  (`ccc5005`).
+  - New actions (both builds): OCR Copy/Save Text from Image (Vision), PDF Combine Images into PDF /
+    Split PDF into Pages / PDF to Images (PDFKit), 4 copy-path variants (file URL / name w/o ext /
+    parent path / Markdown link). All non-destructive (clipboard or new files via `uniqueDestinationURL`).
+    A new `requiresNativeRuntime` flag routes ONLY these 9 through the native executor on the direct
+    build too; the 18 existing actions keep their exact path (zero regression, locked by test).
+  - New per-action settings (optional Codable fields, guardrail-neutral, default = current behavior):
+    `outputMode` (When done: copy result / show window / notify) and `confirmBeforeRun` (NSAlert before
+    file-changing actions, pre-enabled on the destructive built-ins). `DefaultScripts.swift` was split
+    into `ScriptCatalog.swift` (over the 800-line limit; byte-for-byte preserved).
+  - Verification: 147 tests green on the Mini, both the direct and `-D APP_STORE` compile paths. Built by
+    an autonomous agent pipeline (research → 2-phase build → 16-agent adversarial review → fixes). Review
+    caught + fixed an OCR EXIF-orientation bug (empty text on portrait photos) and a copy/notify-on-failure
+    clipboard wipe — both now test-covered. App Store guardrail counts bumped in lockstep (basic 9->13,
+    pro 9->14, allCases 18->27, freeCount 10->14, proCount 43->48, IAP copy "9 more"->"14 more").
+  - Free/Pro split (flippable in `AppStoreActionCatalog` + the library `category`): copy-path = FREE,
+    OCR + PDF = Pro.
+  - Repo reconciliation: the prior "drift" was the Mini sitting 13 commits behind `origin/main` plus
+    redundant uncommitted copies; fast-forwarded clean. All 17 stashes forensically confirmed redundant
+    (only orphan = an abandoned ScriptExecutor file-watcher experiment in `stash@{4}` that also drops the
+    Pro-license guard — NOT recovered). Air + Mini both clean on `ccc5005`. Nothing legit lost.
+  - PENDING (owner / a signing-capable GUI machine): version bump 1.1.12 -> 1.2.0; customer release-notes
+    approval (draft in this session's scratchpad); the signed release build (Mini signing
+    `errSecInternalComponent`-blocked); the manual GUI checks (the 9 actions rendering in the right-click
+    menu, OCR copy on a real PORTRAIT photo, destructive-action confirm Cancel aborting, result window
+    Close/Escape, editor controls persisting, App Store sandbox writes); website `docs/index.html`
+    "53 Built-in Actions" -> 62, separate gated deploy.
 
 - 2026-06-27 keychain prompt-storm fix staged (ships next release, Monday):
   - Symptom (fleet-wide): after a direct-download update, macOS hammers users
