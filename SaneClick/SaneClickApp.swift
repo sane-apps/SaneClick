@@ -255,7 +255,19 @@ struct SaneClickApp: App {
         @State private var licenseService = LicenseService(
             appName: "SaneClick",
             checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick"),
-            keychain: KeychainService(service: "com.saneclick.SaneClick"),
+            // Store the license in the modern data-protection keychain so a Developer ID
+            // signature change across direct updates no longer re-prompts ("wants to use
+            // your confidential information") on every keychain item (TN3137). The access
+            // group reuses the app's existing application-group entitlement, which macOS
+            // also exposes as a keychain access group — so no new entitlement or
+            // provisioning profile is required. The service matches the legacy
+            // login-keychain item so the one-time migration finds it. (App Store builds
+            // are sandboxed and unaffected, so the #if APP_STORE branch keeps the old
+            // service-only keychain.)
+            keychain: KeychainService(
+                service: "com.saneclick.SaneClick",
+                accessGroup: "M78L6FXD48.group.com.saneclick.app"
+            ),
             directCopy: LicenseService.DirectCopy.saneClick,
             proTrial: .init(storageKeyPrefix: "saneclick.pro_trial")
         )

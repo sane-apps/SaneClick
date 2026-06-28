@@ -4,6 +4,15 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [Unreleased]
+
+Stores your license in the modern macOS system keychain so the app should stop
+asking for keychain permission after updates. Existing licenses are moved over
+automatically on first launch. (Direct download builds; the Mac App Store build
+was already unaffected.)
+
+---
+
 ## [1.1.12] - 2026-06-22
 
 Pro is now free to try for 14 days. Basic remains included after the trial.

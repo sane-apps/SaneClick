@@ -1,10 +1,35 @@
 # Session Handoff — SaneClick
 
-**Last updated:** 2026-06-08
-**Current public version:** `1.1.10` (build `1110`)
-**Next release candidate:** none pending
+**Last updated:** 2026-06-27
+**Current public version:** `1.1.12` (build `1112`)
+**Next release candidate:** keychain data-protection fix staged for Monday release
 
 ## Current State
+
+- 2026-06-27 keychain prompt-storm fix staged (ships next release, Monday):
+  - Symptom (fleet-wide): after a direct-download update, macOS hammers users
+    with "SaneClick wants to use your confidential information stored in
+    com.saneclick.SaneClick" prompts. Root cause is the legacy login keychain's
+    per-item ACL being bound to the creating build's code signature (TN3137);
+    a new signature re-prompts on every item, every launch.
+  - Fix: store the license in the modern data-protection keychain via SaneUI
+    `f8e5274` (`kSecUseDataProtectionKeychain` + `kSecAttrAccessGroup` + one-time
+    legacy→DP migration on first launch). Access group reuses the app's existing
+    `M78L6FXD48.group.com.saneclick.app` application-group entitlement (macOS
+    exposes app groups as keychain access groups), so **no new entitlement and no
+    new provisioning profile** were needed.
+  - Scope: only the non-sandboxed direct build (`#else` / `!APP_STORE` branch of
+    `SaneClickApp.swift`). The sandboxed Mac App Store branch (`#if APP_STORE`) is
+    unchanged — sandboxed apps already use the DP keychain and never had the storm.
+  - Files: `SaneClick/SaneClickApp.swift` (accessGroup), `project.yml` (SaneUI pin
+    83d8259→f8e5274), regenerated `project.pbxproj` + workspace `Package.resolved`,
+    `CHANGELOG.md` ([Unreleased]).
+  - Verified: Mini `./scripts/SaneMaster.rb verify` → 117 tests in 17 suites pass.
+  - NOT yet verified (verify-by-release): the real SIGNED Developer ID build at
+    release time (entitlement embeds + no runtime prompt + license migrates).
+    Signing is headless-blocked over ssh; confirm on a GUI machine after the
+    Monday signed build. The previously-created `com.saneclick.SaneClick Direct`
+    provisioning profile is now UNUSED (app-group approach needs no profile).
 
 - 2026-06-08 status refresh:
   - Live validation reports SaneClick `1.1.10` is consistent across appcast,
@@ -195,3 +220,9 @@ Apple released **Xcode 26.3 RC** with `xcrun mcpbridge` — official MCP replaci
 - Fresh blocker receipt: the Finder workflow video still lacks human visual approval and a hosted public URL, the staged `docs/videos` asset is not deployed publicly yet, the Product Hunt maker comment/day-of reply checklist still needs exact approval, and `release_preflight` remains warning-only with 3 warnings.
 - Existing listing URLs remain support surfaces only: [awesome-mac](https://github.com/jaywcjlove/awesome-mac/pull/1804) and [awesome-macOS](https://github.com/iCHAIT/awesome-macOS/pull/697).
 - Next launch-ops date stays 2026-05-22 for the launch-package pass.
+
+## Launch Ops - 2026-06-23
+
+- Cross-product launch ops reran canonical Mini `./scripts/SaneMaster.rb launch_readiness --json` from the SaneClick repo. It stayed red.
+- Active blockers are unchanged: the 30-second Finder workflow video still needs human visual approval plus a hosted/public URL, the staged `docs/videos` asset still is not deployed publicly, and the Product Hunt maker comment/day-of reply checklist still needs exact approval.
+- Fresh proof state: `release_preflight` still passes but is stale at 29.42 days with 3 warnings, and the shared validation receipt [`/Users/sj/SaneApps/infra/SaneProcess/outputs/validation/2026-06-23.json`](/Users/sj/SaneApps/infra/SaneProcess/outputs/validation/2026-06-23.json) is still `NOT READY FOR RELEASE` with stale SaneClick customer-UI proof plus missing transcript/fixture artifacts. No scheduling, submission, posting, or public reply action ran today.
