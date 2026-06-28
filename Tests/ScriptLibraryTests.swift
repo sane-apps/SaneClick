@@ -69,7 +69,7 @@ struct ScriptLibraryTests {
     @Test("Universal category has essential scripts")
     func universalHasEssentials() {
         let scripts = ScriptLibrary.universalScripts
-        let names = scripts.map { $0.name }
+        let names = scripts.map(\.name)
 
         #expect(names.contains("Copy Path"), "Should have Copy Path script")
         #expect(names.contains("Open in Terminal"), "Should have Open in Terminal script")
@@ -78,7 +78,7 @@ struct ScriptLibraryTests {
     @Test("Developer category has dev tools")
     func developerHasDevTools() {
         let scripts = ScriptLibrary.developerScripts
-        let names = scripts.map { $0.name }
+        let names = scripts.map(\.name)
 
         #expect(names.contains("Git Init"), "Should have Git Init script")
         #expect(names.contains("Open in VS Code"), "Should have Open in VS Code script")
@@ -87,7 +87,7 @@ struct ScriptLibraryTests {
     @Test("Designer category has image tools")
     func designerHasImageTools() {
         let scripts = ScriptLibrary.designerScripts
-        let names = scripts.map { $0.name }
+        let names = scripts.map(\.name)
 
         #expect(names.contains("Convert to PNG"), "Should have Convert to PNG script")
         #expect(names.contains("Resize 50%"), "Should have Resize script")
@@ -96,7 +96,7 @@ struct ScriptLibraryTests {
     @Test("Power user category has advanced tools")
     func powerUserHasAdvancedTools() {
         let scripts = ScriptLibrary.powerUserScripts
-        let names = scripts.map { $0.name }
+        let names = scripts.map(\.name)
 
         #expect(names.contains("SHA256 Hash"), "Should have hash script")
         #expect(names.contains("Compress to ZIP"), "Should have compress script")
@@ -107,7 +107,7 @@ struct ScriptLibraryTests {
     @Test("Organization category has file management")
     func organizationHasFileManagement() {
         let scripts = ScriptLibrary.organizationScripts
-        let names = scripts.map { $0.name }
+        let names = scripts.map(\.name)
 
         #expect(names.contains("Flatten Folder"), "Should have flatten folder script")
         #expect(names.contains("Organize by Extension"), "Should have organize script")
@@ -181,7 +181,7 @@ struct ExecutionRequestTests {
         let paths = [
             "/Users/test/file with spaces.txt",
             "/Users/test/résumé.pdf",
-            "/Users/test/日本語.txt",
+            "/Users/test/日本語.txt"
         ]
 
         let request = ExecutionRequest(
@@ -383,6 +383,93 @@ struct SaneClickSharedDefaultsTests {
         defaults.set(false, forKey: SaneClickSharedDefaults.showOpenMainWindowMenuItemKey)
 
         #expect(SaneClickSharedDefaults.showOpenMainWindowMenuItem(in: defaults) == false)
+    }
+
+    @Test("Group actions into folders defaults to enabled")
+    func foldersInRightClickMenuDefaultsToEnabled() {
+        guard let defaults = UserDefaults(suiteName: #function) else {
+            Issue.record("Failed to create isolated defaults suite")
+            return
+        }
+        defaults.removePersistentDomain(forName: #function)
+
+        SaneClickSharedDefaults.registerDefaults(in: defaults)
+
+        #expect(SaneClickSharedDefaults.foldersInRightClickMenu(in: defaults) == true)
+    }
+
+    @Test("Group actions into folders respects saved value")
+    func foldersInRightClickMenuRespectsSavedValue() {
+        guard let defaults = UserDefaults(suiteName: #function) else {
+            Issue.record("Failed to create isolated defaults suite")
+            return
+        }
+        defaults.removePersistentDomain(forName: #function)
+
+        defaults.set(false, forKey: SaneClickSharedDefaults.foldersInRightClickMenuKey)
+
+        #expect(SaneClickSharedDefaults.foldersInRightClickMenu(in: defaults) == false)
+    }
+}
+
+struct RightClickMenuGroupingTests {
+    private let catA = UUID()
+    private let catB = UUID()
+    private let catC = UUID()
+
+    @Test("Folders appear in category order and skip empty categories")
+    func foldersInCategoryOrderSkippingEmpty() {
+        // catA has scripts, catB is empty (no scripts), catC has scripts.
+        let result = RightClickMenuGrouping.group(
+            categoryIds: [catA, catC, catA],
+            orderedCategoryIds: [catA, catB, catC]
+        )
+
+        #expect(result.folders.map(\.categoryId) == [catA, catC])
+        #expect(result.looseIndices.isEmpty)
+    }
+
+    @Test("Script indices are preserved within a folder")
+    func scriptIndicesPreservedWithinFolder() {
+        let result = RightClickMenuGrouping.group(
+            categoryIds: [catA, catB, catA, catB],
+            orderedCategoryIds: [catA, catB]
+        )
+
+        let folderA = result.folders.first { $0.categoryId == catA }
+        let folderB = result.folders.first { $0.categoryId == catB }
+        #expect(folderA?.scriptIndices == [0, 2])
+        #expect(folderB?.scriptIndices == [1, 3])
+    }
+
+    @Test("Uncategorized and unknown-category scripts are loose, in original order")
+    func uncategorizedScriptsAreLoose() {
+        let unknown = UUID()
+        let result = RightClickMenuGrouping.group(
+            categoryIds: [nil, catA, unknown, nil],
+            orderedCategoryIds: [catA]
+        )
+
+        #expect(result.folders.map(\.categoryId) == [catA])
+        #expect(result.folders.first?.scriptIndices == [1])
+        // index 0 (nil), index 2 (unknown category), index 3 (nil) all loose, in order.
+        #expect(result.looseIndices == [0, 2, 3])
+    }
+
+    @Test("Every original index appears exactly once across folders and loose")
+    func everyIndexAccountedForExactlyOnce() {
+        let categoryIds: [UUID?] = [catA, nil, catB, catA, nil, catC]
+        let result = RightClickMenuGrouping.group(
+            categoryIds: categoryIds,
+            orderedCategoryIds: [catA, catB, catC]
+        )
+
+        var seen = result.looseIndices
+        for folder in result.folders {
+            seen.append(contentsOf: folder.scriptIndices)
+        }
+        #expect(Set(seen) == Set(0 ..< categoryIds.count))
+        #expect(seen.count == categoryIds.count)
     }
 }
 

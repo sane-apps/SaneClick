@@ -39,6 +39,14 @@ class FinderSync: FIFinderSync {
         return containerURL.appendingPathComponent("scripts.json")
     }
 
+    private var categoriesFileURL: URL {
+        guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.saneclick.app") else {
+            let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+            return appSupport.appendingPathComponent("SaneClick/categories.json")
+        }
+        return containerURL.appendingPathComponent("categories.json")
+    }
+
     override init() {
         super.init()
         logger.info("FinderSync extension init() called")
@@ -97,20 +105,19 @@ class FinderSync: FIFinderSync {
         let applicableScripts = scripts.filter { script in
             guard script.isEnabled else { return false }
 
-            let menuKindMatch: Bool
-            switch menuKind {
+            let menuKindMatch: Bool = switch menuKind {
             case .contextualMenuForItems:
-                menuKindMatch = script.appliesTo == "Files & Folders" ||
+                script.appliesTo == "Files & Folders" ||
                     script.appliesTo == "Files Only" ||
                     script.appliesTo == "Folders Only"
             case .contextualMenuForContainer:
-                menuKindMatch = script.appliesTo == "Inside Folder" ||
+                script.appliesTo == "Inside Folder" ||
                     script.appliesTo == "Files & Folders"
             case .contextualMenuForSidebar:
-                menuKindMatch = script.appliesTo == "Folders Only" ||
+                script.appliesTo == "Folders Only" ||
                     script.appliesTo == "Files & Folders"
             default:
-                menuKindMatch = false
+                false
             }
 
             guard menuKindMatch else { return false }
@@ -119,11 +126,41 @@ class FinderSync: FIFinderSync {
         }
 
         currentScripts = applicableScripts
-        for (index, script) in applicableScripts.enumerated() {
-            let item = NSMenuItem(title: script.name, action: #selector(executeScript(_:)), keyEquivalent: "")
-            item.tag = index
-            item.image = tintedSFSymbol(name: script.icon, accessibilityDescription: script.name)
-            menu.addItem(item)
+
+        let categories = loadCategories()
+        let useFolders = SaneClickSharedDefaults.foldersInRightClickMenu() && !categories.isEmpty
+
+        if useFolders {
+            let grouping = RightClickMenuGrouping.group(
+                categoryIds: applicableScripts.map(\.categoryId),
+                orderedCategoryIds: categories.map(\.id)
+            )
+
+            let categoriesById = Dictionary(uniqueKeysWithValues: categories.map { ($0.id, $0) })
+
+            // Category folders, in the order categories are listed (empty ones skipped).
+            for folder in grouping.folders {
+                guard let category = categoriesById[folder.categoryId] else { continue }
+
+                let submenu = NSMenu(title: category.name)
+                for index in folder.scriptIndices {
+                    submenu.addItem(makeScriptItem(applicableScripts[index], index: index))
+                }
+
+                let folderItem = NSMenuItem(title: category.name, action: nil, keyEquivalent: "")
+                folderItem.image = tintedSFSymbol(name: category.icon, accessibilityDescription: category.name)
+                folderItem.submenu = submenu
+                menu.addItem(folderItem)
+            }
+
+            // Uncategorized actions stay at the top level, after the folders.
+            for index in grouping.looseIndices {
+                menu.addItem(makeScriptItem(applicableScripts[index], index: index))
+            }
+        } else {
+            for (index, script) in applicableScripts.enumerated() {
+                menu.addItem(makeScriptItem(script, index: index))
+            }
         }
 
         if SaneClickSharedDefaults.showOpenMainWindowMenuItem() {
@@ -139,6 +176,16 @@ class FinderSync: FIFinderSync {
         return menu
     }
 
+    /// Build a script menu item. The `.tag` MUST equal the script's index in
+    /// `currentScripts` (the applicable list); `executeScript(_:)` looks the
+    /// script up by `currentScripts[sender.tag]`.
+    private func makeScriptItem(_ script: ExtensionScript, index: Int) -> NSMenuItem {
+        let item = NSMenuItem(title: script.name, action: #selector(executeScript(_:)), keyEquivalent: "")
+        item.tag = index
+        item.image = tintedSFSymbol(name: script.icon, accessibilityDescription: script.name)
+        return item
+    }
+
     @objc func executeScript(_ sender: AnyObject?) {
         guard let menuItem = sender as? NSMenuItem else { return }
 
@@ -148,7 +195,7 @@ class FinderSync: FIFinderSync {
 
         let items = resolvedSelectionURLs()
         guard !items.isEmpty else { return }
-        let paths = items.map { $0.path }
+        let paths = items.map(\.path)
 
         guard let containerURL = FileManager.default.containerURL(
             forSecurityApplicationGroupIdentifier: "M78L6FXD48.group.com.saneclick.app"
@@ -240,6 +287,16 @@ class FinderSync: FIFinderSync {
         return scripts
     }
 
+    private func loadCategories() -> [ExtensionCategory] {
+        guard FileManager.default.fileExists(atPath: categoriesFileURL.path),
+              let data = try? Data(contentsOf: categoriesFileURL),
+              let categories = try? JSONDecoder().decode([ExtensionCategory].self, from: data)
+        else {
+            return []
+        }
+        return categories
+    }
+
     /// Render an SF Symbol as a tinted bitmap image.
     /// Finder forces template rendering on NSMenuItem images, so we rasterize
     /// with a palette color configuration to produce a non-template bitmap.
@@ -261,6 +318,14 @@ class FinderSync: FIFinderSync {
         bitmap.isTemplate = false
         return bitmap
     }
+}
+
+// MARK: - Category Model
+
+struct ExtensionCategory: Codable {
+    let id: UUID
+    let name: String
+    let icon: String
 }
 
 // MARK: - Script Model
@@ -305,9 +370,9 @@ struct ExtensionScript: Codable {
 
         switch appliesTo {
         case "Files Only":
-            guard hasFiles && !hasFolders else { return false }
+            guard hasFiles, !hasFolders else { return false }
         case "Folders Only", "Inside Folder":
-            guard hasFolders && !hasFiles else { return false }
+            guard hasFolders, !hasFiles else { return false }
         default:
             break
         }

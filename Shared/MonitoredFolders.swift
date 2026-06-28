@@ -20,17 +20,72 @@ struct MonitoredFolder: Codable, Identifiable, Hashable {
 
 enum SaneClickSharedDefaults {
     static let showOpenMainWindowMenuItemKey = "showOpenMainWindowMenuItem"
+    static let foldersInRightClickMenuKey = "foldersInRightClickMenu"
 
     static var userDefaults: UserDefaults? {
         UserDefaults(suiteName: MonitoredFolders.appGroupID)
     }
 
     static func registerDefaults(in defaults: UserDefaults? = userDefaults) {
-        defaults?.register(defaults: [showOpenMainWindowMenuItemKey: true])
+        defaults?.register(defaults: [
+            showOpenMainWindowMenuItemKey: true,
+            foldersInRightClickMenuKey: true
+        ])
     }
 
     static func showOpenMainWindowMenuItem(in defaults: UserDefaults? = userDefaults) -> Bool {
         defaults?.object(forKey: showOpenMainWindowMenuItemKey) as? Bool ?? true
+    }
+
+    static func foldersInRightClickMenu(in defaults: UserDefaults? = userDefaults) -> Bool {
+        defaults?.object(forKey: foldersInRightClickMenuKey) as? Bool ?? true
+    }
+}
+
+/// Pure grouping of applicable scripts into category folders for the right-click menu.
+///
+/// Lives in Shared so the Finder extension and the test target can both use it.
+/// The result preserves the original index of each script (its position in the
+/// applicable list) so the extension can keep menu item `.tag` == index, which is
+/// what `executeScript(_:)` relies on to look the script up in `currentScripts`.
+enum RightClickMenuGrouping {
+    /// One category folder plus the scripts that belong in it.
+    struct Folder<CategoryID: Hashable> {
+        let categoryId: CategoryID
+        /// Script indices (into the original applicable list), in original order.
+        let scriptIndices: [Int]
+    }
+
+    /// Group `categoryIds` (one per applicable script, in order) into folders.
+    ///
+    /// - Parameters:
+    ///   - categoryIds: the category id for each applicable script, by index. `nil` means uncategorized.
+    ///   - orderedCategoryIds: all known category ids, in the order folders should appear.
+    /// - Returns: folders in `orderedCategoryIds` order (only those with at least one
+    ///   script), plus the indices of loose (uncategorized or unknown-category) scripts
+    ///   in their original order.
+    static func group<CategoryID: Hashable>(
+        categoryIds: [CategoryID?],
+        orderedCategoryIds: [CategoryID]
+    ) -> (folders: [Folder<CategoryID>], looseIndices: [Int]) {
+        let knownIds = Set(orderedCategoryIds)
+        var indicesByCategory: [CategoryID: [Int]] = [:]
+        var looseIndices: [Int] = []
+
+        for (index, categoryId) in categoryIds.enumerated() {
+            if let categoryId, knownIds.contains(categoryId) {
+                indicesByCategory[categoryId, default: []].append(index)
+            } else {
+                looseIndices.append(index)
+            }
+        }
+
+        let folders = orderedCategoryIds.compactMap { categoryId -> Folder<CategoryID>? in
+            guard let indices = indicesByCategory[categoryId], !indices.isEmpty else { return nil }
+            return Folder(categoryId: categoryId, scriptIndices: indices)
+        }
+
+        return (folders, looseIndices)
     }
 }
 

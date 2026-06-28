@@ -71,6 +71,10 @@ struct SettingsView: View {
         SaneClickSharedDefaults.showOpenMainWindowMenuItemKey,
         store: SaneClickSharedDefaults.userDefaults
     ) private var showOpenMainWindowMenuItem = true
+    @AppStorage(
+        SaneClickSharedDefaults.foldersInRightClickMenuKey,
+        store: SaneClickSharedDefaults.userDefaults
+    ) private var foldersInRightClickMenu = true
     @State private var extensionStatus = ExtensionStatusService.checkStatus()
     @State private var isCheckingStatus = false
     @State private var selectedTab: Tab?
@@ -155,6 +159,16 @@ struct SettingsView: View {
                             }
                         }
                     }
+
+                    CompactDivider()
+
+                    CompactToggle(
+                        label: SaneClickSettingsCopy.foldersInRightClickMenuLabel,
+                        icon: "folder",
+                        iconColor: .white,
+                        isOn: $foldersInRightClickMenu
+                    )
+                    .help(SaneClickSettingsCopy.foldersInRightClickMenuHelp)
 
                     CompactDivider()
 

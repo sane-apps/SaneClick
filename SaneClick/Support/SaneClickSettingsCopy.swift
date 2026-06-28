@@ -26,6 +26,16 @@ enum SaneClickSettingsCopy {
         defaultValue: "Keep a shortcut to the main SaneClick window at the bottom of the Finder menu"
     )
 
+    static let foldersInRightClickMenuLabel = String(
+        localized: "saneclick.settings.toggle.folders_in_right_click_menu",
+        defaultValue: "Group actions into folders"
+    )
+
+    static let foldersInRightClickMenuHelp = String(
+        localized: "saneclick.settings.help.folders_in_right_click_menu",
+        defaultValue: "Put each category in its own submenu in the Finder menu. Hover a folder to see its actions. Turn off to show every action in one flat list."
+    )
+
     static let removeButtonTitle = String(
         localized: "saneclick.settings.button.remove",
         defaultValue: "Remove"
