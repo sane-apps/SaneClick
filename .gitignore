@@ -210,4 +210,8 @@ scripts/*.swift
 # Project-specific additions
 # Keep repo-only ignore rules inside this block so sync_check can preserve them.
 # BEGIN PROJECT-SPECIFIC .gitignore
+# SaneProcess gate/breaker state — transient per-machine, like the other .claude/ state above.
+# (Belongs in the canonical template alongside sop-verify-state.json; mirror there via sync_check.)
+.claude/gate-*.json
+.claude/gate-*.jsonl
 # END PROJECT-SPECIFIC .gitignore
