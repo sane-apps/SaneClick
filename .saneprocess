@@ -93,13 +93,13 @@ release:
     drop_pos: "600 185"
 
 appstore:
-  enabled: false
-  # Current live strategy is direct download only; the App Store lane stays intentionally inactive (enabled: false)
-  # until the owner-gated submit. App Store revival PREPPED 2026-06-29: metadata, reviewer notes,
-  # and 1.3.0 What's New updated below; compliance verified (#if APP_STORE build = StoreKit IAP only,
-  # no crypto/external/license-key paths). Kept DISABLED until submit-ready — flipping to true makes
-  # verify/preflight run App Store readiness checks (screenshots etc.). Flip + appstore_preflight +
-  # appstore_submit as the FINAL owner-gated submit step, after regenerating the 2880x1800 screenshots.
+  enabled: true
+  # App Store lane is ACTIVE for the owner-authorized 1.3.0 submission (revived 2026-06-29).
+  # The direct-download channel remains live in parallel; this lane handles the Mac App Store submission only.
+  # Compliance verified: the #if APP_STORE build is StoreKit IAP only (com.saneclick.app.pro.actions.v4),
+  # with no crypto / external-unlock / license-key / Sparkle paths. Metadata, reviewer notes, What's New,
+  # and the IAP block below are submission-ready. With enabled: true, verify/preflight run App Store
+  # readiness checks (screenshots etc.); appstore_submit performs the build/sign/upload/submit-for-review.
   app_id: "6759330868"
   product_id: "com.saneclick.app.pro.actions.v4"
   scheme: SaneClick-AppStore

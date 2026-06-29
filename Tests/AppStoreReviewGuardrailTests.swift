@@ -94,7 +94,7 @@ struct AppStoreReviewGuardrailTests {
         var expectedOrder = [
             "Open SaneClick",
             SaneStandardMenu.settingsTitle,
-            SaneStandardMenu.licenseTitle,
+            SaneStandardMenu.licenseTitle
         ]
         #if !APP_STORE
             expectedOrder.append(SaneStandardMenu.checkForUpdatesTitle)
@@ -157,16 +157,30 @@ struct AppStoreReviewGuardrailTests {
         #expect(description.localizedCaseInsensitiveContains("one-time purchase") == false)
     }
 
-    @Test("Inactive App Store lane documents direct download strategy")
-    func inactiveAppStoreLaneDocumentsDirectDownloadStrategy() throws {
+    @Test("Active App Store lane carries the metadata required to submit")
+    func activeAppStoreLaneCarriesSubmissionMetadata() throws {
         let projectRoot = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
             .deletingLastPathComponent()
         let manifest = try String(contentsOf: projectRoot.appendingPathComponent(".saneprocess"), encoding: .utf8)
 
-        #expect(manifest.contains("enabled: false"))
-        #expect(manifest.localizedCaseInsensitiveContains("direct download only"))
-        #expect(manifest.localizedCaseInsensitiveContains("intentionally inactive"))
+        // The lane is now actively submitting to the Mac App Store.
+        #expect(manifest.contains("enabled: true"))
+        #expect(!manifest.contains("enabled: false"))
+
+        // Required submission identifiers and StoreKit-only compliance.
+        #expect(manifest.contains("app_id: \"6759330868\""))
+        #expect(manifest.contains("product_id: \"com.saneclick.app.pro.actions.v4\""))
+        #expect(manifest.contains("scheme: SaneClick-AppStore"))
+        #expect(manifest.contains("configuration: Release-AppStore"))
+
+        // Metadata, review notes, IAP block, and screenshots needed to pass preflight/submit.
+        #expect(manifest.localizedCaseInsensitiveContains("whats_new:"))
+        #expect(manifest.localizedCaseInsensitiveContains("review_notes_by_platform:"))
+        #expect(manifest.localizedCaseInsensitiveContains("display_name: \"SaneClick Pro Access\""))
+        #expect(manifest.contains("docs/screenshots/appstore-*.png"))
+
+        // Still no external-purchase / license-key escape hatch in the App Store lane.
         #expect(!manifest.localizedCaseInsensitiveContains("Settings > License"))
         #expect(!manifest.localizedCaseInsensitiveContains("sidebar Quick Actions section"))
     }
