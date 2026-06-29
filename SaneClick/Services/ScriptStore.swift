@@ -4,26 +4,26 @@ import os.log
 
 private let storeLogger = Logger(subsystem: "com.saneclick.SaneClick", category: "ScriptStore")
 
-enum ScriptImportMode: String, CaseIterable, Sendable {
+enum ScriptImportMode: String, CaseIterable {
     case skipDuplicates
     case replaceDuplicates
 
     var title: String {
         switch self {
-        case .skipDuplicates: return "Skip duplicates"
-        case .replaceDuplicates: return "Replace duplicates"
+        case .skipDuplicates: "Skip duplicates"
+        case .replaceDuplicates: "Replace duplicates"
         }
     }
 
     var detail: String {
         switch self {
-        case .skipDuplicates: return "Keep existing actions if names match"
-        case .replaceDuplicates: return "Overwrite existing actions with same name"
+        case .skipDuplicates: "Keep existing actions if names match"
+        case .replaceDuplicates: "Overwrite existing actions with same name"
         }
     }
 }
 
-struct ScriptImportSummary: Sendable {
+struct ScriptImportSummary {
     let added: Int
     let updated: Int
     let skipped: Int
@@ -34,7 +34,7 @@ struct ScriptImportSummary: Sendable {
     }
 }
 
-struct ScriptExportBundle: Codable, Sendable {
+struct ScriptExportBundle: Codable {
     var schemaVersion: Int
     var app: String?
     var exportedAt: Date?
@@ -42,9 +42,9 @@ struct ScriptExportBundle: Codable, Sendable {
     var categories: [ScriptCategory]
 
     init(scripts: [Script], categories: [ScriptCategory]) {
-        self.schemaVersion = 1
-        self.app = "SaneClick"
-        self.exportedAt = Date()
+        schemaVersion = 1
+        app = "SaneClick"
+        exportedAt = Date()
         self.scripts = scripts
         self.categories = categories
     }
@@ -88,7 +88,7 @@ final class ScriptStore {
     }
 
     private static var scriptsFileURL: URL {
-        guard let containerURL = containerURL else {
+        guard let containerURL else {
             // Fallback to regular app support
             let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
             let saneClickDir = appSupport.appendingPathComponent("SaneClick", isDirectory: true)
@@ -99,7 +99,7 @@ final class ScriptStore {
     }
 
     private static var categoriesFileURL: URL {
-        guard let containerURL = containerURL else {
+        guard let containerURL else {
             let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
             let saneClickDir = appSupport.appendingPathComponent("SaneClick", isDirectory: true)
             try? FileManager.default.createDirectory(at: saneClickDir, withIntermediateDirectories: true)
@@ -229,7 +229,7 @@ final class ScriptStore {
         } catch {
             storeLogger.error("Failed to read scripts file: \(error.localizedDescription)")
             loadError = "Could not read scripts file: \(error.localizedDescription)"
-            scripts = []  // Don't overwrite with defaults - preserve broken file for recovery
+            scripts = [] // Don't overwrite with defaults - preserve broken file for recovery
             return
         }
 
@@ -240,8 +240,10 @@ final class ScriptStore {
                 scripts = sanitizeForAppStore(scripts)
             #endif
             loadError = nil
-            storeLogger.info("Loaded \(self.scripts.count) scripts")
+            let loadedCount = scripts.count
+            storeLogger.info("Loaded \(loadedCount) scripts")
             applyLibraryDefaultsIfNeeded()
+            backfillLibraryCategoriesIfNeeded()
             if normalizeLibraryScriptDuplicates() {
                 saveScripts()
                 notifyExtension()
@@ -250,10 +252,10 @@ final class ScriptStore {
             storeLogger.error("Failed to decode scripts: \(error.localizedDescription)")
             // Save corrupted file for recovery
             let backupURL = fileURL.deletingPathExtension().appendingPathExtension("corrupted.json")
-            try? FileManager.default.removeItem(at: backupURL)  // Remove old backup
+            try? FileManager.default.removeItem(at: backupURL) // Remove old backup
             try? FileManager.default.copyItem(at: fileURL, to: backupURL)
             loadError = "Scripts file corrupted. Backup saved to: \(backupURL.lastPathComponent)"
-            scripts = []  // Don't overwrite - let user decide
+            scripts = [] // Don't overwrite - let user decide
         }
     }
 
@@ -337,7 +339,8 @@ final class ScriptStore {
             extensionMatchMode: libraryScript.extensionMatchMode,
             minSelection: libraryScript.minSelection,
             maxSelection: libraryScript.maxSelection,
-            categoryId: categoryId
+            categoryId: categoryId,
+            libraryCategory: libraryScript.category.rawValue
         )
     }
 
@@ -366,7 +369,8 @@ final class ScriptStore {
         // Write atomically
         do {
             try data.write(to: fileURL, options: .atomic)
-            storeLogger.info("Saved \(self.scripts.count) scripts")
+            let savedCount = scripts.count
+            storeLogger.info("Saved \(savedCount) scripts")
         } catch {
             storeLogger.error("CRITICAL: Failed to save scripts: \(error.localizedDescription)")
             // Consider: restore from backup? For now, log the error
@@ -418,6 +422,46 @@ final class ScriptStore {
         }
     }
 
+    /// One-time, idempotent upgrade migration: stamp each built-in action that
+    /// predates the `libraryCategory` field with its library category name so the
+    /// Finder right-click menu can group existing users' built-ins into submenus
+    /// (the same way fresh installs already carry it via `toScript()`).
+    ///
+    /// Only fills in a `nil` `libraryCategory`, and only when the installed record
+    /// actually matches the library action by name/type/content (`isLibraryRecord`),
+    /// so a user's custom action that happens to share a built-in name is left alone.
+    /// This is metadata only — it does not touch identity, gating, or the App Store
+    /// native-action match, so the free/Pro split and guardrails are unaffected.
+    private func backfillLibraryCategoriesIfNeeded() {
+        let (migrated, didChange) = Self.backfillingLibraryCategories(scripts)
+        guard didChange else { return }
+        scripts = migrated
+        saveScripts()
+        notifyExtension()
+    }
+
+    /// Pure, idempotent migration used by `backfillLibraryCategoriesIfNeeded()`.
+    /// Returns the scripts with built-in `libraryCategory` stamped in, and whether
+    /// anything changed. Exposed (not private) so tests can exercise it directly
+    /// without driving the singleton's one-shot disk load.
+    static func backfillingLibraryCategories(_ scripts: [Script]) -> (scripts: [Script], didChange: Bool) {
+        let libraryByName = Dictionary(uniqueKeysWithValues: ScriptLibrary.allScripts.map { ($0.name, $0) })
+        var result = scripts
+        var didChange = false
+
+        for index in result.indices {
+            guard result[index].libraryCategory == nil,
+                  let library = libraryByName[result[index].name],
+                  ActionCatalog.isLibraryRecord(result[index], matching: library)
+            else { continue }
+
+            result[index].libraryCategory = library.category.rawValue
+            didChange = true
+        }
+
+        return (result, didChange)
+    }
+
     private func loadCategories() {
         let fileURL = Self.categoriesFileURL
 
@@ -429,7 +473,8 @@ final class ScriptStore {
         do {
             let data = try Data(contentsOf: fileURL)
             categories = try JSONDecoder().decode([ScriptCategory].self, from: data)
-            storeLogger.info("Loaded \(self.categories.count) categories")
+            let loadedCount = categories.count
+            storeLogger.info("Loaded \(loadedCount) categories")
         } catch {
             storeLogger.error("Failed to load categories: \(error.localizedDescription)")
             categories = []
@@ -456,7 +501,8 @@ final class ScriptStore {
 
         do {
             try data.write(to: fileURL, options: .atomic)
-            storeLogger.info("Saved \(self.categories.count) categories")
+            let savedCount = categories.count
+            storeLogger.info("Saved \(savedCount) categories")
         } catch {
             storeLogger.error("Failed to save categories: \(error.localizedDescription)")
         }
@@ -678,13 +724,13 @@ extension ScriptStore {
     /// Get all enabled scripts
     var enabledScripts: [Script] {
         loadIfNeeded()
-        return scripts.filter { $0.isEnabled }
+        return scripts.filter(\.isEnabled)
     }
 
     /// Get scripts for a specific category
     func scripts(in category: ScriptCategory?) -> [Script] {
         loadIfNeeded()
-        if let category = category {
+        if let category {
             return scripts.filter { $0.categoryId == category.id }
         } else {
             // Uncategorized scripts

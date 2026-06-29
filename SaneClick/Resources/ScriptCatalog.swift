@@ -12,7 +12,79 @@ import Foundation
 extension ScriptLibrary {
     // MARK: - Designer Scripts
 
+    /// High-demand actions (OCR, PDF, HEIC) lead the Images & Media submenu so they
+    /// are reachable one hover deep instead of buried at the bottom of a flat menu.
+    /// The remaining convert/resize actions follow in their original order.
     static let designerScripts: [LibraryScript] = [
+        LibraryScript(
+            name: "Copy Text from Image",
+            type: .bash,
+            content: "# Runs natively via SaneClick (Copy Text from Image).",
+            icon: "text.viewfinder",
+            appliesTo: .filesOnly,
+            fileExtensions: imageExtensions,
+            category: .designer,
+            description: "Recognize text in images and copy it"
+        ),
+        LibraryScript(
+            name: "Save Text from Image",
+            type: .bash,
+            content: "# Runs natively via SaneClick (Save Text from Image).",
+            icon: "doc.text.viewfinder",
+            appliesTo: .filesOnly,
+            fileExtensions: imageExtensions,
+            category: .designer,
+            description: "Recognize text and save a .txt next to each image"
+        ),
+        LibraryScript(
+            name: "HEIC to JPEG",
+            type: .bash,
+            content: """
+            for f in "$@"; do
+                BASENAME="${f%.*}"
+                sips -s format jpeg "$f" --out "${BASENAME}.jpg"
+            done
+            osascript -e 'display notification "HEIC converted to JPEG" with title "SaneClick"'
+            """,
+            icon: "iphone",
+            appliesTo: .filesOnly,
+            fileExtensions: ["heic"],
+            category: .designer,
+            description: "Convert iPhone HEIC photos to JPEG"
+        ),
+        LibraryScript(
+            name: "Combine Images into PDF",
+            type: .bash,
+            content: "# Runs natively via SaneClick (Combine Images into PDF).",
+            icon: "doc.on.doc",
+            appliesTo: .filesOnly,
+            fileExtensions: imageExtensions,
+            minSelection: 2,
+            category: .designer,
+            description: "Merge selected images into a single PDF"
+        ),
+        LibraryScript(
+            name: "Split PDF into Pages",
+            type: .bash,
+            content: "# Runs natively via SaneClick (Split PDF into Pages).",
+            icon: "doc.on.doc.fill",
+            appliesTo: .filesOnly,
+            fileExtensions: ["pdf"],
+            maxSelection: 1,
+            category: .designer,
+            description: "Split a PDF into one file per page"
+        ),
+        LibraryScript(
+            name: "PDF to Images",
+            type: .bash,
+            content: "# Runs natively via SaneClick (PDF to Images).",
+            icon: "photo.stack",
+            appliesTo: .filesOnly,
+            fileExtensions: ["pdf"],
+            maxSelection: 1,
+            category: .designer,
+            description: "Render each PDF page as a PNG image"
+        ),
         LibraryScript(
             name: "Convert to PNG",
             type: .bash,
@@ -44,22 +116,6 @@ extension ScriptLibrary {
             fileExtensions: imageExtensions,
             category: .designer,
             description: "Convert image to JPEG (85% quality)"
-        ),
-        LibraryScript(
-            name: "HEIC to JPEG",
-            type: .bash,
-            content: """
-            for f in "$@"; do
-                BASENAME="${f%.*}"
-                sips -s format jpeg "$f" --out "${BASENAME}.jpg"
-            done
-            osascript -e 'display notification "HEIC converted to JPEG" with title "SaneClick"'
-            """,
-            icon: "iphone",
-            appliesTo: .filesOnly,
-            fileExtensions: ["heic"],
-            category: .designer,
-            description: "Convert iPhone HEIC photos to JPEG"
         ),
         LibraryScript(
             name: "Resize 50%",
@@ -187,59 +243,6 @@ extension ScriptLibrary {
             fileExtensions: ["png"],
             category: .designer,
             description: "Create @2x retina version from current size"
-        ),
-        LibraryScript(
-            name: "Copy Text from Image",
-            type: .bash,
-            content: "# Runs natively via SaneClick (Copy Text from Image).",
-            icon: "text.viewfinder",
-            appliesTo: .filesOnly,
-            fileExtensions: imageExtensions,
-            category: .designer,
-            description: "Recognize text in images and copy it"
-        ),
-        LibraryScript(
-            name: "Save Text from Image",
-            type: .bash,
-            content: "# Runs natively via SaneClick (Save Text from Image).",
-            icon: "doc.text.viewfinder",
-            appliesTo: .filesOnly,
-            fileExtensions: imageExtensions,
-            category: .designer,
-            description: "Recognize text and save a .txt next to each image"
-        ),
-        LibraryScript(
-            name: "Combine Images into PDF",
-            type: .bash,
-            content: "# Runs natively via SaneClick (Combine Images into PDF).",
-            icon: "doc.on.doc",
-            appliesTo: .filesOnly,
-            fileExtensions: imageExtensions,
-            minSelection: 2,
-            category: .designer,
-            description: "Merge selected images into a single PDF"
-        ),
-        LibraryScript(
-            name: "Split PDF into Pages",
-            type: .bash,
-            content: "# Runs natively via SaneClick (Split PDF into Pages).",
-            icon: "doc.on.doc.fill",
-            appliesTo: .filesOnly,
-            fileExtensions: ["pdf"],
-            maxSelection: 1,
-            category: .designer,
-            description: "Split a PDF into one file per page"
-        ),
-        LibraryScript(
-            name: "PDF to Images",
-            type: .bash,
-            content: "# Runs natively via SaneClick (PDF to Images).",
-            icon: "photo.stack",
-            appliesTo: .filesOnly,
-            fileExtensions: ["pdf"],
-            maxSelection: 1,
-            category: .designer,
-            description: "Render each PDF page as a PNG image"
         )
     ]
 

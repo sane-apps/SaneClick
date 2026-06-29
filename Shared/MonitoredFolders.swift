@@ -42,6 +42,41 @@ enum SaneClickSharedDefaults {
     }
 }
 
+/// The built-in library categories, mirrored in Shared so the Finder extension and
+/// the test target can resolve their display order and icons without importing the
+/// host-app-only `ScriptLibrary.ScriptCategory` enum.
+///
+/// `rawValue` matches `ScriptLibrary.ScriptCategory.rawValue`, and `icon` mirrors
+/// `ScriptLibrary.ScriptCategory.icon`. `displayOrder` lists them most-common first
+/// (Essentials, Files & Folders, Images & Media, Coding, Advanced) so built-in
+/// submenus lead the right-click menu ahead of any user-created categories.
+enum BuiltInMenuCategory: String, CaseIterable {
+    case essentials = "Essentials"
+    case filesAndFolders = "Files & Folders"
+    case imagesAndMedia = "Images & Media"
+    case coding = "Coding"
+    case advanced = "Advanced"
+
+    var icon: String {
+        switch self {
+        case .essentials: "star.fill"
+        case .filesAndFolders: "folder.fill"
+        case .imagesAndMedia: "photo.on.rectangle.angled"
+        case .coding: "chevron.left.forwardslash.chevron.right"
+        case .advanced: "wrench.and.screwdriver.fill"
+        }
+    }
+
+    /// Built-in category names, most-common first, for top-level submenu ordering.
+    static var displayOrder: [String] {
+        allCases.map(\.rawValue)
+    }
+
+    static func icon(forRawValue rawValue: String) -> String? {
+        BuiltInMenuCategory(rawValue: rawValue)?.icon
+    }
+}
+
 /// Pure grouping of applicable scripts into category folders for the right-click menu.
 ///
 /// Lives in Shared so the Finder extension and the test target can both use it.
@@ -86,6 +121,87 @@ enum RightClickMenuGrouping {
         }
 
         return (folders, looseIndices)
+    }
+
+    /// Identifies where an applicable script's submenu should live.
+    /// A script belongs to its USER category when it has one (`categoryId` that maps
+    /// to a known user category); otherwise it falls back to its built-in
+    /// `libraryCategory`. Scripts with neither are loose (top level).
+    struct ScriptCategoryAssignment {
+        let userCategoryId: UUID?
+        /// `ScriptLibrary.ScriptCategory.rawValue` (built-in) when present.
+        let libraryCategory: String?
+    }
+
+    /// One ordered submenu: a display title + icon plus the original indices of the
+    /// applicable scripts inside it. `userCategoryId` is set for user categories,
+    /// `nil` for built-in library categories.
+    struct MenuCategory {
+        let title: String
+        let icon: String
+        let userCategoryId: UUID?
+        let scriptIndices: [Int]
+    }
+
+    /// Build the ordered right-click submenu plan.
+    ///
+    /// Effective category per script: its user category (when `userCategoryId` maps
+    /// to a known user category) ELSE its built-in `libraryCategory`. Built-in
+    /// submenus come first in `BuiltInMenuCategory.displayOrder` (Essentials, Files &
+    /// Folders, Images & Media, Coding, Advanced), then user categories in
+    /// `orderedUserCategories` order, then loose/uncategorized indices at top level.
+    /// Original indices are preserved so menu-item `.tag` == applicable-list index
+    /// keeps working for `executeScript(_:)`.
+    static func menuPlan(
+        assignments: [ScriptCategoryAssignment],
+        orderedUserCategories: [(id: UUID, name: String, icon: String)]
+    ) -> (categories: [MenuCategory], looseIndices: [Int]) {
+        let knownUserIds = Set(orderedUserCategories.map(\.id))
+
+        var builtInIndices: [String: [Int]] = [:]
+        var userIndices: [UUID: [Int]] = [:]
+        var looseIndices: [Int] = []
+
+        for (index, assignment) in assignments.enumerated() {
+            if let userId = assignment.userCategoryId, knownUserIds.contains(userId) {
+                userIndices[userId, default: []].append(index)
+            } else if let libraryCategory = assignment.libraryCategory,
+                      BuiltInMenuCategory(rawValue: libraryCategory) != nil {
+                builtInIndices[libraryCategory, default: []].append(index)
+            } else {
+                looseIndices.append(index)
+            }
+        }
+
+        var categories: [MenuCategory] = []
+
+        // Built-in categories first, in fixed most-common-first order.
+        for builtIn in BuiltInMenuCategory.allCases {
+            guard let indices = builtInIndices[builtIn.rawValue], !indices.isEmpty else { continue }
+            categories.append(
+                MenuCategory(
+                    title: builtIn.rawValue,
+                    icon: builtIn.icon,
+                    userCategoryId: nil,
+                    scriptIndices: indices
+                )
+            )
+        }
+
+        // Then user categories, in their configured order.
+        for category in orderedUserCategories {
+            guard let indices = userIndices[category.id], !indices.isEmpty else { continue }
+            categories.append(
+                MenuCategory(
+                    title: category.name,
+                    icon: category.icon,
+                    userCategoryId: category.id,
+                    scriptIndices: indices
+                )
+            )
+        }
+
+        return (categories, looseIndices)
     }
 }
 

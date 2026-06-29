@@ -74,7 +74,7 @@ struct ScriptTests {
         let urls = [
             URL(fileURLWithPath: "/test/file.jpg"),
             URL(fileURLWithPath: "/test/file.pdf"),
-            URL(fileURLWithPath: "/test/file.txt"),
+            URL(fileURLWithPath: "/test/file.txt")
         ]
         #expect(script.matchesFiles(urls) == true)
     }
@@ -103,14 +103,14 @@ struct ScriptTests {
         // One matching file
         let mixedFiles = [
             URL(fileURLWithPath: "/test/image.jpg"),
-            URL(fileURLWithPath: "/test/document.pdf"),
+            URL(fileURLWithPath: "/test/document.pdf")
         ]
         #expect(script.matchesFiles(mixedFiles) == true)
 
         // No matching files
         let noMatch = [
             URL(fileURLWithPath: "/test/document.pdf"),
-            URL(fileURLWithPath: "/test/file.txt"),
+            URL(fileURLWithPath: "/test/file.txt")
         ]
         #expect(script.matchesFiles(noMatch) == false)
     }
@@ -126,14 +126,14 @@ struct ScriptTests {
         // All files match
         let allMatch = [
             URL(fileURLWithPath: "/test/image1.jpg"),
-            URL(fileURLWithPath: "/test/image2.png"),
+            URL(fileURLWithPath: "/test/image2.png")
         ]
         #expect(script.matchesFiles(allMatch) == true)
 
         // Mixed files - not all match
         let mixed = [
             URL(fileURLWithPath: "/test/image.jpg"),
-            URL(fileURLWithPath: "/test/document.pdf"),
+            URL(fileURLWithPath: "/test/document.pdf")
         ]
         #expect(script.matchesFiles(mixed) == false)
     }
@@ -249,6 +249,44 @@ struct ScriptTests {
 
         #expect(decoded.outputMode == .standard)
         #expect(decoded.confirmBeforeRun == false)
+    }
+
+    // MARK: - libraryCategory Codable
+
+    @Test("Script round-trips libraryCategory through Codable")
+    func scriptRoundTripsLibraryCategory() throws {
+        let original = Script(
+            name: "Copy Text from Image",
+            type: .bash,
+            content: "# native",
+            libraryCategory: "Images & Media"
+        )
+
+        let data = try JSONEncoder().encode(original)
+        let decoded = try JSONDecoder().decode(Script.self, from: data)
+
+        #expect(decoded.libraryCategory == "Images & Media")
+    }
+
+    @Test("Script decodes missing libraryCategory to nil (back-compat)")
+    func scriptDecodesMissingLibraryCategoryToNil() throws {
+        // Legacy payload that predates the libraryCategory field must still decode,
+        // defaulting libraryCategory to nil so older saved actions are unchanged.
+        let legacyJSON = """
+        {
+            "id": "22222222-2222-2222-2222-222222222222",
+            "name": "Legacy",
+            "type": "Shell Command",
+            "content": "echo hi",
+            "isEnabled": true,
+            "icon": "terminal",
+            "appliesTo": "Files & Folders"
+        }
+        """
+        let data = try #require(legacyJSON.data(using: .utf8))
+        let decoded = try JSONDecoder().decode(Script.self, from: data)
+
+        #expect(decoded.libraryCategory == nil)
     }
 
     @Test("ExtensionMatchMode has correct raw values")

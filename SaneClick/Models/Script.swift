@@ -16,6 +16,13 @@ struct Script: Identifiable, Codable, Equatable, Hashable {
     var categoryId: UUID? // nil = uncategorized
     var outputMode: ScriptOutputMode // What to do with the action's output when it finishes
     var confirmBeforeRun: Bool // Ask the user to confirm before running this action
+    /// The built-in library category this action belongs to, e.g. "Images & Media"
+    /// (a `ScriptLibrary.ScriptCategory.rawValue`). `nil` for purely custom actions.
+    /// This is metadata only: it never participates in `AppStoreNativeAction(script:)`
+    /// name/type/content matching, so it is guardrail-neutral and App-Store-safe. It
+    /// lets the Finder right-click menu group fresh-install built-ins into submenus
+    /// even when the user has not created their own categories.
+    var libraryCategory: String?
 
     init(
         id: UUID = UUID(),
@@ -31,7 +38,8 @@ struct Script: Identifiable, Codable, Equatable, Hashable {
         maxSelection: Int? = nil,
         categoryId: UUID? = nil,
         outputMode: ScriptOutputMode = .standard,
-        confirmBeforeRun: Bool = false
+        confirmBeforeRun: Bool = false,
+        libraryCategory: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -47,6 +55,7 @@ struct Script: Identifiable, Codable, Equatable, Hashable {
         self.categoryId = categoryId
         self.outputMode = outputMode
         self.confirmBeforeRun = confirmBeforeRun
+        self.libraryCategory = libraryCategory
     }
 
     /// Check if this script applies to the given file URLs
@@ -115,6 +124,7 @@ struct Script: Identifiable, Codable, Equatable, Hashable {
         case categoryId
         case outputMode
         case confirmBeforeRun
+        case libraryCategory
     }
 
     init(from decoder: Decoder) throws {
@@ -133,6 +143,7 @@ struct Script: Identifiable, Codable, Equatable, Hashable {
         categoryId = try container.decodeIfPresent(UUID.self, forKey: .categoryId)
         outputMode = try container.decodeIfPresent(ScriptOutputMode.self, forKey: .outputMode) ?? .standard
         confirmBeforeRun = try container.decodeIfPresent(Bool.self, forKey: .confirmBeforeRun) ?? false
+        libraryCategory = try container.decodeIfPresent(String.self, forKey: .libraryCategory) ?? nil
     }
 
     func encode(to encoder: Encoder) throws {
@@ -151,6 +162,7 @@ struct Script: Identifiable, Codable, Equatable, Hashable {
         try container.encodeIfPresent(categoryId, forKey: .categoryId)
         try container.encode(outputMode, forKey: .outputMode)
         try container.encode(confirmBeforeRun, forKey: .confirmBeforeRun)
+        try container.encodeIfPresent(libraryCategory, forKey: .libraryCategory)
     }
 }
 

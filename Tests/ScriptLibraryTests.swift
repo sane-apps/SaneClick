@@ -482,6 +482,144 @@ struct RightClickMenuGroupingTests {
     }
 }
 
+struct BuiltInMenuGroupingTests {
+    private func assignment(library: String?, user: UUID? = nil) -> RightClickMenuGrouping.ScriptCategoryAssignment {
+        RightClickMenuGrouping.ScriptCategoryAssignment(userCategoryId: user, libraryCategory: library)
+    }
+
+    @Test("Built-in actions group into submenus by libraryCategory in fixed order")
+    func builtInsGroupByLibraryCategoryInOrder() {
+        // One action per built-in category, supplied out of display order.
+        let plan = RightClickMenuGrouping.menuPlan(
+            assignments: [
+                assignment(library: "Advanced"),
+                assignment(library: "Essentials"),
+                assignment(library: "Images & Media"),
+                assignment(library: "Coding"),
+                assignment(library: "Files & Folders")
+            ],
+            orderedUserCategories: []
+        )
+
+        #expect(plan.categories.map(\.title) == [
+            "Essentials", "Files & Folders", "Images & Media", "Coding", "Advanced"
+        ])
+        #expect(plan.looseIndices.isEmpty)
+        // Icons mirror ScriptLibrary.ScriptCategory.icon.
+        let imagesAndMedia = plan.categories.first { $0.title == "Images & Media" }
+        #expect(imagesAndMedia?.icon == "photo.on.rectangle.angled")
+    }
+
+    @Test("An image action set lands in Images & Media and is not dropped")
+    func imageActionsLandInImagesAndMedia() throws {
+        // Mirror the real applicable list for an image file selection.
+        let assignments = [
+            assignment(library: "Images & Media"), // Copy Text from Image
+            assignment(library: "Images & Media"), // Save Text from Image
+            assignment(library: "Images & Media"), // HEIC to JPEG
+            assignment(library: "Essentials") // Copy Path (applies to all)
+        ]
+
+        let plan = RightClickMenuGrouping.menuPlan(assignments: assignments, orderedUserCategories: [])
+
+        let images = try #require(plan.categories.first { $0.title == "Images & Media" })
+        #expect(images.scriptIndices == [0, 1, 2])
+
+        // Every applicable index is represented exactly once (nothing dropped).
+        var seen = plan.looseIndices
+        for category in plan.categories {
+            seen.append(contentsOf: category.scriptIndices)
+        }
+        #expect(Set(seen) == Set(0 ..< assignments.count))
+        #expect(seen.count == assignments.count)
+    }
+
+    @Test("User category wins over built-in libraryCategory and follows built-ins")
+    func userCategoryWinsAndOrdersAfterBuiltIns() {
+        let userCat = UUID()
+        let assignments = [
+            assignment(library: "Images & Media", user: userCat), // user category set -> goes to user folder
+            assignment(library: "Essentials")
+        ]
+
+        let plan = RightClickMenuGrouping.menuPlan(
+            assignments: assignments,
+            orderedUserCategories: [(id: userCat, name: "My Stuff", icon: "folder")]
+        )
+
+        // Built-in (Essentials) first, then user category.
+        #expect(plan.categories.map(\.title) == ["Essentials", "My Stuff"])
+        #expect(plan.categories.first { $0.title == "My Stuff" }?.scriptIndices == [0])
+        #expect(plan.categories.first { $0.title == "My Stuff" }?.userCategoryId == userCat)
+    }
+
+    @Test("Actions with neither category fall loose to top level")
+    func uncategorizedActionsAreLoose() {
+        let plan = RightClickMenuGrouping.menuPlan(
+            assignments: [assignment(library: nil), assignment(library: "Essentials"), assignment(library: nil)],
+            orderedUserCategories: []
+        )
+
+        #expect(plan.categories.map(\.title) == ["Essentials"])
+        #expect(plan.looseIndices == [0, 2])
+    }
+}
+
+struct ImagesAndMediaReorderTests {
+    @Test("High-demand image actions lead the Images & Media library array")
+    func highDemandActionsLeadCategory() {
+        let names = ScriptLibrary.designerScripts.map(\.name)
+        let leading = Array(names.prefix(6))
+
+        #expect(leading == [
+            "Copy Text from Image",
+            "Save Text from Image",
+            "HEIC to JPEG",
+            "Combine Images into PDF",
+            "Split PDF into Pages",
+            "PDF to Images"
+        ])
+    }
+
+    @Test("Reorder did not drop or duplicate any Images & Media action")
+    func reorderPreservesAllActions() {
+        let names = ScriptLibrary.designerScripts.map(\.name)
+        #expect(Set(names).count == names.count, "No duplicate image actions")
+        // Original convert/resize actions are still present.
+        for expected in ["Convert to PNG", "Convert to JPEG", "Resize 50%", "Create @2x Copy"] {
+            #expect(names.contains(expected), "\(expected) should still be in the library")
+        }
+    }
+}
+
+struct BasicProGatingInvarianceTests {
+    @Test("Free/Pro split stays identity-based after libraryCategory + reorder")
+    func freeProSplitIsIntact() throws {
+        // Basic (free): a copy-path variant from Essentials.
+        let copyFileURL = try #require(ScriptLibrary.libraryScript(named: "Copy as File URL")).toScript()
+        #expect(ActionCatalog.isAvailableInBasic(copyFileURL) == true)
+
+        // Pro: OCR + a PDF action are NOT available in basic.
+        let copyText = try #require(ScriptLibrary.libraryScript(named: "Copy Text from Image")).toScript()
+        #expect(ActionCatalog.isAvailableInBasic(copyText) == false)
+
+        let pdfToImages = try #require(ScriptLibrary.libraryScript(named: "PDF to Images")).toScript()
+        #expect(ActionCatalog.isAvailableInBasic(pdfToImages) == false)
+
+        // libraryCategory must NOT be what the gate keys on: mutate it and the
+        // verdict must not change (gating stays category/identity-based).
+        var tampered = copyText
+        tampered.libraryCategory = "Essentials"
+        #expect(ActionCatalog.isAvailableInBasic(tampered) == false)
+    }
+
+    @Test("App Store basic/pro action counts are unchanged")
+    func appStoreCountsUnchanged() {
+        #expect(Set(AppStoreActionCatalog.basicActions).count == 13)
+        #expect(Set(AppStoreActionCatalog.proActions).count == 14)
+    }
+}
+
 struct MonitoredFoldersPrivacyScopeTests {
     private let home = URL(fileURLWithPath: "/Users/sane", isDirectory: true)
 

@@ -128,33 +128,47 @@ class FinderSync: FIFinderSync {
         currentScripts = applicableScripts
 
         let categories = loadCategories()
-        let useFolders = SaneClickSharedDefaults.foldersInRightClickMenu() && !categories.isEmpty
+
+        // Effective category per applicable script: its USER category when set, else
+        // its built-in `libraryCategory`. Built-in actions now always carry a library
+        // category, so grouping engages by default for a fresh install even before
+        // the user creates any of their own categories. This is what keeps the OCR
+        // actions reachable one hover deep instead of buried in a flat 40+ item menu.
+        let assignments = applicableScripts.map {
+            RightClickMenuGrouping.ScriptCategoryAssignment(
+                userCategoryId: $0.categoryId,
+                libraryCategory: $0.libraryCategory
+            )
+        }
+
+        let hasAnyCategory = assignments.contains {
+            $0.userCategoryId != nil || $0.libraryCategory != nil
+        }
+        let useFolders = SaneClickSharedDefaults.foldersInRightClickMenu() && hasAnyCategory
 
         if useFolders {
-            let grouping = RightClickMenuGrouping.group(
-                categoryIds: applicableScripts.map(\.categoryId),
-                orderedCategoryIds: categories.map(\.id)
+            let plan = RightClickMenuGrouping.menuPlan(
+                assignments: assignments,
+                orderedUserCategories: categories.map { (id: $0.id, name: $0.name, icon: $0.icon) }
             )
 
-            let categoriesById = Dictionary(uniqueKeysWithValues: categories.map { ($0.id, $0) })
-
-            // Category folders, in the order categories are listed (empty ones skipped).
-            for folder in grouping.folders {
-                guard let category = categoriesById[folder.categoryId] else { continue }
-
-                let submenu = NSMenu(title: category.name)
-                for index in folder.scriptIndices {
+            // Submenus, in order: built-in categories (most-common first), then user
+            // categories. Empty categories are skipped by the plan.
+            for category in plan.categories {
+                let submenu = NSMenu(title: category.title)
+                for index in category.scriptIndices {
                     submenu.addItem(makeScriptItem(applicableScripts[index], index: index))
                 }
 
-                let folderItem = NSMenuItem(title: category.name, action: nil, keyEquivalent: "")
-                folderItem.image = tintedSFSymbol(name: category.icon, accessibilityDescription: category.name)
+                let folderItem = NSMenuItem(title: category.title, action: nil, keyEquivalent: "")
+                folderItem.image = tintedSFSymbol(name: category.icon, accessibilityDescription: category.title)
                 folderItem.submenu = submenu
                 menu.addItem(folderItem)
             }
 
-            // Uncategorized actions stay at the top level, after the folders.
-            for index in grouping.looseIndices {
+            // Uncategorized / unknown-category actions stay at the top level, after
+            // the folders, in their original order.
+            for index in plan.looseIndices {
                 menu.addItem(makeScriptItem(applicableScripts[index], index: index))
             }
         } else {
@@ -343,9 +357,13 @@ struct ExtensionScript: Codable {
     var minSelection: Int
     var maxSelection: Int?
     var categoryId: UUID?
+    /// Built-in library category name (a `ScriptLibrary.ScriptCategory.rawValue`),
+    /// `nil` for purely custom actions. Lets fresh-install built-ins group into
+    /// submenus even before the user creates any of their own categories.
+    var libraryCategory: String?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, type, content, isEnabled, icon, appliesTo, fileExtensions, extensionMatchMode, minSelection, maxSelection, categoryId
+        case id, name, type, content, isEnabled, icon, appliesTo, fileExtensions, extensionMatchMode, minSelection, maxSelection, categoryId, libraryCategory
     }
 
     init(from decoder: Decoder) throws {
@@ -362,6 +380,7 @@ struct ExtensionScript: Codable {
         minSelection = try container.decodeIfPresent(Int.self, forKey: .minSelection) ?? 1
         maxSelection = try container.decodeIfPresent(Int.self, forKey: .maxSelection)
         categoryId = try container.decodeIfPresent(UUID.self, forKey: .categoryId)
+        libraryCategory = try container.decodeIfPresent(String.self, forKey: .libraryCategory) ?? nil
     }
 
     func matchesFiles(_ urls: [URL]) -> Bool {

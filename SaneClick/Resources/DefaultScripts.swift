@@ -62,7 +62,8 @@ enum ScriptLibrary {
                 minSelection: minSelection,
                 maxSelection: maxSelection,
                 outputMode: outputMode,
-                confirmBeforeRun: confirmBeforeRun
+                confirmBeforeRun: confirmBeforeRun,
+                libraryCategory: category.rawValue
             )
         }
     }

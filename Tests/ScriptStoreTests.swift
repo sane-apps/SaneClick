@@ -1,17 +1,16 @@
 import Foundation
-import Testing
 @testable import SaneClick
+import Testing
 
 @MainActor
 struct ScriptStoreTests {
-
     // MARK: - Test Helpers
 
     /// Create a temporary test store that doesn't persist to disk
     private func createTestStore() -> ScriptStore {
         // ScriptStore.shared is a singleton, so we test via it
         // but we should save/restore state around tests
-        return ScriptStore.shared
+        ScriptStore.shared
     }
 
     private func resetScripts(in store: ScriptStore, to scripts: [Script]) {
@@ -27,7 +26,7 @@ struct ScriptStoreTests {
     // MARK: - CRUD Tests
 
     @Test("Script can be added to store")
-    func addScript() async {
+    func addScript() {
         let store = createTestStore()
         let initialCount = store.scripts.count
 
@@ -42,7 +41,7 @@ struct ScriptStoreTests {
     }
 
     @Test("Script can be updated in store")
-    func updateScript() async {
+    func updateScript() {
         let store = createTestStore()
 
         var script = Script(name: "Test Update Script", type: .bash, content: "echo original")
@@ -63,7 +62,7 @@ struct ScriptStoreTests {
     }
 
     @Test("Script can be deleted from store")
-    func deleteScript() async {
+    func deleteScript() {
         let store = createTestStore()
 
         let script = Script(name: "Test Delete Script", type: .bash, content: "echo delete me")
@@ -75,7 +74,7 @@ struct ScriptStoreTests {
     }
 
     @Test("Scripts can be reordered")
-    func moveScript() async {
+    func moveScript() throws {
         let store = createTestStore()
 
         // Add test scripts
@@ -88,15 +87,15 @@ struct ScriptStoreTests {
         store.addScript(script3)
 
         // Get indices (they're at the end)
-        let idx1 = store.scripts.firstIndex(where: { $0.id == script1.id })!
-        let idx3 = store.scripts.firstIndex(where: { $0.id == script3.id })!
+        let idx1 = try #require(store.scripts.firstIndex(where: { $0.id == script1.id }))
+        let idx3 = try #require(store.scripts.firstIndex(where: { $0.id == script3.id }))
 
         // Move script3 before script1
         store.moveScript(from: IndexSet(integer: idx3), to: idx1)
 
         // Verify order changed
-        let newIdx3 = store.scripts.firstIndex(where: { $0.id == script3.id })!
-        let newIdx1 = store.scripts.firstIndex(where: { $0.id == script1.id })!
+        let newIdx3 = try #require(store.scripts.firstIndex(where: { $0.id == script3.id }))
+        let newIdx1 = try #require(store.scripts.firstIndex(where: { $0.id == script1.id }))
         #expect(newIdx3 < newIdx1)
 
         // Cleanup
@@ -108,7 +107,7 @@ struct ScriptStoreTests {
     // MARK: - Filter Tests
 
     @Test("Enabled scripts filter works")
-    func enabledScriptsFilter() async {
+    func enabledScriptsFilter() {
         let store = createTestStore()
 
         let enabled = Script(name: "Enabled Script", type: .bash, content: "1", isEnabled: true)
@@ -138,7 +137,7 @@ struct ScriptStoreTests {
     }
 
     @Test("Library activation is live and deduplicates stale installed copies")
-    func libraryActivationDeduplicatesStaleInstalledCopies() async throws {
+    func libraryActivationDeduplicatesStaleInstalledCopies() throws {
         let store = createTestStore()
         let originalScripts = Array(store.scripts)
         defer {
@@ -172,7 +171,7 @@ struct ScriptStoreTests {
     }
 
     @Test("Library activation preserves custom action with same name")
-    func libraryActivationPreservesCustomActionWithSameName() async throws {
+    func libraryActivationPreservesCustomActionWithSameName() throws {
         let store = createTestStore()
         let originalScripts = Array(store.scripts)
         defer {
@@ -209,7 +208,7 @@ struct ScriptStoreTests {
     }
 
     @Test("Library activation canonicalizes legacy built-in content")
-    func libraryActivationCanonicalizesLegacyBuiltInContent() async throws {
+    func libraryActivationCanonicalizesLegacyBuiltInContent() throws {
         let store = createTestStore()
         let originalScripts = Array(store.scripts)
         defer {
@@ -242,7 +241,7 @@ struct ScriptStoreTests {
     // MARK: - Import / Export Tests
 
     @Test("Import scripts adds new actions")
-    func importScriptsAddsNewActions() async {
+    func importScriptsAddsNewActions() {
         let store = createTestStore()
         let uniqueName = "Import Test \(UUID().uuidString)"
         let script = Script(name: uniqueName, type: .bash, content: "echo import")
@@ -268,7 +267,7 @@ struct ScriptStoreTests {
     }
 
     @Test("Import scripts replaces duplicates by name when requested")
-    func importScriptsReplacesDuplicates() async {
+    func importScriptsReplacesDuplicates() {
         let store = createTestStore()
         let name = "Import Replace \(UUID().uuidString)"
         let original = Script(name: name, type: .bash, content: "echo original")
@@ -298,7 +297,7 @@ struct ScriptStoreTests {
     }
 
     @Test("Export scripts writes a bundle")
-    func exportScriptsWritesBundle() async {
+    func exportScriptsWritesBundle() {
         let store = createTestStore()
         let name = "Export Test \(UUID().uuidString)"
         let script = Script(name: name, type: .bash, content: "echo export")
@@ -320,5 +319,46 @@ struct ScriptStoreTests {
 
         store.deleteScript(script)
         try? FileManager.default.removeItem(at: tempURL)
+    }
+
+    // MARK: - libraryCategory Migration
+
+    @Test("Migration stamps libraryCategory onto a built-in action that lacks it")
+    func migrationBackfillsLibraryCategory() throws {
+        // A built-in image action as an EXISTING user would have it on disk before
+        // the upgrade: correct name/type/content, but no libraryCategory yet.
+        let libraryScript = try #require(ScriptLibrary.libraryScript(named: "Copy Text from Image"))
+        var preMigration = libraryScript.toScript()
+        preMigration.libraryCategory = nil
+        #expect(preMigration.libraryCategory == nil)
+
+        let (migrated, didChange) = ScriptStore.backfillingLibraryCategories([preMigration])
+
+        #expect(didChange)
+        #expect(migrated.first?.libraryCategory == "Images & Media")
+    }
+
+    @Test("Migration is idempotent and leaves custom actions alone")
+    func migrationIsIdempotentAndSkipsCustomActions() throws {
+        // Already-categorized built-in: untouched, no change reported.
+        let builtIn = try #require(ScriptLibrary.libraryScript(named: "Copy Path")).toScript()
+        #expect(builtIn.libraryCategory == "Essentials")
+
+        // Custom action that merely shares a built-in NAME but has custom content:
+        // it is not a library record, so the migration must not categorize it.
+        var customSharingName = Script(
+            name: "Copy Path",
+            type: .bash,
+            content: "echo definitely-not-the-builtin",
+            libraryCategory: nil
+        )
+        #expect(customSharingName.libraryCategory == nil)
+
+        let (migrated, didChange) = ScriptStore.backfillingLibraryCategories([builtIn, customSharingName])
+
+        #expect(!didChange)
+        #expect(migrated.first(where: { $0.id == builtIn.id })?.libraryCategory == "Essentials")
+        customSharingName = try #require(migrated.first(where: { $0.id == customSharingName.id }))
+        #expect(customSharingName.libraryCategory == nil)
     }
 }
