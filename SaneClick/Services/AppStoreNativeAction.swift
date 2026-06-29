@@ -32,10 +32,12 @@ enum AppStoreNativeAction: String, CaseIterable {
     case copyFilenameNoExtension = "Copy Filename without Extension"
     case copyParentPath = "Copy Parent Folder Path"
     case copyMarkdownLink = "Copy as Markdown Link"
-    // Image actions. On the direct build these keep running via their existing
-    // sips bash content (unchanged); these native cases only let the App Store
-    // build run them, where shelling out to sips is impossible. They are NOT
-    // marked `requiresNativeRuntime`, so the direct build is untouched.
+    // Image actions. These keep their existing sips bash `content` for identity
+    // matching (init(script:) keys on name + type + content), but on BOTH builds
+    // we now run them through the native executor for non-destructive, consistent
+    // behavior (writes a new file, never edits the original). The sips content is
+    // the action's identity/fallback and is no longer executed on the direct
+    // build. They are marked `requiresNativeRuntime` for that reason.
     case convertToPNG = "Convert to PNG"
     case convertToJPEG = "Convert to JPEG"
     case heicToJPEG = "HEIC to JPEG"
@@ -47,9 +49,15 @@ enum AppStoreNativeAction: String, CaseIterable {
     case createRetinaCopy = "Create @2x Copy"
     case getImageDimensions = "Get Image Dimensions"
 
-    /// Actions that have no shell/AppleScript equivalent (OCR, PDF) or are
-    /// cleaner native (path variants). These route through the native executor
-    /// on the direct build as well as the App Store build.
+    /// Actions that execute via the native engine (not the shell) on BOTH the
+    /// direct and App Store builds. Two groups qualify:
+    ///   1. Native-only actions with no shell/AppleScript equivalent (OCR, PDF)
+    ///      or that are cleaner native (path variants).
+    ///   2. Image actions that DO have a sips equivalent but which we run natively
+    ///      for non-destructive, consistent behavior (write a new file, never edit
+    ///      the original). Their sips `content` is kept only for identity matching.
+    /// Everything in the `false` branch still runs via the shell on the direct
+    /// build (the App Store build always routes through the native executor).
     var requiresNativeRuntime: Bool {
         switch self {
         case .copyTextFromImage,
@@ -60,7 +68,18 @@ enum AppStoreNativeAction: String, CaseIterable {
              .copyFileURL,
              .copyFilenameNoExtension,
              .copyParentPath,
-             .copyMarkdownLink:
+             .copyMarkdownLink,
+             // Image actions: native-preferred (have sips, but run native).
+             .convertToPNG,
+             .convertToJPEG,
+             .heicToJPEG,
+             .resize50,
+             .resizeTo1920,
+             .createThumbnail256,
+             .removePhotoInfo,
+             .rotate90Clockwise,
+             .createRetinaCopy,
+             .getImageDimensions:
             true
         case .copyPath,
              .copyFilename,
@@ -79,17 +98,7 @@ enum AppStoreNativeAction: String, CaseIterable {
              .organizeByDate,
              .renameWithSequence,
              .lowercaseFilenames,
-             .replaceSpacesWithUnderscores,
-             .convertToPNG,
-             .convertToJPEG,
-             .heicToJPEG,
-             .resize50,
-             .resizeTo1920,
-             .createThumbnail256,
-             .removePhotoInfo,
-             .rotate90Clockwise,
-             .createRetinaCopy,
-             .getImageDimensions:
+             .replaceSpacesWithUnderscores:
             false
         }
     }

@@ -607,10 +607,12 @@ final class ScriptExecutor: @unchecked Sendable {
             }
         }
 
-        /// Runs a native-only action (OCR/PDF/copy-path) on the direct build.
-        /// The direct build is non-sandboxed, so no `MonitoredFolders.beginAccess`
-        /// scope is needed — these actions only read, copy to the clipboard, or
-        /// write new sidecar files next to the source.
+        /// Runs a native-runtime action (OCR/PDF/copy-path variants plus the
+        /// native-preferred image transforms) on the direct build. The direct
+        /// build is non-sandboxed, so no `MonitoredFolders.beginAccess` scope is
+        /// needed — these actions only read, copy to the clipboard, or write new
+        /// files next to the source (image transforms write a new file via
+        /// `uniqueDestinationURL` and never edit the original).
         private func executeNativeAction(_ action: AppStoreNativeAction, paths: [String]) -> Result<String, ScriptError> {
             do {
                 return try .success(AppStoreNativeActionExecutor.execute(action, paths: paths))
