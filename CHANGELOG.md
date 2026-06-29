@@ -4,12 +4,32 @@ All notable changes to SaneClick are documented here.
 
 ---
 
-## [Unreleased]
+## [1.2.0] - 2026-06-28
 
-Stores your license in the modern macOS system keychain so the app should stop
-asking for keychain permission after updates. Existing licenses are moved over
-automatically on first launch. (Direct download builds; the Mac App Store build
-was already unaffected.)
+New right-click actions:
+
+- Copy Text from Image / Save Text from Image — pull the text out of a
+  screenshot, photo, or scan, right from the menu. It runs on your Mac, no
+  internet.
+- Combine Images into PDF, Split PDF into Pages, and PDF to Images — quick PDF
+  jobs without opening another app.
+- More copy options — copy a file's URL, its name without the extension, its
+  parent folder, or a ready-to-paste Markdown link.
+
+New per-action settings:
+
+- When done — choose to copy an action's result, show it in a window, or get it
+  in a notification.
+- Ask before running — get a confirmation before an action that moves, renames,
+  or deletes files. It's on by default for those.
+
+Right-click actions can now group into folders once you sort them into
+categories.
+
+Your license is now stored in the modern macOS keychain, so the app should stop
+asking for keychain permission after updates. Existing licenses move over
+automatically. (Direct download builds; the Mac App Store build was already
+unaffected.)
 
 ---
 
