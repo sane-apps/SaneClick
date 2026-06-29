@@ -136,9 +136,18 @@ appstore:
       keywords: "context menu,folders,batch rename,hash,copy path,terminal,file info,duplicate,productivity"
       whats_new: "A big update. Copy text out of any image, screenshot, or scan. Turn images into a PDF or a PDF into images. Convert, resize, rotate, and clean up photos, with results saved as a new file. Right-click actions are now grouped into folders, so everything is easy to find. Everything runs on your Mac."
       marketing_url: "https://saneclick.com"
+  copyright: "2026 SaneApps"
+  content_rights_declaration: "DOES_NOT_USE_THIRD_PARTY_CONTENT"
+  export_compliance:
+    uses_non_exempt_encryption: false
+    exemption_reason: "SaneClick does not use encryption beyond Apple's operating-system-provided HTTPS for standard app distribution; no proprietary or non-exempt encryption is included."
   review_notes_by_platform:
     macos: >-
-      SaneClick adds actions to the macOS Finder right-click menu; all actions run locally on the user's Mac and nothing is uploaded. After install, enable the SaneClick Finder extension in System Settings > Privacy & Security > Extensions > Added Extensions > Finder, then right-click a file or image in Finder (for example on the Desktop) and choose a SaneClick action. Pro is a one-time In-App Purchase (SaneClick Pro Access, $9.99): the free tier includes 13 actions, and tapping any Pro action (such as Copy Text from Image in the Images and Media submenu) or opening Settings shows the in-app purchase prompt. Image, text, and PDF actions create a new file next to the original or copy to the clipboard. No external purchase, subscription, or account is required.
+      SaneClick adds actions to the macOS Finder right-click menu; all actions run locally on the user's Mac and nothing is uploaded. After install, enable the SaneClick Finder extension in System Settings > Privacy & Security > Extensions > Added Extensions > Finder, then right-click a file or image in Finder (for example on the Desktop) and choose a SaneClick action.
+
+      Business model: the basic tier is free. Free includes 13 actions. Pro is a one-time In-App Purchase (SaneClick Pro Access, $9.99) on the App Store that unlocks 24 more actions. There is no external checkout and no license key; everything is handled by App Store in-app purchase.
+
+      To reach the optional Pro unlock, open SaneClick, go to Settings > License (the Unlock Pro / Restore Purchases path), or tap any locked Pro action (such as Copy Text from Image in the Images and Media submenu); either route shows the App Store in-app purchase prompt. Image, text, and PDF actions create a new file next to the original or copy to the clipboard. No subscription or account is required.
   iap:
     display_name: "SaneClick Pro Access"
     price_usd: 9.99
