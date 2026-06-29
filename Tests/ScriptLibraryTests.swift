@@ -190,7 +190,7 @@ struct ExecutionRequestTests {
         let paths = [
             "/Users/test/file with spaces.txt",
             "/Users/test/résumé.pdf",
-            "/Users/test/日本語.txt"
+            "/Users/test/日本語.txt",
         ]
 
         let request = ExecutionRequest(
@@ -496,13 +496,13 @@ struct BuiltInMenuGroupingTests {
                 assignment(library: "Essentials"),
                 assignment(library: "Images & Media"),
                 assignment(library: "Coding"),
-                assignment(library: "Files & Folders")
+                assignment(library: "Files & Folders"),
             ],
             orderedUserCategories: []
         )
 
         #expect(plan.categories.map(\.title) == [
-            "Essentials", "Files & Folders", "Images & Media", "Coding", "Advanced"
+            "Essentials", "Files & Folders", "Images & Media", "Coding", "Advanced",
         ])
         #expect(plan.looseIndices.isEmpty)
         // Icons mirror ScriptLibrary.ScriptCategory.icon.
@@ -517,7 +517,7 @@ struct BuiltInMenuGroupingTests {
             assignment(library: "Images & Media"), // Copy Text from Image
             assignment(library: "Images & Media"), // Save Text from Image
             assignment(library: "Images & Media"), // HEIC to JPEG
-            assignment(library: "Essentials") // Copy Path (applies to all)
+            assignment(library: "Essentials"), // Copy Path (applies to all)
         ]
 
         let plan = RightClickMenuGrouping.menuPlan(assignments: assignments, orderedUserCategories: [])
@@ -539,7 +539,7 @@ struct BuiltInMenuGroupingTests {
         let userCat = UUID()
         let assignments = [
             assignment(library: "Images & Media", user: userCat), // user category set -> goes to user folder
-            assignment(library: "Essentials")
+            assignment(library: "Essentials"),
         ]
 
         let plan = RightClickMenuGrouping.menuPlan(
@@ -577,7 +577,7 @@ struct ImagesAndMediaReorderTests {
             "HEIC to JPEG",
             "Combine Images into PDF",
             "Split PDF into Pages",
-            "PDF to Images"
+            "PDF to Images",
         ])
     }
 
@@ -616,7 +616,7 @@ struct BasicProGatingInvarianceTests {
     @Test("App Store basic/pro action counts are unchanged")
     func appStoreCountsUnchanged() {
         #expect(Set(AppStoreActionCatalog.basicActions).count == 13)
-        #expect(Set(AppStoreActionCatalog.proActions).count == 14)
+        #expect(Set(AppStoreActionCatalog.proActions).count == 24)
     }
 }
 

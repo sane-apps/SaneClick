@@ -134,7 +134,7 @@ struct ContentView: View {
                     if !licenseService.isPro {
                         QuickActionRow(
                             title: "Unlock Pro",
-                            subtitle: "Get 14 more built-in file actions • \(licenseService.displayPriceLabel) once",
+                            subtitle: "Get 24 more built-in file actions • \(licenseService.displayPriceLabel) once",
                             icon: "lock.open.fill",
                             color: .teal
                         ) {

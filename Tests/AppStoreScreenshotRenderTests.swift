@@ -76,7 +76,8 @@ struct AppStoreScreenshotRenderTests {
 
         if let hintedOutputDir = try? String(contentsOf: outputHintFile, encoding: .utf8)
             .trimmingCharacters(in: .whitespacesAndNewlines),
-            !hintedOutputDir.isEmpty {
+            !hintedOutputDir.isEmpty
+        {
             return URL(fileURLWithPath: hintedOutputDir, isDirectory: true)
         }
 
@@ -117,7 +118,7 @@ struct AppStoreScreenshotRenderTests {
 
                     QuickActionRow(
                         title: "Unlock Pro",
-                        subtitle: "Get 14 more built-in file actions • $14.99 once",
+                        subtitle: "Get 24 more built-in file actions • $14.99 once",
                         icon: "lock.open.fill",
                         color: .teal
                     ) {}

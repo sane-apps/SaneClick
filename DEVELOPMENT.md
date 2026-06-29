@@ -43,6 +43,8 @@ Real failures from past sessions. Don't repeat them.
 | **Extension not loading** | Changed extension target but didn't rebuild host app | Rebuild both targets |
 | **Finder menu stale** | Cached menu items from previous session | Don't cache menus - rebuild on each `menu(for:)` call |
 | **App Group mismatch** | Extension couldn't read shared data | Verify `M78L6FXD48.group.com.saneclick.app` in both targets |
+| **Tested the shape, not the content** | "Rotate 90°" shipped a **blank image** past green tests — the test only asserted output dimensions (correct), never read a pixel. Same family: OCR returned empty on portrait photos while green. Class: *green tests, broken output.* | For any action that PRODUCES output, assert the actual CONTENT: a known pixel color at a known coordinate (proves non-blank AND direction), decoded text == expected, real format via magic-bytes / `NSBitmapImageRep` round-trip with extension matching the bytes. Never just size/count/exists. |
+| **Happy-path fixtures hid the bug** | Orientation + format bugs slipped through because every fixture was an upright PNG (orientation=1). | Use adversarial fixtures: EXIF-oriented / portrait (orientation ≠ 1) images, non-PNG/JPEG sources (HEIC, TIFF), and multi-file batches with one unreadable file. Then visually verify the real artifact on a real input before claiming done. |
 
 <!-- ADD PROJECT-SPECIFIC BURNS ABOVE -->
 
@@ -407,6 +409,27 @@ All interactive elements need accessibility identifiers:
 ```
 
 If automation can't find it → UX is broken → fix design first.
+
+### Verifying output-producing actions (image / PDF / text / file)
+
+A passing test suite is NOT enough for any action that emits an artifact. These
+bugs hide in the content, which structural assertions never inspect. Required:
+
+1. **Content, not shape.** Assert a known **pixel color at a known coordinate**
+   (catches blank/transparent renders AND proves rotate/flip *direction*), decoded
+   **text == expected** (not merely non-empty), and the **real file format** via
+   magic-bytes / `NSBitmapImageRep` round-trip, with the **extension matching the
+   bytes**. Dimensions, file-exists, type, and counts all pass on garbage output.
+2. **Adversarial fixtures.** Include the failure modes, not just the happy path:
+   EXIF-oriented / portrait images (orientation ≠ 1), non-PNG/JPEG sources (HEIC,
+   TIFF), and multi-file batches containing one unreadable file.
+3. **Blank-output guard.** Explicitly assert the output is not all-one-color /
+   all-transparent / zero-information, so a blank render fails the test.
+4. **Real-artifact visual check before ship.** Headless tests and the
+   `customer_ui_sweep` don't render real pixels or the real Finder menu. Run the
+   action on a real input (live App-Store-sandbox / Finder) and have a human or
+   vision agent inspect the actual output. (Same rule that surfaced the buried OCR
+   submenu in 1.2.1 and the blank rotate in the image port.)
 
 ---
 

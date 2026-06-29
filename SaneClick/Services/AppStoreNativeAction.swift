@@ -1,9 +1,6 @@
 import AppKit
 import CryptoKit
 import Foundation
-import ImageIO
-import PDFKit
-import Vision
 
 enum AppStoreNativeAction: String, CaseIterable {
     case copyPath = "Copy Path"
@@ -35,6 +32,20 @@ enum AppStoreNativeAction: String, CaseIterable {
     case copyFilenameNoExtension = "Copy Filename without Extension"
     case copyParentPath = "Copy Parent Folder Path"
     case copyMarkdownLink = "Copy as Markdown Link"
+    // Image actions. On the direct build these keep running via their existing
+    // sips bash content (unchanged); these native cases only let the App Store
+    // build run them, where shelling out to sips is impossible. They are NOT
+    // marked `requiresNativeRuntime`, so the direct build is untouched.
+    case convertToPNG = "Convert to PNG"
+    case convertToJPEG = "Convert to JPEG"
+    case heicToJPEG = "HEIC to JPEG"
+    case resize50 = "Resize 50%"
+    case resizeTo1920 = "Resize to 1920px"
+    case createThumbnail256 = "Create Thumbnail (256px)"
+    case removePhotoInfo = "Remove Photo Info"
+    case rotate90Clockwise = "Rotate 90° Clockwise"
+    case createRetinaCopy = "Create @2x Copy"
+    case getImageDimensions = "Get Image Dimensions"
 
     /// Actions that have no shell/AppleScript equivalent (OCR, PDF) or are
     /// cleaner native (path variants). These route through the native executor
@@ -68,7 +79,17 @@ enum AppStoreNativeAction: String, CaseIterable {
              .organizeByDate,
              .renameWithSequence,
              .lowercaseFilenames,
-             .replaceSpacesWithUnderscores:
+             .replaceSpacesWithUnderscores,
+             .convertToPNG,
+             .convertToJPEG,
+             .heicToJPEG,
+             .resize50,
+             .resizeTo1920,
+             .createThumbnail256,
+             .removePhotoInfo,
+             .rotate90Clockwise,
+             .createRetinaCopy,
+             .getImageDimensions:
             false
         }
     }
@@ -117,7 +138,17 @@ enum AppStoreActionCatalog {
         .saveTextFromImage,
         .combineImagesIntoPDF,
         .splitPDFIntoPages,
-        .pdfToImages
+        .pdfToImages,
+        .convertToPNG,
+        .convertToJPEG,
+        .heicToJPEG,
+        .resize50,
+        .resizeTo1920,
+        .createThumbnail256,
+        .removePhotoInfo,
+        .rotate90Clockwise,
+        .createRetinaCopy,
+        .getImageDimensions
     ]
 }
 
@@ -179,6 +210,26 @@ enum AppStoreNativeActionExecutor {
             return try copyParentPath(urls)
         case .copyMarkdownLink:
             return try copyMarkdownLink(urls)
+        case .convertToPNG:
+            return try convertImages(urls, to: .png)
+        case .convertToJPEG:
+            return try convertImages(urls, to: .jpeg)
+        case .heicToJPEG:
+            return try convertImages(urls, to: .jpeg, sourceExtensions: ["heic"])
+        case .resize50:
+            return try resizeImages(urls, scale: 0.5, suffix: "_half")
+        case .resizeTo1920:
+            return try resizeImages(urls, maxWidth: 1920, suffix: "_1920")
+        case .createThumbnail256:
+            return try createThumbnails(urls, maxDimension: 256)
+        case .removePhotoInfo:
+            return try removePhotoInfo(urls)
+        case .rotate90Clockwise:
+            return try rotateImagesClockwise(urls)
+        case .createRetinaCopy:
+            return try createRetinaCopies(urls)
+        case .getImageDimensions:
+            return try getImageDimensions(urls)
         }
     }
 
@@ -478,214 +529,6 @@ enum AppStoreNativeActionExecutor {
         return "Renamed \(renamed) item(s)."
     }
 
-    // MARK: - OCR (Vision)
-
-    private static func copyTextFromImage(_ urls: [URL]) throws -> String {
-        let images = imageURLsSortedByFilename(urls)
-        guard !images.isEmpty else {
-            throw ScriptError.executionFailed("No image selected.")
-        }
-
-        var lines: [String] = []
-        for url in images {
-            try lines.append(contentsOf: recognizeText(in: url))
-        }
-
-        let text = lines.joined(separator: "\n")
-        guard !text.isEmpty else {
-            return "No text found in the selected image(s)."
-        }
-
-        try copyToPasteboard(text)
-        return text
-    }
-
-    private static func saveTextFromImage(_ urls: [URL]) throws -> String {
-        let images = imageURLsSortedByFilename(urls)
-        guard !images.isEmpty else {
-            throw ScriptError.executionFailed("No image selected.")
-        }
-
-        var written = 0
-        for url in images {
-            let lines = try recognizeText(in: url)
-            let text = lines.joined(separator: "\n")
-            guard !text.isEmpty else { continue }
-
-            let destinationURL = uniqueDestinationURL(
-                in: url.deletingLastPathComponent(),
-                preferredName: url.deletingPathExtension().lastPathComponent,
-                pathExtension: "txt"
-            )
-            try text.write(to: destinationURL, atomically: true, encoding: .utf8)
-            written += 1
-        }
-
-        guard written > 0 else {
-            return "No text found in the selected image(s)."
-        }
-
-        return "Saved text for \(written) image(s)."
-    }
-
-    private static func recognizeText(in url: URL) throws -> [String] {
-        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
-              let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil)
-        else {
-            throw ScriptError.executionFailed("Could not read image: \(url.lastPathComponent)")
-        }
-
-        // Honor the image's EXIF/TIFF orientation so rotated photos and scans
-        // (e.g. portrait iPhone shots) are OCR'd upright instead of sideways.
-        let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any]
-        let rawOrientation = (props?[kCGImagePropertyOrientation] as? UInt32) ?? 1
-        let orientation = CGImagePropertyOrientation(rawValue: rawOrientation) ?? .up
-
-        let request = VNRecognizeTextRequest()
-        request.recognitionLevel = .accurate
-        request.usesLanguageCorrection = true
-
-        let handler = VNImageRequestHandler(cgImage: cgImage, orientation: orientation, options: [:])
-        try handler.perform([request])
-
-        guard let observations = request.results else { return [] }
-        return observations.compactMap { $0.topCandidates(1).first?.string }
-    }
-
-    // MARK: - PDF (PDFKit)
-
-    private static func combineImagesIntoPDF(_ urls: [URL]) throws -> String {
-        let images = imageURLsSortedByFilename(urls)
-        guard let firstImage = images.first else {
-            throw ScriptError.executionFailed("No image selected.")
-        }
-
-        let document = PDFDocument()
-        var pageIndex = 0
-        for url in images {
-            guard let nsImage = NSImage(contentsOf: url),
-                  let page = PDFPage(image: nsImage)
-            else { continue }
-            document.insert(page, at: pageIndex)
-            pageIndex += 1
-        }
-
-        guard pageIndex > 0 else {
-            throw ScriptError.executionFailed("None of the selected images could be read.")
-        }
-
-        let destinationURL = uniqueDestinationURL(
-            in: firstImage.deletingLastPathComponent(),
-            preferredName: "Combined",
-            pathExtension: "pdf"
-        )
-        guard document.write(to: destinationURL) else {
-            throw ScriptError.executionFailed("Failed to write the combined PDF.")
-        }
-
-        return "Created \(destinationURL.lastPathComponent) (\(pageIndex) page(s))."
-    }
-
-    private static func splitPDFIntoPages(_ urls: [URL]) throws -> String {
-        let pdfURL = try firstPDF(in: urls)
-        guard let document = PDFDocument(url: pdfURL) else {
-            throw ScriptError.executionFailed("Could not read PDF: \(pdfURL.lastPathComponent)")
-        }
-
-        let baseName = pdfURL.deletingPathExtension().lastPathComponent
-        let directory = pdfURL.deletingLastPathComponent()
-        var written = 0
-
-        for index in 0 ..< document.pageCount {
-            guard let page = document.page(at: index) else { continue }
-            let singlePageDocument = PDFDocument()
-            guard let copiedPage = page.copy() as? PDFPage else { continue }
-            singlePageDocument.insert(copiedPage, at: 0)
-
-            let pageNumber = String(format: "%03d", index + 1)
-            let destinationURL = uniqueDestinationURL(
-                in: directory,
-                preferredName: "\(baseName)-\(pageNumber)",
-                pathExtension: "pdf"
-            )
-            if singlePageDocument.write(to: destinationURL) {
-                written += 1
-            }
-        }
-
-        guard written > 0 else {
-            throw ScriptError.executionFailed("The PDF has no pages to split.")
-        }
-
-        return "Split into \(written) page(s)."
-    }
-
-    private static func pdfToImages(_ urls: [URL]) throws -> String {
-        let pdfURL = try firstPDF(in: urls)
-        guard let document = PDFDocument(url: pdfURL) else {
-            throw ScriptError.executionFailed("Could not read PDF: \(pdfURL.lastPathComponent)")
-        }
-
-        let baseName = pdfURL.deletingPathExtension().lastPathComponent
-        let directory = pdfURL.deletingLastPathComponent()
-        let dpi: CGFloat = 144
-        let scale = dpi / 72
-        var written = 0
-
-        for index in 0 ..< document.pageCount {
-            guard let page = document.page(at: index) else { continue }
-            let bounds = page.bounds(for: .mediaBox)
-            // `bounds` is the un-rotated mediaBox, but `thumbnail(of:for:)` applies
-            // the page `/Rotate`. For 90/270 rotations, swap width/height so the
-            // requested pixel size matches the rendered aspect ratio (no squish).
-            var width = bounds.width
-            var height = bounds.height
-            if abs(page.rotation % 180) == 90 {
-                swap(&width, &height)
-            }
-            let pixelSize = NSSize(width: width * scale, height: height * scale)
-            guard pixelSize.width >= 1, pixelSize.height >= 1 else { continue }
-
-            let thumbnail = page.thumbnail(of: pixelSize, for: .mediaBox)
-            guard let tiffData = thumbnail.tiffRepresentation,
-                  let bitmap = NSBitmapImageRep(data: tiffData),
-                  let pngData = bitmap.representation(using: .png, properties: [:])
-            else { continue }
-
-            let pageNumber = String(format: "%03d", index + 1)
-            let destinationURL = uniqueDestinationURL(
-                in: directory,
-                preferredName: "\(baseName)-\(pageNumber)",
-                pathExtension: "png"
-            )
-            try pngData.write(to: destinationURL)
-            written += 1
-        }
-
-        guard written > 0 else {
-            throw ScriptError.executionFailed("The PDF has no pages to render.")
-        }
-
-        return "Rendered \(written) image(s)."
-    }
-
-    private static func firstPDF(in urls: [URL]) throws -> URL {
-        guard let pdfURL = urls.first(where: { $0.pathExtension.lowercased() == "pdf" }) else {
-            throw ScriptError.executionFailed("No PDF selected.")
-        }
-        return pdfURL
-    }
-
-    private static func imageURLsSortedByFilename(_ urls: [URL]) -> [URL] {
-        urls
-            .filter { imageExtensions.contains($0.pathExtension.lowercased()) }
-            .sorted { $0.lastPathComponent.localizedCaseInsensitiveCompare($1.lastPathComponent) == .orderedAscending }
-    }
-
-    private static let imageExtensions: Set<String> = [
-        "jpg", "jpeg", "png", "heic", "heif", "tiff", "tif", "gif", "bmp", "webp"
-    ]
-
     // MARK: - Copy path variants
 
     private static func copyFileURL(_ urls: [URL]) throws -> String {
@@ -724,7 +567,7 @@ enum AppStoreNativeActionExecutor {
         return value
     }
 
-    private static func copyToPasteboard(_ string: String) throws {
+    static func copyToPasteboard(_ string: String) throws {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         guard pasteboard.setString(string, forType: .string) else {
@@ -747,7 +590,7 @@ enum AppStoreNativeActionExecutor {
         )
     }
 
-    private static func uniqueDestinationURL(in directory: URL, preferredName: String, pathExtension: String = "") -> URL {
+    static func uniqueDestinationURL(in directory: URL, preferredName: String, pathExtension: String = "") -> URL {
         let sanitizedName = preferredName.isEmpty ? "Untitled" : preferredName
         var candidate = directory.appendingPathComponent(sanitizedName, isDirectory: false)
         if !pathExtension.isEmpty {

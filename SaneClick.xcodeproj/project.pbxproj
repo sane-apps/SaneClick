@@ -55,6 +55,7 @@
 		A2814B7D8E5C998434A68C28 /* ScriptEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0292252BEA20E38AA9D5AD5 /* ScriptEditorView.swift */; };
 		A32EFFBFF6ED1304526BF32F /* SaneClickApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2315CC9340FA3A69BDDE3F79 /* SaneClickApp.swift */; };
 		A4AFD157125E508753899D83 /* ProFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7561E69DFD12512C70D2215B /* ProFeature.swift */; };
+		A726DD3ADC8BE00D7F72AB8B /* AppStoreNativeActionExecutor+Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = C548100027AB773FDCB99108 /* AppStoreNativeActionExecutor+Media.swift */; };
 		A835726077778654601A5DF6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C430CF1913F9F056D1C42FD1 /* ContentView.swift */; };
 		ABE641DDFB2FA603A3BF14BD /* ExtensionStatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3B0C60BE7EF0BF925BB1F9 /* ExtensionStatusService.swift */; };
 		AD2450C8572F6E5827CA4DE9 /* DefaultScripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */; };
@@ -77,6 +78,7 @@
 		DBD8078B3161A28696C81530 /* VisualVerificationRenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C83DAB25F21AC8F5CBF893 /* VisualVerificationRenderTests.swift */; };
 		E646F123A34072852AA1F4B1 /* DefaultScripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2E8E4ABE26901E187A3D14 /* DefaultScripts.swift */; };
 		E9456CC812E10D96402F93C9 /* SaneClickExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8803A8A55C554862BD49EAE8 /* SaneClickExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EF9D2693D8D6ACE1878A66FF /* AppStoreNativeActionExecutor+Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = C548100027AB773FDCB99108 /* AppStoreNativeActionExecutor+Media.swift */; };
 		F52F937E1B88C7672C3470CA /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447D4BFE5ACB557CE976F11 /* Script.swift */; };
 		F7886BBDB60B447EE583AFD2 /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF1B4BB43599FDB2D286ADF /* AppPreferences.swift */; };
 		F91271770A8383B473533243 /* MonitoredFolders.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E14736E3A91B0759B66C0E /* MonitoredFolders.swift */; };
@@ -186,6 +188,7 @@
 		BA8B50CEA8F97A893927BB7D /* DirectDistributionSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectDistributionSupport.swift; sourceTree = "<group>"; };
 		C19B414E55D6FF5FDF7690BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C430CF1913F9F056D1C42FD1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C548100027AB773FDCB99108 /* AppStoreNativeActionExecutor+Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppStoreNativeActionExecutor+Media.swift"; sourceTree = "<group>"; };
 		C7D697C2D4CBA6B49BECA004 /* SaneClickAppStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SaneClickAppStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9E14736E3A91B0759B66C0E /* MonitoredFolders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitoredFolders.swift; sourceTree = "<group>"; };
 		E68AE3D3E5F32A83827F08A7 /* SaneClick-AppStore.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "SaneClick-AppStore.entitlements"; sourceTree = "<group>"; };
@@ -301,6 +304,7 @@
 			children = (
 				0AF1B4BB43599FDB2D286ADF /* AppPreferences.swift */,
 				66E8F38469A2721677F9A7EC /* AppStoreNativeAction.swift */,
+				C548100027AB773FDCB99108 /* AppStoreNativeActionExecutor+Media.swift */,
 				2C3B0C60BE7EF0BF925BB1F9 /* ExtensionStatusService.swift */,
 				3657A493D18F7FE8C14A6434 /* FinderControl.swift */,
 				B1D6405FA6195B48159C6502 /* MenuBarController.swift */,
@@ -570,6 +574,7 @@
 			files = (
 				CED119D09B9E882EE37AEA8B /* AppPreferences.swift in Sources */,
 				A078CB636A3A04456B7E291E /* AppStoreNativeAction.swift in Sources */,
+				EF9D2693D8D6ACE1878A66FF /* AppStoreNativeActionExecutor+Media.swift in Sources */,
 				4214C45F58D93958090E6AF5 /* Category.swift in Sources */,
 				0D111DBAB50E53218731BCAB /* CategoryEditorView.swift in Sources */,
 				CA389228F1F7FE16FF17D850 /* ContentView.swift in Sources */,
@@ -602,6 +607,7 @@
 			files = (
 				F7886BBDB60B447EE583AFD2 /* AppPreferences.swift in Sources */,
 				9AC93BCBE2F4543EC1691704 /* AppStoreNativeAction.swift in Sources */,
+				A726DD3ADC8BE00D7F72AB8B /* AppStoreNativeActionExecutor+Media.swift in Sources */,
 				395985D6C5DDC4E3B5D4030A /* Category.swift in Sources */,
 				985B54C7FA6D8961728EBB9A /* CategoryEditorView.swift in Sources */,
 				A835726077778654601A5DF6 /* ContentView.swift in Sources */,

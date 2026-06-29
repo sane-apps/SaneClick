@@ -94,7 +94,7 @@ struct AppStoreReviewGuardrailTests {
         var expectedOrder = [
             "Open SaneClick",
             SaneStandardMenu.settingsTitle,
-            SaneStandardMenu.licenseTitle
+            SaneStandardMenu.licenseTitle,
         ]
         #if !APP_STORE
             expectedOrder.append(SaneStandardMenu.checkForUpdatesTitle)
@@ -153,7 +153,7 @@ struct AppStoreReviewGuardrailTests {
 
         #expect(productId == "com.saneclick.app.pro.actions.v4")
         #expect(displayName == "SaneClick Pro Access")
-        #expect(description == "Unlock 14 more built-in file actions.")
+        #expect(description == "Unlock 24 more built-in file actions.")
         #expect(description.localizedCaseInsensitiveContains("one-time purchase") == false)
     }
 
@@ -177,7 +177,7 @@ struct AppStoreReviewGuardrailTests {
         let pro = Set(AppStoreActionCatalog.proActions)
 
         #expect(basic.count == 13)
-        #expect(pro.count == 14)
+        #expect(pro.count == 24)
         #expect(basic.intersection(pro).isEmpty)
         #expect(basic.union(pro).count == AppStoreNativeAction.allCases.count)
     }
