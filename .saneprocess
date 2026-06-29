@@ -94,9 +94,11 @@ release:
 
 appstore:
   enabled: false
-  # Current strategy: direct-download only.
-  # Do not route the current full-featured build through App Store release automation.
-  # App Store metadata below is retained only as dormant reference and is not an active lane.
+  # App Store revival PREPPED 2026-06-29 (owner decided to ship to the Store): metadata, reviewer notes,
+  # and 1.3.0 What's New updated below; compliance verified (#if APP_STORE build = StoreKit IAP only,
+  # no crypto/external/license-key paths). Kept DISABLED until submit-ready — flipping to true makes
+  # verify/preflight run App Store readiness checks (screenshots etc.). Flip + appstore_preflight +
+  # appstore_submit as the FINAL owner-gated submit step, after regenerating the 2880x1800 screenshots.
   app_id: "6759330868"
   product_id: "com.saneclick.app.pro.actions.v4"
   scheme: SaneClick-AppStore
@@ -131,11 +133,11 @@ appstore:
 
         Everything runs locally on your Mac.
       keywords: "context menu,folders,batch rename,hash,copy path,terminal,file info,duplicate,productivity"
-      whats_new: "Improves Finder extension reliability and makes the Pro upgrade path clearer in the App Store build."
+      whats_new: "A big update. Copy text out of any image, screenshot, or scan. Turn images into a PDF or a PDF into images. Convert, resize, rotate, and clean up photos, with results saved as a new file. Right-click actions are now grouped into folders, so everything is easy to find. Everything runs on your Mac."
       marketing_url: "https://saneclick.com"
   review_notes_by_platform:
     macos: >-
-      SaneClick's current public strategy is direct download only. The Mac App Store lane is intentionally inactive for the current full-featured build and should not be submitted from this repo state. If an App Store-safe variant is revisited later, re-validate sandbox-safe behavior, pricing, StoreKit, and reviewer guidance from scratch.
+      SaneClick adds actions to the macOS Finder right-click menu; all actions run locally on the user's Mac and nothing is uploaded. After install, enable the SaneClick Finder extension in System Settings > Privacy & Security > Extensions > Added Extensions > Finder, then right-click a file or image in Finder (for example on the Desktop) and choose a SaneClick action. Pro is a one-time In-App Purchase (SaneClick Pro Access, $9.99): the free tier includes 13 actions, and tapping any Pro action (such as Copy Text from Image in the Images and Media submenu) or opening Settings shows the in-app purchase prompt. Image, text, and PDF actions create a new file next to the original or copy to the clipboard. No external purchase, subscription, or account is required.
   iap:
     display_name: "SaneClick Pro Access"
     price_usd: 9.99
