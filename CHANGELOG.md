@@ -4,6 +4,14 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.2.1] - 2026-06-29
+
+Right-click actions now group into folders in the Finder menu, so the new tools
+(Copy Text from Image, the PDF actions, and more) are easy to find instead of
+buried at the bottom of a long list.
+
+---
+
 ## [1.2.0] - 2026-06-28
 
 New right-click actions:
