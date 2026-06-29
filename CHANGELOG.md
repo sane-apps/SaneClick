@@ -6,10 +6,10 @@ All notable changes to SaneClick are documented here.
 
 ## [1.3.0] - 2026-06-29
 
-Your original photos stay safe. Resize, rotate, convert (including HEIC to
-JPEG), make thumbnails, and remove hidden photo info right from your right-click
-menu, and SaneClick now always saves the result as a new file instead of
-changing your original. Image actions run entirely on your Mac.
+Upgraded photo handling. Resize, rotate, convert (including HEIC to JPEG), make
+thumbnails, and remove photo info right from your right-click menu. Image actions
+now always save the result as a new file rather than editing the original
+directly, and run entirely on your Mac.
 
 ---
 
