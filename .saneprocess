@@ -94,7 +94,7 @@ release:
 
 appstore:
   enabled: false
-  # App Store revival PREPPED 2026-06-29 (owner decided to ship to the Store): metadata, reviewer notes,
+  # Current live strategy is direct download only. App Store revival PREPPED 2026-06-29: metadata, reviewer notes,
   # and 1.3.0 What's New updated below; compliance verified (#if APP_STORE build = StoreKit IAP only,
   # no crypto/external/license-key paths). Kept DISABLED until submit-ready — flipping to true makes
   # verify/preflight run App Store readiness checks (screenshots etc.). Flip + appstore_preflight +
