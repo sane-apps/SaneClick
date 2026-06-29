@@ -3,7 +3,33 @@
     <channel>
         <title>SaneClick Changelog</title>
 
-                                                                                                                    <item>
+                                                                                                                            <item>
+            <title>1.2.1</title>
+            <link>https://saneclick.com/download</link>
+            <pubDate>Mon, 29 Jun 2026 04:46:49 -0400</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description>
+                <![CDATA[
+                <h2>What's New</h2>
+                <ul>
+                <li>Right-click actions are now organized into folders, so the new tools are easy to find.</li>
+                <li>Copy or save the text from any image, screenshot, or scan. Runs on your Mac, no internet.</li>
+                <li>Combine images into a PDF, split a PDF into pages, or turn a PDF into images.</li>
+                <li>More copy options: file URL, name without extension, parent folder, or a ready-to-paste Markdown link.</li>
+                <li>When done: choose to copy an action's result, show it in a window, or get a notification.</li>
+                <li>Ask before running: a confirmation before actions that move, rename, or delete files.</li>
+                <li>Your license now lives in the modern macOS keychain, so the app should stop asking for keychain permission after updates.</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.2.1.zip"
+                       sparkle:version="1201"
+                       sparkle:shortVersionString="1.2.1"
+                       length="2721486"
+                       type="application/octet-stream"
+                       sparkle:edSignature="+nCQR/iI8KtqhQiriEcZ2hDi+dOwOHpWeXAjzOhk5OewQkRLpaQyTrUtfPHh+64WnCKCi+k4uYJ1/7jWXSDLAA=="/>
+        </item>
+<item>
             <title>1.2.0</title>
             <link>https://saneclick.com/download</link>
             <pubDate>Sun, 28 Jun 2026 22:35:33 -0400</pubDate>
