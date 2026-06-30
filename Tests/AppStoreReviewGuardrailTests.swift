@@ -180,9 +180,17 @@ struct AppStoreReviewGuardrailTests {
         #expect(manifest.localizedCaseInsensitiveContains("display_name: \"SaneClick Pro Access\""))
         #expect(manifest.contains("docs/screenshots/appstore-*.png"))
 
-        // Still no external-purchase / license-key escape hatch in the App Store lane.
-        #expect(!manifest.localizedCaseInsensitiveContains("Settings > License"))
-        #expect(!manifest.localizedCaseInsensitiveContains("sidebar Quick Actions section"))
+        // No external-purchase escape hatch in the App Store lane. An in-app
+        // "Settings > License / Unlock Pro" path is allowed and expected (App Review
+        // needs it), and the notes may reassure that there is "no license key" / "no
+        // external checkout" — so the guard targets external storefront URLs and
+        // third-party checkout providers, not that reassurance language.
+        #expect(!manifest.localizedCaseInsensitiveContains("Paste your API key"))
+        #expect(!manifest.localizedCaseInsensitiveContains("saneclick.com/checkout"))
+        #expect(!manifest.localizedCaseInsensitiveContains("lemonsqueezy"))
+        #expect(!manifest.localizedCaseInsensitiveContains("gumroad"))
+        // The IAP review note must affirm there is no external checkout / license key flow.
+        #expect(manifest.localizedCaseInsensitiveContains("does not unlock scripts, external checkout, or license keys"))
     }
 
     @Test("App Store welcome claims match the actual native action split")
