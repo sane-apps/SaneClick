@@ -147,7 +147,7 @@ appstore:
 
       Business model: the basic tier is free. Free includes 13 actions. Pro is a one-time In-App Purchase (SaneClick Pro Access, $9.99) on the App Store that unlocks 24 more actions. There is no external checkout and no license key; everything is handled by App Store in-app purchase.
 
-      To reach the optional Pro unlock, open SaneClick, go to Settings > License (the Unlock Pro / Restore Purchases path), or tap any locked Pro action (such as Copy Text from Image in the Images and Media submenu); either route shows the App Store in-app purchase prompt. Image, text, and PDF actions create a new file next to the original or copy to the clipboard. No subscription or account is required.
+      To reach the optional Pro unlock, open SaneClick, go to Settings > License (the Unlock Pro / Restore Purchases path), or tap any locked Pro action (such as Copy Text from Image in the Images and Media submenu); either route shows the App Store in-app purchase prompt. Image, text, and PDF actions create a new file next to the original or copy to the clipboard. No subscription or account is required, and no login, sign-in, API key, password, or other credentials are needed to review the app — it works immediately after install. SaneClick uses no external provider or merchant accounts; any external accounts would be the user's own existing merchant accounts and do not unlock paid app features or digital content.
   iap:
     display_name: "SaneClick Pro Access"
     price_usd: 9.99
