@@ -313,7 +313,13 @@ struct SaneClickApp: App {
 
     var body: some Scene {
         WindowGroup(id: "main") {
-            if shouldAttachWelcomeGate {
+            if licenseService.hasExpiredProTrial {
+                LicenseGateView(licenseService: licenseService, appIcon: "cursorarrow.click.2")
+                    .preferredColorScheme(.dark)
+                    .onAppear {
+                        licenseService.checkCachedLicense()
+                    }
+            } else if shouldAttachWelcomeGate {
                 mainWindowContent
                     .sheet(isPresented: welcomeGateBinding) {
                         WelcomeGateView(

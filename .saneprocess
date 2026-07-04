@@ -33,6 +33,10 @@ release:
       subject: "On main: auto-reconcile-20260424-215517-stephans-mac-mini"
       decision: superseded
       reason: "Reviewed 2026-05-09. Website copy is stale and conflicts with current release docs: it reverts to 1.1.5 links and older Public Code wording, while HEAD/live docs use the current 1.1.6 direct-download links and Transparent Code positioning."
+    - stash_sha: "6fabbaea54cb081f5a7a969d3606081840b15823"
+      subject: "On main: auto-reconcile-20260424-153452-stephans-mac-mini"
+      decision: superseded
+      reason: "Reviewed 2026-07-04. The stash only adds older Finder Sync status-debugging and App Store review notes to ARCHITECTURE.md and DEVELOPMENT.md. Current release behavior, SaneProcess release guards, and App Store preflight policy supersede this stale documentation-only snapshot."
     - stash_sha: "d57327aadd1d8b4937340f4ef4f9b36f1347e688"
       subject: "On main: auto-reconcile-20260417-055518-stephans-mac-mini"
       decision: deferred
