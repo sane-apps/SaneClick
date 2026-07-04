@@ -4,6 +4,12 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.3.1] - 2026-07-04
+
+Important update to onboarding, licensing, and reliability. Recommended for all users.
+
+---
+
 ## [1.3.0] - 2026-06-29
 
 Upgraded photo handling. Resize, rotate, convert (including HEIC to JPEG), make
