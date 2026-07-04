@@ -2,7 +2,7 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
   <channel>
     <title>SaneClick Changelog</title>
-            <item>
+<item>
             <title>1.3.1</title>
             <link>https://saneclick.com/download</link>
             <pubDate>Sat, 04 Jul 2026 18:14:43 -0400</pubDate>
@@ -22,18 +22,5 @@
                        type="application/octet-stream"
                        sparkle:edSignature="/Fwiq8ZwF2RwRkbiq6uO3zEc20jwEoCeAyFc5AoDFt5paqnt8rUEJRidXxjlcsHz2VTEeeu4QzursCG5PEcCAw=="/>
         </item>
-<item>
-      <title>1.3.0</title>
-      <link>https://saneclick.com/download</link>
-      <pubDate>Mon, 29 Jun 2026 13:25:13 -0400</pubDate>
-      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-      <description><![CDATA[
-    <h2>Important Update</h2>
-    <ul>
-    <li>Important update for continued app access, reliability, and compatibility. Recommended for all users.</li>
-    </ul>
-    ]]></description>
-      <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.3.0.zip" sparkle:version="1300" sparkle:shortVersionString="1.3.0" length="2736131" type="application/octet-stream" sparkle:edSignature="7zJSLJbyJrlzVt4oo4NLLcIwd76mlzVAzW+fosGF8VX+Nt+YRFHpR+KUte/mm0BdMt7ZeB+pIToMhZR2o+MvAw=="/>
-    </item>
-  </channel>
+</channel>
 </rss>
