@@ -1,6 +1,6 @@
 # SaneClick
 
-> 50+ ready-to-use actions for your Finder right-click menu
+> 62 ready-to-use actions for your Finder right-click menu
 
 [![GitHub stars](https://img.shields.io/github/stars/sane-apps/SaneClick?style=flat-square)](https://github.com/sane-apps/SaneClick/stargazers)
 [![License: PolyForm Shield](https://img.shields.io/badge/License-PolyForm%20Shield-blue.svg)](LICENSE)
@@ -8,7 +8,7 @@
 [![macOS 14+](https://img.shields.io/badge/macOS-14%2B-brightgreen)](https://www.apple.com/macos)
 [![Listed on macOS apps list](https://img.shields.io/badge/Listed%20on-macOS--apps--list%20(40k%E2%98%85)-black)](https://github.com/serhii-londar/open-source-mac-os-apps)
 
-> **⭐ Star this repo if it's useful!** · **[Download Basic free](https://saneclick.com)** · **[Unlock Pro for $14.99 once](https://saneclick.com)** · Keeps development alive
+> **⭐ Star this repo if it's useful!** · **[Start a free 14-day Pro trial](https://saneclick.com)** · **[Buy Pro for $14.99 once](https://saneclick.com)** · Keeps development alive
 
 ![SaneClick Main Window](docs/screenshots/main-window.png)
 
@@ -32,11 +32,13 @@ The "easy" solutions cost $10-15, require subscriptions, or haven't been updated
 
 ## The Sane Solution
 
-SaneClick gives you **50+ ready-to-use actions** — no scripting required. Browse by category, toggle on what you need, done.
+SaneClick gives you **62 ready-to-use actions** — no scripting required. Browse by category, toggle on what you need, done.
 
-- **Curated Library**: 50+ pre-built actions organized by category
+- **Curated Library**: 62 pre-built actions organized by category
 - **One-Click Install**: Toggle actions on/off instantly
 - **Smart Filtering**: Actions appear only for matching file types
+- **Image and Media Tools**: Convert, resize, strip metadata, OCR text, and handle common file chores from Finder
+- **PDF and File Workflows**: Merge PDFs, hash files, copy paths, create archives, and clean names without opening extra apps
 - **Custom Scripts**: Power users can write Bash, AppleScript, or Automator workflows
 - **Categories**: Essentials, Files & Folders, Images & Media, Coding, Advanced
 
@@ -50,7 +52,7 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 
 | Feature | Description |
 |---------|-------------|
-| **50+ Pre-built Actions** | Copy paths, convert images, open in Terminal, and more |
+| **62 Pre-built Actions** | Copy paths, convert images, open in Terminal, OCR images, merge PDFs, and more |
 | **5 Categories** | Essentials, Files & Folders, Images & Media, Coding, Advanced |
 | **Smart Filtering** | Actions appear only for matching file types |
 | **Selection Count Filtering** | Show actions only for single files or multi-select (min/max) |
@@ -78,7 +80,7 @@ SaneClick gives you **50+ ready-to-use actions** — no scripting required. Brow
 
 ### Download
 
-[Download SaneClick](https://saneclick.com) — Basic is free, signed, notarized, and ready to use. Unlock Pro once when you want the full toolkit.
+[Download SaneClick](https://saneclick.com) — start with a free 14-day Pro trial. After the trial, Pro is required and remains a $14.99 one-time purchase.
 
 ### Build from Source
 
