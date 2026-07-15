@@ -198,7 +198,7 @@ This is the standard protocol for investigating problems. Used by Rule #3, Circu
 | **context7 MCP** | Library documentation | Third-party packages |
 | **WebSearch/WebFetch** | Solutions, patterns, best practices | Error messages, architectural questions |
 | **Grep/Glob/Read** | Local investigation | Find similar patterns, check implementations |
-| **memory MCP** | Past bug patterns, architecture decisions | "Have we seen this before?" |
+| **AgentMemory** | Shared bug patterns and architecture decisions | "Have we seen this before?" |
 | **RESEARCH.md** | Project-specific API research | Finder Sync Extension API, state machine |
 
 ### Research Output → Plan
@@ -437,7 +437,7 @@ bugs hide in the content, which structural assertions never inspect. Required:
 
 1. Run `./scripts/SaneMaster.rb bootstrap` (if available) or `./scripts/SaneMaster.rb doctor`
 2. Read `RESEARCH.md` if unfamiliar with Finder Sync API
-3. Search memory MCP: `project: "SaneClick"`
+3. Search AgentMemory with `mcp__agentmemory__memory_smart_search query: "SaneClick"`
 4. Kill stale processes: `killall SaneClick 2>/dev/null || true`
 5. Use subagents for heavy work, verify their output
 
