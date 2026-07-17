@@ -161,9 +161,13 @@
             100% { background-position: 200% 0; }
         }
 
-        .animate-in {
-            animation: fadeInUp 0.8s ease-out forwards;
-            opacity: 0;
+        /* Load-in is motion-guarded: base state is fully visible, the
+           animation (with its hidden from-frame) only runs when the user
+           allows motion. Nothing ever sits at opacity 0 with motion off. */
+        @media (prefers-reduced-motion: no-preference) {
+            .animate-in {
+                animation: fadeInUp 0.8s ease-out both;
+            }
         }
 
         .delay-1 { animation-delay: 0.1s; }
@@ -805,6 +809,48 @@
                 font-size: 2rem;
             }
         }
+
+        /* ============================================================
+           Motion pass — progressive enhancement only.
+           The page is fully readable with no JS and with animations off:
+           every base state below is the fully-visible final state, and
+           opacity:0 appears only inside html.io or motion-guarded rules.
+           ============================================================ */
+        @view-transition { navigation: auto; }
+
+        /* Hover lifts (match the existing card hover language) */
+        .use-case-card { transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
+        .use-case-card:hover { transform: translateY(-4px); border-color: rgba(79, 143, 250, 0.35); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4); }
+        .proof-side-card { transition: transform 0.3s ease, border-color 0.3s ease; }
+        .proof-side-card:hover { transform: translateY(-4px); border-color: rgba(79, 143, 250, 0.35); }
+        .testimonial-card { transition: transform 0.3s ease, border-color 0.3s ease; }
+        .testimonial-card:hover { transform: translateY(-3px); border-color: rgba(79, 143, 250, 0.4); }
+
+        /* Hero demo: real screen capture of SaneClick in the Finder
+           context menu (demo/saneclick-finder-demo.mp4). */
+        .rc-demo { display: flex; justify-content: center; margin: 36px auto 6px; pointer-events: none; user-select: none; -webkit-user-select: none; }
+        .hero { overflow-x: clip; }
+        .rc-video-wrap { position: relative; isolation: isolate; max-width: 560px; pointer-events: auto; }
+        .rc-video-wrap::before { content: ''; position: absolute; inset: -8% -12%; background: radial-gradient(closest-side, rgba(79, 143, 250, 0.17), transparent 70%); border-radius: 50%; z-index: -1; }
+        .rc-video { width: 100%; height: auto; display: block; border-radius: 14px; border: 1px solid rgba(79, 143, 250, 0.35); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45); }
+        .rc-video-caption { font-size: 14px; font-weight: 600; color: var(--text-primary); text-align: center; margin-top: 12px; }
+
+        @keyframes glowBreathe { 0%, 100% { opacity: 0.65; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
+        @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+        /* Scroll-reveal IO fallback: .io is added by JS only when CSS
+           scroll-timelines are unsupported and motion is allowed —
+           no-JS visitors and crawlers get the full static page. */
+        html.io .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s cubic-bezier(0.22, 0.7, 0.3, 1), transform 0.7s cubic-bezier(0.22, 0.7, 0.3, 1); }
+        html.io .reveal.in { opacity: 1; transform: none; }
+
+        @media (prefers-reduced-motion: no-preference) {
+            html { scroll-behavior: smooth; }
+            .rc-video-wrap::before { animation: glowBreathe 9s ease-in-out infinite; }
+            @supports (animation-timeline: view()) {
+                .reveal { animation: rise 0.7s cubic-bezier(0.22, 0.7, 0.3, 1) both; animation-timeline: view(); animation-range: entry 8% entry 45%; }
+            }
+        }
     </style>
 </head>
 <body>
@@ -865,6 +911,16 @@
                 <a href="https://go.saneapps.com/buy/saneclick?ref=website-hero" style="color: var(--accent); font-weight: 700; text-decoration: none;" data-cta="buy_pro">Buy Pro now — $14.99 once</a>
             </div>
 
+            <!-- Real screen capture: SaneClick in the Finder context menu (recorded unedited). -->
+            <div class="rc-demo animate-in delay-4">
+                <div class="rc-video-wrap">
+                    <video class="rc-video" autoplay muted loop playsinline preload="metadata" width="880" height="780" poster="demo/saneclick-demo-poster.jpg" aria-label="Screen recording: right-clicking a file in Finder shows SaneClick's action categories, and Duplicate with Timestamp instantly creates a timestamped copy">
+                        <source src="demo/saneclick-finder-demo.mp4" type="video/mp4">
+                    </video>
+                    <p class="rc-video-caption">Real capture, no mockups — right-click &rarr; Essentials &rarr; Duplicate with Timestamp.</p>
+                </div>
+            </div>
+
             <div class="hero-pricing-grid animate-in delay-4" id="pricing" style="max-width: 520px; grid-template-columns: 1fr; scroll-margin-top: 120px;">
                 <div class="pricing-card featured">
                     <p class="pricing-label">Full Pro Trial</p>
@@ -897,8 +953,8 @@
     <section class="proof-section">
         <div class="container">
             <div class="proof-header">
-                <h2 class="section-title">Real Finder actions.<br>Real file workflows.</h2>
-                <p class="section-subtitle" style="margin-bottom: 0;">Copy paths, resize images, organize folders,<br>and run useful Mac actions without leaving Finder.</p>
+                <h2 class="section-title reveal">Real Finder actions.<br>Real file workflows.</h2>
+                <p class="section-subtitle reveal" style="margin-bottom: 0;">Copy paths, resize images, organize folders,<br>and run useful Mac actions without leaving Finder.</p>
             </div>
             <div class="proof-shell">
                 <article class="proof-hero-card animate-in delay-4">
@@ -949,8 +1005,8 @@
 
     <section class="use-cases">
         <div class="container">
-            <h2 class="section-title">What You Can Actually Do</h2>
-            <p class="section-subtitle">This is not a toy script runner. It is a practical Finder toolkit for everyday file work, creative assets, and developer workflows.</p>
+            <h2 class="section-title reveal">What You Can Actually Do</h2>
+            <p class="section-subtitle reveal">This is not a toy script runner. It is a practical Finder toolkit for everyday file work, creative assets, and developer workflows.</p>
             <div class="use-case-grid">
                 <article class="use-case-card animate-in delay-2">
                     <div class="use-case-image">
@@ -1002,10 +1058,10 @@
 
     <section class="comparison" id="features">
         <div class="container">
-            <h2 class="section-title">The Sane Way to Automate</h2>
-            <p class="section-subtitle">Why fight with Automator when you can just right-click?</p>
-            <p class="section-subtitle" style="margin-top: -10px; font-size: 0.95rem;">This table reflects SaneClick Pro. Download starts full Pro for 14 days, then Pro is required to continue.</p>
-            <div class="comparison-table-wrapper">
+            <h2 class="section-title reveal">The Sane Way to Automate</h2>
+            <p class="section-subtitle reveal">Why fight with Automator when you can just right-click?</p>
+            <p class="section-subtitle reveal" style="margin-top: -10px; font-size: 0.95rem;">This table reflects SaneClick Pro. Download starts full Pro for 14 days, then Pro is required to continue.</p>
+            <div class="comparison-table-wrapper reveal">
             <table class="comparison-table">
                 <thead>
                     <tr>
@@ -1086,9 +1142,9 @@
             </table>
             </div>
 
-            <h3 style="text-align: center; font-size: 1.6rem; font-weight: 700; margin: 80px 0 8px;">And next to the other paid menu apps</h3>
-            <p class="section-subtitle" style="margin-bottom: 40px;">Only SaneClick does all of it &mdash; and it's the only one that can copy the text out of an image.</p>
-            <div class="comparison-table-wrapper">
+            <h3 class="reveal" style="text-align: center; font-size: 1.6rem; font-weight: 700; margin: 80px 0 8px;">And next to the other paid menu apps</h3>
+            <p class="section-subtitle reveal" style="margin-bottom: 40px;">Only SaneClick does all of it &mdash; and it's the only one that can copy the text out of an image.</p>
+            <div class="comparison-table-wrapper reveal">
             <table class="comparison-table">
                 <thead>
                     <tr>
@@ -1110,13 +1166,13 @@
                 </tbody>
             </table>
             </div>
-            <p class="section-subtitle" style="font-size: 0.85rem; margin: 24px auto 0; max-width: 820px; line-height: 1.6;">Verified from each company's own page, June 2026: <a href="https://iboysoft.com/magic-menu/" style="color: var(--accent);">iBoysoft MagicMenu</a>, <a href="https://apps.apple.com/us/app/service-station/id1503136033" style="color: var(--accent);">Service Station</a>, <a href="https://apps.apple.com/us/app/filepane-drag-drop-utility/id847515307" style="color: var(--accent);">FilePane</a>. &ldquo;&mdash;&rdquo; means the company doesn't publicly state it. FilePane's PDF support is images-to-PDF and PDF-to-images. Reflects SaneClick Pro.</p>
+            <p class="section-subtitle reveal" style="font-size: 0.85rem; margin: 24px auto 0; max-width: 820px; line-height: 1.6;">Verified from each company's own page, June 2026: <a href="https://iboysoft.com/magic-menu/" style="color: var(--accent);">iBoysoft MagicMenu</a>, <a href="https://apps.apple.com/us/app/service-station/id1503136033" style="color: var(--accent);">Service Station</a>, <a href="https://apps.apple.com/us/app/filepane-drag-drop-utility/id847515307" style="color: var(--accent);">FilePane</a>. &ldquo;&mdash;&rdquo; means the company doesn't publicly state it. FilePane's PDF support is images-to-PDF and PDF-to-images. Reflects SaneClick Pro.</p>
         </div>
     </section>
 
     <section style="padding: 0 0 20px; text-align: center;">
         <div class="container">
-            <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 700px; margin: 0 auto; padding: 20px 24px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; line-height: 1.6;">
+            <p class="reveal" style="color: var(--text-muted); font-size: 0.9rem; max-width: 700px; margin: 0 auto; padding: 20px 24px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; line-height: 1.6;">
                 <strong style="color: var(--text-secondary);">Tip:</strong> Import opens a small window where you choose the JSON file. It keeps the flow fast and reliable.
             </p>
         </div>
@@ -1124,20 +1180,20 @@
 
     <section class="philosophy">
         <div class="container">
-            <h2 class="section-title">Built for a Sound Mind</h2>
-            <p style="font-style: italic; color: var(--text-muted); margin-top: 10px;">"For God has not given us a spirit of fear, but of power and of love and of a sound mind." — 2 Timothy 1:7</p>
+            <h2 class="section-title reveal">Built for a Sound Mind</h2>
+            <p class="reveal" style="font-style: italic; color: var(--text-muted); margin-top: 10px;">"For God has not given us a spirit of fear, but of power and of love and of a sound mind." — 2 Timothy 1:7</p>
             <div class="philosophy-grid">
-                <div class="philosophy-card">
+                <div class="philosophy-card reveal">
                     <span class="emoji">&#9889;</span>
                     <h3>Power</h3>
                     <p>Execute complex scripts with one click. No Terminal required.</p>
                 </div>
-                <div class="philosophy-card">
+                <div class="philosophy-card reveal">
                     <span class="emoji">&#10084;&#65039;</span>
                     <h3>Love</h3>
                     <p>Designed to be useful, not to extract data. Your privacy is the priority.</p>
                 </div>
-                <div class="philosophy-card">
+                <div class="philosophy-card reveal">
                     <span class="emoji">&#129504;</span>
                     <h3>Sound Mind</h3>
                     <p>Clean up your workflow. Focus on the task, not the tool.</p>
@@ -1148,7 +1204,7 @@
 
     <section class="sustainability">
         <div class="container">
-            <div class="sustainability-card">
+            <div class="sustainability-card reveal">
                 <h2 style="font-family: 'Playfair Display', serif; font-size: 2.25rem; margin-bottom: 20px;">&#128269; Transparent Code + Sustainable</h2>
                 <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 30px;">Download starts 14 days of Pro. After the trial, keep Pro with a one-time purchase.</p>
                 <div class="sustainability-options">
@@ -1167,8 +1223,8 @@
 
     <section class="support" id="support">
         <div class="container">
-            <h2 class="section-title">Support SaneClick</h2>
-            <p class="section-subtitle support-subtitle">
+            <h2 class="section-title reveal">Support SaneClick</h2>
+            <p class="section-subtitle support-subtitle reveal">
                 I build apps because I love building things that work well.<br>
                 If SaneClick saves you time, consider supporting development.<br><br>
                 <span>Thank you. — Mr. Sane</span>
@@ -1184,10 +1240,10 @@
 
     <section class="more-apps">
         <div class="container">
-            <h2 class="section-title">More from SaneApps</h2>
-            <p class="more-apps-subtitle">Simple Mac utilities that respect your time and privacy.</p>
+            <h2 class="section-title reveal">More from SaneApps</h2>
+            <p class="more-apps-subtitle reveal">Simple Mac utilities that respect your time and privacy.</p>
             <div class="more-apps-grid">
-                <a href="https://saneclip.com" class="app-card" data-cta="cross_sell_saneclip_card">
+                <a href="https://saneclip.com" class="app-card reveal" data-cta="cross_sell_saneclip_card">
                     <div class="app-card-header">
                         <img src="images/saneclip-icon.png" alt="SaneClip" class="app-card-icon">
                         <div class="app-card-name">SaneClip</div>
@@ -1195,7 +1251,7 @@
                     <p class="app-card-tagline">Save clipboard history privately. Touch ID protection, instant search, and quick text tools.</p>
                     <span class="app-card-cta">Learn more &rarr;</span>
                 </a>
-                <a href="https://sanehosts.com" class="app-card" data-cta="cross_sell_sanehosts_card">
+                <a href="https://sanehosts.com" class="app-card reveal" data-cta="cross_sell_sanehosts_card">
                     <div class="app-card-header">
                         <img src="images/sanehosts-icon.png" alt="SaneHosts" class="app-card-icon">
                         <div class="app-card-name">SaneHosts</div>
@@ -1204,7 +1260,7 @@
                     <span class="app-card-cta">Learn more &rarr;</span>
                 </a>
             </div>
-            <div class="more-apps-hub">
+            <div class="more-apps-hub reveal">
                 <a href="https://saneapps.com" data-cta="cross_sell_saneapps_hub">See all apps at saneapps.com &rarr;</a>
             </div>
         </div>
@@ -1212,7 +1268,7 @@
 
     <section class="crypto-section">
         <div class="container">
-            <div class="crypto-card">
+            <div class="crypto-card reveal">
                 <h3>Pay with Crypto</h3>
                 <p class="crypto-subtitle">Prefer privacy-first payments? Send $14.99 in any of these:</p>
                 <div class="crypto-grid">
@@ -1252,11 +1308,11 @@
 
     <section style="padding: 60px 0 80px; text-align: center; overflow: hidden;">
         <div class="container">
-            <h2 class="section-title">What Mac Users Are Saying</h2>
-            <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 40px;">From the SaneApps community</p>
+            <h2 class="section-title reveal">What Mac Users Are Saying</h2>
+            <p class="reveal" style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 40px;">From the SaneApps community</p>
         </div>
         <div class="testimonial-mask" style="overflow: hidden; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
-            <div class="testimonial-track" style="display: flex; gap: 20px; animation: testimonialScroll 20s linear infinite; width: max-content;" onmouseenter="this.style.animationPlayState='paused'" onmouseleave="this.style.animationPlayState='running'">
+            <div class="testimonial-track" style="display: flex; gap: 20px; width: max-content;" onmouseenter="this.style.animationPlayState='paused'" onmouseleave="this.style.animationPlayState='running'">
                 <div class="testimonial-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 16px; padding: 24px 28px; border: 1px solid var(--border); text-align: left; min-width: 340px; max-width: 340px; flex-shrink: 0;">
                     <p style="font-style: italic; color: var(--text-primary); margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">"Actually local and no telemetry is the only way to do this."</p>
                     <div style="color: var(--accent); font-size: 0.9rem; font-weight: 500;">@manuotel (X)</div>
@@ -1313,6 +1369,23 @@
         @keyframes testimonialScroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
+        }
+
+        /* Marquee only runs when the user allows motion; hover pauses it.
+           With motion off, the mask comes off and the row scrolls by hand. */
+        @media (prefers-reduced-motion: no-preference) {
+            .testimonial-track { animation: testimonialScroll 20s linear infinite; }
+            .testimonial-mask:hover .testimonial-track { animation-play-state: paused; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .testimonial-mask {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+                mask-image: none !important;
+                -webkit-mask-image: none !important;
+                padding-bottom: 8px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1398,6 +1471,30 @@
             el.style.color = 'var(--success)';
             setTimeout(function() { el.textContent = orig; el.style.color = ''; }, 1500);
         }
+    </script>
+
+    <script>
+        // Scroll reveals: CSS scroll-timelines where supported; IntersectionObserver otherwise.
+        // The .io class (which hides .reveal pre-scroll) is only added when JS runs and the
+        // user allows motion — no-JS visitors and crawlers get the full static page.
+        (function () {
+            if (CSS.supports('animation-timeline: view()')) return;
+            if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            document.documentElement.classList.add('io');
+            var o = new IntersectionObserver(function (es) {
+                es.forEach(function (e) {
+                    if (e.isIntersecting) { e.target.classList.add('in'); o.unobserve(e.target); }
+                });
+            }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+            document.querySelectorAll('.reveal').forEach(function (el) { o.observe(el); });
+        })();
+        // Reduced motion: demo video becomes click-to-play with controls instead of an autoplaying loop.
+        (function () {
+            var v = document.querySelector('.rc-video');
+            if (v && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                v.removeAttribute('autoplay'); v.removeAttribute('loop'); v.controls = true; v.pause();
+            }
+        })();
     </script>
 
     <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "bad38ef682374c00a2ac812a3b76a51f"}'></script><!-- End Cloudflare Web Analytics -->
