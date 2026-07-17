@@ -829,7 +829,11 @@
         /* Hero demo: real screen capture of SaneClick in the Finder
            context menu (demo/saneclick-finder-demo.mp4). */
         .rc-demo { display: flex; justify-content: center; margin: 36px auto 6px; pointer-events: none; user-select: none; -webkit-user-select: none; }
-        .hero-watch-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 30px; align-items: center; max-width: 1120px; margin: 14px auto 10px; padding: 0 8px; }
+        .hero-watch-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(340px, .65fr); gap: 26px; align-items: start; max-width: 1220px; margin: 10px auto 10px; padding: 0 8px; }
+        .hero { padding-top: 118px; }
+        .hero h1 { margin-bottom: 14px; }
+        .hero .subtitle { margin-bottom: 20px; }
+        .hero .trust-badges { margin-bottom: 14px; font-size: 1.05rem; }
         .hero-watch-video video { width: 100%; aspect-ratio: 16/9; height: auto; background: #08080c; border-radius: 14px; border: 1px solid rgba(79, 143, 250, 0.35); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5); display: block; }
         .hero-watch-video .watch-after { margin: 12px 0 0; font-size: 14.5px; color: var(--text-primary); text-align: center; }
         .hero-watch-grid .hero-pricing-grid { margin: 0 auto; }
@@ -912,7 +916,7 @@
                 <span>&#128274; 100% On-Device &middot; &#128176; No Subscriptions &middot; &#128269; 100% Transparent Code</span>
                 <a href="https://github.com/sane-apps/SaneClick/blob/main/PRIVACY.md" target="_blank" rel="noopener">&#128737;&#65039; Privacy by Design</a>
             </div>
-            <div class="animate-in delay-4" style="margin: 22px auto 28px; text-align: center;">
+            <div class="animate-in delay-4" style="margin: 12px auto 14px; text-align: center;">
                 <a href="https://dist.saneclick.com/updates/SaneClick-1.3.1.zip" class="pricing-cta pricing-cta-pro" style="display: inline-flex; align-items: center; justify-content: center; width: auto; min-width: 240px;" data-cta="download_trial">Start Full Pro Trial</a>
                 <p style="color: var(--text-muted); font-size: 0.92rem; margin: 12px 0 6px;">Full Pro for 14 days. No credit card required. Pro is required after trial.</p>
                 <a href="https://go.saneapps.com/buy/saneclick?ref=website-hero" style="color: var(--accent); font-weight: 700; text-decoration: none;" data-cta="buy_pro">Buy Pro now — $14.99 once</a>
