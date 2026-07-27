@@ -260,7 +260,13 @@ final class ScriptExecutor: @unchecked Sendable {
             service = LicenseService(
                 appName: "SaneClick",
                 checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick"),
-                keychain: KeychainService(service: "com.saneclick.SaneClick"),
+                // Match the host app's data-protection keychain namespace. Without
+                // this access group, Finder-triggered Pro actions can see an empty
+                // legacy keychain while Settings correctly reports an active unlock.
+                keychain: KeychainService(
+                    service: "com.saneclick.SaneClick",
+                    accessGroup: "M78L6FXD48.group.com.saneclick.app"
+                ),
                 directCopy: LicenseService.DirectCopy.saneClick,
                 proTrial: .init(storageKeyPrefix: "saneclick.pro_trial")
             )

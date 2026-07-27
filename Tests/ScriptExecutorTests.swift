@@ -283,6 +283,25 @@ struct ScriptExecutorTests {
         }
     }
 
+    @Test("Direct executor and host app share the Pro keychain access group")
+    func directExecutorUsesHostAppKeychainAccessGroup() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let executorSource = try String(
+            contentsOf: projectRoot.appendingPathComponent("SaneClick/Services/ScriptExecutor.swift"),
+            encoding: .utf8
+        )
+        let appSource = try String(
+            contentsOf: projectRoot.appendingPathComponent("SaneClick/SaneClickApp.swift"),
+            encoding: .utf8
+        )
+        let accessGroup = "M78L6FXD48.group.com.saneclick.app"
+
+        #expect(executorSource.contains("accessGroup: \"\(accessGroup)\""))
+        #expect(appSource.contains("accessGroup: \"\(accessGroup)\""))
+    }
+
     @Test("Built-in actions never pre-set a non-standard output mode")
     func builtInsKeepStandardOutputMode() {
         for script in ScriptLibrary.allScripts {

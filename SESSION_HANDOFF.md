@@ -1,10 +1,18 @@
 # Session Handoff — SaneClick
 
-**Last updated:** 2026-06-28
-**Current public version:** `1.1.12` (build `1112`)
-**Next release candidate:** `1.2.0` — combined feature release, code on `origin/main` (`ccc5005`), pending signed build + owner sign-off
+**Last updated:** 2026-07-27
+**Current public version:** `1.3.1` (build `1301`)
+**Next release candidate:** `1.3.2` (build `1302`) — pending guarded direct release
 
 ## Current State
+
+- 2026-07-27 **1.3.2 direct release candidate verified on the Mini.**
+  - Candidate includes the shared neutral expired-trial gate, matching host/executor data-protection keychain access groups for Finder-triggered licensed actions, and an app-local direct-only Sparkle settings row.
+  - Canonical full verify passed 177 tests: receipt `cd5ef388d367088fbc2233521dd73ddc`. Focused test scan passed: receipt `9027cb2912494a5f026c297e75e116ee`.
+  - Release-mode expired-trial runtime passed: receipt `514294c351193214dc422c558a470dd0`; log `outputs/live-logs/saneclick-expired-trial-20260727.log`; screenshot `outputs/visual-audit-trial-expired/1.3.2/saneclick-expired-trial.png`.
+  - Visual verdict: clean, bright, unclipped, and free of tier language.
+  - Finder live AX verification remains blocked by system TCC `auth_value=0`; enable the password-gated Accessibility setting before claiming Finder end-to-end proof.
+  - Preserve the unrelated `.sane/customer_ui_action_receipt.json` refresh until the customer UI sweep is rerun.
 
 - 2026-06-29 (RESOLVED) **✅ Push landed + everything live. The only thing left is the owner-gated App Store submission (below).** All commits are on `origin/main` (`388327e`); Air + Mini + origin synced clean. The competitor comparison table + the 53→62 fix are LIVE on saneclick.com (deployed). How the earlier block resolved: the verify failure was a self-inflicted guardrail-string deletion in `.saneprocess` (BOTH "direct download only" AND "intentionally inactive" were dropped — restore BOTH next time, the test asserts all five); the gate certifier (ADR-011) recorded a `--gate verify-escalation --slug verify` override; and the push only cleared with `SANEMASTER_FORCE_LOCAL=1` because the override lives in the Air's `.claude/` but a plain push routes verify to the Mini (which lacks it). Gate-state files (`.claude/gate-*`) are now gitignored. **Lessons (also in memory):** read the actual test error (`xcresulttool`) before theorizing — Swift Testing runs in parallel so the last-printed test ≠ the failing one; and verify a fix COMPLETELY (I restored 1 of 2 deleted strings; the certifier caught the second).
 

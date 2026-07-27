@@ -11,6 +11,48 @@ private final class MenuActionTarget: NSObject {
 
 @MainActor
 struct AppStoreReviewGuardrailTests {
+    private let everythingBundleSaneUIRevision = "e578dcd77a93124364e063fd1d9f91c09f5c590a"
+
+    @Test("Everything Bundle entitlement uses bundle-aware SaneUI validation")
+    func everythingBundleEntitlementUsesBundleAwareSaneUIValidation() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let pinFiles = [
+            "project.yml",
+            "SaneClick.xcodeproj/project.pbxproj",
+            "SaneClick.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+        ]
+
+        for relativePath in pinFiles {
+            let source = try String(contentsOf: projectRoot.appendingPathComponent(relativePath), encoding: .utf8)
+            #expect(source.contains(everythingBundleSaneUIRevision))
+        }
+
+        let licenseServiceSource = try String(
+            contentsOf: projectRoot
+                .deletingLastPathComponent()
+                .deletingLastPathComponent()
+                .appendingPathComponent("infra/SaneUI/Sources/SaneUI/License/LicenseService.swift"),
+            encoding: .utf8
+        )
+        #expect(licenseServiceSource.contains(#"let everythingBundleToken = "saneappseverythingbundle""#))
+        #expect(licenseServiceSource.contains("productToken.contains(appToken)"))
+        #expect(licenseServiceSource.contains("variantToken.contains(appToken)"))
+    }
+
+    @Test("Direct updater cadence stays daily or weekly")
+    func directUpdaterCadenceStaysDailyOrWeekly() {
+        #expect(SaneSparkleCheckFrequency.daily.interval == 86_400)
+        #expect(SaneSparkleCheckFrequency.weekly.interval == 604_800)
+        #expect(SaneSparkleCheckFrequency.resolve(updateCheckInterval: 86_400) == .daily)
+        #expect(SaneSparkleCheckFrequency.resolve(updateCheckInterval: 604_800) == .weekly)
+        #expect(
+            SaneSparkleCheckFrequency.normalizedInterval(from: 200_000)
+                == SaneSparkleCheckFrequency.daily.interval
+        )
+    }
+
     @Test("Reopen without visible windows requests the main window")
     func reopenWithoutVisibleWindowsRequestsMainWindow() {
         let delegate = SaneClickAppDelegate()

@@ -4,6 +4,10 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.3.2] - 2026-07-27
+
+Improves licensing, updates, and reliability.
+
 ## [1.3.1] - 2026-07-04
 
 Important update to onboarding, licensing, and reliability. Recommended for all users.
