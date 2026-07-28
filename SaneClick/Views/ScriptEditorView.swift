@@ -147,8 +147,8 @@ struct ScriptEditorView: View {
             }
 
             Text("Leave blank to show for all files. Or enter file types separated by commas.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(.system(size: 13))
+                .foregroundStyle(.white)
         }
     }
 
@@ -161,7 +161,7 @@ struct ScriptEditorView: View {
                     Text("Minimum selected")
                     Spacer()
                     Text("\(minSelection)")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.white)
                 }
             }
 
@@ -172,15 +172,15 @@ struct ScriptEditorView: View {
                     HStack {
                         Text("Maximum selected")
                         Spacer()
-                        Text("\(maxSelection)")
-                            .foregroundStyle(.secondary)
+                    Text("\(maxSelection)")
+                            .foregroundStyle(.white)
                     }
                 }
             }
 
             Text("Use this to show actions only for single files or larger selections.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(.system(size: 13))
+                .foregroundStyle(.white)
         }
         .onChange(of: minSelection) { _, newValue in
             if limitSelection, maxSelection < newValue {
@@ -233,8 +233,8 @@ struct ScriptEditorView: View {
                     .accessibilityIdentifier("scriptContentEditor")
 
                 Text(helpText)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 13))
+                    .foregroundStyle(.white)
             }
         }
     }
@@ -256,7 +256,7 @@ struct ScriptEditorView: View {
         Section("Preview") {
             HStack(spacing: 12) {
                 Image(systemName: icon)
-                    .foregroundStyle(.teal)
+                    .foregroundStyle(Color.saneAccent)
                     .frame(width: 20)
 
                 Text(name.isEmpty ? "Untitled Script" : name)
@@ -264,8 +264,8 @@ struct ScriptEditorView: View {
                 Spacer()
 
                 Text(type.rawValue)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 13))
+                    .foregroundStyle(.white)
             }
             .padding(.vertical, 4)
         }
@@ -509,7 +509,7 @@ struct IconPickerView: View {
                         Image(systemName: icon)
                             .font(.title2)
                             .frame(width: 40, height: 40)
-                            .background(selectedIcon == icon ? Color.teal.opacity(0.2) : Color.clear)
+                            .background(selectedIcon == icon ? Color.saneAccent.opacity(0.2) : Color.clear)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                     }
                     .buttonStyle(.plain)
@@ -559,7 +559,7 @@ struct TestOutputView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Error")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.white.opacity(0.9))
 
                     ScrollView {
                         Text(error)
@@ -576,7 +576,7 @@ struct TestOutputView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Output")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.white.opacity(0.9))
 
                     ScrollView {
                         Text(output)

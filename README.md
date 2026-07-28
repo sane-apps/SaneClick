@@ -8,7 +8,7 @@
 [![macOS 14+](https://img.shields.io/badge/macOS-14%2B-brightgreen)](https://www.apple.com/macos)
 [![Listed on macOS apps list](https://img.shields.io/badge/Listed%20on-macOS--apps--list%20(40k%E2%98%85)-black)](https://github.com/serhii-londar/open-source-mac-os-apps)
 
-> **⭐ Star this repo if it's useful!** · **[Start a free 14-day Pro trial](https://saneclick.com)** · **[Buy Pro for $14.99 once](https://saneclick.com)** · Keeps development alive
+> **⭐ Star this repo if it's useful!** · **[Start a free 14-day trial](https://saneclick.com)** · **[Buy SaneClick for $14.99 once](https://saneclick.com)** · Keeps development alive
 
 ![SaneClick Main Window](docs/screenshots/main-window.png)
 
@@ -44,7 +44,7 @@ SaneClick gives you **62 ready-to-use actions** — no scripting required. Brows
 
 **100% local. We never see your data.**
 
-> Pay once. Keep the full Pro toolset. No subscription.
+> Pay once. Keep every SaneClick action. No subscription.
 
 ---
 
@@ -80,11 +80,11 @@ SaneClick gives you **62 ready-to-use actions** — no scripting required. Brows
 
 ### Download
 
-[Download SaneClick](https://saneclick.com) — start with a free 14-day Pro trial. After the trial, Pro is required and remains a $14.99 one-time purchase.
+[Download SaneClick](https://saneclick.com) — start with a free 14-day trial. After the trial, buy once for $14.99 to keep using the app.
 
 ### Build from Source
 
-**Building from source?** Consider [unlocking Pro](https://saneclick.com) to support continued development.
+**Building from source?** Consider [buying SaneClick](https://saneclick.com) to support continued development.
 
 ```bash
 # Clone the repository

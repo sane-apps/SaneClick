@@ -68,7 +68,7 @@ struct ImportExportView: View {
         HStack(spacing: 12) {
             Image(systemName: mode.icon)
                 .font(.system(size: 28, weight: .semibold))
-                .foregroundStyle(Color.saneTeal)
+                .foregroundStyle(Color.saneAccent)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text("Import and Export")
@@ -77,7 +77,7 @@ struct ImportExportView: View {
 
                 Text("Move your right-click actions between Macs")
                     .font(.subheadline)
-                    .foregroundStyle(Color.saneSilver)
+                    .foregroundStyle(Color.white.opacity(0.9))
             }
 
             Spacer()
@@ -95,7 +95,7 @@ struct ImportExportView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("When an action already exists")
                     .font(.subheadline)
-                    .foregroundStyle(Color.saneSilver)
+                    .foregroundStyle(Color.white.opacity(0.9))
 
                 Picker("Import mode", selection: $importMode) {
                     ForEach(ScriptImportMode.allCases, id: \.self) { option in
@@ -105,8 +105,8 @@ struct ImportExportView: View {
                 .pickerStyle(.radioGroup)
 
                 Text(importMode.detail)
-                    .font(.caption)
-                    .foregroundStyle(Color.saneSilver)
+                    .font(.system(size: 13))
+                    .foregroundStyle(Color.white.opacity(0.9))
             }
 
             Button {
@@ -115,7 +115,7 @@ struct ImportExportView: View {
                 Label("Choose JSON File", systemImage: "square.and.arrow.down")
             }
             .buttonStyle(.borderedProminent)
-            .tint(.saneTeal)
+            .tint(.saneAccent)
             .disabled(isWorking)
         }
         .padding(16)
@@ -138,8 +138,8 @@ struct ImportExportView: View {
                     Text("\(scriptStore.scripts.count) actions")
                         .font(.headline)
                     Text("Includes enabled and disabled actions")
-                        .font(.caption)
-                        .foregroundStyle(Color.saneSilver)
+                        .font(.system(size: 13))
+                        .foregroundStyle(Color.white.opacity(0.9))
                 }
 
                 Spacer()
@@ -150,7 +150,7 @@ struct ImportExportView: View {
                     Label("Export All", systemImage: "square.and.arrow.up")
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.saneTeal)
+                .tint(.saneAccent)
                 .disabled(isWorking)
             }
 
@@ -172,14 +172,14 @@ struct ImportExportView: View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(Color.saneTeal)
+                .foregroundStyle(Color.saneAccent)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.headline)
                 Text(subtitle)
-                    .font(.caption)
-                    .foregroundStyle(Color.saneSilver)
+                    .font(.system(size: 13))
+                    .foregroundStyle(Color.white.opacity(0.9))
             }
 
             Spacer()

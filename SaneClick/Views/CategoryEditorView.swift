@@ -1,3 +1,4 @@
+import SaneUI
 import SwiftUI
 
 struct ScriptCategoryEditorView: View {
@@ -40,7 +41,7 @@ struct ScriptCategoryEditorView: View {
             Section("Preview") {
                 HStack(spacing: 12) {
                     Image(systemName: icon)
-                        .foregroundStyle(.teal)
+                        .foregroundStyle(Color.saneAccent)
                         .frame(width: 20)
 
                     Text(name.isEmpty ? "New Group" : name)
@@ -117,7 +118,7 @@ struct ScriptCategoryIconPickerView: View {
                         Image(systemName: icon)
                             .font(.title2)
                             .frame(width: 40, height: 40)
-                            .background(selectedIcon == icon ? Color.teal.opacity(0.2) : Color.clear)
+                            .background(selectedIcon == icon ? Color.saneAccent.opacity(0.2) : Color.clear)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                     }
                     .buttonStyle(.plain)

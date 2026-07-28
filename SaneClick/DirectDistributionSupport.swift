@@ -5,9 +5,9 @@ import SwiftUI
 
 extension LicenseService.DirectCopy {
     static let saneClick = Self(
-        alternateUnlockLabel: "Unlock Pro",
+        alternateUnlockLabel: "Buy SaneClick",
         alternateEntryLabel: "Enter License Key",
-        accessManagementLabel: "Deactivate Pro",
+        accessManagementLabel: "Deactivate License",
         alternateEntryInstruction: "Paste your activation code from the confirmation email."
     )
 }

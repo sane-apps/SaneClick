@@ -125,7 +125,7 @@ struct ContentView: View {
                     title: "Browse Library",
                     subtitle: librarySubtitle,
                     icon: "books.vertical.fill",
-                    color: .saneTeal
+                    color: .saneAccent
                 ) {
                     showLibrary = true
                 }
@@ -133,10 +133,10 @@ struct ContentView: View {
                 #if APP_STORE
                     if !licenseService.isPro {
                         QuickActionRow(
-                            title: "Unlock Pro",
+                            title: "Buy SaneClick",
                             subtitle: "Get 24 more built-in file actions • \(licenseService.displayPriceLabel) once",
                             icon: "lock.open.fill",
-                            color: .teal
+                            color: .saneAccent
                         ) {
                             proUpsellFeature = .organizationScripts
                         }
@@ -180,7 +180,7 @@ struct ContentView: View {
                             Text("More Options")
                                 .font(.system(size: 13, weight: .medium))
                         }
-                        .foregroundStyle(Color.saneTeal.opacity(0.8))
+                        .foregroundStyle(Color.saneAccent.opacity(0.8))
                         .padding(.vertical, 6)
                     }
                     .buttonStyle(.plain)
@@ -189,7 +189,7 @@ struct ContentView: View {
                         // Custom Script Editor — Pro feature
                         QuickActionRow(
                             title: "Write Custom Action",
-                            subtitle: licenseService.isPro ? "For advanced users" : "Pro — create your own scripts",
+                            subtitle: licenseService.isPro ? "For advanced users" : "Purchase required to create scripts",
                             icon: "terminal",
                             color: .orange,
                             isLocked: !licenseService.isPro
@@ -204,9 +204,9 @@ struct ContentView: View {
                         // Import / Export — Pro feature
                         QuickActionRow(
                             title: "Import / Export",
-                            subtitle: licenseService.isPro ? "Move actions between Macs" : "Pro — backup & share scripts",
+                            subtitle: licenseService.isPro ? "Move actions between Macs" : "Purchase required to back up and share",
                             icon: "square.and.arrow.up.on.square",
-                            color: .saneTeal,
+                            color: .saneAccent,
                             isLocked: !licenseService.isPro
                         ) {
                             if licenseService.isPro {
@@ -223,9 +223,9 @@ struct ContentView: View {
                     Image(systemName: "bolt.fill")
                         .font(.system(size: 12, weight: .semibold))
                     Text("QUICK ACTIONS")
-                        .font(.system(size: 11, weight: .bold))
+                        .font(.system(size: 13, weight: .bold))
                 }
-                .foregroundStyle(.primary)
+                .foregroundStyle(.white)
             }
 
             // Categories section
@@ -250,9 +250,9 @@ struct ContentView: View {
                     Image(systemName: "square.stack.fill")
                         .font(.system(size: 12, weight: .semibold))
                     Text("YOUR ACTIONS")
-                        .font(.system(size: 11, weight: .bold))
+                        .font(.system(size: 13, weight: .bold))
                 }
-                .foregroundStyle(.primary)
+                .foregroundStyle(.white)
             }
         }
         .listStyle(.sidebar)
@@ -315,13 +315,13 @@ struct ContentView: View {
                         // Active count in green (success), total available
                         HStack(spacing: 4) {
                             if isLocked {
-                                Text("\(libraryScripts.count) scripts included with Pro")
-                                    .foregroundStyle(Color.saneSilver)
+                                Text("\(libraryScripts.count) scripts included with SaneClick")
+                                    .foregroundStyle(Color.white.opacity(0.9))
                             } else {
                                 Text("\(activeCount)")
-                                    .foregroundStyle(activeCount > 0 ? Color(red: 0.13, green: 0.77, blue: 0.37) : Color.saneSilver)
+                                    .foregroundStyle(activeCount > 0 ? Color(red: 0.13, green: 0.77, blue: 0.37) : Color.white.opacity(0.9))
                                 Text("of \(libraryScripts.count) enabled")
-                                    .foregroundStyle(Color.saneSilver)
+                                    .foregroundStyle(Color.white.opacity(0.9))
                             }
                         }
                         .font(.subheadline)
@@ -337,13 +337,13 @@ struct ContentView: View {
                             HStack(spacing: 6) {
                                 Image(systemName: "lock.fill")
                                     .font(.system(size: 12))
-                                Text("Unlock Pro — \(licenseService.displayPriceLabel)")
+                                Text("Buy SaneClick — \(licenseService.displayPriceLabel)")
                                     .font(.system(size: 13, weight: .semibold))
                             }
                             .foregroundStyle(.white)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
-                            .background(Color.teal)
+                            .background(Color.saneAccent)
                             .clipShape(Capsule())
                         }
                         .buttonStyle(.plain)
@@ -361,8 +361,8 @@ struct ContentView: View {
                             .tint(categoryColor)
 
                             Text(allEnabled ? "All On" : "Enable All")
-                                .font(.caption)
-                                .foregroundStyle(Color.saneSilver)
+                                .font(.system(size: 13))
+                                .foregroundStyle(Color.white.opacity(0.9))
                         }
                     }
                 }
@@ -422,20 +422,20 @@ struct ContentView: View {
             }
 
             HStack {
-                Text("\(libraryScripts.count) scripts included with Pro")
+                Text("\(libraryScripts.count) scripts included with SaneClick")
                     .font(.subheadline)
-                    .foregroundStyle(Color.saneSilver)
+                    .foregroundStyle(Color.white.opacity(0.9))
 
                 Spacer()
 
                 Button {
                     proUpsellFeature = proFeatureForCategory(category)
                 } label: {
-                    Label("Unlock Pro — \(licenseService.displayPriceLabel)", systemImage: "lock.fill")
+                    Label("Buy SaneClick — \(licenseService.displayPriceLabel)", systemImage: "lock.fill")
                         .font(.system(size: 13, weight: .semibold))
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.teal)
+                .tint(.saneAccent)
             }
             .padding(.top, 8)
         }
@@ -457,13 +457,13 @@ struct ContentView: View {
         HStack(spacing: 4) {
             Image(systemName: "lock.fill")
                 .font(.system(size: 10))
-            Text("Pro")
-                .font(.system(size: 11, weight: .semibold))
+            Text("Buy once")
+                .font(.system(size: 13, weight: .semibold))
         }
-        .foregroundStyle(.teal)
+        .foregroundStyle(Color.saneAccent)
         .padding(.horizontal, 6)
         .padding(.vertical, 2)
-        .background(Color.teal.opacity(0.15))
+        .background(Color.saneAccent.opacity(0.15))
         .clipShape(Capsule())
     }
 
@@ -489,7 +489,7 @@ struct ContentView: View {
         VStack(spacing: 20) {
             Image(systemName: "cursorarrow.click.2")
                 .font(.system(size: 56))
-                .foregroundStyle(Color.saneTeal)
+                .foregroundStyle(Color.saneAccent)
 
             Text("Welcome to SaneClick")
                 .font(.title2)
@@ -497,7 +497,7 @@ struct ContentView: View {
 
             Text(emptyStateBody)
                 .font(.body)
-                .foregroundStyle(Color.saneSilver)
+                .foregroundStyle(Color.white.opacity(0.9))
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: 300)
 
@@ -508,7 +508,7 @@ struct ContentView: View {
                     .font(.headline)
             }
             .buttonStyle(.borderedProminent)
-            .tint(.saneTeal)
+            .tint(.saneAccent)
             .controlSize(.large)
 
             #if APP_STORE
@@ -516,11 +516,11 @@ struct ContentView: View {
                     Button {
                         proUpsellFeature = .organizationScripts
                     } label: {
-                        Label("Unlock Pro — \(licenseService.displayPriceLabel)", systemImage: "lock.open.fill")
+                        Label("Buy SaneClick — \(licenseService.displayPriceLabel)", systemImage: "lock.open.fill")
                             .font(.headline)
                     }
                     .buttonStyle(.bordered)
-                    .tint(.teal)
+                    .tint(.saneAccent)
                     .controlSize(.large)
                 }
             #endif
@@ -570,7 +570,7 @@ struct ContentView: View {
                 openSettingsWindow()
             }
             .buttonStyle(.borderedProminent)
-            .tint(.saneTeal)
+            .tint(.saneAccent)
         }
         .padding(16)
         .background(RoundedRectangle(cornerRadius: 12).fill(Color.saneCarbon))
@@ -610,7 +610,7 @@ struct LibraryScriptRow: View {
             // Icon - keep script identity visible for locked Pro rows
             Image(systemName: libraryScript.icon)
                 .font(.title3)
-                .foregroundStyle(isLocked ? categoryColor : (isEnabled ? successGreen : Color.saneSilver))
+                .foregroundStyle(isLocked ? categoryColor : (isEnabled ? successGreen : Color.white.opacity(0.9)))
                 .frame(width: 36, height: 36)
                 .background(isLocked ? categoryColor.opacity(0.15) : (isEnabled ? successGreen.opacity(0.15) : Color.saneSmoke))
                 .clipShape(RoundedRectangle(cornerRadius: 8))
@@ -620,11 +620,11 @@ struct LibraryScriptRow: View {
                 Text(libraryScript.name)
                     .font(.body)
                     .fontWeight(.medium)
-                    .foregroundStyle(isLocked ? .primary : (isEnabled ? Color.saneCloud : Color.saneSilver))
+                    .foregroundStyle(isLocked ? .primary : (isEnabled ? Color.saneCloud : Color.white.opacity(0.9)))
 
                 Text(libraryScript.description)
-                    .font(.caption)
-                    .foregroundStyle(Color.saneSilver)
+                    .font(.system(size: 13))
+                    .foregroundStyle(Color.white.opacity(0.9))
                     .lineLimit(1)
             }
 
@@ -634,13 +634,13 @@ struct LibraryScriptRow: View {
                 HStack(spacing: 5) {
                     Image(systemName: "lock.fill")
                         .font(.system(size: 11))
-                    Text("Pro")
-                        .font(.system(size: 12, weight: .semibold))
+                    Text("Buy once")
+                        .font(.system(size: 13, weight: .semibold))
                 }
-                .foregroundStyle(.teal)
+                .foregroundStyle(Color.saneAccent)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)
-                .background(Color.teal.opacity(0.15))
+                .background(Color.saneAccent.opacity(0.15))
                 .clipShape(Capsule())
             } else {
                 // Always show toggle - consistent UI for all scripts
@@ -675,7 +675,7 @@ struct LibraryScriptRow: View {
         }
         .contentShape(Rectangle())
         .accessibilityAddTraits(isLocked ? .isButton : [])
-        .accessibilityHint(isLocked ? "Shows what is included with Pro" : "")
+        .accessibilityHint(isLocked ? "Shows what is included with SaneClick" : "")
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.15)) {
                 isHovered = hovering

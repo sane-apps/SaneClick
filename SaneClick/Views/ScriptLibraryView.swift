@@ -66,9 +66,9 @@ struct ScriptLibraryView: View {
                 let totalAvailable = ScriptLibrary.availableAllScripts.count
                 HStack(spacing: 4) {
                     Text("\(totalEnabled)")
-                        .foregroundStyle(totalEnabled > 0 ? successGreen : Color.saneSilver)
+                        .foregroundStyle(totalEnabled > 0 ? successGreen : Color.white.opacity(0.9))
                     Text("of \(totalAvailable) enabled")
-                        .foregroundStyle(Color.saneSilver)
+                        .foregroundStyle(Color.white.opacity(0.9))
                 }
                 .font(.subheadline)
             }
@@ -79,7 +79,7 @@ struct ScriptLibraryView: View {
                 dismiss()
             }
             .buttonStyle(.borderedProminent)
-            .tint(.saneTeal)
+            .tint(.saneAccent)
         }
         .padding()
     }
@@ -89,7 +89,7 @@ struct ScriptLibraryView: View {
     private var searchBar: some View {
         HStack {
             Image(systemName: "magnifyingglass")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.white.opacity(0.9))
             TextField("Search scripts...", text: $searchText)
                 .textFieldStyle(.plain)
         }
@@ -123,24 +123,24 @@ struct ScriptLibraryView: View {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 12, weight: .semibold))
                             .rotationEffect(.degrees(showAllSection ? 90 : 0))
-                            .foregroundStyle(Color.saneSilver)
+                            .foregroundStyle(Color.white.opacity(0.9))
 
                         Image(systemName: "square.grid.2x2.fill")
                             .font(.title2)
-                            .foregroundStyle(Color.saneTeal)
+                            .foregroundStyle(Color.saneAccent)
 
                         VStack(alignment: .leading, spacing: 2) {
                             Text("All Scripts")
                                 .font(.headline)
-                                .foregroundStyle(.primary)
+                                .foregroundStyle(.white)
 
                             HStack(spacing: 4) {
                                 Text("\(totalEnabled)")
-                                    .foregroundStyle(totalEnabled > 0 ? successGreen : Color.saneSilver)
+                                    .foregroundStyle(totalEnabled > 0 ? successGreen : Color.white.opacity(0.9))
                                 Text("of \(totalAvailable) enabled")
-                                    .foregroundStyle(Color.saneSilver)
+                                    .foregroundStyle(Color.white.opacity(0.9))
                             }
-                            .font(.caption)
+                            .font(.system(size: 13))
                         }
                     }
                 }
@@ -158,11 +158,11 @@ struct ScriptLibraryView: View {
                     ))
                     .toggleStyle(.switch)
                     .labelsHidden()
-                    .tint(Color.saneTeal)
+                    .tint(Color.saneAccent)
 
                     Text(allEnabled ? "All On" : "Enable All")
-                        .font(.caption)
-                        .foregroundStyle(Color.saneSilver)
+                        .font(.system(size: 13))
+                        .foregroundStyle(Color.white.opacity(0.9))
                 }
             }
 
@@ -192,7 +192,7 @@ struct ScriptLibraryView: View {
             } else if showAllSection, allScripts.isEmpty, !searchText.isEmpty {
                 Text("No matching scripts")
                     .font(.subheadline)
-                    .foregroundStyle(Color.saneSilver)
+                    .foregroundStyle(Color.white.opacity(0.9))
                     .padding(.leading, 44)
             }
         }
@@ -245,7 +245,7 @@ struct ScriptLibraryView: View {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 12, weight: .semibold))
                             .rotationEffect(.degrees(isExpanded ? 90 : 0))
-                            .foregroundStyle(Color.saneSilver)
+                            .foregroundStyle(Color.white.opacity(0.9))
 
                         Image(systemName: category.icon)
                             .font(.title2)
@@ -255,35 +255,35 @@ struct ScriptLibraryView: View {
                             HStack(spacing: 6) {
                                 Text(category.rawValue)
                                     .font(.headline)
-                                    .foregroundStyle(.primary)
+                                    .foregroundStyle(.white)
 
                                 if isLocked {
                                     HStack(spacing: 4) {
                                         Image(systemName: "lock.fill")
                                             .font(.system(size: 9))
-                                        Text("Pro")
-                                            .font(.system(size: 10, weight: .semibold))
+                                        Text("Buy once")
+                                            .font(.system(size: 13, weight: .semibold))
                                     }
-                                    .foregroundStyle(.teal)
+                                    .foregroundStyle(Color.saneAccent)
                                     .padding(.horizontal, 5)
                                     .padding(.vertical, 2)
-                                    .background(Color.teal.opacity(0.15))
+                                    .background(Color.saneAccent.opacity(0.15))
                                     .clipShape(Capsule())
                                 }
                             }
 
                             if isLocked {
-                                Text("\(totalInCategory) scripts included with Pro")
+                                Text("\(totalInCategory) scripts included with SaneClick")
                                     .font(.subheadline)
-                                    .foregroundStyle(Color.saneSilver)
+                                    .foregroundStyle(Color.white.opacity(0.9))
                             } else {
                                 HStack(spacing: 4) {
                                     Text("\(enabledInCategory)")
-                                        .foregroundStyle(enabledInCategory > 0 ? successGreen : Color.saneSilver)
+                                        .foregroundStyle(enabledInCategory > 0 ? successGreen : Color.white.opacity(0.9))
                                     Text("of \(totalInCategory) enabled")
-                                        .foregroundStyle(Color.saneSilver)
+                                        .foregroundStyle(Color.white.opacity(0.9))
                                 }
-                                .font(.caption)
+                                .font(.system(size: 13))
                             }
                         }
                     }
@@ -300,13 +300,13 @@ struct ScriptLibraryView: View {
                         HStack(spacing: 5) {
                             Image(systemName: "lock.fill")
                                 .font(.system(size: 11))
-                            Text("Unlock Pro — \(licenseService.displayPriceLabel)")
-                                .font(.system(size: 12, weight: .semibold))
+                            Text("Buy SaneClick — \(licenseService.displayPriceLabel)")
+                                .font(.system(size: 13, weight: .semibold))
                         }
                         .foregroundStyle(.white)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
-                        .background(Color.teal)
+                        .background(Color.saneAccent)
                         .clipShape(Capsule())
                     }
                     .buttonStyle(.plain)
@@ -324,8 +324,8 @@ struct ScriptLibraryView: View {
                         .tint(categoryColor)
 
                         Text(allCategoryEnabled ? "All On" : "Enable All")
-                            .font(.caption)
-                            .foregroundStyle(Color.saneSilver)
+                            .font(.system(size: 13))
+                            .foregroundStyle(Color.white.opacity(0.9))
                     }
                 }
             }
@@ -350,20 +350,20 @@ struct ScriptLibraryView: View {
                         }
 
                         HStack {
-                            Text("\(totalInCategory) scripts included with Pro")
+                            Text("\(totalInCategory) scripts included with SaneClick")
                                 .font(.subheadline)
-                                .foregroundStyle(Color.saneSilver)
+                                .foregroundStyle(Color.white.opacity(0.9))
 
                             Spacer()
 
                             Button {
                                 proUpsellFeature = proFeatureForCategory(category)
                             } label: {
-                                Label("Unlock Pro — \(licenseService.displayPriceLabel)", systemImage: "lock.fill")
+                                Label("Buy SaneClick — \(licenseService.displayPriceLabel)", systemImage: "lock.fill")
                                     .font(.system(size: 13, weight: .semibold))
                             }
                             .buttonStyle(.borderedProminent)
-                            .tint(.teal)
+                            .tint(.saneAccent)
                         }
                     }
                 } else {
@@ -391,7 +391,7 @@ struct ScriptLibraryView: View {
             } else if isExpanded, libraryScripts.isEmpty, !searchText.isEmpty {
                 Text("No matching scripts")
                     .font(.subheadline)
-                    .foregroundStyle(Color.saneSilver)
+                    .foregroundStyle(Color.white.opacity(0.9))
                     .padding(.leading, 44)
             }
         }

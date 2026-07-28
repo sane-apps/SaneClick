@@ -11,7 +11,7 @@ private final class MenuActionTarget: NSObject {
 
 @MainActor
 struct AppStoreReviewGuardrailTests {
-    private let everythingBundleSaneUIRevision = "e578dcd77a93124364e063fd1d9f91c09f5c590a"
+    private let everythingBundleSaneUIRevision = "b6a2bc967d438eccb6773807e89fbc64efb671d4"
 
     @Test("Everything Bundle entitlement uses bundle-aware SaneUI validation")
     func everythingBundleEntitlementUsesBundleAwareSaneUIValidation() throws {
@@ -110,6 +110,19 @@ struct AppStoreReviewGuardrailTests {
         #expect(appSource.contains("keyboardShortcut(\",\", modifiers: .command)") == false)
     }
 
+    @Test("Customer UI sweep keeps nested contract output machine readable")
+    func customerUISweepSuppressesNestedWorkflowReceiptNoise() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let source = try String(
+            contentsOf: projectRoot.appendingPathComponent("scripts/customer_ui_action_sweep.rb"),
+            encoding: .utf8
+        )
+
+        #expect(source.contains("{ 'SANEMASTER_SUPPRESS_WORKFLOW_RECEIPT' => '1' }"))
+    }
+
     @Test("Dock and menu bar context menus share customer-critical settings order")
     func dockAndMenuBarContextMenusShareCustomerCriticalOrder() {
         let delegate = SaneClickAppDelegate()
@@ -194,7 +207,7 @@ struct AppStoreReviewGuardrailTests {
         let description = String(manifest.matches(of: descriptionPattern).first?.output.1 ?? "")
 
         #expect(productId == "com.saneclick.app.pro.actions.v4")
-        #expect(displayName == "SaneClick Pro Access")
+        #expect(displayName == "SaneClick Full Access")
         #expect(description == "Unlock 24 more built-in file actions.")
         #expect(description.localizedCaseInsensitiveContains("one-time purchase") == false)
     }
@@ -219,7 +232,7 @@ struct AppStoreReviewGuardrailTests {
         // Metadata, review notes, IAP block, and screenshots needed to pass preflight/submit.
         #expect(manifest.localizedCaseInsensitiveContains("whats_new:"))
         #expect(manifest.localizedCaseInsensitiveContains("review_notes_by_platform:"))
-        #expect(manifest.localizedCaseInsensitiveContains("display_name: \"SaneClick Pro Access\""))
+        #expect(manifest.localizedCaseInsensitiveContains("display_name: \"SaneClick Full Access\""))
         #expect(manifest.contains("docs/screenshots/appstore-*.png"))
 
         // No external-purchase escape hatch in the App Store lane. An in-app
@@ -265,14 +278,14 @@ struct AppStoreReviewGuardrailTests {
 
         #expect(appSource.contains("WelcomeGateView("))
         #expect(appSource.contains("proTierPriceOverride: SaneClickWelcomeCopy.proPrice"))
-        #expect(contentSource.contains("title: \"Unlock Pro\""))
+        #expect(contentSource.contains("title: \"Buy SaneClick\""))
         #expect(contentSource.contains("isLocked: true"))
-        #expect(librarySource.contains("Unlock Pro — \\(licenseService.displayPriceLabel)"))
-        #expect(librarySource.contains("Text(\"\\(totalInCategory) scripts included with Pro\")"))
+        #expect(librarySource.contains("Buy SaneClick — \\(licenseService.displayPriceLabel)"))
+        #expect(librarySource.contains("Text(\"\\(totalInCategory) scripts included with SaneClick\")"))
         #expect(librarySource.contains("isLocked: true"))
         #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab, windowSizing: .embedded)"))
         #expect(settingsSource.contains("LicenseSettingsView(licenseService: licenseService, style: .panel)"))
-        #expect(licenseSettingsSource.contains("Unlock Pro —"))
+        #expect(licenseSettingsSource.contains("Buy Once —"))
         #expect(licenseSettingsSource.contains("Restore Purchases"))
     }
 
@@ -325,9 +338,9 @@ struct AppStoreReviewGuardrailTests {
         #expect(settingsSource.contains("Enter License Key") == false)
         #expect(settingsSource.contains("TabView(selection: $selectedTab)") == false)
         #expect(directSupportSource.contains("struct SaneSparkleRow") == false)
-        #expect(directSupportSource.contains("alternateUnlockLabel: \"Unlock Pro\""))
+        #expect(directSupportSource.contains("alternateUnlockLabel: \"Buy SaneClick\""))
         #expect(directSupportSource.contains("alternateEntryLabel: \"Enter License Key\""))
-        #expect(directSupportSource.contains("accessManagementLabel: \"Deactivate Pro\""))
+        #expect(directSupportSource.contains("accessManagementLabel: \"Deactivate License\""))
     }
 
     @Test("Direct builds expose monitored folder setup instead of silent empty Finder registration")

@@ -12,9 +12,6 @@ extension Color {
     /// Deep Navy - Gradient endpoint, deepest darks
     static let saneDeepNavy = Color(red: 0.051, green: 0.082, blue: 0.145) // #0d1525
 
-    /// Glowing Teal - Logo accent, highlights, CTAs
-    static let saneTeal = Color(red: 0.373, green: 0.659, blue: 0.827) // #5fa8d3
-
     /// Silver - Secondary elements, borders
     static let saneSilver = Color(red: 0.659, green: 0.706, blue: 0.769) // #a8b4c4
 
@@ -34,11 +31,6 @@ extension Color {
 
     /// Cloud - Primary text
     static let saneCloud = Color(red: 0.898, green: 0.898, blue: 0.898) // #e5e5e5
-
-    // MARK: - App Accent (SaneClick)
-
-    /// SaneClick accent - Terminal teal (matches brand teal)
-    static let saneAccent = Color(red: 0.373, green: 0.659, blue: 0.827) // #5fa8d3
 
     // MARK: - Semantic Colors
 

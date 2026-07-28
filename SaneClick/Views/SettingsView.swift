@@ -450,7 +450,7 @@ struct CustomActionsManagerView: View {
 
                         Text("Your custom actions will appear here so you can edit, disable, or remove them.")
                             .font(.body)
-                            .foregroundStyle(Color.saneSilver)
+                            .foregroundStyle(Color.white.opacity(0.9))
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: 320)
                     }
@@ -493,16 +493,16 @@ struct QuickActionRow: View {
             HStack(spacing: 12) {
                 Image(systemName: icon)
                     .font(.title3)
-                    .foregroundStyle(isLocked ? Color.saneSilver : color)
+                    .foregroundStyle(isLocked ? Color.white.opacity(0.9) : color)
                     .frame(width: 24)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
                         .font(.body)
                         .fontWeight(.medium)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(.white)
                     Text(subtitle)
-                        .font(.caption)
+                        .font(.system(size: 13))
                         .foregroundStyle(.white.opacity(0.9))
                 }
 
@@ -512,10 +512,10 @@ struct QuickActionRow: View {
                     HStack(spacing: 4) {
                         Image(systemName: "lock.fill")
                             .font(.system(size: 10))
-                        Text("Pro")
-                            .font(.system(size: 11, weight: .semibold))
+                        Text("Buy once")
+                            .font(.system(size: 13, weight: .semibold))
                     }
-                    .foregroundStyle(.teal)
+                    .foregroundStyle(Color.saneAccent)
                 }
             }
             .contentShape(Rectangle())
@@ -548,21 +548,21 @@ struct CategoryRow: View {
         HStack(spacing: 12) {
             Image(systemName: category.icon)
                 .font(.body)
-                .foregroundStyle(isLocked ? Color.saneSilver : categoryColor)
+                .foregroundStyle(isLocked ? Color.white.opacity(0.9) : categoryColor)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(category.rawValue)
                     .font(.body)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(.white)
 
                 if isLocked {
-                    Text("Pro")
-                        .font(.caption)
-                        .foregroundStyle(.teal)
+                    Text("Purchase required")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Color.saneAccent)
                 } else {
                     Text("\(activeCount) active")
-                        .font(.caption)
+                        .font(.system(size: 13))
                         .foregroundStyle(activeCount > 0 ? successGreen : .white.opacity(0.9))
                 }
             }
@@ -573,10 +573,10 @@ struct CategoryRow: View {
                 HStack(spacing: 4) {
                     Image(systemName: "lock.fill")
                         .font(.system(size: 10))
-                    Text("Pro")
-                        .font(.system(size: 11, weight: .semibold))
+                    Text("Buy once")
+                        .font(.system(size: 13, weight: .semibold))
                 }
-                .foregroundStyle(.teal)
+                .foregroundStyle(Color.saneAccent)
             } else {
                 Text("\(totalCount)")
                     .font(.subheadline)
@@ -607,7 +607,7 @@ struct ScriptRow: View {
         HStack(spacing: 14) {
             Image(systemName: script.icon)
                 .font(.title3)
-                .foregroundStyle(script.isEnabled ? successGreen : Color.saneSilver)
+                .foregroundStyle(script.isEnabled ? successGreen : Color.white.opacity(0.9))
                 .frame(width: 36, height: 36)
                 .background(script.isEnabled ? successGreen.opacity(0.15) : Color.saneSmoke)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
@@ -616,12 +616,12 @@ struct ScriptRow: View {
                 Text(script.name)
                     .font(.body)
                     .fontWeight(.medium)
-                    .foregroundStyle(script.isEnabled ? Color.saneCloud : Color.saneSilver)
+                    .foregroundStyle(script.isEnabled ? Color.saneCloud : Color.white.opacity(0.9))
 
                 if !script.fileExtensions.isEmpty {
                     Text(script.fileExtensions.joined(separator: ", "))
-                        .font(.caption)
-                        .foregroundStyle(Color.saneSilver)
+                        .font(.system(size: 13))
+                        .foregroundStyle(Color.white.opacity(0.9))
                 }
             }
 

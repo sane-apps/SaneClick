@@ -443,6 +443,6 @@ bugs hide in the content, which structural assertions never inspect. Required:
 
 ## App Store Review Notes
 
-- Review notes must point reviewers to the actual Pro entry points visible in the build.
+- Review notes must point reviewers to the actual purchase entry points visible in the build.
 - App Store builds must not expose external purchase, GitHub Sponsors, crypto donation, or non-Store unlock paths.
 - If shared SaneUI About/license content changes, rerun `SaneMaster.rb appstore_preflight` before submission.

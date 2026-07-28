@@ -209,9 +209,9 @@ final class ScriptExecutor: @unchecked Sendable {
             DispatchQueue.main.async {
                 if let script = ScriptStore.shared.scripts.first(where: { $0.id == request.scriptId }) {
                     guard self.canExecute(script: script) else {
-                        NSLog("[ScriptExecutor] Blocked Pro-only script without Pro access: \(script.name)")
+                        NSLog("[ScriptExecutor] Blocked paid action without a valid license")
                         Task { @MainActor in
-                            Self.lastResult = .failure(scriptName: script.name, error: "This action requires SaneClick Pro.")
+                            Self.lastResult = .failure(scriptName: script.name, error: "This action requires a SaneClick purchase.")
                             NotificationCenter.default.post(name: Self.executionCompletedNotification, object: nil)
                         }
                         return

@@ -76,8 +76,7 @@ struct AppStoreScreenshotRenderTests {
 
         if let hintedOutputDir = try? String(contentsOf: outputHintFile, encoding: .utf8)
             .trimmingCharacters(in: .whitespacesAndNewlines),
-            !hintedOutputDir.isEmpty
-        {
+            !hintedOutputDir.isEmpty {
             return URL(fileURLWithPath: hintedOutputDir, isDirectory: true)
         }
 
@@ -117,8 +116,8 @@ struct AppStoreScreenshotRenderTests {
                     ) {}
 
                     QuickActionRow(
-                        title: "Unlock Pro",
-                        subtitle: "Get 24 more built-in file actions • $14.99 once",
+                        title: "Buy SaneClick",
+                        subtitle: "Get 24 more built-in file actions • $9.99 once",
                         icon: "lock.open.fill",
                         color: .teal
                     ) {}
@@ -203,12 +202,12 @@ struct AppStoreScreenshotRenderTests {
                             .font(.headline)
                             .foregroundStyle(.white)
 
-                        Text("Unlock Pro for advanced organization, developer, and power-user actions.")
+                        Text("Buy SaneClick for advanced organization, developer, and power-user actions.")
                             .font(.subheadline)
                             .foregroundStyle(.white.opacity(0.92))
 
                         HStack(spacing: 12) {
-                            Button("Unlock Pro — $14.99") {}
+                            Button("Buy SaneClick — $9.99") {}
                                 .buttonStyle(.borderedProminent)
                                 .tint(.teal)
 
@@ -353,7 +352,7 @@ struct AppStoreScreenshotRenderTests {
                                             .font(.headline)
                                         proBadge
                                     }
-                                    Text("\(proScripts.count) scripts included with Pro")
+                                    Text("\(proScripts.count) scripts included with SaneClick")
                                         .font(.caption)
                                         .foregroundStyle(Color.saneSilver)
                                 }
@@ -365,7 +364,7 @@ struct AppStoreScreenshotRenderTests {
                                 HStack(spacing: 5) {
                                     Image(systemName: "lock.fill")
                                         .font(.system(size: 11))
-                                    Text("Unlock Pro — $14.99")
+                                    Text("Buy SaneClick — $9.99")
                                         .font(.system(size: 12, weight: .semibold))
                                 }
                                 .foregroundStyle(.white)
@@ -404,7 +403,7 @@ struct AppStoreScreenshotRenderTests {
         HStack(spacing: 4) {
             Image(systemName: "lock.fill")
                 .font(.system(size: 10))
-            Text("Pro")
+            Text("Buy once")
                 .font(.system(size: 11, weight: .semibold))
         }
         .foregroundStyle(.teal)

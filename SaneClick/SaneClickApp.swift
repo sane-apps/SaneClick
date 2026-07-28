@@ -455,7 +455,7 @@ enum SaneClickWelcomeCopy {
     static let basicPrice = "Free"
     static let proPrice: String = {
         #if APP_STORE
-            "$14.99 once"
+            "$9.99 once"
         #else
             "14 days free. No credit card required."
         #endif
@@ -483,7 +483,7 @@ enum SaneClickWelcomeCopy {
     static let proFeatures: [(String, String)] = {
         #if APP_STORE
             [
-                ("checkmark", "Everything in Basic, plus:"),
+                ("checkmark", "Full access includes:"),
                 ("folder.badge.plus", "\(AppStoreActionCatalog.proActions.count) more built-in Finder actions"),
                 ("folder.badge.gearshape", "Batch rename and organization tools"),
                 ("number.square.fill", "MD5 + SHA256 hashing"),
@@ -496,7 +496,7 @@ enum SaneClickWelcomeCopy {
                 .map { ScriptLibrary.availableScripts(for: $0).count }
                 .reduce(0, +)
             return [
-                ("checkmark", "Enjoy 14 days of Pro"),
+                ("checkmark", "Try everything for 14 days"),
                 ("folder.badge.plus", "\(proCount) more built-in Finder actions"),
                 ("square.stack.3d.up.fill", "Developer, media, advanced, and organization tools"),
                 ("square.and.pencil", "Build your own custom Finder scripts"),

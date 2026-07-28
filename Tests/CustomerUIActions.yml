@@ -14,8 +14,8 @@ actions:
   - Header enabled count changes immediately.
   - Row toggles match the header count.
   - Enabled count never exceeds available count.
-  - Locked Pro categories open an upgrade gate for Basic users instead of pretending
-    to activate Pro actions.
+  - Locked paid categories open an upgrade gate for unlicensed users instead of pretending
+    to activate paid actions.
   evidence:
   - Mini AX click transcript
   - Screenshot of at least one all-on category state
@@ -31,7 +31,7 @@ actions:
   - activation_noop
   functional_state:
     description: Seeded Finder fixture with representative files, folders, images,
-      code files, and enabled Basic/Pro action states.
+      code files, and enabled unlicensed/licensed action states.
     setup_steps:
     - Create the Finder test folder tree on the Mini.
     - Enable the direct build Finder extension and select representative fixture files
@@ -70,7 +70,7 @@ actions:
   - activation_noop
   functional_state:
     description: Seeded Finder fixture with representative files, folders, images,
-      code files, and enabled Basic/Pro action states.
+      code files, and enabled unlicensed/licensed action states.
     setup_steps:
     - Create the Finder test folder tree on the Mini.
     - Enable the direct build Finder extension and select representative fixture files
@@ -91,8 +91,8 @@ actions:
   - Open Browse Library.
   - Toggle All Scripts off and on.
   assertions:
-  - Basic mode counts and toggles only Basic-actionable scripts.
-  - Pro mode counts and toggles all available library scripts.
+  - Unlicensed mode counts and toggles only scripts available without a purchase.
+  - Licensed mode counts and toggles all available library scripts.
   - Visible All Scripts rows agree with the header count.
   - Enabled count never exceeds available count.
   evidence:
@@ -110,7 +110,7 @@ actions:
   - activation_noop
   functional_state:
     description: Seeded Finder fixture with representative files, folders, images,
-      code files, and enabled Basic/Pro action states.
+      code files, and enabled unlicensed/licensed action states.
     setup_steps:
     - Create the Finder test folder tree on the Mini.
     - Enable the direct build Finder extension and select representative fixture files
@@ -121,8 +121,8 @@ actions:
   - Open Browse Library.
   - Toggle All Scripts off and on.
   expected_outputs:
-  - Basic mode counts and toggles only Basic-actionable scripts.
-  - Pro mode counts and toggles all available library scripts.
+  - Unlicensed mode counts and toggles only scripts available without a purchase.
+  - Licensed mode counts and toggles all available library scripts.
   - Visible All Scripts rows agree with the header count.
 - id: script-library-category-controls
   title: Script Library category controls are live
@@ -133,7 +133,7 @@ actions:
   - Toggle category Enable All controls and individual rows where available.
   assertions:
   - Category counts agree with visible rows.
-  - Locked Pro category controls route to the Pro upgrade gate in Basic mode.
+  - Locked paid category controls route to the purchase gate in Unlicensed mode.
   - No category can report more enabled actions than total actions.
   evidence:
   - Mini AX click transcript
@@ -150,7 +150,7 @@ actions:
   - activation_noop
   functional_state:
     description: Seeded Finder fixture with representative files, folders, images,
-      code files, and enabled Basic/Pro action states.
+      code files, and enabled unlicensed/licensed action states.
     setup_steps:
     - Create the Finder test folder tree on the Mini.
     - Enable the direct build Finder extension and select representative fixture files
@@ -162,7 +162,7 @@ actions:
   - Toggle category Enable All controls and individual rows where available.
   expected_outputs:
   - Category counts agree with visible rows.
-  - Locked Pro category controls route to the Pro upgrade gate in Basic mode.
+  - Locked paid category controls route to the purchase gate in Unlicensed mode.
   - No category can report more enabled actions than total actions.
 - id: custom-action-management
   title: Custom action management preserves customer actions
@@ -193,7 +193,7 @@ actions:
   - activation_noop
   functional_state:
     description: Seeded Finder fixture with representative files, folders, images,
-      code files, and enabled Basic/Pro action states.
+      code files, and enabled unlicensed/licensed action states.
     setup_steps:
     - Create the Finder test folder tree on the Mini.
     - Enable the direct build Finder extension and select representative fixture files
@@ -239,7 +239,7 @@ actions:
   - activation_noop
   functional_state:
     description: Seeded Finder fixture with representative files, folders, images,
-      code files, and enabled Basic/Pro action states.
+      code files, and enabled unlicensed/licensed action states.
     setup_steps:
     - Create the Finder test folder tree on the Mini.
     - Enable the direct build Finder extension and select representative fixture files
@@ -289,7 +289,7 @@ actions:
   - activation_noop
   functional_state:
     description: Seeded Finder fixture with representative files, folders, images,
-      code files, and enabled Basic/Pro action states.
+      code files, and enabled unlicensed/licensed action states.
     setup_steps:
     - Create the Finder test folder tree on the Mini.
     - Enable the direct build Finder extension and select representative fixture files
@@ -348,7 +348,7 @@ actions:
   - activation_noop
   functional_state:
     description: Seeded Finder fixture with representative files, folders, images,
-      code files, and enabled Basic/Pro action states.
+      code files, and enabled unlicensed/licensed action states.
     setup_steps:
     - Create the Finder test folder tree on the Mini.
     - Enable the direct build Finder extension and select representative fixture files

@@ -117,18 +117,18 @@ appstore:
   metadata:
     macos:
       subtitle: "Right-Click File Tools"
-      promotional_text: "Add native Finder actions to the folders you choose. Free includes 13 core actions; Pro adds OCR, PDF tools, image conversion and resizing, batch rename, hashing, and more built-in file tools."
+      promotional_text: "Add native Finder actions to the folders you choose. The app includes 13 core actions; a one-time purchase adds OCR, PDF tools, image conversion, batch rename, hashing, and more."
       description: >-
         Add native right-click actions to the folders you choose in Finder.
 
         SaneClick keeps your Finder context menu focused by only showing actions inside the folders you monitor. Copy paths, create text files, reveal items, rename in batches, hash files, and work faster without leaving Finder.
 
-        Free includes:
+        Included at no cost:
         • 13 built-in Finder actions
         • Monitored folders
         • Finder Sync actions inside those selected folders
 
-        Pro unlock adds:
+        A one-time purchase adds:
         • 24 more built-in Finder actions
         • OCR text recognition and PDF tools
         • Image conversion, resizing, and thumbnails
@@ -149,14 +149,14 @@ appstore:
     macos: >-
       SaneClick adds actions to the macOS Finder right-click menu; all actions run locally on the user's Mac and nothing is uploaded. After install, enable the SaneClick Finder extension in System Settings > Privacy & Security > Extensions > Added Extensions > Finder, then right-click a file or image in Finder (for example on the Desktop) and choose a SaneClick action.
 
-      Business model: the basic tier is free. Free includes 13 actions. Pro is a one-time In-App Purchase (SaneClick Pro Access, $9.99) on the App Store that unlocks 24 more actions. There is no external checkout and no license key; everything is handled by App Store in-app purchase.
+      Business model: the App Store build includes 13 actions. A one-time SaneClick Full Access purchase ($9.99) adds 24 more actions. There is no external checkout and no license key; everything is handled by App Store in-app purchase.
 
-      To reach the optional Pro unlock, open SaneClick, go to Settings > License (the Unlock Pro / Restore Purchases path), or tap any locked Pro action (such as Copy Text from Image in the Images and Media submenu); either route shows the App Store in-app purchase prompt. Image, text, and PDF actions create a new file next to the original or copy to the clipboard. No subscription or account is required, and no login, sign-in, API key, password, or other credentials are needed to review the app — it works immediately after install. SaneClick uses no external provider or merchant accounts; any external accounts would be the user's own existing merchant accounts and do not unlock paid app features or digital content.
+      To reach the optional Full Access purchase, open SaneClick, go to Settings > License (the Buy SaneClick / Restore Purchases path), or tap any locked paid action (such as Copy Text from Image in the Images and Media submenu); either route shows the App Store in-app purchase prompt. Image, text, and PDF actions create a new file next to the original or copy to the clipboard. No subscription or account is required, and no login, sign-in, API key, password, or other credentials are needed to review the app — it works immediately after install. SaneClick uses no external provider or merchant accounts; any external accounts would be the user's own existing merchant accounts and do not unlock paid app features or digital content.
   iap:
-    display_name: "SaneClick Pro Access"
+    display_name: "SaneClick Full Access"
     price_usd: 9.99
     description: "Unlock 24 more built-in file actions."
-    review_note: "SaneClick Pro Access is a one-time non-consumable StoreKit purchase. It adds 24 more built-in native file actions, including OCR text recognition, PDF tools, image conversion and resizing, advanced hashing, and extra file and folder utilities. It does not unlock scripts, external checkout, or license keys."
+    review_note: "SaneClick Full Access is a one-time non-consumable StoreKit purchase. It adds 24 more built-in native file actions, including OCR text recognition, PDF tools, image conversion and resizing, advanced hashing, and extra file and folder utilities. It does not unlock scripts, external checkout, or license keys."
   accessibility_declarations:
     publish: true
     mac:

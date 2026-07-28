@@ -361,7 +361,10 @@ class CustomerUIActionSweep
   def customer_ui_contract_report_before_receipt
     FileUtils.rm_f(RECEIPT_PATH)
     FileUtils.rm_f(MIRROR_RECEIPT_PATH)
-    out, status = Open3.capture2e(SANEMASTER, 'customer_ui_contract', '--json', '--no-exit')
+    out, status = Open3.capture2e(
+      { 'SANEMASTER_SUPPRESS_WORKFLOW_RECEIPT' => '1' },
+      SANEMASTER, 'customer_ui_contract', '--json', '--no-exit'
+    )
     raise "customer_ui_contract failed before receipt write: #{out}" unless status.success?
 
     JSON.parse(out)

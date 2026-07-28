@@ -2,7 +2,7 @@
 
 > [README](README.md) · [ARCHITECTURE](ARCHITECTURE.md) · [DEVELOPMENT](DEVELOPMENT.md) · [PRIVACY](PRIVACY.md) · [SECURITY](SECURITY.md)
 
-**Last updated: April 25, 2026**
+**Last updated: July 27, 2026**
 
 SaneClick is built to keep your files, scripts, and automations on your Mac. This page explains what stays local, when the app uses the network, and why.
 
@@ -10,7 +10,7 @@ SaneClick is built to keep your files, scripts, and automations on your Mac. Thi
 
 **Your files and script contents stay on your Mac.** SaneClick does not upload them to SaneApps servers.
 
-The app may send privacy-preserving aggregate counts, such as whether it opened in Free or Pro, whether an upgrade button was clicked, whether a license was activated, app version, build, and update status. Those counts help us run the business and improve the app. They do not include your files or script contents.
+The app may send privacy-preserving aggregate counts, such as whether it opened during a trial or with a license, whether a purchase button was clicked, whether a license was activated, app version, build, and update status. Those counts help us run the business and improve the app. They do not include your files or script contents.
 
 ## What SaneClick Does Not Collect
 
@@ -34,7 +34,7 @@ SaneClick stores the following locally on your Mac:
 SaneClick uses the network only when:
 
 - It checks for app updates, if update checks are enabled
-- It sends privacy-preserving aggregate app counts, such as Free vs Pro launches, upgrade flow, license activation, app version, build, and update status
+- It sends privacy-preserving aggregate app counts, such as trial or licensed launches, purchase flow, license activation, app version, build, and update status
 
 Your files and script contents are not sent to SaneApps.
 
