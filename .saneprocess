@@ -138,7 +138,7 @@ appstore:
 
         Everything runs locally on your Mac.
       keywords: "context menu,folders,batch rename,hash,copy path,terminal,file info,duplicate,productivity"
-      whats_new: "Improves fresh-install Finder setup and custom action editing. Also polishes setup, purchase, and update screens."
+      whats_new: "Improves fresh-install Finder setup and polishes action browsing and the purchase screen."
       marketing_url: "https://saneclick.com"
   copyright: "2026 SaneApps"
   content_rights_declaration: "DOES_NOT_USE_THIRD_PARTY_CONTENT"

@@ -506,7 +506,7 @@ enum ScriptLibrary {
             name: "Start Python Server",
             type: .bash,
             content: """
-            (cd "$1" && python3 -m http.server 8000) &
+            (cd "$1" && python3 -m http.server 8000 </dev/null >/dev/null 2>&1) &
             sleep 1 && open "http://localhost:8000"
             """,
             icon: "network",
