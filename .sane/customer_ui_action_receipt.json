@@ -3,7 +3,7 @@
   "host": "Mac Mini",
   "generated_at": "2026-07-28T18:33:28Z",
   "manifest_sha256": "febc30fd458f227418e86e81f169b88b4b4c7d4bf0a39dd1b97c620c3f911cb1",
-  "source_fingerprint": "8b39150ef987810db9dbfca8f4bb0838ea9f5d99ecd149f9d1fbf8451c71eac4",
+  "source_fingerprint": "1de763e91b1b84f561559070bf9a860cafed0b688b4c79920aa57831a1991b9d",
   "action_results": {
     "main-category-enable-all": {
       "status": "passed",
@@ -368,7 +368,7 @@
     "source_guard=finder-menu-action-execution checks=5",
     "source_guard=fresh-direct-install-finder-availability checks=5"
   ],
-  "contract_artifact": "outputs/customer-ui/sweep-20260728T183328Z/contract-inventory.json",
+  "contract_artifact": "outputs/customer-ui/sweep-20260728T190057Z/contract-inventory.json",
   "status": "passed",
   "execution_mode": "executed",
   "execution_source": "outputs/customer-ui/execution-evidence-1.3.2.json",
