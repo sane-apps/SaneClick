@@ -5,6 +5,44 @@ import ImageIO
 import Testing
 import UniformTypeIdentifiers
 
+private enum ExecutionRequestFileTestError: Error {
+    case removalFailed
+}
+
+private final class MockExecutionRequestFileManager: ExecutionRequestFileManaging {
+    var files: [URL: Data]
+    var failRemoval = false
+
+    init(files: [URL: Data]) {
+        self.files = files
+    }
+
+    func fileExists(atPath path: String) -> Bool {
+        files.keys.contains { $0.path == path }
+    }
+
+    func moveItem(at sourceURL: URL, to destinationURL: URL) throws {
+        guard let data = files.removeValue(forKey: sourceURL) else {
+            throw CocoaError(.fileNoSuchFile)
+        }
+        files[destinationURL] = data
+    }
+
+    func removeItem(at URL: URL) throws {
+        if failRemoval {
+            throw ExecutionRequestFileTestError.removalFailed
+        }
+        files.removeValue(forKey: URL)
+    }
+
+    func readData(at URL: URL) throws -> Data {
+        guard let data = files[URL] else {
+            throw CocoaError(.fileReadNoSuchFile)
+        }
+        return data
+    }
+}
+
 struct ScriptExecutorTests {
     // MARK: - Bash Script Tests
 
@@ -80,6 +118,73 @@ struct ScriptExecutorTests {
         case .failure:
             // Expected
             break
+        }
+    }
+
+    @Test("Process runner drains large output without blocking")
+    func processRunnerDrainsLargeOutput() {
+        let input = Data(repeating: Character("x").asciiValue!, count: 256 * 1024)
+        let result = ScriptExecutor.runProcess(
+            executableURL: URL(fileURLWithPath: "/bin/cat"),
+            arguments: [],
+            standardInput: input
+        )
+
+        switch result {
+        case let .success(output):
+            #expect(output.utf8.count == input.count)
+        case let .failure(error):
+            Issue.record("Large process output failed: \(error)")
+        }
+    }
+
+    @Test("Process runner reports nonzero status and stderr")
+    func processRunnerReportsFailure() {
+        let result = ScriptExecutor.runProcess(
+            executableURL: URL(fileURLWithPath: "/bin/bash"),
+            arguments: ["-c", "printf 'workflow failed' >&2; exit 7"]
+        )
+
+        switch result {
+        case .success:
+            Issue.record("Expected nonzero process status to fail")
+        case let .failure(error):
+            #expect(error.localizedDescription.contains("workflow failed"))
+        }
+    }
+
+    @Test("Process runner drains large stdout and stderr together")
+    func processRunnerDrainsBothLargePipes() {
+        let result = ScriptExecutor.runProcess(
+            executableURL: URL(fileURLWithPath: "/bin/bash"),
+            arguments: [
+                "-c",
+                "dd if=/dev/zero bs=1024 count=256 2>/dev/null; " +
+                    "dd if=/dev/zero bs=1024 count=256 1>&2 2>/dev/null; exit 9"
+            ]
+        )
+
+        switch result {
+        case .success:
+            Issue.record("Expected nonzero process status to fail")
+        case let .failure(error):
+            let prefixSize = "Script execution failed: ".utf8.count
+            #expect(error.localizedDescription.utf8.count == prefixSize + (256 * 1024))
+        }
+    }
+
+    @Test("Process runner reports launch failures")
+    func processRunnerReportsLaunchFailure() {
+        let result = ScriptExecutor.runProcess(
+            executableURL: URL(fileURLWithPath: "/path/that/does/not/exist"),
+            arguments: []
+        )
+
+        switch result {
+        case .success:
+            Issue.record("Expected missing executable to fail")
+        case let .failure(error):
+            #expect(error.localizedDescription.isEmpty == false)
         }
     }
 
@@ -281,6 +386,57 @@ struct ScriptExecutorTests {
             let library = try #require(ScriptLibrary.libraryScript(named: name))
             #expect(ScriptExecutor.shouldConfirm(library.toScript()) == false, "\(name) should not confirm")
         }
+    }
+
+    @Test("Pending execution is consumed only after successful removal")
+    func pendingExecutionConsumeRequiresRemoval() throws {
+        let pendingURL = URL(fileURLWithPath: "/tmp/pending_execution.json")
+        let payload = Data("private-path-payload".utf8)
+        let fileManager = MockExecutionRequestFileManager(files: [pendingURL: payload])
+        fileManager.failRemoval = true
+
+        #expect(throws: ExecutionRequestFileTestError.self) {
+            _ = try PendingExecutionFileConsumer.consume(
+                from: pendingURL,
+                fileManager: fileManager,
+                claimID: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!
+            )
+        }
+        #expect(fileManager.files[pendingURL] == payload)
+        #expect(fileManager.files.count == 1)
+    }
+
+    @Test("Pending execution uses an atomic claim and returns data once")
+    func pendingExecutionConsumeSucceedsOnce() throws {
+        let pendingURL = URL(fileURLWithPath: "/tmp/pending_execution.json")
+        let payload = Data("request".utf8)
+        let fileManager = MockExecutionRequestFileManager(files: [pendingURL: payload])
+
+        let consumed = try PendingExecutionFileConsumer.consume(
+            from: pendingURL,
+            fileManager: fileManager,
+            claimID: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
+        )
+
+        #expect(consumed == payload)
+        #expect(fileManager.files.isEmpty)
+        #expect(try PendingExecutionFileConsumer.consume(
+            from: pendingURL,
+            fileManager: fileManager,
+            claimID: UUID(uuidString: "00000000-0000-0000-0000-000000000003")!
+        ) == nil)
+    }
+
+    @Test("Production IPC logs omit selected file paths")
+    func productionIPCLogsOmitSelectedPaths() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+        let source = try String(
+            contentsOf: projectRoot.appendingPathComponent("SaneClick/Services/ScriptExecutor.swift"),
+            encoding: .utf8
+        )
+        #expect(source.contains("paths=\\(request.paths)") == false)
+        #expect(source.contains("Found pending execution file at: \\(pendingURL.path)") == false)
+        #expect(source.contains("itemCount=\\(request.paths.count)"))
     }
 
     @Test("Direct executor and host app share the Pro keychain access group")

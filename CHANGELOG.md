@@ -6,7 +6,8 @@ All notable changes to SaneClick are documented here.
 
 ## [1.3.2] - 2026-07-27
 
-Polishes setup, purchase, and update screens for a clearer first run.
+Improves fresh-install Finder setup and custom action editing. Also polishes
+setup, purchase, and update screens.
 
 ## [1.3.1] - 2026-07-04
 

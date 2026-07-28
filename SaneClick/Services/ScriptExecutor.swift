@@ -39,6 +39,53 @@ struct ExecutionRequest: Codable {
     }
 }
 
+protocol ExecutionRequestFileManaging {
+    func fileExists(atPath path: String) -> Bool
+    func moveItem(at sourceURL: URL, to destinationURL: URL) throws
+    func removeItem(at URL: URL) throws
+    func readData(at URL: URL) throws -> Data
+}
+
+extension FileManager: ExecutionRequestFileManaging {
+    func readData(at URL: URL) throws -> Data {
+        try Data(contentsOf: URL)
+    }
+}
+
+enum PendingExecutionFileConsumer {
+    static func consume(
+        from pendingURL: URL,
+        fileManager: ExecutionRequestFileManaging = FileManager.default,
+        claimID: UUID = UUID()
+    ) throws -> Data? {
+        guard fileManager.fileExists(atPath: pendingURL.path) else { return nil }
+
+        // Rename within the App Group directory to atomically claim this request.
+        // The Finder extension can safely write the next atomic request without
+        // the host accidentally deleting it after reading the previous payload.
+        let claimedURL = pendingURL
+            .deletingLastPathComponent()
+            .appendingPathComponent(".pending_execution.claimed-\(claimID.uuidString).json")
+        try fileManager.moveItem(at: pendingURL, to: claimedURL)
+
+        do {
+            let data = try fileManager.readData(at: claimedURL)
+
+            // Fail closed: a request is executable only after its claimed file
+            // has been removed successfully, preventing duplicate execution.
+            try fileManager.removeItem(at: claimedURL)
+            return data
+        } catch {
+            // Restore the claim for a later attempt when no newer request has
+            // taken the canonical pending path. Never execute on this failure.
+            if !fileManager.fileExists(atPath: pendingURL.path) {
+                try? fileManager.moveItem(at: claimedURL, to: pendingURL)
+            }
+            throw error
+        }
+    }
+}
+
 /// Where an action's output should be surfaced once it finishes.
 /// This is the single, pure decision computed from a script's `outputMode`
 /// (and, for `.standard`, the existing self-notification suppression), so the
@@ -156,18 +203,11 @@ final class ScriptExecutor: @unchecked Sendable {
         }
         defer { flock(lockFd, LOCK_UN) }
 
-        // Now we hold the exclusive lock - safe to read and delete
-        guard FileManager.default.fileExists(atPath: pendingURL.path) else {
-            return // No pending request
-        }
-
-        NSLog("[ScriptExecutor] Found pending execution file at: \(pendingURL.path)")
-
         do {
-            let data = try Data(contentsOf: pendingURL)
-
-            // Delete the file immediately while holding lock
-            try? FileManager.default.removeItem(at: pendingURL)
+            guard let data = try PendingExecutionFileConsumer.consume(from: pendingURL) else {
+                return
+            }
+            NSLog("[ScriptExecutor] Claimed pending execution request")
 
             // Decode request - handle missing requestId for backward compatibility
             let request: ExecutionRequest
@@ -203,7 +243,7 @@ final class ScriptExecutor: @unchecked Sendable {
                 return
             }
 
-            NSLog("[ScriptExecutor] Processing request: scriptId=\(request.scriptId), requestId=\(request.requestId), paths=\(request.paths)")
+            NSLog("[ScriptExecutor] Processing request: scriptId=\(request.scriptId), requestId=\(request.requestId), itemCount=\(request.paths.count)")
 
             // Find and execute the script on main thread
             DispatchQueue.main.async {
@@ -519,33 +559,114 @@ final class ScriptExecutor: @unchecked Sendable {
     // MARK: - Execution Methods
 
     #if !APP_STORE
-        private func executeBash(content: String, paths: [String]) async -> Result<String, ScriptError> {
-            let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/bin/bash")
-            process.arguments = ["-c", content, "bash"] + paths
+        private final class ProcessPipeCollector: @unchecked Sendable {
+            let pipe = Pipe()
 
-            let outputPipe = Pipe()
-            let errorPipe = Pipe()
-            process.standardOutput = outputPipe
-            process.standardError = errorPipe
+            private let completion = DispatchGroup()
+            private let lock = NSLock()
+            private var buffer = Data()
+            private var finished = false
+
+            init() {
+                completion.enter()
+                pipe.fileHandleForReading.readabilityHandler = { [weak self] handle in
+                    self?.consume(handle.availableData)
+                }
+            }
+
+            func finish() -> Data {
+                completion.wait()
+                lock.lock()
+                defer { lock.unlock() }
+                return buffer
+            }
+
+            func cancel() {
+                pipe.fileHandleForReading.readabilityHandler = nil
+                finishOnce()
+            }
+
+            private func consume(_ data: Data) {
+                guard !data.isEmpty else {
+                    pipe.fileHandleForReading.readabilityHandler = nil
+                    finishOnce()
+                    return
+                }
+
+                lock.lock()
+                buffer.append(data)
+                lock.unlock()
+            }
+
+            private func finishOnce() {
+                lock.lock()
+                guard !finished else {
+                    lock.unlock()
+                    return
+                }
+                finished = true
+                lock.unlock()
+                completion.leave()
+            }
+        }
+
+        static func runProcess(
+            executableURL: URL,
+            arguments: [String],
+            standardInput: Data? = nil
+        ) -> Result<String, ScriptError> {
+            let process = Process()
+            process.executableURL = executableURL
+            process.arguments = arguments
+
+            let outputCollector = ProcessPipeCollector()
+            let errorCollector = ProcessPipeCollector()
+            process.standardOutput = outputCollector.pipe
+            process.standardError = errorCollector.pipe
+
+            let inputPipe = standardInput == nil ? nil : Pipe()
+            process.standardInput = inputPipe
 
             do {
                 try process.run()
-                process.waitUntilExit()
+                outputCollector.pipe.fileHandleForWriting.closeFile()
+                errorCollector.pipe.fileHandleForWriting.closeFile()
 
-                let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+                if let standardInput, let inputPipe {
+                    inputPipe.fileHandleForWriting.write(standardInput)
+                    inputPipe.fileHandleForWriting.closeFile()
+                }
+
+                process.waitUntilExit()
+                let outputData = outputCollector.finish()
+                let errorData = errorCollector.finish()
                 let output = String(data: outputData, encoding: .utf8) ?? ""
 
-                if process.terminationStatus == 0 {
+                guard process.terminationStatus != 0 else {
                     return .success(output)
-                } else {
-                    let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
-                    let errorOutput = String(data: errorData, encoding: .utf8) ?? "Unknown error"
-                    return .failure(.executionFailed(errorOutput))
                 }
+
+                let errorOutput = String(data: errorData, encoding: .utf8)?
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                let message = if let errorOutput, !errorOutput.isEmpty {
+                    errorOutput
+                } else {
+                    "Command exited with status \(process.terminationStatus)."
+                }
+                return .failure(.executionFailed(message))
             } catch {
+                outputCollector.cancel()
+                errorCollector.cancel()
+                inputPipe?.fileHandleForWriting.closeFile()
                 return .failure(.launchFailed(error.localizedDescription))
             }
+        }
+
+        private func executeBash(content: String, paths: [String]) async -> Result<String, ScriptError> {
+            Self.runProcess(
+                executableURL: URL(fileURLWithPath: "/bin/bash"),
+                arguments: ["-c", content, "bash"] + paths
+            )
         }
 
         private func executeAppleScript(content: String, paths: [String]) async -> Result<String, ScriptError> {
@@ -555,32 +676,10 @@ final class ScriptExecutor: @unchecked Sendable {
             end run
             """
 
-            let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-            process.arguments = ["-e", fullScript] + paths
-
-            let outputPipe = Pipe()
-            let errorPipe = Pipe()
-            process.standardOutput = outputPipe
-            process.standardError = errorPipe
-
-            do {
-                try process.run()
-                process.waitUntilExit()
-
-                let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
-                let output = String(data: outputData, encoding: .utf8) ?? ""
-
-                if process.terminationStatus == 0 {
-                    return .success(output)
-                } else {
-                    let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
-                    let errorOutput = String(data: errorData, encoding: .utf8) ?? "Unknown error"
-                    return .failure(.executionFailed(errorOutput))
-                }
-            } catch {
-                return .failure(.launchFailed(error.localizedDescription))
-            }
+            return Self.runProcess(
+                executableURL: URL(fileURLWithPath: "/usr/bin/osascript"),
+                arguments: ["-e", fullScript] + paths
+            )
         }
 
         private func executeAutomator(workflowPath: String, paths: [String]) async -> Result<String, ScriptError> {
@@ -588,29 +687,12 @@ final class ScriptExecutor: @unchecked Sendable {
                 return .failure(.workflowNotFound(workflowPath))
             }
 
-            let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/usr/bin/automator")
-            process.arguments = [workflowPath]
-
-            let inputPipe = Pipe()
-            process.standardInput = inputPipe
             let pathsString = paths.joined(separator: "\n")
-            inputPipe.fileHandleForWriting.write(pathsString.data(using: .utf8) ?? Data())
-            inputPipe.fileHandleForWriting.closeFile()
-
-            let outputPipe = Pipe()
-            process.standardOutput = outputPipe
-
-            do {
-                try process.run()
-                process.waitUntilExit()
-
-                let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
-                let output = String(data: outputData, encoding: .utf8) ?? ""
-                return .success(output)
-            } catch {
-                return .failure(.launchFailed(error.localizedDescription))
-            }
+            return Self.runProcess(
+                executableURL: URL(fileURLWithPath: "/usr/bin/automator"),
+                arguments: [workflowPath],
+                standardInput: pathsString.data(using: .utf8)
+            )
         }
 
         /// Runs a native-runtime action (OCR/PDF/copy-path variants plus the

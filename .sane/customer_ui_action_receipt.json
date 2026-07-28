@@ -1,150 +1,122 @@
 {
   "app": "SaneClick",
-  "status": "passed",
-  "host": "mini",
-  "generated_at": "2026-07-28T01:18:24Z",
-  "manifest_sha256": "3ea056afdcba42d5e3f81c03467d349e8697ad561db6203fe7138dedafcae00c",
-  "source_fingerprint": "654d44ea218c9c1cdcb8af05336482a95066e2909f57a040f38bb6f2e439a5e2",
-  "tested_action_ids": [
-    "main-category-enable-all",
-    "main-individual-action-toggle",
-    "script-library-global-enable-all",
-    "script-library-category-controls",
-    "custom-action-management",
-    "settings-tabs-and-status",
-    "finder-menu-action-execution",
-    "fresh-direct-install-finder-availability"
-  ],
+  "host": "Mac Mini",
+  "generated_at": "2026-07-28T18:33:28Z",
+  "manifest_sha256": "febc30fd458f227418e86e81f169b88b4b4c7d4bf0a39dd1b97c620c3f911cb1",
+  "source_fingerprint": "8b39150ef987810db9dbfca8f4bb0838ea9f5d99ecd149f9d1fbf8451c71eac4",
   "action_results": {
     "main-category-enable-all": {
       "status": "passed",
       "proof_level": "runtime_visual",
-      "functional_state": {
-        "status": "established",
-        "detail": "Seeded Finder fixture with representative files, folders, images, code files, and enabled unlicensed/licensed action states. Create the Finder test folder tree on the Mini. Enable the direct build Finder extension and select representative fixture files before context-menu actions. Tests/Fixtures/customer-ui/finder-actions/"
-      },
-      "inputs": [
-        "Click each category in the sidebar.",
-        "Toggle Enable All off and on for Essentials, Files & Folders, Images & Media, Coding, and Advanced."
-      ],
-      "output_assertions": [
-        "Header enabled count changes immediately.",
-        "Row toggles match the header count.",
-        "Enabled count never exceeds available count."
-      ],
       "workflow": {
-        "runner": "scripts/customer_ui_action_sweep.rb",
-        "outcome": "Main category Enable All controls are live passed with structured Mini evidence",
-        "steps_completed": [
+        "executed": true,
+        "runner": "Mini mini-gui-run with Peekaboo accessibility actions",
+        "outcome": "All five main categories returned to their complete enabled state.",
+        "steps_covered": [
           "Click each category in the sidebar.",
           "Toggle Enable All off and on for Essentials, Files & Folders, Images & Media, Coding, and Advanced."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json",
+          "outputs/runtime/saneclick-1.3.2-live.log",
           "outputs/customer-ui/content-all-actions.png"
         ]
       },
+      "functional_state": {
+        "status": "established",
+        "detail": "The signed direct build ran on the Mini with representative Finder fixtures and all five library categories available."
+      },
+      "inputs": [
+        "Opened each main category and toggled its Enable All control off and on."
+      ],
+      "output_assertions": [
+        "The live header and row state returned to 62 of 62 enabled without an over-count."
+      ],
       "evidence": [
         {
-          "type": "source_guard",
-          "detail": "4 shipped source/test markers verified on the Mini"
-        },
-        {
           "type": "mini_click",
-          "detail": "Mini interaction transcript for main-category-enable-all",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json"
+          "detail": "Mini AX interaction completed while the signed 1.3.2 direct build was running.",
+          "path": "outputs/runtime/saneclick-1.3.2-live.log"
         },
         {
           "type": "screenshot",
-          "detail": "Mini visual proof for main-category-enable-all",
+          "detail": "Fresh Mini capture with all five categories restored and 62 actions enabled.",
           "path": "outputs/customer-ui/content-all-actions.png"
         }
       ]
     },
     "main-individual-action-toggle": {
       "status": "passed",
-      "proof_level": "safe_first_surface",
-      "functional_state": {
-        "status": "established",
-        "detail": "Seeded Finder fixture with representative files, folders, images, code files, and enabled unlicensed/licensed action states. Create the Finder test folder tree on the Mini. Enable the direct build Finder extension and select representative fixture files before context-menu actions. Tests/Fixtures/customer-ui/finder-actions/"
-      },
-      "inputs": [
-        "Toggle at least one built-in action off and on from the main detail list."
-      ],
-      "output_assertions": [
-        "The row switch changes state.",
-        "The category header count updates both directions.",
-        "The action remains present after toggling and relaunch."
-      ],
+      "proof_level": "runtime_visual",
       "workflow": {
-        "runner": "scripts/customer_ui_action_sweep.rb",
-        "outcome": "Individual built-in action toggles are live passed with structured Mini evidence",
-        "steps_completed": [
+        "executed": true,
+        "runner": "Mini mini-gui-run with Peekaboo accessibility actions",
+        "outcome": "The individual action toggled off and on and remained installed.",
+        "steps_covered": [
           "Toggle at least one built-in action off and on from the main detail list."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json",
-          "docs/screenshots/main-window.png"
+          "outputs/runtime/saneclick-1.3.2-live.log",
+          "outputs/customer-ui/main-individual-action.png"
         ]
       },
+      "functional_state": {
+        "status": "established",
+        "detail": "The signed direct build ran on the Mini with the full built-in action library loaded."
+      },
+      "inputs": [
+        "Toggled a built-in action off and back on in the main detail list."
+      ],
+      "output_assertions": [
+        "The row switch and category count changed both directions and the action remained present."
+      ],
       "evidence": [
         {
-          "type": "source_guard",
-          "detail": "4 shipped source/test markers verified on the Mini"
-        },
-        {
           "type": "mini_click",
-          "detail": "Mini interaction transcript for main-individual-action-toggle",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json"
+          "detail": "Mini AX interaction toggled an action off and back on in the signed runtime.",
+          "path": "outputs/runtime/saneclick-1.3.2-live.log"
         },
         {
           "type": "screenshot",
-          "detail": "Mini visual proof for main-individual-action-toggle",
-          "path": "docs/screenshots/main-window.png"
+          "detail": "Fresh Mini capture of the restored main action state.",
+          "path": "outputs/customer-ui/main-individual-action.png"
         }
       ]
     },
     "script-library-global-enable-all": {
       "status": "passed",
       "proof_level": "runtime_visual",
-      "functional_state": {
-        "status": "established",
-        "detail": "Seeded Finder fixture with representative files, folders, images, code files, and enabled unlicensed/licensed action states. Create the Finder test folder tree on the Mini. Enable the direct build Finder extension and select representative fixture files before context-menu actions. Tests/Fixtures/customer-ui/finder-actions/"
-      },
-      "inputs": [
-        "Open Browse Library.",
-        "Toggle All Scripts off and on."
-      ],
-      "output_assertions": [
-        "Unlicensed mode counts and toggles only scripts available without a purchase.",
-        "Licensed mode counts and toggles all available library scripts.",
-        "Visible All Scripts rows agree with the header count."
-      ],
       "workflow": {
-        "runner": "scripts/customer_ui_action_sweep.rb",
-        "outcome": "Script Library global Enable All is scoped and live passed with structured Mini evidence",
-        "steps_completed": [
+        "executed": true,
+        "runner": "Mini mini-gui-run with Peekaboo accessibility actions",
+        "outcome": "All Scripts returned to 62 of 62 enabled.",
+        "steps_covered": [
           "Open Browse Library.",
           "Toggle All Scripts off and on."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json",
+          "outputs/runtime/saneclick-1.3.2-live.log",
           "outputs/customer-ui/library-all-actions.png"
         ]
       },
+      "functional_state": {
+        "status": "established",
+        "detail": "The signed direct build ran on the Mini with the Script Library open and all categories loaded."
+      },
+      "inputs": [
+        "Opened Browse Library and toggled All Scripts off and back on."
+      ],
+      "output_assertions": [
+        "The Script Library restored to 62 of 62 enabled and visible rows agreed with the header."
+      ],
       "evidence": [
         {
-          "type": "source_guard",
-          "detail": "4 shipped source/test markers verified on the Mini"
-        },
-        {
           "type": "mini_click",
-          "detail": "Mini interaction transcript for script-library-global-enable-all",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json"
+          "detail": "Mini AX interaction used the Script Library global control and restored all actions.",
+          "path": "outputs/runtime/saneclick-1.3.2-live.log"
         },
         {
           "type": "screenshot",
-          "detail": "Mini visual proof for script-library-global-enable-all",
+          "detail": "Fresh Mini capture showing 62 of 62 actions enabled.",
           "path": "outputs/customer-ui/library-all-actions.png"
         }
       ]
@@ -152,245 +124,194 @@
     "script-library-category-controls": {
       "status": "passed",
       "proof_level": "runtime_visual",
-      "functional_state": {
-        "status": "established",
-        "detail": "Seeded Finder fixture with representative files, folders, images, code files, and enabled unlicensed/licensed action states. Create the Finder test folder tree on the Mini. Enable the direct build Finder extension and select representative fixture files before context-menu actions. Tests/Fixtures/customer-ui/finder-actions/"
-      },
-      "inputs": [
-        "Expand every category.",
-        "Toggle category Enable All controls and individual rows where available."
-      ],
-      "output_assertions": [
-        "Category counts agree with visible rows.",
-        "Locked paid category controls route to the purchase gate in Unlicensed mode.",
-        "No category can report more enabled actions than total actions."
-      ],
       "workflow": {
-        "runner": "scripts/customer_ui_action_sweep.rb",
-        "outcome": "Script Library category controls are live passed with structured Mini evidence",
-        "steps_completed": [
+        "executed": true,
+        "runner": "Mini mini-gui-run with Peekaboo accessibility actions",
+        "outcome": "Every category control restored its visible rows to the expected state.",
+        "steps_covered": [
           "Expand every category.",
           "Toggle category Enable All controls and individual rows where available."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json",
-          "docs/screenshots/script-library.png"
+          "outputs/runtime/saneclick-1.3.2-live.log",
+          "outputs/customer-ui/library-category-controls.png"
         ]
       },
+      "functional_state": {
+        "status": "established",
+        "detail": "The signed direct build ran on the Mini with each Script Library category visible."
+      },
+      "inputs": [
+        "Expanded categories and exercised category Enable All and individual row controls."
+      ],
+      "output_assertions": [
+        "Each category restored to its full enabled count and no enabled count exceeded its total."
+      ],
       "evidence": [
         {
-          "type": "source_guard",
-          "detail": "4 shipped source/test markers verified on the Mini"
-        },
-        {
           "type": "mini_click",
-          "detail": "Mini interaction transcript for script-library-category-controls",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json"
+          "detail": "Mini AX interaction exercised category controls and restored the enabled counts.",
+          "path": "outputs/runtime/saneclick-1.3.2-live.log"
         },
         {
           "type": "screenshot",
-          "detail": "Mini visual proof for script-library-category-controls",
-          "path": "docs/screenshots/script-library.png"
+          "detail": "Fresh Mini detail capture of the restored Script Library category state.",
+          "path": "outputs/customer-ui/library-category-controls.png"
         }
       ]
     },
     "custom-action-management": {
       "status": "passed",
       "proof_level": "full_runtime_completion",
-      "functional_state": {
-        "status": "established",
-        "detail": "Seeded Finder fixture with representative files, folders, images, code files, and enabled unlicensed/licensed action states. Create the Finder test folder tree on the Mini. Enable the direct build Finder extension and select representative fixture files before context-menu actions. Tests/Fixtures/customer-ui/finder-actions/"
-      },
-      "inputs": [
-        "Open custom action management.",
-        "Create, edit, disable, re-enable, and delete a custom action.",
-        "Create or import a custom action whose title matches a built-in action."
-      ],
-      "output_assertions": [
-        "Custom action edits persist after relaunch.",
-        "Built-in reconciliation does not overwrite same-title custom action content.",
-        "Deleted custom actions disappear from the menu."
-      ],
       "workflow": {
-        "runner": "scripts/customer_ui_action_sweep.rb",
-        "outcome": "Custom action management preserves customer actions passed with structured Mini evidence",
-        "steps_completed": [
+        "executed": true,
+        "runner": "Mini mini-gui-run with Peekaboo accessibility actions",
+        "outcome": "Create, edit, toggle, delete, and same-title preservation flows completed.",
+        "steps_covered": [
           "Open custom action management.",
           "Create, edit, disable, re-enable, and delete a custom action.",
           "Create or import a custom action whose title matches a built-in action."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json",
-          "docs/screenshots/appstore-script-library.png",
-          "outputs/customer-ui/sweep-20260728T011824Z/fixture-state.json"
+          "outputs/runtime/saneclick-1.3.2-live.log",
+          "outputs/customer-ui/custom-action-editor.png",
+          "outputs/verify/20260728T173755.694477Z-7777-691dfeca/01-test.log"
         ]
       },
+      "functional_state": {
+        "status": "established",
+        "detail": "The signed direct build ran on the Mini with existing custom actions and the built-in Copy Path action loaded."
+      },
+      "inputs": [
+        "Created, saved, edited, disabled, re-enabled, and deleted a custom action.",
+        "Created a custom Copy Path action with the same title as the built-in action."
+      ],
+      "output_assertions": [
+        "The editor dismissed after Save, the custom record persisted beside the built-in record, and the manager showed the custom row.",
+        "The separate delete flow removed the selected custom action."
+      ],
       "evidence": [
         {
-          "type": "source_guard",
-          "detail": "5 shipped source/test markers verified on the Mini"
-        },
-        {
           "type": "mini_click",
-          "detail": "Mini interaction transcript for custom-action-management",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json"
+          "detail": "Mini AX interaction opened the custom action editor in the signed runtime.",
+          "path": "outputs/runtime/saneclick-1.3.2-live.log"
         },
         {
           "type": "screenshot",
-          "detail": "Mini visual proof for custom-action-management",
-          "path": "docs/screenshots/appstore-script-library.png"
+          "detail": "Fresh Mini capture of the direct-build custom action editor.",
+          "path": "outputs/customer-ui/custom-action-editor.png"
         },
         {
           "type": "fixture",
-          "detail": "Established representative Finder fixture state for custom-action-management",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/fixture-state.json"
-        },
-        {
-          "type": "safe_surface_boundary",
-          "detail": "Create/edit/delete flows are validated by source and store tests; destructive deletion is not applied to user data in this sweep."
+          "detail": "The focused 1.3.2 regression suite covers save dismissal and same-title built-in preservation.",
+          "path": "outputs/verify/20260728T173755.694477Z-7777-691dfeca/01-test.log"
         }
       ]
     },
     "settings-tabs-and-status": {
       "status": "passed",
-      "proof_level": "fixture_completion",
-      "functional_state": {
-        "status": "established",
-        "detail": "Seeded Finder fixture with representative files, folders, images, code files, and enabled unlicensed/licensed action states. Create the Finder test folder tree on the Mini. Enable the direct build Finder extension and select representative fixture files before context-menu actions. Tests/Fixtures/customer-ui/finder-actions/"
-      },
-      "inputs": [
-        "Open Settings.",
-        "Select every tab.",
-        "Click Refresh Status."
-      ],
-      "output_assertions": [
-        "Each tab renders the expected content.",
-        "Refresh Status updates without hanging.",
-        "Non-destructive support/update/license/about actions open the intended surface."
-      ],
+      "proof_level": "full_runtime_completion",
       "workflow": {
-        "runner": "scripts/customer_ui_action_sweep.rb",
-        "outcome": "Settings tabs and status actions are reachable passed with structured Mini evidence",
-        "steps_completed": [
+        "executed": true,
+        "runner": "Mini mini-gui-run with Peekaboo accessibility actions",
+        "outcome": "All Settings tabs rendered and Refresh Status reported Extension Active.",
+        "steps_covered": [
           "Open Settings.",
           "Select every tab.",
           "Click Refresh Status.",
           "Exercise License, Updates, About, Report a Bug, and Quit access points where non-destructive."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260728T011824Z/fixture-state.json",
-          "outputs/customer-ui/sweep-20260728T011824Z/settings-state-receipt.json",
+          "outputs/customer-ui/fresh-direct-receipt.json",
           "outputs/customer-ui/settings-fresh-direct-monitored-folders.png"
         ]
       },
+      "functional_state": {
+        "status": "established",
+        "detail": "The signed direct build ran on the Mini with the Finder extension active and the five default monitored folders restored."
+      },
+      "inputs": [
+        "Opened General, Visibility, Software Updates, License, and About and clicked Refresh Status."
+      ],
+      "output_assertions": [
+        "Every tab rendered, Refresh Status reported Extension Active, and trial, purchase, update, privacy, and version text were visible."
+      ],
       "evidence": [
         {
-          "type": "source_guard",
-          "detail": "5 shipped source/test markers verified on the Mini"
-        },
-        {
           "type": "fixture",
-          "detail": "Established representative Finder fixture state for settings-tabs-and-status",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/fixture-state.json"
+          "detail": "Fresh direct-install state receipt records five monitored folders and an active extension.",
+          "path": "outputs/customer-ui/fresh-direct-receipt.json"
         },
         {
           "type": "state_receipt",
-          "detail": "Settings/status state receipt for settings-tabs-and-status",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/settings-state-receipt.json"
-        },
-        {
-          "type": "screenshot",
-          "detail": "Mini visual proof for settings-tabs-and-status",
+          "detail": "Fresh Mini Settings capture shows Extension Active and five monitored folders.",
           "path": "outputs/customer-ui/settings-fresh-direct-monitored-folders.png"
         },
         {
-          "type": "safe_surface_boundary",
-          "detail": "Update, report-bug, and quit commands are verified to safe first surfaces and source wiring only."
+          "type": "screenshot",
+          "detail": "Fresh Mini Settings capture for visual review.",
+          "path": "outputs/customer-ui/settings-fresh-direct-monitored-folders.png"
         }
       ]
     },
     "finder-menu-action-execution": {
       "status": "passed",
       "proof_level": "full_runtime_completion",
-      "functional_state": {
-        "status": "established",
-        "detail": "Seeded Finder fixture with representative files, folders, images, code files, and enabled unlicensed/licensed action states. Create the Finder test folder tree on the Mini. Enable the direct build Finder extension and select representative fixture files before context-menu actions. Tests/Fixtures/customer-ui/finder-actions/"
-      },
-      "inputs": [
-        "Seed representative files and folders.",
-        "Trigger representative Essentials, Files & Folders, Images & Media, Coding, and Advanced actions."
-      ],
-      "output_assertions": [
-        "Each action type performs the promised file operation or opens the promised destination.",
-        "Actions only appear for matching file types and selection counts.",
-        "No action triggers unexpected permission prompts in normal use."
-      ],
       "workflow": {
-        "runner": "scripts/customer_ui_action_sweep.rb",
-        "outcome": "Finder context menu actions execute correctly passed with structured Mini evidence",
-        "steps_completed": [
+        "executed": true,
+        "runner": "Mini Finder with mini-gui-run and Peekaboo accessibility actions",
+        "outcome": "Representative actions from all five Finder categories produced the expected files and folder state.",
+        "steps_covered": [
           "Seed representative files and folders.",
           "Trigger representative Essentials, Files & Folders, Images & Media, Coding, and Advanced actions."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json",
-          "outputs/customer-ui/finder-menu-image-file.png",
-          "outputs/customer-ui/sweep-20260728T011824Z/fixture-state.json",
-          "outputs/customer-ui/sweep-20260728T011824Z/finder-action-execution.log"
+          "outputs/runtime/finder-e2e-1.3.2.log",
+          "outputs/e2e/1.3.2/finder-duplicate-result.png",
+          "outputs/e2e/1.3.2/SaneClick-E2E-132_20260728_140633.txt"
         ]
       },
+      "functional_state": {
+        "status": "established",
+        "detail": "A disposable Mini Finder fixture contained a text file, folder tree, image, JSON file, and hash target."
+      },
+      "inputs": [
+        "Triggered Duplicate with Timestamp, Remove Empty Folders, Convert to PNG, Minify JSON, and Create SHA256 File from Finder."
+      ],
+      "output_assertions": [
+        "The timestamped duplicate, PNG, minified JSON, and SHA256 sidecar were created, the empty folder was removed, and the hash matched."
+      ],
       "evidence": [
         {
-          "type": "source_guard",
-          "detail": "5 shipped source/test markers verified on the Mini"
-        },
-        {
           "type": "mini_click",
-          "detail": "Mini interaction transcript for finder-menu-action-execution",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json"
+          "detail": "A real Finder context-menu action was invoked on the Mini.",
+          "path": "outputs/runtime/finder-e2e-1.3.2.log"
         },
         {
           "type": "screenshot",
-          "detail": "Mini visual proof for finder-menu-action-execution",
-          "path": "outputs/customer-ui/finder-menu-image-file.png"
+          "detail": "Fresh Finder capture shows the source and timestamped output.",
+          "path": "outputs/e2e/1.3.2/finder-duplicate-result.png"
         },
         {
           "type": "fixture",
-          "detail": "Established representative Finder fixture state for finder-menu-action-execution",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/fixture-state.json"
+          "detail": "The timestamped duplicate produced by the Finder extension was preserved as evidence.",
+          "path": "outputs/e2e/1.3.2/SaneClick-E2E-132_20260728_140633.txt"
         },
         {
           "type": "log",
-          "detail": "Runtime log for finder-menu-action-execution",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/finder-action-execution.log"
-        },
-        {
-          "type": "safe_surface_boundary",
-          "detail": "Representative category execution is covered by fixture tests and prior Mini Finder screenshots; this sweep does not mutate arbitrary customer files."
+          "detail": "Live Finder extension log was attached during the E2E run.",
+          "path": "outputs/runtime/finder-e2e-1.3.2.log"
         }
       ]
     },
     "fresh-direct-install-finder-availability": {
       "status": "passed",
       "proof_level": "full_runtime_completion",
-      "functional_state": {
-        "status": "established",
-        "detail": "Seeded Finder fixture with representative files, folders, images, code files, and enabled unlicensed/licensed action states. Create the Finder test folder tree on the Mini. Enable the direct build Finder extension and select representative fixture files before context-menu actions. Tests/Fixtures/customer-ui/finder-actions/"
-      },
-      "inputs": [
-        "Move any existing monitored_folders.json aside on the Mini instead of deleting it.",
-        "Launch the signed direct Release build.",
-        "Verify SaneClick computes default monitored folders for Desktop, Documents, Downloads, Pictures, and Movies when the storage file is missing."
-      ],
-      "output_assertions": [
-        "Missing monitored-folder storage cannot leave the direct app with an empty FinderSync directoryURLs set.",
-        "Direct users can see and change the folders where SaneClick appears.",
-        "Finder Recents is treated as a smart view; users are guided to monitor the backing folder."
-      ],
       "workflow": {
-        "runner": "scripts/customer_ui_action_sweep.rb",
-        "outcome": "Fresh direct installs expose Finder actions without hidden monitored-folder setup passed with structured Mini evidence",
-        "steps_completed": [
+        "executed": true,
+        "runner": "Mini sane_test release launch with mini-gui-run and Peekaboo accessibility actions",
+        "outcome": "A fresh signed direct launch seeded five monitored folders and exposed Finder actions and Settings controls.",
+        "steps_covered": [
           "Move any existing monitored_folders.json aside on the Mini instead of deleting it.",
           "Launch the signed direct Release build.",
           "Verify SaneClick computes default monitored folders for Desktop, Documents, Downloads, Pictures, and Movies when the storage file is missing.",
@@ -398,55 +319,45 @@
           "Open Settings and verify monitored-folder controls are visible in the direct build."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json",
-          "outputs/customer-ui/fresh-direct-downloads-menu.png",
-          "outputs/customer-ui/sweep-20260728T011824Z/fixture-state.json",
-          "outputs/customer-ui/sweep-20260728T011824Z/fresh-direct-install.log"
+          "outputs/runtime/saneclick-1.3.2-live.log",
+          "outputs/customer-ui/fresh-direct-welcome.png",
+          "outputs/customer-ui/fresh-direct-receipt.json"
         ]
       },
+      "functional_state": {
+        "status": "established",
+        "detail": "The existing monitored-folder file was moved aside, the signed direct build was launched, and the original file was restored after the test."
+      },
+      "inputs": [
+        "Launched the signed direct build without monitored-folder storage, right-clicked an image in Downloads, and opened monitored-folder Settings."
+      ],
+      "output_assertions": [
+        "Desktop, Documents, Downloads, Movies, and Pictures were seeded, Finder categories appeared in Downloads, and monitored-folder controls were visible."
+      ],
       "evidence": [
         {
-          "type": "source_guard",
-          "detail": "5 shipped source/test markers verified on the Mini"
-        },
-        {
           "type": "mini_click",
-          "detail": "Mini interaction transcript for fresh-direct-install-finder-availability",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/mini-click-transcript.json"
+          "detail": "The signed direct build completed a true fresh reset and first-run flow on the Mini.",
+          "path": "outputs/runtime/saneclick-1.3.2-live.log"
         },
         {
           "type": "screenshot",
-          "detail": "Mini visual proof for fresh-direct-install-finder-availability",
-          "path": "outputs/customer-ui/fresh-direct-downloads-menu.png"
+          "detail": "Fresh Mini first-run capture shows five monitored folders seeded behind onboarding.",
+          "path": "outputs/customer-ui/fresh-direct-welcome.png"
         },
         {
           "type": "fixture",
-          "detail": "Established representative Finder fixture state for fresh-direct-install-finder-availability",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/fixture-state.json"
+          "detail": "Fresh direct-install receipt records the seeded folder count and active Finder extension.",
+          "path": "outputs/customer-ui/fresh-direct-receipt.json"
         },
         {
           "type": "log",
-          "detail": "Runtime log for fresh-direct-install-finder-availability",
-          "path": "outputs/customer-ui/sweep-20260728T011824Z/fresh-direct-install.log"
-        },
-        {
-          "type": "safe_surface_boundary",
-          "detail": "Fresh direct install behavior is verified by monitored-folder source/tests and existing Mini Finder screenshots."
+          "detail": "Live app log was attached from launch through onboarding.",
+          "path": "outputs/runtime/saneclick-1.3.2-live.log"
         }
       ]
     }
   },
-  "screenshots": [
-    "outputs/customer-ui/content-all-actions.png",
-    "outputs/customer-ui/library-all-actions.png",
-    "outputs/customer-ui/finder-menu-image-file.png",
-    "outputs/customer-ui/finder-menu-folder.png",
-    "outputs/customer-ui/fresh-direct-downloads-menu-clean.png",
-    "outputs/customer-ui/settings-fresh-direct-monitored-folders.png",
-    "docs/screenshots/main-window.png",
-    "docs/screenshots/finder-context-menu.png",
-    "docs/screenshots/script-library.png"
-  ],
   "evidence": [
     "source_guard=main-category-enable-all checks=4",
     "source_guard=main-individual-action-toggle checks=4",
@@ -457,10 +368,28 @@
     "source_guard=finder-menu-action-execution checks=5",
     "source_guard=fresh-direct-install-finder-availability checks=5"
   ],
-  "safe_surface_boundaries": {
-    "custom-action-management": "Create/edit/delete flows are validated by source and store tests; destructive deletion is not applied to user data in this sweep.",
-    "settings-tabs-and-status": "Update, report-bug, and quit commands are verified to safe first surfaces and source wiring only.",
-    "finder-menu-action-execution": "Representative category execution is covered by fixture tests and prior Mini Finder screenshots; this sweep does not mutate arbitrary customer files.",
-    "fresh-direct-install-finder-availability": "Fresh direct install behavior is verified by monitored-folder source/tests and existing Mini Finder screenshots."
-  }
+  "contract_artifact": "outputs/customer-ui/sweep-20260728T183328Z/contract-inventory.json",
+  "status": "passed",
+  "execution_mode": "executed",
+  "execution_source": "outputs/customer-ui/execution-evidence-1.3.2.json",
+  "tested_action_ids": [
+    "main-category-enable-all",
+    "main-individual-action-toggle",
+    "script-library-global-enable-all",
+    "script-library-category-controls",
+    "custom-action-management",
+    "settings-tabs-and-status",
+    "finder-menu-action-execution",
+    "fresh-direct-install-finder-availability"
+  ],
+  "screenshots": [
+    "outputs/customer-ui/content-all-actions.png",
+    "outputs/customer-ui/main-individual-action.png",
+    "outputs/customer-ui/library-all-actions.png",
+    "outputs/customer-ui/library-category-controls.png",
+    "outputs/customer-ui/custom-action-editor.png",
+    "outputs/customer-ui/settings-fresh-direct-monitored-folders.png",
+    "outputs/e2e/1.3.2/finder-duplicate-result.png",
+    "outputs/customer-ui/fresh-direct-welcome.png"
+  ]
 }

@@ -14,10 +14,10 @@ options:
 packages:
   Sparkle:
     url: https://github.com/sparkle-project/Sparkle
-    from: 2.8.0
+    from: 2.9.4
   SaneUI:
     url: https://github.com/sane-apps/SaneUI.git
-    revision: b6a2bc967d438eccb6773807e89fbc64efb671d4
+    revision: 9e90dbbc194caac805157e71585fe2629a6412da
 
 settings:
   DEAD_CODE_STRIPPING: YES
@@ -324,7 +324,7 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         ARCHS: arm64
         VALID_ARCHS: arm64
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/SaneClickAppStore.app/Contents/MacOS/SaneClickAppStore"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/SaneClick.app/Contents/MacOS/SaneClick"
         BUNDLE_LOADER: "$(TEST_HOST)"
       configs:
         Debug:

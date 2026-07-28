@@ -128,12 +128,7 @@ class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_: Notification) {
         NSApp.appearance = NSAppearance(named: .darkAqua)
         #if !DEBUG && !APP_STORE
-            if SaneAppMover.moveToApplicationsFolderIfNeeded(prompt: .init(
-                messageText: "Move to Applications?",
-                informativeText: "{appName} works best from your Applications folder. Move it there now? You may be asked for your password.",
-                moveButtonTitle: "Move to Applications",
-                cancelButtonTitle: "Not Now"
-            )) { return }
+            if SaneAppMover.moveToApplicationsFolderIfNeeded(prompt: SaneClickInstallPrompt.standard) { return }
         #endif
 
         DistributedNotificationCenter.default().addObserver(
@@ -329,6 +324,7 @@ struct SaneClickApp: App {
                             proFeatures: SaneClickWelcomeCopy.proFeatures,
                             freeTierPrice: SaneClickWelcomeCopy.basicPrice,
                             proTierPriceOverride: SaneClickWelcomeCopy.proPrice,
+                            permissionConfig: SaneClickWelcomePermission.make(),
                             licenseService: licenseService
                         )
                         .preferredColorScheme(.dark)
@@ -451,6 +447,42 @@ struct MainWindowCaptureView: NSViewRepresentable {
     }
 }
 
+enum SaneClickWelcomePermission {
+    @MainActor
+    static func make(
+        statusProvider: @escaping () -> ExtensionStatus = { ExtensionStatusService.checkStatus() },
+        openSettings: @escaping () -> Void = {
+            guard let url = URL(string: "x-apple.systempreferences:com.apple.ExtensionsPreferences") else { return }
+            NSWorkspace.shared.open(url)
+        }
+    ) -> WelcomeGatePermissionConfig {
+        let initialStatus = statusProvider()
+        return WelcomeGatePermissionConfig(
+            title: "Finder Extension",
+            bullets: [
+                (
+                    "cursorarrow.click.2",
+                    "Enable SaneClick in macOS Finder Extensions settings so its actions can appear when you right-click."
+                ),
+                (
+                    "arrow.clockwise",
+                    "Return to SaneClick after changing access. The status refreshes automatically."
+                ),
+                (
+                    "arrow.triangle.2.circlepath",
+                    "If the extension is enabled but actions do not appear, use Restart Finder in Settings > General."
+                )
+            ],
+            grantedMessage: "Finder extension enabled. If actions do not appear, use Restart Finder in Settings > General.",
+            actionLabel: SaneClickSettingsCopy.openSettingsButtonTitle,
+            actionHint: "Enable SaneClick under Finder extensions, then return here. If needed, use Restart Finder in Settings > General.",
+            initiallyGranted: initialStatus.isUsable,
+            refreshGranted: { statusProvider().isUsable },
+            action: openSettings
+        )
+    }
+}
+
 enum SaneClickWelcomeCopy {
     static let basicPrice = "Free"
     static let proPrice: String = {
@@ -490,14 +522,10 @@ enum SaneClickWelcomeCopy {
                 ("arrow.clockwise", "Restore purchases on your Macs")
             ]
         #else
-            let proCount = ScriptLibrary
-                .availableCategories
-                .filter { $0 != .universal }
-                .map { ScriptLibrary.availableScripts(for: $0).count }
-                .reduce(0, +)
+            let totalCount = ScriptLibrary.availableAllScripts.count
             return [
                 ("checkmark", "Try everything for 14 days"),
-                ("folder.badge.plus", "\(proCount) more built-in Finder actions"),
+                ("folder.badge.plus", "\(totalCount) built-in Finder actions"),
                 ("square.stack.3d.up.fill", "Developer, media, advanced, and organization tools"),
                 ("square.and.pencil", "Build your own custom Finder scripts"),
                 ("square.and.arrow.up.on.square", "Import and export your library")

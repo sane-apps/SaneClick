@@ -76,7 +76,7 @@ struct ImportExportView: View {
                     .fontWeight(.bold)
 
                 Text("Move your right-click actions between Macs")
-                    .font(.subheadline)
+                    .font(.system(size: 16))
                     .foregroundStyle(Color.white.opacity(0.9))
             }
 
@@ -94,7 +94,7 @@ struct ImportExportView: View {
 
             VStack(alignment: .leading, spacing: 8) {
                 Text("When an action already exists")
-                    .font(.subheadline)
+                    .font(.system(size: 16))
                     .foregroundStyle(Color.white.opacity(0.9))
 
                 Picker("Import mode", selection: $importMode) {
@@ -105,7 +105,7 @@ struct ImportExportView: View {
                 .pickerStyle(.radioGroup)
 
                 Text(importMode.detail)
-                    .font(.system(size: 13))
+                    .font(.system(size: 16))
                     .foregroundStyle(Color.white.opacity(0.9))
             }
 
@@ -138,7 +138,7 @@ struct ImportExportView: View {
                     Text("\(scriptStore.scripts.count) actions")
                         .font(.headline)
                     Text("Includes enabled and disabled actions")
-                        .font(.system(size: 13))
+                        .font(.system(size: 16))
                         .foregroundStyle(Color.white.opacity(0.9))
                 }
 
@@ -178,7 +178,7 @@ struct ImportExportView: View {
                 Text(title)
                     .font(.headline)
                 Text(subtitle)
-                    .font(.system(size: 13))
+                    .font(.system(size: 16))
                     .foregroundStyle(Color.white.opacity(0.9))
             }
 
@@ -310,7 +310,7 @@ private struct StatusBanner: View {
             Image(systemName: iconName)
                 .foregroundStyle(borderColor)
             Text(message.text)
-                .font(.subheadline)
+                .font(.system(size: 16))
                 .foregroundStyle(Color.saneCloud)
             Spacer()
         }

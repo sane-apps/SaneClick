@@ -101,7 +101,7 @@
             if let unavailableStatus, !isAvailable {
                 CompactRow("Status") {
                     Text(unavailableStatus)
-                        .font(.system(size: 13, weight: .medium))
+                        .font(.system(size: 16, weight: .medium))
                         .multilineTextAlignment(.trailing)
                         .foregroundStyle(.white)
                         .fixedSize(horizontal: false, vertical: true)

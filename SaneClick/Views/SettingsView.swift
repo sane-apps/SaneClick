@@ -301,6 +301,18 @@ struct SettingsView: View {
                         SaneSparkleRow(
                             automaticallyChecks: $automaticallyChecksForUpdates,
                             checkFrequency: $updateCheckFrequency,
+                            isAvailable: updateService.isUpdateChannelEnabled,
+                            unavailableStatus: updateService.updateUnavailableStatus,
+                            recoveryActionLabel: updateService.isMissingApplicationsInstall
+                                ? "Move to Applications"
+                                : nil,
+                            recoveryActionHelp: "Move SaneClick to Applications and reopen it to enable secure updates.",
+                            onRecoveryAction: {
+                                guard updateService.isMissingApplicationsInstall else { return }
+                                _ = SaneAppMover.moveToApplicationsFolderIfNeeded(
+                                    prompt: SaneClickInstallPrompt.standard
+                                )
+                            },
                             onCheckNow: { updateService.checkForUpdates() }
                         )
                         .onChange(of: automaticallyChecksForUpdates) { _, newValue in

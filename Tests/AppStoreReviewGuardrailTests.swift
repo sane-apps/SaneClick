@@ -11,7 +11,7 @@ private final class MenuActionTarget: NSObject {
 
 @MainActor
 struct AppStoreReviewGuardrailTests {
-    private let everythingBundleSaneUIRevision = "b6a2bc967d438eccb6773807e89fbc64efb671d4"
+    private let everythingBundleSaneUIRevision = "9e90dbbc194caac805157e71585fe2629a6412da"
 
     @Test("Everything Bundle entitlement uses bundle-aware SaneUI validation")
     func everythingBundleEntitlementUsesBundleAwareSaneUIValidation() throws {
@@ -104,7 +104,6 @@ struct AppStoreReviewGuardrailTests {
             .deletingLastPathComponent()
             .deletingLastPathComponent()
         let appSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/SaneClickApp.swift"), encoding: .utf8)
-
         #expect(appSource.contains("Settings {"))
         #expect(appSource.contains("CommandGroup(replacing: .appSettings)") == false)
         #expect(appSource.contains("keyboardShortcut(\",\", modifiers: .command)") == false)
@@ -285,7 +284,7 @@ struct AppStoreReviewGuardrailTests {
         #expect(librarySource.contains("isLocked: true"))
         #expect(settingsSource.contains("SaneSettingsContainer(defaultTab: .general, selection: $selectedTab, windowSizing: .embedded)"))
         #expect(settingsSource.contains("LicenseSettingsView(licenseService: licenseService, style: .panel)"))
-        #expect(licenseSettingsSource.contains("Buy Once —"))
+        #expect(licenseSettingsSource.contains("labels.unlockProLabel(price: licenseService.displayPriceLabel)"))
         #expect(licenseSettingsSource.contains("Restore Purchases"))
     }
 
@@ -335,12 +334,26 @@ struct AppStoreReviewGuardrailTests {
         #expect(settingsSource.contains("SaneClickSettingsCopy.openSettingsButtonTitle"))
         #expect(settingsSource.contains("SaneSparkleRow("))
         #expect(settingsSource.contains("SaneClickSettingsCopy.yourActionsSectionTitle") == false)
+        #expect(settingsSource.contains("isAvailable: updateService.isUpdateChannelEnabled"))
+        #expect(settingsSource.contains("unavailableStatus: updateService.updateUnavailableStatus"))
+        #expect(settingsSource.contains("recoveryActionLabel: updateService.isMissingApplicationsInstall"))
+        #expect(settingsSource.contains("SaneClickInstallPrompt.standard"))
         #expect(settingsSource.contains("Enter License Key") == false)
         #expect(settingsSource.contains("TabView(selection: $selectedTab)") == false)
         #expect(directSupportSource.contains("struct SaneSparkleRow") == false)
         #expect(directSupportSource.contains("alternateUnlockLabel: \"Buy SaneClick\""))
         #expect(directSupportSource.contains("alternateEntryLabel: \"Enter License Key\""))
         #expect(directSupportSource.contains("accessManagementLabel: \"Deactivate License\""))
+        #expect(directSupportSource.contains("static let standard = SaneAppMover.Prompt("))
+    }
+
+    @Test("Customer body descriptions use readable type")
+    func customerBodyDescriptionsUseReadableType() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+        let content = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/ContentView.swift"), encoding: .utf8)
+        let transfer = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/ImportExportView.swift"), encoding: .utf8)
+        #expect(content.contains("Text(libraryScript.description)\n                    .font(.system(size: 16))"))
+        #expect(transfer.contains(".font(.system(size: 13))") == false)
     }
 
     @Test("Direct builds expose monitored folder setup instead of silent empty Finder registration")
@@ -390,7 +403,12 @@ struct AppStoreReviewGuardrailTests {
     }
 
     @Test("Direct welcome claims match the script library split")
-    func directWelcomeCopyMatchesScriptLibrarySplit() {
+    func directWelcomeCopyMatchesScriptLibrarySplit() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let appSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/SaneClickApp.swift"), encoding: .utf8)
+        let contentSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/ContentView.swift"), encoding: .utf8)
         let freeCount = ScriptLibrary.availableScripts(for: .universal).count
         let proCount = ScriptLibrary
             .availableCategories
@@ -400,5 +418,11 @@ struct AppStoreReviewGuardrailTests {
 
         #expect(freeCount == 14)
         #expect(proCount == 48)
+        #expect(freeCount + proCount == 62)
+        #expect(appSource.contains("Try everything for 14 days"))
+        #expect(appSource.contains("\\(totalCount) built-in Finder actions"))
+        #expect(appSource.contains("\\(proCount) more built-in Finder actions") == false)
+        #expect(contentSource.contains("\\(ScriptLibrary.availableAllScripts.count) ready-to-use actions"))
+        #expect(contentSource.contains("50+ ready-to-use actions") == false)
     }
 }

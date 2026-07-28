@@ -4,7 +4,7 @@ set -euo pipefail
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUTPUT_DIR="${OUTPUT_DIR:-${PROJECT_ROOT}/docs/screenshots}"
 RENDER_OUTPUT_DIR="${RENDER_OUTPUT_DIR:-$HOME/Library/Containers/com.saneclick.SaneClick/Data/tmp/AppStoreScreenshots}"
-CONFIGURATION="${CONFIGURATION:-Release-AppStore}"
+CONFIGURATION="${CONFIGURATION:-Debug}"
 SCHEME="${SCHEME:-SaneClick-AppStore-Screenshots}"
 TEST_FILTER="SaneClickAppStoreScreenshotTests/AppStoreScreenshotRenderTests"
 MINI_HOST="${MINI_HOST:-mini}"
@@ -103,10 +103,10 @@ rm -f \
   "${RENDER_OUTPUT_DIR}/main-window.png" \
   "${RENDER_OUTPUT_DIR}/finder-context-menu.png" \
   "${RENDER_OUTPUT_DIR}/script-library.png" \
-  "${OUTPUT_DIR}/onboarding.png" \
-  "${OUTPUT_DIR}/main-window.png" \
-  "${OUTPUT_DIR}/finder-context-menu.png" \
-  "${OUTPUT_DIR}/script-library.png"
+  "${OUTPUT_DIR}/appstore-onboarding.png" \
+  "${OUTPUT_DIR}/appstore-main-window.png" \
+  "${OUTPUT_DIR}/appstore-finder-context-menu.png" \
+  "${OUTPUT_DIR}/appstore-script-library.png"
 printf '%s\n' "${RENDER_OUTPUT_DIR}" > "${OUTPUT_HINT_FILE}"
 
 base_cmd=(
@@ -142,7 +142,7 @@ for screenshot in onboarding.png main-window.png finder-context-menu.png script-
     echo "Missing rendered screenshot: ${RENDER_OUTPUT_DIR}/${screenshot}" >&2
     exit 1
   fi
-  cp "${RENDER_OUTPUT_DIR}/${screenshot}" "${OUTPUT_DIR}/${screenshot}"
+  cp "${RENDER_OUTPUT_DIR}/${screenshot}" "${OUTPUT_DIR}/appstore-${screenshot}"
 done
 
 log "Wrote screenshots to ${OUTPUT_DIR}"

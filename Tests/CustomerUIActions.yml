@@ -1,6 +1,8 @@
 ---
 version: 1
 app: SaneClick
+evidence_policy: This manifest defines required interactions and expected results. It does
+  not record execution; a separate Mini runner must supply action-level evidence.
 actions:
 - id: main-category-enable-all
   title: Main category Enable All controls are live

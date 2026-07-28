@@ -42,7 +42,7 @@ SaneClick gives you **62 ready-to-use actions** — no scripting required. Brows
 - **Custom Scripts**: Power users can write Bash, AppleScript, or Automator workflows
 - **Categories**: Essentials, Files & Folders, Images & Media, Coding, Advanced
 
-**100% local. We never see your data.**
+Finder actions process selected files on your Mac. SaneClick does not upload file contents; update and license checks use the limited network requests described in [PRIVACY.md](PRIVACY.md).
 
 > Pay once. Keep every SaneClick action. No subscription.
 
@@ -101,7 +101,7 @@ SaneMaster runs XcodeGen when needed; only run `xcodegen generate` manually if y
 
 ### First Launch
 
-On first launch, SaneClick offers curated starter packs by category. Pick the ones that match your workflow and install scripts with one click. Add more anytime from the library.
+On first launch, follow the setup screen to enable the Finder extension, then start the free 14-day trial or enter a license key. In the main window, use **Browse Library** to choose actions and **Manage Folders** to choose where SaneClick appears in Finder.
 
 ### Enable the Extension
 
@@ -120,12 +120,12 @@ Check extension status in **Settings > General**:
 
 ## Usage
 
-1. **Add Scripts**: Click the + button and choose "New Script"
-2. **Configure**: Set name, type (Bash/AppleScript/Automator), content, icon, and file filters
-3. **Test**: Use the Test button to select real files and preview output/errors before saving
-4. **Organize**: Create custom categories and assign scripts to groups
-5. **Use**: Right-click files in Finder to see your scripts
-6. **Notifications**: Toggle action completion confirmations in Settings
+1. **Choose Built-In Actions**: Open **Browse Library**, then enable the actions you want.
+2. **Write a Custom Action**: Expand **More Options** in the main sidebar and choose **Write Custom Action**.
+3. **Configure**: Set the name, type (Bash, AppleScript, or Automator), content, icon, and file filters.
+4. **Test**: Use **Test** to select files and preview output or errors before saving.
+5. **Manage Custom Actions**: Use **Manage Custom Actions** in the sidebar after you create one.
+6. **Use in Finder**: Right-click a file in a monitored folder and choose a SaneClick action.
 
 ### Script Variables
 

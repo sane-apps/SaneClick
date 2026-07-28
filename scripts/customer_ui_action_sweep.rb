@@ -5,6 +5,7 @@ require 'digest'
 require 'fileutils'
 require 'json'
 require 'open3'
+require 'optparse'
 require 'socket'
 require 'time'
 require 'yaml'
@@ -73,45 +74,25 @@ class CustomerUIActionSweep
     ]
   }.freeze
 
-  SCREENSHOT_CANDIDATES = [
-    'outputs/customer-ui/content-all-actions.png',
-    'outputs/customer-ui/library-all-actions.png',
-    'outputs/customer-ui/finder-menu-image-file.png',
-    'outputs/customer-ui/finder-menu-folder.png',
-    'outputs/customer-ui/fresh-direct-downloads-menu-clean.png',
-    'outputs/customer-ui/settings-fresh-direct-monitored-folders.png',
-    'docs/screenshots/main-window.png',
-    'docs/screenshots/finder-context-menu.png',
-    'docs/screenshots/script-library.png'
-  ].freeze
-
-  SCREENSHOT_BY_ACTION = {
+  ARTIFACT_REFERENCES = {
     'main-category-enable-all' => 'outputs/customer-ui/content-all-actions.png',
     'main-individual-action-toggle' => 'docs/screenshots/main-window.png',
     'script-library-global-enable-all' => 'outputs/customer-ui/library-all-actions.png',
-    'script-library-category-controls' => 'docs/screenshots/script-library.png',
-    'custom-action-management' => 'docs/screenshots/appstore-script-library.png',
     'settings-tabs-and-status' => 'outputs/customer-ui/settings-fresh-direct-monitored-folders.png',
     'finder-menu-action-execution' => 'outputs/customer-ui/finder-menu-image-file.png',
     'fresh-direct-install-finder-availability' => 'outputs/customer-ui/fresh-direct-downloads-menu.png'
   }.freeze
 
-  SAFE_SURFACE_NOTES = {
-    'custom-action-management' => 'Create/edit/delete flows are validated by source and store tests; destructive deletion is not applied to user data in this sweep.',
-    'settings-tabs-and-status' => 'Update, report-bug, and quit commands are verified to safe first surfaces and source wiring only.',
-    'finder-menu-action-execution' => 'Representative category execution is covered by fixture tests and prior Mini Finder screenshots; this sweep does not mutate arbitrary customer files.',
-    'fresh-direct-install-finder-availability' => 'Fresh direct install behavior is verified by monitored-folder source/tests and existing Mini Finder screenshots.'
-  }.freeze
-
-  def initialize
+  def initialize(argv = [])
+    @execution_evidence_path = nil
+    parse_options!(argv.dup)
     @started_at = Time.now.utc
     @run_id = @started_at.strftime('%Y%m%dT%H%M%SZ')
     @transcript = []
     @action_results = {}
-    @screenshots = []
     @manifest_actions = {}
     @artifact_dir = File.join(OUTPUT_DIR, "sweep-#{@run_id}")
-    @artifacts = {}
+    @execution_evidence = nil
   end
 
   def run
@@ -121,12 +102,17 @@ class CustomerUIActionSweep
       FileUtils.mkdir_p(File.dirname(RECEIPT_PATH))
       ensure_manifest!
       verify_source_and_test_guards
-      collect_screenshots
-      write_runtime_artifacts
+      load_execution_evidence!
+      write_contract_artifact
       build_action_results
       verify_all_actions_have_results!
       write_receipt
-      puts "Customer UI action sweep passed: #{relative(RECEIPT_PATH)}"
+      if @execution_evidence
+        puts "Customer UI execution receipt accepted: #{relative(RECEIPT_PATH)}"
+      else
+        puts "Customer UI contract inventory written: #{relative(RECEIPT_PATH)}"
+        puts 'No app actions or clicks were executed by this script.'
+      end
     end
   rescue StandardError => e
     warn "Customer UI action sweep failed: #{e.message}"
@@ -135,6 +121,23 @@ class CustomerUIActionSweep
   end
 
   private
+
+  def parse_options!(argv)
+    parser = OptionParser.new do |options|
+      options.banner = 'Usage: customer_ui_action_sweep.rb [--execution-evidence PATH]'
+      options.separator ''
+      options.separator 'Without execution evidence, this writes a contract-only receipt.'
+      options.on('--execution-evidence PATH', 'Use a separate Mini runner receipt with real per-action results') do |path|
+        @execution_evidence_path = path
+      end
+      options.on_tail('-h', '--help', 'Show this help without changing receipts') do
+        puts options
+        exit 0
+      end
+    end
+    parser.parse!(argv)
+    raise OptionParser::InvalidOption, argv.join(' ') unless argv.empty?
+  end
 
   def require_mini!
     host = Socket.gethostname.to_s.downcase
@@ -171,134 +174,106 @@ class CustomerUIActionSweep
     end
   end
 
-  def collect_screenshots
-    @screenshots = SCREENSHOT_CANDIDATES.select { |path| File.size?(path) }
-    raise 'Missing screenshot evidence for SaneClick customer UI receipt' if @screenshots.empty?
+  def load_execution_evidence!
+    return unless @execution_evidence_path
+
+    path = File.expand_path(@execution_evidence_path, PROJECT_ROOT)
+    payload = JSON.parse(File.read(path))
+    raise 'Execution evidence app does not match SaneClick' unless payload['app'].to_s == APP_NAME
+    raise 'Execution evidence must come from the Mini' unless payload['host'].to_s.downcase.include?('mini')
+    raise 'Execution evidence status must be passed' unless payload['status'].to_s == 'passed'
+    raise 'Execution evidence must declare execution_mode=executed' unless payload['execution_mode'].to_s == 'executed'
+    Time.parse(payload.fetch('generated_at'))
+
+    results = payload['action_results']
+    raise 'Execution evidence is missing per-action results' unless results.is_a?(Hash)
+    missing = @action_ids - results.keys.map(&:to_s)
+    extra = results.keys.map(&:to_s) - @action_ids
+    raise "Execution evidence misses action(s): #{missing.join(', ')}" unless missing.empty?
+    raise "Execution evidence has unknown action(s): #{extra.join(', ')}" unless extra.empty?
+
+    @action_ids.each do |action_id|
+      result = results.fetch(action_id)
+      raise "#{action_id}: execution status must be passed" unless result['status'].to_s == 'passed'
+      raise "#{action_id}: workflow must declare executed=true" unless result.dig('workflow', 'executed') == true
+      raise "#{action_id}: execution evidence is empty" if Array(result['evidence']).empty?
+    end
+
+    screenshots = Array(payload['screenshots'])
+    raise 'Execution evidence has no screenshots' if screenshots.empty?
+    missing_screenshots = screenshots.reject { |item| File.size?(File.expand_path(item, PROJECT_ROOT)) }
+    raise "Execution evidence screenshot missing: #{missing_screenshots.join(', ')}" unless missing_screenshots.empty?
+
+    @execution_evidence = payload
+    @execution_evidence['source_path'] = relative(path)
   end
 
-  def write_runtime_artifacts
+  def write_contract_artifact
     FileUtils.mkdir_p(@artifact_dir)
-
-    click_transcript = {
+    payload = {
       generated_at: @started_at.iso8601,
       host: 'mini',
       app: APP_NAME,
       runner: relative(__FILE__),
-      note: 'Structured Mini customer-surface transcript assembled from the current Mini run artifacts and focused runtime proof.',
+      evidence_mode: 'contract_only',
+      claim_boundary: 'This file lists planned interactions and expected outputs. It does not prove that any action or click ran.',
       actions: @action_ids.map do |action_id|
         action = @manifest_actions.fetch(action_id)
         {
           id: action_id,
           surfaces: Array(action['surfaces']),
-          inputs: Array(action['user_inputs']),
+          steps_planned: Array(action['steps']),
+          inputs_planned: Array(action['user_inputs']),
           expected_outputs: Array(action['expected_outputs']),
-          screenshot: screenshot_for(action_id)
+          artifact_reference: existing_artifact_for(action_id)
         }
       end
     }
-    @artifacts[:mini_click] = write_json_artifact('mini-click-transcript.json', click_transcript)
-
-    fixture_state = {
-      generated_at: @started_at.iso8601,
-      fixture_root: 'Tests/Fixtures/customer-ui/finder-actions/',
-      runtime_fixture_root: '~/Downloads/SaneClickFreshDirectQA',
-      representative_selection: 'PNG image in Downloads',
-      categories: ['Essentials', 'Files & Folders', 'Images & Media', 'Coding', 'Advanced'],
-      proof_files: @screenshots
-    }
-    @artifacts[:fixture] = write_json_artifact('fixture-state.json', fixture_state)
-
-    settings_state = {
-      generated_at: @started_at.iso8601,
-      settings_surface: 'SaneClick Settings',
-      verified_controls: ['Finder Extension', 'Refresh Status', 'License', 'Updates', 'About / Report a Bug'],
-      monitored_folder_controls_visible: File.size?('outputs/customer-ui/settings-fresh-direct-monitored-folders.png')
-    }
-    @artifacts[:state_receipt] = write_json_artifact('settings-state-receipt.json', settings_state)
-
-    @artifacts[:finder_log] = write_text_artifact(
-      'finder-action-execution.log',
-      [
-        "Generated: #{@started_at.iso8601}",
-        'Representative right-click action completion is covered by Tests/ScriptExecutorTests.swift.',
-        'Fresh Finder runtime proof shows SaneClick menu entries on a Downloads PNG after clean monitored-folder regeneration.',
-        "Screenshots: #{@screenshots.join(', ')}"
-      ].join("\n")
-    )
-
-    fresh_summary = File.join(OUTPUT_DIR, latest_fresh_direct_dir.to_s, 'monitored_folders.after.summary.json')
-    @artifacts[:fresh_log] = write_text_artifact(
-      'fresh-direct-install.log',
-      [
-        "Generated: #{@started_at.iso8601}",
-        "Monitored-folder summary: #{File.file?(fresh_summary) ? File.read(fresh_summary).strip : 'not available'}",
-        'Expected default folders: Desktop, Documents, Downloads, Movies, Pictures',
-        "Finder proof screenshot: #{screenshot_for('fresh-direct-install-finder-availability')}"
-      ].join("\n")
-    )
+    @contract_artifact = write_json_artifact('contract-inventory.json', payload)
   end
 
   def build_action_results
+    if @execution_evidence
+      @action_results = @execution_evidence.fetch('action_results')
+      return
+    end
+
     @action_ids.each do |action_id|
       action = @manifest_actions.fetch(action_id)
-      evidence = action_evidence(action_id, action)
-      if SAFE_SURFACE_NOTES[action_id]
-        evidence << evidence('safe_surface_boundary', SAFE_SURFACE_NOTES.fetch(action_id))
+      evidence_items = [
+        evidence('source_guard', "#{ACTION_GUARDS.fetch(action_id).length} source/test markers are present on the Mini")
+      ]
+      if (artifact = existing_artifact_for(action_id))
+        evidence_items << evidence(
+          'artifact_reference',
+          'Existing file reference only; this script did not capture or validate it as current runtime proof.',
+          path: artifact
+        )
       end
       @action_results[action_id] = {
-        status: 'passed',
-        proof_level: action.fetch('required_proof_level'),
+        status: 'contract_only',
+        required_proof_level: action.fetch('required_proof_level'),
         functional_state: {
-          status: 'established',
+          status: 'planned',
           detail: functional_state_detail(action)
         },
-        inputs: Array(action['user_inputs']),
-        output_assertions: Array(action['expected_outputs']),
-        workflow: workflow_proof(action_id, action, evidence),
-        evidence: evidence
+        inputs_planned: Array(action['user_inputs']),
+        output_assertions_planned: Array(action['expected_outputs']),
+        workflow: {
+          runner: relative(__FILE__),
+          executed: false,
+          outcome: 'Contract and source guards checked; no app action or click was executed.',
+          steps_planned: Array(action['steps']),
+          steps_completed: []
+        },
+        evidence: evidence_items
       }
     end
   end
 
-  def action_evidence(action_id, action)
-    evidence_items = [
-      evidence('source_guard', "#{ACTION_GUARDS.fetch(action_id).length} shipped source/test markers verified on the Mini")
-    ]
-
-    Array(action['required_evidence_types']).each do |type|
-      case type.to_s
-      when 'mini_click'
-        evidence_items << evidence('mini_click', "Mini interaction transcript for #{action_id}", path: @artifacts.fetch(:mini_click))
-      when 'screenshot'
-        evidence_items << evidence('screenshot', "Mini visual proof for #{action_id}", path: screenshot_for(action_id))
-      when 'fixture'
-        evidence_items << evidence('fixture', "Established representative Finder fixture state for #{action_id}", path: @artifacts.fetch(:fixture))
-      when 'state_receipt'
-        evidence_items << evidence('state_receipt', "Settings/status state receipt for #{action_id}", path: @artifacts.fetch(:state_receipt))
-      when 'log'
-        log_path = action_id == 'fresh-direct-install-finder-availability' ? @artifacts.fetch(:fresh_log) : @artifacts.fetch(:finder_log)
-        evidence_items << evidence('log', "Runtime log for #{action_id}", path: log_path)
-      else
-        evidence_items << evidence(type.to_s, "Required evidence type #{type} recorded for #{action_id}")
-      end
-    end
-
-    needs_screenshot = %w[runtime_visual full_runtime_completion].include?(action['required_proof_level'].to_s) ||
-                       Array(action['evidence']).any? { |item| item.to_s.downcase.include?('screenshot') }
-    if Array(action['required_evidence_types']).none? { |type| type.to_s == 'screenshot' } && needs_screenshot
-      evidence_items << evidence('screenshot', "Mini visual proof for #{action_id}", path: screenshot_for(action_id))
-    end
-
-    evidence_items
-  end
-
-  def workflow_proof(action_id, action, evidence)
-    {
-      runner: relative(__FILE__),
-      outcome: "#{action['title']} passed with structured Mini evidence",
-      steps_completed: Array(action['steps']),
-      artifacts: evidence.flat_map { |item| Array(item[:path] || item['path'] || item[:artifacts] || item['artifacts']) }.compact
-    }
+  def existing_artifact_for(action_id)
+    path = ARTIFACT_REFERENCES[action_id]
+    path if path && File.size?(path)
   end
 
   def functional_state_detail(action)
@@ -308,33 +283,9 @@ class CustomerUIActionSweep
     [state['description'], setup, fixtures].compact.join(' ')
   end
 
-  def screenshot_for(action_id)
-    preferred = SCREENSHOT_BY_ACTION[action_id]
-    return preferred if preferred && File.size?(preferred)
-
-    @screenshots.first || raise("No screenshot artifact available for #{action_id}")
-  end
-
-  def latest_fresh_direct_dir
-    marker = File.join(OUTPUT_DIR, 'latest-fresh-direct-dir.txt')
-    return nil unless File.file?(marker)
-
-    File.read(marker).strip.sub(%r{\Aoutputs/customer-ui/}, '')
-  end
-
-  def write_json_artifact(name, payload)
-    write_text_artifact(name, "#{JSON.pretty_generate(payload)}\n")
-  end
-
-  def write_text_artifact(name, content)
-    path = File.join(@artifact_dir, name)
-    File.write(path, content)
-    relative(path)
-  end
-
   def verify_all_actions_have_results!
-    missing = @action_ids - @action_results.keys
-    extra = @action_results.keys - @action_ids
+    missing = @action_ids - @action_results.keys.map(&:to_s)
+    extra = @action_results.keys.map(&:to_s) - @action_ids
     raise "Missing action result(s): #{missing.join(', ')}" unless missing.empty?
     raise "Unexpected action result(s): #{extra.join(', ')}" unless extra.empty?
   end
@@ -343,24 +294,39 @@ class CustomerUIActionSweep
     report = customer_ui_contract_report_before_receipt
     receipt = {
       app: APP_NAME,
-      status: 'passed',
-      host: 'mini',
-      generated_at: @started_at.iso8601,
+      host: @execution_evidence ? @execution_evidence.fetch('host') : 'mini',
+      generated_at: @execution_evidence ? @execution_evidence.fetch('generated_at') : @started_at.iso8601,
       manifest_sha256: report.fetch('manifest_sha256'),
       source_fingerprint: report.fetch('source_fingerprint'),
-      tested_action_ids: @action_ids,
       action_results: @action_results,
-      screenshots: @screenshots.map { |path| relative(File.join(PROJECT_ROOT, path)) },
       evidence: @transcript,
-      safe_surface_boundaries: SAFE_SURFACE_NOTES
+      contract_artifact: @contract_artifact
     }
+
+    if @execution_evidence
+      receipt.merge!(
+        status: 'passed',
+        execution_mode: 'executed',
+        execution_source: @execution_evidence.fetch('source_path'),
+        tested_action_ids: @action_ids,
+        screenshots: Array(@execution_evidence['screenshots'])
+      )
+    else
+      receipt.merge!(
+        status: 'contract_only',
+        execution_mode: 'not_executed',
+        claim_boundary: 'Manifest, source, and test contracts only. No app actions or clicks ran.',
+        contract_action_ids: @action_ids,
+        tested_action_ids: [],
+        screenshots: []
+      )
+    end
+
     File.write(RECEIPT_PATH, "#{JSON.pretty_generate(receipt)}\n")
     File.write(MIRROR_RECEIPT_PATH, "#{JSON.pretty_generate(receipt)}\n")
   end
 
   def customer_ui_contract_report_before_receipt
-    FileUtils.rm_f(RECEIPT_PATH)
-    FileUtils.rm_f(MIRROR_RECEIPT_PATH)
     out, status = Open3.capture2e(
       { 'SANEMASTER_SUPPRESS_WORKFLOW_RECEIPT' => '1' },
       SANEMASTER, 'customer_ui_contract', '--json', '--no-exit'
@@ -375,14 +341,7 @@ class CustomerUIActionSweep
     path = File.join(OUTPUT_DIR, "customer-ui-action-sweep-failure-#{Time.now.utc.strftime('%Y%m%dT%H%M%SZ')}.json")
     File.write(
       path,
-      JSON.pretty_generate(
-        app: APP_NAME,
-        status: 'failed',
-        host: Socket.gethostname,
-        generated_at: Time.now.utc.iso8601,
-        error: error.message,
-        transcript: @transcript
-      )
+      "#{JSON.pretty_generate(app: APP_NAME, status: 'failed', host: Socket.gethostname, generated_at: Time.now.utc.iso8601, error: error.message, transcript: @transcript)}\n"
     )
   rescue StandardError
     nil
@@ -399,6 +358,12 @@ class CustomerUIActionSweep
     File.read(file)
   end
 
+  def write_json_artifact(name, payload)
+    path = File.join(@artifact_dir, name)
+    File.write(path, "#{JSON.pretty_generate(payload)}\n")
+    relative(path)
+  end
+
   def evidence(type, detail, path: nil)
     item = { type: type, detail: detail }
     item[:path] = path if path
@@ -410,4 +375,4 @@ class CustomerUIActionSweep
   end
 end
 
-CustomerUIActionSweep.new.run if __FILE__ == $PROGRAM_NAME
+CustomerUIActionSweep.new(ARGV).run if __FILE__ == $PROGRAM_NAME

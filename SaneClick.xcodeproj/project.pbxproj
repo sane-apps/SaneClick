@@ -939,7 +939,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClickAppStoreScreenshotTests;
 				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClickAppStore.app/Contents/MacOS/SaneClickAppStore";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClick.app/Contents/MacOS/SaneClick";
 				VALID_ARCHS = arm64;
 			};
 			name = Debug;
@@ -1081,7 +1081,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClickAppStoreScreenshotTests;
 				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClickAppStore.app/Contents/MacOS/SaneClickAppStore";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClick.app/Contents/MacOS/SaneClick";
 				VALID_ARCHS = arm64;
 			};
 			name = ProdDebug;
@@ -1130,7 +1130,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D APP_STORE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClickAppStoreScreenshotTests;
 				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClickAppStore.app/Contents/MacOS/SaneClickAppStore";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClick.app/Contents/MacOS/SaneClick";
 				VALID_ARCHS = arm64;
 			};
 			name = "Release-AppStore";
@@ -1185,7 +1185,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneclick.SaneClickAppStoreScreenshotTests;
 				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClickAppStore.app/Contents/MacOS/SaneClickAppStore";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClick.app/Contents/MacOS/SaneClick";
 				VALID_ARCHS = arm64;
 			};
 			name = Release;
@@ -1545,7 +1545,7 @@
 			repositoryURL = "https://github.com/sparkle-project/Sparkle";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.8.0;
+				minimumVersion = 2.9.4;
 			};
 		};
 		AF778DBEAA6553F8AC1165A8 /* XCRemoteSwiftPackageReference "SaneUI" */ = {
@@ -1553,7 +1553,7 @@
 			repositoryURL = "https://github.com/sane-apps/SaneUI.git";
 			requirement = {
 				kind = revision;
-				revision = b6a2bc967d438eccb6773807e89fbc64efb671d4;
+				revision = 9e90dbbc194caac805157e71585fe2629a6412da;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

@@ -19,7 +19,7 @@ struct AppStoreScreenshotRenderTests {
             purchaseBackend: .appStore(productID: "com.saneclick.app.pro.actions.v4")
         )
         let scriptStore = ScriptStore.shared
-        try seedScreenshotState(store: scriptStore)
+        try seedScreenshotState(store: scriptStore, outputDir: outputDir)
 
         let monitoredFolderService = MonitoredFolderService.shared
         monitoredFolderService.refresh()
@@ -112,7 +112,7 @@ struct AppStoreScreenshotRenderTests {
                         title: "Browse Library",
                         subtitle: "\(ScriptLibrary.availableAllScripts.count) built-in Finder actions",
                         icon: "books.vertical.fill",
-                        color: .saneTeal
+                        color: .saneAccent
                     ) {}
 
                     QuickActionRow(
@@ -229,7 +229,7 @@ struct AppStoreScreenshotRenderTests {
         .background(Color.saneNavy.opacity(0.3))
     }
 
-    private func seedScreenshotState(store: ScriptStore) throws {
+    private func seedScreenshotState(store: ScriptStore, outputDir: URL) throws {
         AppPreferences.registerDefaults()
 
         for script in Array(store.scripts) {
@@ -246,7 +246,7 @@ struct AppStoreScreenshotRenderTests {
         }
 
         try MonitoredFolders.save([])
-        let demoRoot = URL(fileURLWithPath: "/tmp/SaneClick Screenshot Demo", isDirectory: true)
+        let demoRoot = outputDir.appendingPathComponent("SaneClick Screenshot Demo", isDirectory: true)
         try FileManager.default.createDirectory(at: demoRoot, withIntermediateDirectories: true)
         try "Client notes".write(to: demoRoot.appendingPathComponent("Client Notes.txt"), atomically: true, encoding: .utf8)
         _ = try MonitoredFolders.addFolder(url: demoRoot, to: [])
@@ -277,7 +277,7 @@ struct AppStoreScreenshotRenderTests {
 
                 Button("Done") {}
                     .buttonStyle(.borderedProminent)
-                    .tint(.saneTeal)
+                    .tint(.saneAccent)
             }
             .padding()
 
@@ -306,7 +306,7 @@ struct AppStoreScreenshotRenderTests {
                                     .foregroundStyle(Color.saneSilver)
                                 Image(systemName: "square.grid.2x2.fill")
                                     .font(.title2)
-                                    .foregroundStyle(Color.saneTeal)
+                                    .foregroundStyle(Color.saneAccent)
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text("All Scripts")
                                         .font(.headline)
@@ -326,7 +326,7 @@ struct AppStoreScreenshotRenderTests {
                                 Toggle("", isOn: .constant(false))
                                     .toggleStyle(.switch)
                                     .labelsHidden()
-                                    .tint(Color.saneTeal)
+                                    .tint(Color.saneAccent)
                                 Text("Enable All")
                                     .font(.caption)
                                     .foregroundStyle(Color.saneSilver)

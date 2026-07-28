@@ -542,7 +542,7 @@ struct ContentView: View {
         #if APP_STORE
             "\(ScriptLibrary.availableAllScripts.count) built-in Finder actions"
         #else
-            "50+ ready-to-use actions"
+            "\(ScriptLibrary.availableAllScripts.count) ready-to-use actions"
         #endif
     }
 
@@ -623,7 +623,7 @@ struct LibraryScriptRow: View {
                     .foregroundStyle(isLocked ? .primary : (isEnabled ? Color.saneCloud : Color.white.opacity(0.9)))
 
                 Text(libraryScript.description)
-                    .font(.system(size: 13))
+                    .font(.system(size: 16))
                     .foregroundStyle(Color.white.opacity(0.9))
                     .lineLimit(1)
             }

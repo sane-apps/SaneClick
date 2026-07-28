@@ -336,9 +336,7 @@ struct ScriptEditorView: View {
         )
         onSave(script)
 
-        if existingScript == nil {
-            dismiss()
-        }
+        dismiss()
     }
 
     func testScript() {

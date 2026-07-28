@@ -1,4 +1,5 @@
 import Foundation
+import SaneUI
 import SwiftUI
 import Testing
 @testable import SaneClick
@@ -89,6 +90,38 @@ struct ExtensionStatusTests {
     func statusEquality() {
         #expect(ExtensionStatus.active == ExtensionStatus.active)
         #expect(ExtensionStatus.active != ExtensionStatus.disabled)
+    }
+
+    @Test("Finder onboarding permission exposes live status and recovery guidance")
+    @MainActor
+    func finderOnboardingPermissionUsesLiveStatus() throws {
+        var status = ExtensionStatus.disabled
+        var openedSettings = false
+        let config = SaneClickWelcomePermission.make(
+            statusProvider: { status },
+            openSettings: { openedSettings = true }
+        )
+        let section = try #require(config.sections.first)
+
+        #expect(config.title == "Finder Extension")
+        #expect(section.initiallyGranted == false)
+        #expect(section.actionLabel == "Manage Finder Extension")
+        #expect(section.actionHint?.contains("Restart Finder") == true)
+        section.action?()
+        #expect(openedSettings)
+
+        status = .enabledNotRunning
+        #expect(section.refreshGranted?() == true)
+    }
+
+    @Test("Direct trial describes the full action library")
+    func directTrialDescribesFullActionLibrary() {
+        #if !APP_STORE
+            let benefits = SaneClickWelcomeCopy.proFeatures.map { $0.1 }
+            let total = ScriptLibrary.availableAllScripts.count
+            #expect(benefits.contains("\(total) built-in Finder actions"))
+            #expect(benefits.contains { $0.localizedCaseInsensitiveContains("more built-in Finder actions") } == false)
+        #endif
     }
 
     // MARK: - ScriptExecutionResult Tests

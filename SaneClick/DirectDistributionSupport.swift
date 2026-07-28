@@ -12,6 +12,15 @@ extension LicenseService.DirectCopy {
     )
 }
 
+enum SaneClickInstallPrompt {
+    static let standard = SaneAppMover.Prompt(
+        messageText: "Move to Applications?",
+        informativeText: "{appName} works best from your Applications folder. Move it there now? You may be asked for your password.",
+        moveButtonTitle: "Move to Applications",
+        cancelButtonTitle: "Not Now"
+    )
+}
+
 enum SaneAppMover {
     typealias Prompt = SaneApplicationMover.Prompt
 
