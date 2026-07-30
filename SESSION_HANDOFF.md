@@ -3,8 +3,9 @@
 **Last updated:** 2026-07-30
 **Current public version:** `1.3.1` (build `1301`)
 **Release candidate:** `1.3.3` (build `1303`)
-**Release branch:** `codex/saneclick-1.3.3`
-**Audited commit:** `37c64a697b8cef6b8971afa6b6412ecf2be3bc5a`
+**Release candidate state:** merged to `main` in PR #9
+**Merged commit:** `9b95e95333d972078e62ff4c1ceaaf66e5027057`
+**Audited fix commit:** `37c64a697b8cef6b8971afa6b6412ecf2be3bc5a`
 
 ## Active Release State
 
@@ -38,7 +39,7 @@ Expected pre-publish warnings: public appcast and Homebrew remain on 1.3.1 until
 
 ## Fixed 1.3.3 Customer Proof — 2026-07-30
 
-Candidate `37c64a697b8cef6b8971afa6b6412ecf2be3bc5a` passed the canonical Mini verify twice: 190 tests in 22 suites, receipt `3dab6efba777a4c98dbf4a7a460cb978` and pre-push receipt prefix `269e115`. The signed Release candidate launch receipt prefixes are `e7a027` and `5d9b4d`. No release or upload ran.
+Candidate `37c64a697b8cef6b8971afa6b6412ecf2be3bc5a` passed the canonical Mini verify, and the conflict-resolved PR head `f8840077572046ad223aaca41d88e91bfe5ab481` passed 190 tests in 22 suites with receipt `c2d41a5c124350fd1c6e9876bfe427f7`. PR #9 merged to `main` as `9b95e95333d972078e62ff4c1ceaaf66e5027057`. The signed Release candidate launch receipt prefixes are `e7a027` and `5d9b4d`. No release or upload ran.
 
 The fresh fixed-binary proof root is `outputs/customer-ui/1.3.3-20260730T054618Z-fixed/`.
 
