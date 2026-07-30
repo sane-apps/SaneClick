@@ -1,9 +1,10 @@
 # Session Handoff — SaneClick
 
-**Last updated:** 2026-07-28
+**Last updated:** 2026-07-29
 **Current public version:** `1.3.1` (build `1301`)
-**Release candidate:** `1.3.2` (build `1302`)
-**Audited commit:** `b5fc2a952c202348e10f5816c8eac5c16f0b8711`
+**Release candidate:** `1.3.3` (build `1303`)
+**Release branch:** `codex/saneclick-1.3.3`
+**Audited commit:** `a475245364eb216e8905f68a8d91218769431cef`
 
 ## Active Release State
 
@@ -15,6 +16,10 @@ Public release note:
 
 ### Current Mini receipts
 
+- The signed 1.3.3 owner build reached `License / Status / Licensed` through the real Settings UI on the Mini.
+- The Keychain access-group repair and its guardrail coverage are on the release branch. GitHub fixes #7 and #8 are merged.
+- The shared Mini GUI runner cleanup is merged in SaneProcess PRs #22 and #24. Focused tests passed 31/31.
+- Installed-runner acceptance returned status 0 with Finder frontmost, Terminal hidden, and zero accessibility-visible automation windows.
 - 188 tests in 22 suites passed. Log: `outputs/verify/20260728T173755.694477Z-7777-691dfeca/01-test.log`.
 - Customer UI contract passed with all eight release actions covered: `03b0e58354c8e9e4c9060ae30732d8fe`.
 - Signed Release launch log: `outputs/runtime/saneclick-1.3.2-live.log`.
@@ -43,9 +48,17 @@ The Finder demo and pitch videos were frame-inspected on the Mini on 2026-07-28.
 
 ## Remaining Release Work
 
-1. Commit and push the verified 1.3.2 candidate.
-2. Run the guarded release and App Store preflights on the clean commit.
-3. Publish 1.3.2, then verify the appcast, Homebrew cask, website, checkout, and hosted download.
+1. Repair the Mini screenshot wrapper. Two bounded attempts on 2026-07-29 returned no new image, so there is no fresh visual receipt for the 1.3.3 licensed state.
+2. Run the guarded release and App Store preflights on the clean 1.3.3 commit.
+3. Publish 1.3.3, then verify the appcast, Homebrew cask, website, checkout, and hosted download.
+
+## End-of-day preservation
+
+- Air release checkout is clean at `a475245364eb216e8905f68a8d91218769431cef`.
+- Mini primary checkout is clean on `main` at `2bbd52cf3367c108256616050bf2eca6ebd60f0c`.
+- The old Mini Keychain worktree changes are recoverable in stash `18ea4473c396060014ea9d3127f368c637bac956`.
+- The stale Mini release-worktree state is recoverable in stash `2bcf448e1715d7f51fc46de6ba2c686d93709db0`.
+- Both stale linked worktrees were removed after checkpointing; the primary checkout is the only remaining SaneClick worktree on the Mini.
 
 ## Archive
 
