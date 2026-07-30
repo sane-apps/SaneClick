@@ -1,7 +1,7 @@
 import AppKit
 import Foundation
 @testable import SaneClick
-import SaneUI
+@testable import SaneUI
 import Testing
 
 @MainActor
@@ -13,8 +13,8 @@ private final class MenuActionTarget: NSObject {
 struct AppStoreReviewGuardrailTests {
     private let everythingBundleSaneUIRevision = "9e90dbbc194caac805157e71585fe2629a6412da"
 
-    @Test("Everything Bundle entitlement uses bundle-aware SaneUI validation")
-    func everythingBundleEntitlementUsesBundleAwareSaneUIValidation() throws {
+    @Test("Everything Bundle entitlement uses the pinned SaneUI policy")
+    func everythingBundleEntitlementUsesPinnedSaneUIPolicy() throws {
         let projectRoot = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
             .deletingLastPathComponent()
@@ -29,16 +29,29 @@ struct AppStoreReviewGuardrailTests {
             #expect(source.contains(everythingBundleSaneUIRevision))
         }
 
-        let licenseServiceSource = try String(
-            contentsOf: projectRoot
-                .deletingLastPathComponent()
-                .deletingLastPathComponent()
-                .appendingPathComponent("infra/SaneUI/Sources/SaneUI/License/LicenseService.swift"),
-            encoding: .utf8
-        )
-        #expect(licenseServiceSource.contains(#"let everythingBundleToken = "saneappseverythingbundle""#))
-        #expect(licenseServiceSource.contains("productToken.contains(appToken)"))
-        #expect(licenseServiceSource.contains("variantToken.contains(appToken)"))
+        #expect(LicenseService.licenseProductMatchesApp(
+            appName: "SaneClick",
+            productName: "SaneApps Everything Bundle",
+            variantName: nil
+        ))
+        #expect(!LicenseService.licenseProductMatchesApp(
+            appName: "SaneClick",
+            productName: "SaneClip",
+            variantName: "Pro"
+        ))
+        #expect(!LicenseService.licenseProductMatchesApp(
+            appName: "SaneClick",
+            productName: "Unrelated Product",
+            variantName: nil
+        ))
+
+        for excludedAppName in ["SaneBar", "SaneScan", ""] {
+            #expect(!LicenseService.licenseProductMatchesApp(
+                appName: excludedAppName,
+                productName: "SaneApps Everything Bundle",
+                variantName: nil
+            ))
+        }
     }
 
     @Test("Direct updater cadence stays daily or weekly")
