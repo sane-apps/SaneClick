@@ -22,6 +22,9 @@ Public release note:
 - Installed-runner acceptance returned status 0 with Finder frontmost, Terminal hidden, and zero accessibility-visible automation windows.
 - The 1.3.3 custom-action manager now exposes visible, bright-white Edit and Remove controls. This fixes the Mini proof blocker where the row context menu did not appear through right-click, control-click, or its accessibility action.
 - The focused visible-control guardrail and full canonical Mini verify passed: 190 tests in 22 suites. Workflow receipt: `3dab6efba777a4c98dbf4a7a460cb978`.
+- The earlier 188-test Mini receipt remains at
+  `outputs/verify/20260728T173755.694477Z-7777-691dfeca/01-test.log`; the
+  190-test receipts above supersede it for this candidate.
 - The earlier customer UI contract-only sweep passed source/manifest coverage:
   `03b0e58354c8e9e4c9060ae30732d8fe`. It is not an eight-action runtime receipt.
 - Signed Release launch log: `outputs/runtime/saneclick-1.3.2-live.log`.
@@ -117,6 +120,10 @@ Cleanup completed after the blocker:
 The Finder demo and pitch videos were frame-inspected on the Mini on 2026-07-28. They show the real Finder action, the 14-day full trial, the $14.99 one-time price, and no retired Basic/Pro customer copy. The website main-window and Script Library screenshots now use the fresh active 1.3.2 captures above.
 
 ## Remaining Release Work
+
+The July 29 Mini screenshot-wrapper blocker recorded on `main` was superseded
+by the merged runner fixes. The remaining proof blocker is the Action 7 Finder
+context-menu/capture path recorded above.
 
 1. Fix or formally replace the blocked Finder action proof path, then rerun
    Actions 7 and 8 on the exact fixed 1.3.3 candidate.
