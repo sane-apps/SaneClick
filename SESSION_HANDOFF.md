@@ -4,7 +4,7 @@
 **Current public version:** `1.3.1` (build `1301`)
 **Release candidate:** `1.3.3` (build `1303`)
 **Release branch:** `codex/saneclick-1.3.3`
-**Audited commit:** `a475245364eb216e8905f68a8d91218769431cef`
+**Audited commit:** `37c64a697b8cef6b8971afa6b6412ecf2be3bc5a`
 
 ## Active Release State
 
@@ -22,7 +22,8 @@ Public release note:
 - Installed-runner acceptance returned status 0 with Finder frontmost, Terminal hidden, and zero accessibility-visible automation windows.
 - The 1.3.3 custom-action manager now exposes visible, bright-white Edit and Remove controls. This fixes the Mini proof blocker where the row context menu did not appear through right-click, control-click, or its accessibility action.
 - The focused visible-control guardrail and full canonical Mini verify passed: 190 tests in 22 suites. Workflow receipt: `3dab6efba777a4c98dbf4a7a460cb978`.
-- Customer UI contract passed with all eight release actions covered: `03b0e58354c8e9e4c9060ae30732d8fe`.
+- The earlier customer UI contract-only sweep passed source/manifest coverage:
+  `03b0e58354c8e9e4c9060ae30732d8fe`. It is not an eight-action runtime receipt.
 - Signed Release launch log: `outputs/runtime/saneclick-1.3.2-live.log`.
 - Fresh direct-install Settings proof: `outputs/customer-ui/settings-fresh-direct-monitored-folders.png`.
 - Signed-release Finder action produced a timestamped duplicate: `outputs/e2e/1.3.2/SaneClick-E2E-132_20260728_140633.txt`.
@@ -31,6 +32,74 @@ Public release note:
 The customer UI sweep receipt above established source and contract coverage. It did not execute every manifest click or Finder action. `scripts/customer_ui_action_sweep.rb` now writes contract-only receipts unless a separate Mini runner supplies action-level execution evidence.
 
 Expected pre-publish warnings: public appcast and Homebrew remain on 1.3.1 until release, unrelated pending support email exists, and the audit ran in the evening.
+
+## Fixed 1.3.3 Customer Proof — 2026-07-30
+
+Candidate `37c64a697b8cef6b8971afa6b6412ecf2be3bc5a` passed the canonical Mini verify twice: 190 tests in 22 suites, receipt `3dab6efba777a4c98dbf4a7a460cb978` and pre-push receipt prefix `269e115`. The signed Release candidate launch receipt prefixes are `e7a027` and `5d9b4d`. No release or upload ran.
+
+The fresh fixed-binary proof root is `outputs/customer-ui/1.3.3-20260730T054618Z-fixed/`.
+
+1. **Passed — main category Enable All.** Transcript:
+   `actions/01-main-category-enable-all.log`; screenshot:
+   `screenshots/01-main-category-enable-all.png`.
+2. **Passed — individual main-action toggle.** Transcript:
+   `actions/02-main-individual-action-toggle.log`; screenshot:
+   `screenshots/02-main-individual-action-toggle.png`.
+3. **Passed — Script Library global controls.** The live read-back was
+   `62/62 -> 1/62 -> 62/62`, with the global checkbox reading
+   `1 -> 0 -> 1`. Transcript:
+   `actions/03-script-library-global-enable-all.log`; screenshot:
+   `screenshots/03-script-library-global-enable-all.png`. The earlier invalid
+   diagnostic is retained as
+   `actions/03-script-library-global-enable-all-invalid-readback.log` and
+   `actions/03-readback-blocker.png`.
+4. **Passed — Script Library category controls.** All five categories expanded;
+   a category and its first row toggled off/on; final state returned to
+   `62 of 62 enabled`. Transcript:
+   `actions/04-script-library-category-controls.log`; screenshot:
+   `screenshots/04-script-library-category-controls.png`.
+5. **Passed — custom-action management.** Created `MD5 Hash`, saved body
+   `echo CUSTOM_PROOF_FIXED_V2`, relaunched, edited it through the visible Edit
+   button to `V3`, toggled it `1 -> 0 -> 1`, then used the visible Remove button
+   and real confirmation dialog. The post-delete manager contained only
+   `Start Python Server`, and the backing store was `[]`. Transcript:
+   `actions/05-custom-action-management.log`; canonical screenshot:
+   `screenshots/05-custom-action-management.png`; state receipts:
+   `fixtures/05-custom-action-state-before-delete.json` and
+   `fixtures/05-custom-action-state-after-delete.json`.
+6. **Passed — Settings tabs and status.** General refreshed to
+   `Extension Active`; General, Visibility, Updates, License, and About were
+   selected and read through accessibility; Report a Bug opened only to its
+   safe first surface and sent nothing; Privacy reached the end and displayed
+   the local-data/public-GitHub warning. Canonical screenshot:
+   `screenshots/06-settings-tabs-and-status.png`; transcript:
+   `actions/06-settings-tabs-and-status.log`. The live License state was
+   `Licensed`, so trial/$14.99 copy was not visible in this run.
+7. **Blocked — real Finder menu action execution.** Direct-SSH `cliclick`, the
+   researched Terminal/TCC context, and the System Events path did not expose a
+   readable Finder context menu. The diagnostic desktop capture also stalled.
+   The disposable fixture inventory remained unchanged and no Finder action
+   produced a side effect. Retained evidence:
+   `fixtures/07-before-inventory.txt`. There is no Action 7 pass screenshot.
+8. **Not run / blocked by Action 7.** The fresh direct-install monitored-folder
+   flow did not run because the required one-app proof sequence stopped at the
+   Action 7 blocker. There is no Action 8 receipt.
+
+This run is **not 8/8**. Do not run release/App Store preflights or claim
+release readiness from it.
+
+Cleanup completed after the blocker:
+
+- The disposable Mini fixture directory
+  `/Users/stephansmac/Downloads/SaneClick-Proof-20260730T054618Z` was moved to
+  the Mini Trash and is recoverable there.
+- Exact owned Mini processes were stopped: SaneClick PID `21641`, Finder
+  extension PID `21642`, and live logger PID `17829`.
+- The controller-side logger pipeline PGID `42693` (`ssh` PID `42704`, `tee`
+  PID `42705`) exited.
+- Final process read-back found zero SaneClick, logger, `mini-gui-run`,
+  `cliclick`, or screenshot-helper processes. The proof Finder window was gone;
+  Finder showed `Downloads`.
 
 ## Current Visual Proof
 
@@ -49,9 +118,12 @@ The Finder demo and pitch videos were frame-inspected on the Mini on 2026-07-28.
 
 ## Remaining Release Work
 
-1. Rerun all eight customer UI actions on the exact fixed 1.3.3 binary. Earlier 2026-07-30 actions 1–4 are diagnostic only because the visible custom-action control changes the candidate fingerprint.
-2. Run the guarded release and App Store preflights on the clean 1.3.3 commit.
-3. Publish 1.3.3, then verify the appcast, Homebrew cask, website, checkout, and hosted download.
+1. Fix or formally replace the blocked Finder action proof path, then rerun
+   Actions 7 and 8 on the exact fixed 1.3.3 candidate.
+2. Only after an honest eight-action runtime result, run the guarded release
+   and App Store preflights.
+3. Publish 1.3.3 only with owner approval, then verify the appcast, Homebrew
+   cask, website, checkout, and hosted download.
 
 ## End-of-day preservation
 
