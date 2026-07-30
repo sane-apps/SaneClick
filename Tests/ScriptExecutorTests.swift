@@ -439,8 +439,8 @@ struct ScriptExecutorTests {
         #expect(source.contains("itemCount=\\(request.paths.count)"))
     }
 
-    @Test("Direct executor and host app share the Pro keychain access group")
-    func directExecutorUsesHostAppKeychainAccessGroup() throws {
+    @Test("Direct executor and host app use the legacy service-only keychain")
+    func directExecutorUsesHostAppServiceOnlyKeychain() throws {
         let projectRoot = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
             .deletingLastPathComponent()
@@ -452,10 +452,12 @@ struct ScriptExecutorTests {
             contentsOf: projectRoot.appendingPathComponent("SaneClick/SaneClickApp.swift"),
             encoding: .utf8
         )
-        let accessGroup = "M78L6FXD48.group.com.saneclick.app"
+        let serviceOnlyKeychain = #"keychain: KeychainService(service: "com.saneclick.SaneClick")"#
 
-        #expect(executorSource.contains("accessGroup: \"\(accessGroup)\""))
-        #expect(appSource.contains("accessGroup: \"\(accessGroup)\""))
+        #expect(executorSource.components(separatedBy: serviceOnlyKeychain).count - 1 == 2)
+        #expect(appSource.components(separatedBy: serviceOnlyKeychain).count - 1 == 2)
+        #expect(!executorSource.contains("accessGroup:"))
+        #expect(!appSource.contains("accessGroup:"))
     }
 
     @Test("Built-in actions never pre-set a non-standard output mode")
