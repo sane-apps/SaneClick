@@ -1,6 +1,6 @@
 # Session Handoff — SaneClick
 
-**Last updated:** 2026-07-29
+**Last updated:** 2026-07-30
 **Current public version:** `1.3.1` (build `1301`)
 **Release candidate:** `1.3.3` (build `1303`)
 **Release branch:** `codex/saneclick-1.3.3`
@@ -20,7 +20,8 @@ Public release note:
 - The Keychain access-group repair and its guardrail coverage are on the release branch. GitHub fixes #7 and #8 are merged.
 - The shared Mini GUI runner cleanup is merged in SaneProcess PRs #22 and #24. Focused tests passed 31/31.
 - Installed-runner acceptance returned status 0 with Finder frontmost, Terminal hidden, and zero accessibility-visible automation windows.
-- 188 tests in 22 suites passed. Log: `outputs/verify/20260728T173755.694477Z-7777-691dfeca/01-test.log`.
+- The 1.3.3 custom-action manager now exposes visible, bright-white Edit and Remove controls. This fixes the Mini proof blocker where the row context menu did not appear through right-click, control-click, or its accessibility action.
+- The focused visible-control guardrail and full canonical Mini verify passed: 190 tests in 22 suites. Workflow receipt: `3dab6efba777a4c98dbf4a7a460cb978`.
 - Customer UI contract passed with all eight release actions covered: `03b0e58354c8e9e4c9060ae30732d8fe`.
 - Signed Release launch log: `outputs/runtime/saneclick-1.3.2-live.log`.
 - Fresh direct-install Settings proof: `outputs/customer-ui/settings-fresh-direct-monitored-folders.png`.
@@ -48,7 +49,7 @@ The Finder demo and pitch videos were frame-inspected on the Mini on 2026-07-28.
 
 ## Remaining Release Work
 
-1. Repair the Mini screenshot wrapper. Two bounded attempts on 2026-07-29 returned no new image, so there is no fresh visual receipt for the 1.3.3 licensed state.
+1. Rerun all eight customer UI actions on the exact fixed 1.3.3 binary. Earlier 2026-07-30 actions 1–4 are diagnostic only because the visible custom-action control changes the candidate fingerprint.
 2. Run the guarded release and App Store preflights on the clean 1.3.3 commit.
 3. Publish 1.3.3, then verify the appcast, Homebrew cask, website, checkout, and hosted download.
 

@@ -646,6 +646,30 @@ struct ScriptRow: View {
             .toggleStyle(.switch)
             .labelsHidden()
             .tint(successGreen)
+
+            Button(action: onEdit) {
+                Label("Edit", systemImage: "pencil")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+            .buttonStyle(.plain)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
+            .background(Color.saneSmoke)
+            .clipShape(RoundedRectangle(cornerRadius: 7))
+            .accessibilityIdentifier("editCustomActionButton")
+
+            Button(role: .destructive, action: onDelete) {
+                Label("Remove", systemImage: "trash")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+            .buttonStyle(.plain)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
+            .background(Color.saneSmoke)
+            .clipShape(RoundedRectangle(cornerRadius: 7))
+            .accessibilityIdentifier("removeCustomActionButton")
         }
         .padding(14)
         .background {

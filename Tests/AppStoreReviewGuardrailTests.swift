@@ -122,6 +122,23 @@ struct AppStoreReviewGuardrailTests {
         #expect(appSource.contains("keyboardShortcut(\",\", modifiers: .command)") == false)
     }
 
+    @Test("Custom actions expose visible Edit and Remove controls")
+    func customActionsExposeVisibleEditAndRemoveControls() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let source = try String(
+            contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/SettingsView.swift"),
+            encoding: .utf8
+        )
+        let scriptRow = try #require(source.components(separatedBy: "struct ScriptRow: View").last)
+
+        #expect(scriptRow.contains("Button(action: onEdit)"))
+        #expect(scriptRow.contains("accessibilityIdentifier(\"editCustomActionButton\")"))
+        #expect(scriptRow.contains("Button(role: .destructive, action: onDelete)"))
+        #expect(scriptRow.contains("accessibilityIdentifier(\"removeCustomActionButton\")"))
+    }
+
     @Test("Customer UI sweep keeps nested contract output machine readable")
     func customerUISweepSuppressesNestedWorkflowReceiptNoise() throws {
         let projectRoot = URL(fileURLWithPath: #filePath)
