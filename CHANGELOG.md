@@ -4,6 +4,10 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.3.3] - 2026-07-29
+
+Restores direct-download license recognition for SaneApps bundle purchases.
+
 ## [1.3.2] - 2026-07-27
 
 Improves fresh-install Finder setup and custom action editing. Also polishes
