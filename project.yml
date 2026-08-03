@@ -17,7 +17,7 @@ packages:
     from: 2.9.4
   SaneUI:
     url: https://github.com/sane-apps/SaneUI.git
-    revision: 9e90dbbc194caac805157e71585fe2629a6412da
+    revision: 6101a7475124d0c6bde57ac55de7ae709eeaeabe
 
 settings:
   DEAD_CODE_STRIPPING: YES
