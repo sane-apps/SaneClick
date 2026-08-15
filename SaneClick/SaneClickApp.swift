@@ -289,6 +289,9 @@ struct SaneClickApp: App {
 
         // Initialize ScriptExecutor to register notification listener for extension requests
         _ = ScriptExecutor.shared
+        Task { @MainActor in
+            ScriptStore.shared.loadIfNeeded()
+        }
         if ProcessInfo.processInfo.arguments.contains("--saneclick-execution-requested") {
             ScriptExecutor.shared.processPendingExecutionAfterLaunchRequest()
         }

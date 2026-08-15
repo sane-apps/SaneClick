@@ -247,6 +247,10 @@ final class ScriptExecutor: @unchecked Sendable {
 
             // Find and execute the script on main thread
             DispatchQueue.main.async {
+                // License-gate windows never mount ContentView, so ScriptStore
+                // would stay empty and every Finder action would miss. Load
+                // here so Basic actions still run after a trial expires.
+                ScriptStore.shared.loadIfNeeded()
                 if let script = ScriptStore.shared.scripts.first(where: { $0.id == request.scriptId }) {
                     guard self.canExecute(script: script) else {
                         NSLog("[ScriptExecutor] Blocked paid action without a valid license")

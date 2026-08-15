@@ -350,6 +350,21 @@ struct AppStoreReviewGuardrailTests {
         #expect(executorSource.contains("setupFileWatcher()") == false)
     }
 
+    @Test("Finder execution loads ScriptStore even when the license gate is showing")
+    func finderExecutionLoadsScriptsWithoutMainWindow() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let executorSource = try String(
+            contentsOf: projectRoot.appendingPathComponent("SaneClick/Services/ScriptExecutor.swift"),
+            encoding: .utf8
+        )
+        let lookupStart = try #require(executorSource.range(of: "DispatchQueue.main.async {"))
+        let lookupEnd = try #require(executorSource.range(of: "if let script = ScriptStore.shared.scripts.first"))
+        let lookupPreamble = String(executorSource[lookupStart.lowerBound ..< lookupEnd.lowerBound])
+        #expect(lookupPreamble.contains("ScriptStore.shared.loadIfNeeded()"))
+    }
+
     @Test("Settings use shared SaneUI shell and standardized direct license copy")
     func settingsUseSharedShellAndStandardCopy() throws {
         let projectRoot = URL(fileURLWithPath: #filePath)

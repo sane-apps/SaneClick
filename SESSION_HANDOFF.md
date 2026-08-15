@@ -1,6 +1,31 @@
 # Session Handoff — SaneClick
 
-**Last updated:** 2026-07-30
+**Last updated:** 2026-08-14 22:30 EDT
+
+## 2026-08-14 Action 7
+
+Installed `/Applications/SaneClick.app` is **1.3.3 (1303)**. A real Finder
+right-click on `Downloads/saneclick-proof.txt` opened the SaneClick menu
+(Essentials, Files & Folders, Coding, Advanced, Open SaneClick). Extension
+log: `menu(for:)` fired. Evidence:
+`outputs/e2e/1.3.3-20260815T020349Z/finder-menu-open.png`.
+
+The click never produced a timestamped copy. Two blockers:
+
+1. The installed app was on the expired-trial gate. That window never mounts
+   `ContentView`, so `ScriptStore` stayed empty and host execution could not
+   find Duplicate with Timestamp.
+2. AX still cannot see Finder context-menu items. Pixel/type-select did not
+   land on Duplicate.
+
+Source fix on this checkout (not in the installed 1.3.3): load
+`ScriptStore` at app launch and again before Finder execution. Canonical Mini
+verify passed **191 tests**, receipt `8b13c3e4a410cd10e37feb1718b2d1d9`.
+Owner Pro was re-seeded on the Mini. Do not publish 1.3.3 until a rebuild
+with that fix produces a Duplicate filesystem side effect.
+
+Live log: `outputs/runtime/saneclick-1.3.3-action7-20260814.log`.
+
 **Current public version:** `1.3.1` (build `1301`)
 **Release candidate:** `1.3.3` (build `1303`)
 **Release candidate state:** merged to `main` in PR #9
