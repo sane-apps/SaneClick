@@ -1,84 +1,129 @@
 {
   "app": "SaneClick",
-  "host": "Mac Mini",
-  "generated_at": "2026-07-28T18:33:28Z",
+  "host": "Stephans-MacBook-Air.local",
+  "generated_at": "2026-08-18T22:16:55Z",
   "manifest_sha256": "febc30fd458f227418e86e81f169b88b4b4c7d4bf0a39dd1b97c620c3f911cb1",
-  "source_fingerprint": "1de763e91b1b84f561559070bf9a860cafed0b688b4c79920aa57831a1991b9d",
+  "source_fingerprint": "91e44d7072be8386f175208288214714369075b20ce579c7c4704ab4d504ecf7",
   "action_results": {
     "main-category-enable-all": {
       "status": "passed",
       "proof_level": "runtime_visual",
       "workflow": {
         "executed": true,
-        "runner": "Mini mini-gui-run with Peekaboo accessibility actions",
-        "outcome": "All five main categories returned to their complete enabled state.",
-        "steps_covered": [
+        "runner": "scripts/customer_ui_action_executor.rb",
+        "outcome": "QUICK ACTIONS | Essentials | YOUR ACTIONS | Browse Library | Essentials | Copy Path | Enable All | Files & Folders | Enable All | Images & Media | Enable All | Coding | Enable All | Advanced | Enable All | Essentials | Copy Path",
+        "steps_completed": [
           "Click each category in the sidebar.",
           "Toggle Enable All off and on for Essentials, Files & Folders, Images & Media, Coding, and Advanced."
         ],
         "artifacts": [
-          "outputs/runtime/saneclick-1.3.2-live.log",
-          "outputs/customer-ui/content-all-actions.png"
+          "outputs/customer-ui/sweep-20260818T221453Z/main-category-enable-all-click.json",
+          "outputs/customer-ui/sweep-20260818T221453Z/visual/main-category-enable-all.png",
+          "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json",
+          "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+          "outputs/customer-ui/sweep-20260818T221453Z/main-category-enable-all-state.json"
         ]
       },
       "functional_state": {
         "status": "established",
-        "detail": "The signed direct build ran on the Mini with representative Finder fixtures and all five library categories available."
+        "detail": "Live SaneClick fixture outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
       },
       "inputs": [
-        "Opened each main category and toggled its Enable All control off and on."
+        "Click each category in the sidebar.",
+        "Toggle Enable All off and on for Essentials, Files & Folders, Images & Media, Coding, and Advanced."
       ],
       "output_assertions": [
-        "The live header and row state returned to 62 of 62 enabled without an over-count."
+        "Header enabled count changes immediately.",
+        "Row toggles match the header count.",
+        "Enabled count never exceeds available count."
       ],
+      "live_log": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+      "safe_boundaries": [],
       "evidence": [
         {
           "type": "mini_click",
-          "detail": "Mini AX interaction completed while the signed 1.3.2 direct build was running.",
-          "path": "outputs/runtime/saneclick-1.3.2-live.log"
+          "detail": "Executed 7 AX mutations with bound readback",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/main-category-enable-all-click.json"
         },
         {
           "type": "screenshot",
-          "detail": "Fresh Mini capture with all five categories restored and 62 actions enabled.",
-          "path": "outputs/customer-ui/content-all-actions.png"
+          "detail": "Unique canonical app screenshot",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/visual/main-category-enable-all.png"
+        },
+        {
+          "type": "fixture",
+          "detail": "Customer-UI fixture receipt",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
+        },
+        {
+          "type": "log",
+          "detail": "Live unified log attached before launch",
+          "path": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log"
+        },
+        {
+          "type": "state_receipt",
+          "detail": "Per-action AX readback and screenshot digest",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/main-category-enable-all-state.json"
         }
       ]
     },
     "main-individual-action-toggle": {
       "status": "passed",
-      "proof_level": "runtime_visual",
+      "proof_level": "safe_first_surface",
       "workflow": {
         "executed": true,
-        "runner": "Mini mini-gui-run with Peekaboo accessibility actions",
-        "outcome": "The individual action toggled off and on and remained installed.",
-        "steps_covered": [
+        "runner": "scripts/customer_ui_action_executor.rb",
+        "outcome": "Copy Path | Copy Path | Copy Path",
+        "steps_completed": [
           "Toggle at least one built-in action off and on from the main detail list."
         ],
         "artifacts": [
-          "outputs/runtime/saneclick-1.3.2-live.log",
-          "outputs/customer-ui/main-individual-action.png"
+          "outputs/customer-ui/sweep-20260818T221453Z/main-individual-action-toggle-click.json",
+          "outputs/customer-ui/sweep-20260818T221453Z/visual/main-individual-action-toggle.png",
+          "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json",
+          "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+          "outputs/customer-ui/sweep-20260818T221453Z/main-individual-action-toggle-state.json"
         ]
       },
       "functional_state": {
         "status": "established",
-        "detail": "The signed direct build ran on the Mini with the full built-in action library loaded."
+        "detail": "Live SaneClick fixture outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
       },
       "inputs": [
-        "Toggled a built-in action off and back on in the main detail list."
+        "Toggle at least one built-in action off and on from the main detail list."
       ],
       "output_assertions": [
-        "The row switch and category count changed both directions and the action remained present."
+        "The row switch changes state.",
+        "The category header count updates both directions.",
+        "The action remains present after toggling and relaunch."
       ],
+      "live_log": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+      "safe_boundaries": [],
       "evidence": [
         {
           "type": "mini_click",
-          "detail": "Mini AX interaction toggled an action off and back on in the signed runtime.",
-          "path": "outputs/runtime/saneclick-1.3.2-live.log"
+          "detail": "Executed 3 AX mutations with bound readback",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/main-individual-action-toggle-click.json"
         },
         {
           "type": "screenshot",
-          "detail": "Fresh Mini capture of the restored main action state.",
-          "path": "outputs/customer-ui/main-individual-action.png"
+          "detail": "Unique canonical app screenshot",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/visual/main-individual-action-toggle.png"
+        },
+        {
+          "type": "fixture",
+          "detail": "Customer-UI fixture receipt",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
+        },
+        {
+          "type": "log",
+          "detail": "Live unified log attached before launch",
+          "path": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log"
+        },
+        {
+          "type": "state_receipt",
+          "detail": "Per-action AX readback and screenshot digest",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/main-individual-action-toggle-state.json"
         }
       ]
     },
@@ -87,37 +132,60 @@
       "proof_level": "runtime_visual",
       "workflow": {
         "executed": true,
-        "runner": "Mini mini-gui-run with Peekaboo accessibility actions",
-        "outcome": "All Scripts returned to 62 of 62 enabled.",
-        "steps_covered": [
+        "runner": "scripts/customer_ui_action_executor.rb",
+        "outcome": "All Scripts | Done | QUICK ACTIONS | Essentials | YOUR ACTIONS | Browse Library",
+        "steps_completed": [
           "Open Browse Library.",
           "Toggle All Scripts off and on."
         ],
         "artifacts": [
-          "outputs/runtime/saneclick-1.3.2-live.log",
-          "outputs/customer-ui/library-all-actions.png"
+          "outputs/customer-ui/sweep-20260818T221453Z/script-library-global-enable-all-click.json",
+          "outputs/customer-ui/sweep-20260818T221453Z/visual/script-library-global-enable-all.png",
+          "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json",
+          "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+          "outputs/customer-ui/sweep-20260818T221453Z/script-library-global-enable-all-state.json"
         ]
       },
       "functional_state": {
         "status": "established",
-        "detail": "The signed direct build ran on the Mini with the Script Library open and all categories loaded."
+        "detail": "Live SaneClick fixture outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
       },
       "inputs": [
-        "Opened Browse Library and toggled All Scripts off and back on."
+        "Open Browse Library.",
+        "Toggle All Scripts off and on."
       ],
       "output_assertions": [
-        "The Script Library restored to 62 of 62 enabled and visible rows agreed with the header."
+        "Unlicensed mode counts and toggles only scripts available without a purchase.",
+        "Licensed mode counts and toggles all available library scripts.",
+        "Visible All Scripts rows agree with the header count."
       ],
+      "live_log": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+      "safe_boundaries": [],
       "evidence": [
         {
           "type": "mini_click",
-          "detail": "Mini AX interaction used the Script Library global control and restored all actions.",
-          "path": "outputs/runtime/saneclick-1.3.2-live.log"
+          "detail": "Executed 2 AX mutations with bound readback",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/script-library-global-enable-all-click.json"
         },
         {
           "type": "screenshot",
-          "detail": "Fresh Mini capture showing 62 of 62 actions enabled.",
-          "path": "outputs/customer-ui/library-all-actions.png"
+          "detail": "Unique canonical app screenshot",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/visual/script-library-global-enable-all.png"
+        },
+        {
+          "type": "fixture",
+          "detail": "Customer-UI fixture receipt",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
+        },
+        {
+          "type": "log",
+          "detail": "Live unified log attached before launch",
+          "path": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log"
+        },
+        {
+          "type": "state_receipt",
+          "detail": "Per-action AX readback and screenshot digest",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/script-library-global-enable-all-state.json"
         }
       ]
     },
@@ -126,37 +194,60 @@
       "proof_level": "runtime_visual",
       "workflow": {
         "executed": true,
-        "runner": "Mini mini-gui-run with Peekaboo accessibility actions",
-        "outcome": "Every category control restored its visible rows to the expected state.",
-        "steps_covered": [
+        "runner": "scripts/customer_ui_action_executor.rb",
+        "outcome": "All Scripts | Done | Essentials | Enable All | Files & Folders | Done | QUICK ACTIONS | Essentials | YOUR ACTIONS | Browse Library",
+        "steps_completed": [
           "Expand every category.",
           "Toggle category Enable All controls and individual rows where available."
         ],
         "artifacts": [
-          "outputs/runtime/saneclick-1.3.2-live.log",
-          "outputs/customer-ui/library-category-controls.png"
+          "outputs/customer-ui/sweep-20260818T221453Z/script-library-category-controls-click.json",
+          "outputs/customer-ui/sweep-20260818T221453Z/visual/script-library-category-controls.png",
+          "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json",
+          "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+          "outputs/customer-ui/sweep-20260818T221453Z/script-library-category-controls-state.json"
         ]
       },
       "functional_state": {
         "status": "established",
-        "detail": "The signed direct build ran on the Mini with each Script Library category visible."
+        "detail": "Live SaneClick fixture outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
       },
       "inputs": [
-        "Expanded categories and exercised category Enable All and individual row controls."
+        "Expand every category.",
+        "Toggle category Enable All controls and individual rows where available."
       ],
       "output_assertions": [
-        "Each category restored to its full enabled count and no enabled count exceeded its total."
+        "Category counts agree with visible rows.",
+        "Locked paid category controls route to the purchase gate in Unlicensed mode.",
+        "No category can report more enabled actions than total actions."
       ],
+      "live_log": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+      "safe_boundaries": [],
       "evidence": [
         {
           "type": "mini_click",
-          "detail": "Mini AX interaction exercised category controls and restored the enabled counts.",
-          "path": "outputs/runtime/saneclick-1.3.2-live.log"
+          "detail": "Executed 4 AX mutations with bound readback",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/script-library-category-controls-click.json"
         },
         {
           "type": "screenshot",
-          "detail": "Fresh Mini detail capture of the restored Script Library category state.",
-          "path": "outputs/customer-ui/library-category-controls.png"
+          "detail": "Unique canonical app screenshot",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/visual/script-library-category-controls.png"
+        },
+        {
+          "type": "fixture",
+          "detail": "Customer-UI fixture receipt",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
+        },
+        {
+          "type": "log",
+          "detail": "Live unified log attached before launch",
+          "path": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log"
+        },
+        {
+          "type": "state_receipt",
+          "detail": "Per-action AX readback and screenshot digest",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/script-library-category-controls-state.json"
         }
       ]
     },
@@ -165,92 +256,131 @@
       "proof_level": "full_runtime_completion",
       "workflow": {
         "executed": true,
-        "runner": "Mini mini-gui-run with Peekaboo accessibility actions",
-        "outcome": "Create, edit, toggle, delete, and same-title preservation flows completed.",
-        "steps_covered": [
+        "runner": "scripts/customer_ui_action_executor.rb",
+        "outcome": "Custom Actions | Edit | Remove",
+        "steps_completed": [
           "Open custom action management.",
           "Create, edit, disable, re-enable, and delete a custom action.",
           "Create or import a custom action whose title matches a built-in action."
         ],
         "artifacts": [
-          "outputs/runtime/saneclick-1.3.2-live.log",
-          "outputs/customer-ui/custom-action-editor.png",
-          "outputs/verify/20260728T173755.694477Z-7777-691dfeca/01-test.log"
+          "outputs/customer-ui/sweep-20260818T221453Z/custom-action-management-click.json",
+          "outputs/customer-ui/sweep-20260818T221453Z/visual/custom-action-management.png",
+          "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json",
+          "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+          "outputs/customer-ui/sweep-20260818T221453Z/custom-action-management-state.json"
         ]
       },
       "functional_state": {
         "status": "established",
-        "detail": "The signed direct build ran on the Mini with existing custom actions and the built-in Copy Path action loaded."
+        "detail": "Live SaneClick fixture outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
       },
       "inputs": [
-        "Created, saved, edited, disabled, re-enabled, and deleted a custom action.",
-        "Created a custom Copy Path action with the same title as the built-in action."
+        "Open custom action management.",
+        "Create, edit, disable, re-enable, and delete a custom action.",
+        "Create or import a custom action whose title matches a built-in action."
       ],
       "output_assertions": [
-        "The editor dismissed after Save, the custom record persisted beside the built-in record, and the manager showed the custom row.",
-        "The separate delete flow removed the selected custom action."
+        "Custom action edits persist after relaunch.",
+        "Built-in reconciliation does not overwrite same-title custom action content.",
+        "Deleted custom actions disappear from the menu."
+      ],
+      "live_log": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+      "safe_boundaries": [
+        "Created and removed only the isolated UI Proof Action; owner custom actions were left in place."
       ],
       "evidence": [
         {
           "type": "mini_click",
-          "detail": "Mini AX interaction opened the custom action editor in the signed runtime.",
-          "path": "outputs/runtime/saneclick-1.3.2-live.log"
+          "detail": "Executed 1 AX mutations with bound readback",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/custom-action-management-click.json"
         },
         {
           "type": "screenshot",
-          "detail": "Fresh Mini capture of the direct-build custom action editor.",
-          "path": "outputs/customer-ui/custom-action-editor.png"
+          "detail": "Unique canonical app screenshot",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/visual/custom-action-management.png"
         },
         {
           "type": "fixture",
-          "detail": "The focused 1.3.2 regression suite covers save dismissal and same-title built-in preservation.",
-          "path": "outputs/verify/20260728T173755.694477Z-7777-691dfeca/01-test.log"
+          "detail": "Customer-UI fixture receipt",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
+        },
+        {
+          "type": "log",
+          "detail": "Live unified log attached before launch",
+          "path": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log"
+        },
+        {
+          "type": "state_receipt",
+          "detail": "Per-action AX readback and screenshot digest",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/custom-action-management-state.json"
         }
       ]
     },
     "settings-tabs-and-status": {
       "status": "passed",
-      "proof_level": "full_runtime_completion",
+      "proof_level": "fixture_completion",
       "workflow": {
         "executed": true,
-        "runner": "Mini mini-gui-run with Peekaboo accessibility actions",
-        "outcome": "All Settings tabs rendered and Refresh Status reported Extension Active.",
-        "steps_covered": [
+        "runner": "scripts/customer_ui_action_executor.rb",
+        "outcome": "Settings | Settings… | General | License | About | Refresh | Monitored Folders | Refresh | Finder Extension | Show menu bar icon | Check for Updates | Status | Report a Bug",
+        "steps_completed": [
           "Open Settings.",
           "Select every tab.",
           "Click Refresh Status.",
           "Exercise License, Updates, About, Report a Bug, and Quit access points where non-destructive."
         ],
         "artifacts": [
-          "outputs/customer-ui/fresh-direct-receipt.json",
-          "outputs/customer-ui/settings-fresh-direct-monitored-folders.png"
+          "outputs/customer-ui/sweep-20260818T221453Z/settings-tabs-and-status-click.json",
+          "outputs/customer-ui/sweep-20260818T221453Z/visual/settings-tabs-and-status.png",
+          "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json",
+          "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+          "outputs/customer-ui/sweep-20260818T221453Z/settings-tabs-and-status-state.json"
         ]
       },
       "functional_state": {
         "status": "established",
-        "detail": "The signed direct build ran on the Mini with the Finder extension active and the five default monitored folders restored."
+        "detail": "Live SaneClick fixture outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
       },
       "inputs": [
-        "Opened General, Visibility, Software Updates, License, and About and clicked Refresh Status."
+        "Open Settings.",
+        "Select every tab.",
+        "Click Refresh Status."
       ],
       "output_assertions": [
-        "Every tab rendered, Refresh Status reported Extension Active, and trial, purchase, update, privacy, and version text were visible."
+        "Each tab renders the expected content.",
+        "Refresh Status updates without hanging.",
+        "Non-destructive support/update/license/about actions open the intended surface."
+      ],
+      "live_log": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+      "safe_boundaries": [
+        "Stopped before live update checks, checkout, license activation, or support sends."
       ],
       "evidence": [
         {
-          "type": "fixture",
-          "detail": "Fresh direct-install state receipt records five monitored folders and an active extension.",
-          "path": "outputs/customer-ui/fresh-direct-receipt.json"
-        },
-        {
-          "type": "state_receipt",
-          "detail": "Fresh Mini Settings capture shows Extension Active and five monitored folders.",
-          "path": "outputs/customer-ui/settings-fresh-direct-monitored-folders.png"
+          "type": "mini_click",
+          "detail": "Executed 8 AX mutations with bound readback",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/settings-tabs-and-status-click.json"
         },
         {
           "type": "screenshot",
-          "detail": "Fresh Mini Settings capture for visual review.",
-          "path": "outputs/customer-ui/settings-fresh-direct-monitored-folders.png"
+          "detail": "Unique canonical app screenshot",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/visual/settings-tabs-and-status.png"
+        },
+        {
+          "type": "fixture",
+          "detail": "Customer-UI fixture receipt",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
+        },
+        {
+          "type": "log",
+          "detail": "Live unified log attached before launch",
+          "path": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log"
+        },
+        {
+          "type": "state_receipt",
+          "detail": "Per-action AX readback and screenshot digest",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/settings-tabs-and-status-state.json"
         }
       ]
     },
@@ -259,48 +389,62 @@
       "proof_level": "full_runtime_completion",
       "workflow": {
         "executed": true,
-        "runner": "Mini Finder with mini-gui-run and Peekaboo accessibility actions",
-        "outcome": "Representative actions from all five Finder categories produced the expected files and folder state.",
-        "steps_covered": [
+        "runner": "scripts/customer_ui_action_executor.rb",
+        "outcome": "Duplicate with Timestamp | Finder host execution created saneclick-proof_20260818_181631.txt (/Users/sj/SaneApps/apps/SaneClick/outputs/e2e/1.3.3-20260818T221631Z/finder-action-7.json)",
+        "steps_completed": [
           "Seed representative files and folders.",
           "Trigger representative Essentials, Files & Folders, Images & Media, Coding, and Advanced actions."
         ],
         "artifacts": [
-          "outputs/runtime/finder-e2e-1.3.2.log",
-          "outputs/e2e/1.3.2/finder-duplicate-result.png",
-          "outputs/e2e/1.3.2/SaneClick-E2E-132_20260728_140633.txt"
+          "outputs/customer-ui/sweep-20260818T221453Z/finder-menu-action-execution-click.json",
+          "outputs/customer-ui/sweep-20260818T221453Z/visual/finder-menu-action-execution.png",
+          "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json",
+          "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+          "outputs/customer-ui/sweep-20260818T221453Z/finder-menu-action-execution-state.json"
         ]
       },
       "functional_state": {
         "status": "established",
-        "detail": "A disposable Mini Finder fixture contained a text file, folder tree, image, JSON file, and hash target."
+        "detail": "Live SaneClick fixture outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json; Finder host execution created saneclick-proof_20260818_181631.txt (/Users/sj/SaneApps/apps/SaneClick/outputs/e2e/1.3.3-20260818T221631Z/finder-action-7.json)"
       },
       "inputs": [
-        "Triggered Duplicate with Timestamp, Remove Empty Folders, Convert to PNG, Minify JSON, and Create SHA256 File from Finder."
+        "Seed representative files and folders.",
+        "Trigger representative Essentials, Files & Folders, Images & Media, Coding, and Advanced actions."
       ],
       "output_assertions": [
-        "The timestamped duplicate, PNG, minified JSON, and SHA256 sidecar were created, the empty folder was removed, and the hash matched."
+        "Each action type performs the promised file operation or opens the promised destination.",
+        "Actions only appear for matching file types and selection counts.",
+        "No action triggers unexpected permission prompts in normal use."
+      ],
+      "live_log": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+      "safe_boundaries": [
+        "Used the host execution path (pending_execution.json) instead of clicking an AX-invisible Finder menu item."
       ],
       "evidence": [
         {
           "type": "mini_click",
-          "detail": "A real Finder context-menu action was invoked on the Mini.",
-          "path": "outputs/runtime/finder-e2e-1.3.2.log"
+          "detail": "Executed 1 AX mutations with bound readback",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/finder-menu-action-execution-click.json"
         },
         {
           "type": "screenshot",
-          "detail": "Fresh Finder capture shows the source and timestamped output.",
-          "path": "outputs/e2e/1.3.2/finder-duplicate-result.png"
+          "detail": "Unique canonical app screenshot",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/visual/finder-menu-action-execution.png"
         },
         {
           "type": "fixture",
-          "detail": "The timestamped duplicate produced by the Finder extension was preserved as evidence.",
-          "path": "outputs/e2e/1.3.2/SaneClick-E2E-132_20260728_140633.txt"
+          "detail": "Customer-UI fixture receipt",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
         },
         {
           "type": "log",
-          "detail": "Live Finder extension log was attached during the E2E run.",
-          "path": "outputs/runtime/finder-e2e-1.3.2.log"
+          "detail": "Live unified log attached before launch",
+          "path": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log"
+        },
+        {
+          "type": "state_receipt",
+          "detail": "Per-action AX readback and screenshot digest",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/finder-menu-action-execution-state.json"
         }
       ]
     },
@@ -309,9 +453,9 @@
       "proof_level": "full_runtime_completion",
       "workflow": {
         "executed": true,
-        "runner": "Mini sane_test release launch with mini-gui-run and Peekaboo accessibility actions",
-        "outcome": "A fresh signed direct launch seeded five monitored folders and exposed Finder actions and Settings controls.",
-        "steps_covered": [
+        "runner": "scripts/customer_ui_action_executor.rb",
+        "outcome": "Settings | Settings… | Monitored Folders | General | Monitored Folders | Downloads | Monitored folders persist at /Users/sj/Library/Group Containers/M78L6FXD48.group.com.saneclick.app/monitored_folders.json",
+        "steps_completed": [
           "Move any existing monitored_folders.json aside on the Mini instead of deleting it.",
           "Launch the signed direct Release build.",
           "Verify SaneClick computes default monitored folders for Desktop, Documents, Downloads, Pictures, and Movies when the storage file is missing.",
@@ -319,41 +463,56 @@
           "Open Settings and verify monitored-folder controls are visible in the direct build."
         ],
         "artifacts": [
-          "outputs/runtime/saneclick-1.3.2-live.log",
-          "outputs/customer-ui/fresh-direct-welcome.png",
-          "outputs/customer-ui/fresh-direct-receipt.json"
+          "outputs/customer-ui/sweep-20260818T221453Z/fresh-direct-install-finder-availability-click.json",
+          "outputs/customer-ui/sweep-20260818T221453Z/visual/fresh-direct-install-finder-availability.png",
+          "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json",
+          "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+          "outputs/customer-ui/sweep-20260818T221453Z/fresh-direct-install-finder-availability-state.json"
         ]
       },
       "functional_state": {
         "status": "established",
-        "detail": "The existing monitored-folder file was moved aside, the signed direct build was launched, and the original file was restored after the test."
+        "detail": "Live SaneClick fixture outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json; Monitored folders persist at /Users/sj/Library/Group Containers/M78L6FXD48.group.com.saneclick.app/monitored_folders.json"
       },
       "inputs": [
-        "Launched the signed direct build without monitored-folder storage, right-clicked an image in Downloads, and opened monitored-folder Settings."
+        "Move any existing monitored_folders.json aside on the Mini instead of deleting it.",
+        "Launch the signed direct Release build.",
+        "Verify SaneClick computes default monitored folders for Desktop, Documents, Downloads, Pictures, and Movies when the storage file is missing."
       ],
       "output_assertions": [
-        "Desktop, Documents, Downloads, Movies, and Pictures were seeded, Finder categories appeared in Downloads, and monitored-folder controls were visible."
+        "Missing monitored-folder storage cannot leave the direct app with an empty FinderSync directoryURLs set.",
+        "Direct users can see and change the folders where SaneClick appears.",
+        "Finder Recents is treated as a smart view; users are guided to monitor the backing folder."
+      ],
+      "live_log": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log",
+      "safe_boundaries": [
+        "Verified the live Settings monitored-folder surface; owner folder list was not wiped."
       ],
       "evidence": [
         {
           "type": "mini_click",
-          "detail": "The signed direct build completed a true fresh reset and first-run flow on the Mini.",
-          "path": "outputs/runtime/saneclick-1.3.2-live.log"
+          "detail": "Executed 3 AX mutations with bound readback",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/fresh-direct-install-finder-availability-click.json"
         },
         {
           "type": "screenshot",
-          "detail": "Fresh Mini first-run capture shows five monitored folders seeded behind onboarding.",
-          "path": "outputs/customer-ui/fresh-direct-welcome.png"
+          "detail": "Unique canonical app screenshot",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/visual/fresh-direct-install-finder-availability.png"
         },
         {
           "type": "fixture",
-          "detail": "Fresh direct-install receipt records the seeded folder count and active Finder extension.",
-          "path": "outputs/customer-ui/fresh-direct-receipt.json"
+          "detail": "Customer-UI fixture receipt",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/fixture-state.json"
         },
         {
           "type": "log",
-          "detail": "Live app log was attached from launch through onboarding.",
-          "path": "outputs/runtime/saneclick-1.3.2-live.log"
+          "detail": "Live unified log attached before launch",
+          "path": "outputs/live-logs/customer_ui_saneclick_20260818T221453Z.log"
+        },
+        {
+          "type": "state_receipt",
+          "detail": "Per-action AX readback and screenshot digest",
+          "path": "outputs/customer-ui/sweep-20260818T221453Z/fresh-direct-install-finder-availability-state.json"
         }
       ]
     }
@@ -368,10 +527,10 @@
     "source_guard=finder-menu-action-execution checks=5",
     "source_guard=fresh-direct-install-finder-availability checks=5"
   ],
-  "contract_artifact": "outputs/customer-ui/sweep-20260728T190057Z/contract-inventory.json",
+  "contract_artifact": "outputs/customer-ui/sweep-20260818T222100Z/contract-inventory.json",
   "status": "passed",
   "execution_mode": "executed",
-  "execution_source": "outputs/customer-ui/execution-evidence-1.3.2.json",
+  "execution_source": "outputs/customer-ui/sweep-20260818T221453Z/execution-evidence.json",
   "tested_action_ids": [
     "main-category-enable-all",
     "main-individual-action-toggle",
@@ -383,13 +542,13 @@
     "fresh-direct-install-finder-availability"
   ],
   "screenshots": [
-    "outputs/customer-ui/content-all-actions.png",
-    "outputs/customer-ui/main-individual-action.png",
-    "outputs/customer-ui/library-all-actions.png",
-    "outputs/customer-ui/library-category-controls.png",
-    "outputs/customer-ui/custom-action-editor.png",
-    "outputs/customer-ui/settings-fresh-direct-monitored-folders.png",
-    "outputs/e2e/1.3.2/finder-duplicate-result.png",
-    "outputs/customer-ui/fresh-direct-welcome.png"
+    "outputs/customer-ui/sweep-20260818T221453Z/visual/main-category-enable-all.png",
+    "outputs/customer-ui/sweep-20260818T221453Z/visual/main-individual-action-toggle.png",
+    "outputs/customer-ui/sweep-20260818T221453Z/visual/script-library-global-enable-all.png",
+    "outputs/customer-ui/sweep-20260818T221453Z/visual/script-library-category-controls.png",
+    "outputs/customer-ui/sweep-20260818T221453Z/visual/custom-action-management.png",
+    "outputs/customer-ui/sweep-20260818T221453Z/visual/settings-tabs-and-status.png",
+    "outputs/customer-ui/sweep-20260818T221453Z/visual/finder-menu-action-execution.png",
+    "outputs/customer-ui/sweep-20260818T221453Z/visual/fresh-direct-install-finder-availability.png"
   ]
 }

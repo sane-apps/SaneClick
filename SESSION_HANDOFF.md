@@ -1,6 +1,26 @@
 # Session Handoff — SaneClick
 
-**Last updated:** 2026-08-14 22:30 EDT
+**Last updated:** 2026-08-18 18:23 EDT
+
+## 2026-08-18 18:23 — 1.3.3 ready to publish
+
+Air customer-UI 8-action receipt passed (`outputs/customer-ui/sweep-20260818T221453Z/`).
+Finder host execution created `saneclick-proof_20260818_181326.txt`.
+`release_preflight` green (193 tests). Sparkle/Homebrew still on 1.3.2 until
+`release.sh --full --deploy`. LS ZIP goes in `~/Desktop/LemonSqueezy-Uploads`.
+
+Trial model: 14 days of every Finder action, then a hard buy gate. No leftover
+Basic set after expiry.
+
+## 2026-08-17 23:15 — 2am publish scheduled
+
+One-shot Grok task `SaneApps 2am publish` fires 2026-08-18 02:00 ET.
+Brief: `~/SaneApps/outputs/release-2am-2026-08-18.md`. Action 7 Finder proof
+already passed (`outputs/e2e/1.3.3-20260818T025902Z/`). Still need the 8-action
+runtime sweep + preflight before publishing 1.3.3. Do not start while the
+owner is on Mini.
+
+## 2026-08-14 22:30 EDT
 
 ## 2026-08-14 Action 7
 
