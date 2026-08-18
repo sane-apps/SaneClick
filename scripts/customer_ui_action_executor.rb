@@ -505,7 +505,14 @@ class SaneClickUIActionExecutor
     return 'Default monitored folders are computed when the storage file is missing' if path.nil?
 
     payload = JSON.parse(File.read(path))
-    names = Array(payload['folders'] || payload['paths'] || payload).map(&:to_s).join(' ')
+    folders = if payload.is_a?(Array)
+                payload
+              else
+                Array(payload['folders'] || payload['paths'])
+              end
+    names = folders.map do |item|
+      item.is_a?(Hash) ? (item['name'] || item['path']).to_s : item.to_s
+    end.join(' ')
     raise "Monitored folders file is empty: #{path}" if names.strip.empty?
 
     "Monitored folders persist at #{path}"
