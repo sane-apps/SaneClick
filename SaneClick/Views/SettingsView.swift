@@ -646,6 +646,7 @@ struct ScriptRow: View {
             .toggleStyle(.switch)
             .labelsHidden()
             .tint(successGreen)
+            .accessibilityLabel("Toggle \(script.name)")
 
             Button(action: onEdit) {
                 Label("Edit", systemImage: "pencil")
@@ -658,6 +659,7 @@ struct ScriptRow: View {
             .background(Color.saneSmoke)
             .clipShape(RoundedRectangle(cornerRadius: 7))
             .accessibilityIdentifier("editCustomActionButton")
+            .accessibilityLabel("Edit \(script.name)")
 
             Button(role: .destructive, action: onDelete) {
                 Label("Remove", systemImage: "trash")
@@ -670,6 +672,7 @@ struct ScriptRow: View {
             .background(Color.saneSmoke)
             .clipShape(RoundedRectangle(cornerRadius: 7))
             .accessibilityIdentifier("removeCustomActionButton")
+            .accessibilityLabel("Remove \(script.name)")
         }
         .padding(14)
         .background {

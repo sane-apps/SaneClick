@@ -163,12 +163,12 @@ class SaneClickUIActionExecutor
              value: 'echo ui-proof', expected: [['Save', 'echo ui-proof', FIXTURE_ACTION]]),
         step('Save', action: 'press', roles: 'AXButton',
              expected: [['QUICK ACTIONS', 'Manage Custom Actions', FIXTURE_ACTION]]),
-        step('Manage Custom Actions', action: 'press', expected: [['Custom Actions'], ['editCustomActionButton', 'Edit'], FIXTURE_ACTION]),
-        step(['editCustomActionButton', 'Edit'], action: 'press', expected: [['Save'], [FIXTURE_ACTION]]),
+        step('Manage Custom Actions', action: 'press', expected: [['Custom Actions'], ['Edit UI Proof Action', 'Edit'], FIXTURE_ACTION]),
+        step(['Edit UI Proof Action', 'editCustomActionButton'], action: 'press', expected: [['Save'], [FIXTURE_ACTION]]),
         step('Cancel', action: 'press', expected: [['Custom Actions', 'Manage Custom Actions', 'QUICK ACTIONS']]),
-        step(['removeCustomActionButton', 'Remove'], action: 'press', expected: [['Remove', 'Cancel']]),
-        step(['Remove "UI Proof Action"', 'Remove'], action: 'press', roles: 'AXButton',
-             expected: [['No Custom Actions', 'QUICK ACTIONS', 'Manage Custom Actions']])
+        step(['Remove UI Proof Action', 'removeCustomActionButton'], action: 'press', expected: [['Remove', 'Cancel']]),
+        step(['Remove "UI Proof Action"', 'Remove UI Proof Action'], action: 'press', roles: 'AXButton',
+             expected: [['QUICK ACTIONS', 'Manage Custom Actions', 'No Custom Actions']])
       ],
       'settings-tabs-and-status' => [
         step('SaneClick', action: 'press', roles: 'AXMenuBarItem', expected: [['Settings'], ['Settings…', 'Settings...']]),
