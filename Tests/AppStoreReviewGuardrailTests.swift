@@ -11,7 +11,7 @@ private final class MenuActionTarget: NSObject {
 
 @MainActor
 struct AppStoreReviewGuardrailTests {
-    private let everythingBundleSaneUIRevision = "7f87b04bd74c6903a34e715ff46adf583d854f87"
+    private let everythingBundleSaneUIRevision = "387e29166b1a2b9502840ea0bd09b50fa199e873"
 
     @Test("Everything Bundle entitlement uses the pinned SaneUI policy")
     func everythingBundleEntitlementUsesPinnedSaneUIPolicy() throws {
@@ -363,6 +363,43 @@ struct AppStoreReviewGuardrailTests {
         let lookupEnd = try #require(executorSource.range(of: "if let script = ScriptStore.shared.scripts.first"))
         let lookupPreamble = String(executorSource[lookupStart.lowerBound ..< lookupEnd.lowerBound])
         #expect(lookupPreamble.contains("ScriptStore.shared.loadIfNeeded()"))
+    }
+
+    @Test("Direct expired trial stops Finder actions instead of leaving a free forever set")
+    func directExpiredTrialStopsFinderActions() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let executorSource = try String(
+            contentsOf: projectRoot.appendingPathComponent("SaneClick/Services/ScriptExecutor.swift"),
+            encoding: .utf8
+        )
+        let appSource = try String(
+            contentsOf: projectRoot.appendingPathComponent("SaneClick/SaneClickApp.swift"),
+            encoding: .utf8
+        )
+        #expect(executorSource.contains("if license.hasExpiredProTrial { return false }"))
+        #expect(executorSource.contains("WindowActionStorage.shared.showMainWindow()"))
+        #expect(appSource.contains("Finder actions are off. Buy once to turn them back on."))
+    }
+
+    @Test("Enable All and row switches have spoken names")
+    func enableAllAndRowSwitchesHaveSpokenNames() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let contentView = try String(
+            contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/ContentView.swift"),
+            encoding: .utf8
+        )
+        let libraryView = try String(
+            contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/ScriptLibraryView.swift"),
+            encoding: .utf8
+        )
+        #expect(contentView.contains("Enable All \\(category.rawValue)"))
+        #expect(contentView.contains("Toggle \\(libraryScript.name)"))
+        #expect(libraryView.contains("Enable All Scripts"))
+        #expect(libraryView.contains("library-enable-all-"))
     }
 
     @Test("Settings use shared SaneUI shell and standardized direct license copy")

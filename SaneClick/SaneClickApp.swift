@@ -300,7 +300,11 @@ struct SaneClickApp: App {
     var body: some Scene {
         WindowGroup(id: "main") {
             if licenseService.hasExpiredProTrial {
-                LicenseGateView(licenseService: licenseService, appIcon: "cursorarrow.click.2")
+                LicenseGateView(
+                    licenseService: licenseService,
+                    appIcon: "cursorarrow.click.2",
+                    expiredDetail: "Finder actions are off. Buy once to turn them back on."
+                )
                     .preferredColorScheme(.dark)
                     .onAppear {
                         licenseService.checkCachedLicense()

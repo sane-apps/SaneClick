@@ -159,6 +159,8 @@ struct ScriptLibraryView: View {
                     .toggleStyle(.switch)
                     .labelsHidden()
                     .tint(Color.saneAccent)
+                    .accessibilityLabel(allEnabled ? "All On Scripts" : "Enable All Scripts")
+                    .accessibilityIdentifier("enable-all-scripts")
 
                     Text(allEnabled ? "All On" : "Enable All")
                         .font(.system(size: 13))
@@ -322,6 +324,8 @@ struct ScriptLibraryView: View {
                         .toggleStyle(.switch)
                         .labelsHidden()
                         .tint(categoryColor)
+                        .accessibilityLabel(allCategoryEnabled ? "All On \(category.rawValue)" : "Enable All \(category.rawValue)")
+                        .accessibilityIdentifier("library-enable-all-\(category.rawValue)")
 
                         Text(allCategoryEnabled ? "All On" : "Enable All")
                             .font(.system(size: 13))

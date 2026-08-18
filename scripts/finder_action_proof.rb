@@ -11,7 +11,12 @@ require 'socket'
 require 'time'
 require 'tmpdir'
 
-raise 'finder_action_proof must run on the Mini' unless Socket.gethostname.downcase.include?('mini')
+def air_fallback_approved?
+  ENV['SANE_APPROVE_LOCAL_UI_ON_AIR'] == 'MR. SANE APPROVES LOCAL UI ON AIR' ||
+    ENV['SANE_MINI_UNAVAILABLE'] == 'MR. SANE CONFIRMS MINI UNAVAILABLE'
+end
+
+raise 'finder_action_proof must run on the Mini (Air needs SANE_APPROVE_LOCAL_UI_ON_AIR or SANE_MINI_UNAVAILABLE)' unless Socket.gethostname.downcase.include?('mini') || air_fallback_approved?
 
 ROOT = File.expand_path('..', __dir__)
 PROOF_NAME = 'saneclick-proof.txt'

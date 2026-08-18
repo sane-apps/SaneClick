@@ -4,9 +4,13 @@ All notable changes to SaneClick are documented here.
 
 ---
 
-## [1.3.3] - 2026-07-29
+## [1.3.3] - 2026-08-18
 
 Restores direct-download license recognition for SaneApps bundle purchases.
+Every Finder action works for 14 days; when the trial ends, actions stop
+and SaneClick asks to buy once. Also loads the action library before a
+Finder click so Duplicate and the rest still run during the trial. Enable
+All and per-action switches now have spoken names.
 
 ## [1.3.2] - 2026-07-27
 

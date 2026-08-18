@@ -359,6 +359,8 @@ struct ContentView: View {
                             .toggleStyle(.switch)
                             .labelsHidden()
                             .tint(categoryColor)
+                            .accessibilityLabel(allEnabled ? "All On \(category.rawValue)" : "Enable All \(category.rawValue)")
+                            .accessibilityIdentifier("enable-all-\(category.rawValue)")
 
                             Text(allEnabled ? "All On" : "Enable All")
                                 .font(.system(size: 13))
@@ -651,6 +653,8 @@ struct LibraryScriptRow: View {
                 .toggleStyle(.switch)
                 .labelsHidden()
                 .tint(successGreen)
+                .accessibilityLabel("Toggle \(libraryScript.name)")
+                .accessibilityIdentifier("toggle-\(libraryScript.name)")
             }
         }
         .padding(14)

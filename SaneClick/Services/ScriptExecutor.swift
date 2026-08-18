@@ -248,13 +248,16 @@ final class ScriptExecutor: @unchecked Sendable {
             // Find and execute the script on main thread
             DispatchQueue.main.async {
                 // License-gate windows never mount ContentView, so ScriptStore
-                // would stay empty and every Finder action would miss. Load
-                // here so Basic actions still run after a trial expires.
+                // would stay empty and Finder actions would miss. Load here so
+                // a live trial or license can still run from the host app.
                 ScriptStore.shared.loadIfNeeded()
                 if let script = ScriptStore.shared.scripts.first(where: { $0.id == request.scriptId }) {
                     guard self.canExecute(script: script) else {
-                        NSLog("[ScriptExecutor] Blocked paid action without a valid license")
+                        NSLog("[ScriptExecutor] Blocked Finder action without a valid license")
                         Task { @MainActor in
+                            if self.currentLicenseService().hasExpiredProTrial {
+                                WindowActionStorage.shared.showMainWindow()
+                            }
                             Self.lastResult = .failure(scriptName: script.name, error: "This action requires a SaneClick purchase.")
                             NotificationCenter.default.post(name: Self.executionCompletedNotification, object: nil)
                         }
@@ -287,8 +290,14 @@ final class ScriptExecutor: @unchecked Sendable {
 
     @MainActor
     private func canExecute(script: Script) -> Bool {
-        guard !currentLicenseService().isPro else { return true }
-        return ActionCatalog.isAvailableInBasic(script)
+        let license = currentLicenseService()
+        #if APP_STORE
+            if license.isPro { return true }
+            return ActionCatalog.isAvailableInBasic(script)
+        #else
+            if license.hasExpiredProTrial { return false }
+            return license.isPro
+        #endif
     }
 
     @MainActor

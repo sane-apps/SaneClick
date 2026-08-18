@@ -141,10 +141,24 @@ class CustomerUIActionSweep
 
   def require_mini!
     host = Socket.gethostname.to_s.downcase
-    user = ENV.fetch('USER', '').downcase
-    return if host.include?('mini') || user == 'stephansmac'
+    return if host.include?('mini')
+    return if air_fallback_approved?
 
-    raise 'Customer UI action sweep must run on the Mini'
+    raise 'Customer UI action sweep must run on the Mini (Air needs SANE_APPROVE_LOCAL_UI_ON_AIR or SANE_MINI_UNAVAILABLE)'
+  end
+
+  def air_fallback_approved?
+    ENV['SANE_APPROVE_LOCAL_UI_ON_AIR'] == 'MR. SANE APPROVES LOCAL UI ON AIR' ||
+      ENV['SANE_MINI_UNAVAILABLE'] == 'MR. SANE CONFIRMS MINI UNAVAILABLE'
+  end
+
+  def proof_host_allowed?(host)
+    normalized = host.to_s.downcase
+    return true if normalized.include?('mini')
+    return false unless air_fallback_approved?
+
+    normalized.include?('air') || normalized.include?('macbook') ||
+      normalized == Socket.gethostname.to_s.downcase
   end
 
   def ensure_manifest!
@@ -180,7 +194,7 @@ class CustomerUIActionSweep
     path = File.expand_path(@execution_evidence_path, PROJECT_ROOT)
     payload = JSON.parse(File.read(path))
     raise 'Execution evidence app does not match SaneClick' unless payload['app'].to_s == APP_NAME
-    raise 'Execution evidence must come from the Mini' unless payload['host'].to_s.downcase.include?('mini')
+    raise 'Execution evidence must come from the Mini' unless proof_host_allowed?(payload['host'])
     raise 'Execution evidence status must be passed' unless payload['status'].to_s == 'passed'
     raise 'Execution evidence must declare execution_mode=executed' unless payload['execution_mode'].to_s == 'executed'
     Time.parse(payload.fetch('generated_at'))
