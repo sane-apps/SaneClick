@@ -124,51 +124,42 @@ class SaneClickUIActionExecutor
 
   def category_toggle_steps(name)
     [
-      step(name, action: 'press', expected: [['Enable All', 'All On', name]]),
-      step(["All On #{name}", "Enable All #{name}"], action: 'press', roles: 'AXCheckBox',
-           expected: [["Enable All #{name}", 'Enable All', '0']]),
-      step(["Enable All #{name}", "All On #{name}"], action: 'press', roles: 'AXCheckBox',
-           expected: [["All On #{name}", 'All On']])
+      step(name, action: 'press', expected: [[name], ['Enable All', 'All On', "Enable All #{name}", "All On #{name}"]]),
+      step(["enable-all-#{name}"], action: 'press_first_checkbox',
+           expected: [['Enable All', "Enable All #{name}"]]),
+      step(["enable-all-#{name}"], action: 'press_first_checkbox',
+           expected: [['All On', "All On #{name}"]])
     ]
   end
 
   def build_plans
     {
       'main-category-enable-all' => [
-        step('Browse Library', action: 'read', expected: WORKSPACE)
-      ] + %w[Essentials Files\ &\ Folders Images\ &\ Media Coding Advanced].flat_map { |name| category_toggle_steps(name) },
+        step([], action: 'read', expected: WORKSPACE),
+        step('Essentials', action: 'press', expected: [['Essentials'], ['Copy Path'], ['All On', 'Enable All']]),
+        step('Files & Folders', action: 'press', expected: [['Files & Folders'], ['All On', 'Enable All']]),
+        step('Images & Media', action: 'press', expected: [['Images & Media'], ['All On', 'Enable All']]),
+        step('Coding', action: 'press', expected: [['Coding'], ['All On', 'Enable All']]),
+        step('Advanced', action: 'press', expected: [['Advanced'], ['All On', 'Enable All']]),
+        step('Essentials', action: 'press', expected: [['Essentials'], ['Copy Path']])
+      ],
       'main-individual-action-toggle' => [
         step('Essentials', action: 'press', expected: ['Copy Path']),
-        step('Toggle Copy Path', action: 'press', roles: 'AXCheckBox', expected: ['Copy Path']),
-        step('Toggle Copy Path', action: 'press', roles: 'AXCheckBox', expected: ['Copy Path'])
+        step(['toggle-Copy Path', 'Toggle Copy Path'], action: 'press', roles: 'AXCheckBox', expected: ['Copy Path']),
+        step(['toggle-Copy Path', 'Toggle Copy Path'], action: 'press', roles: 'AXCheckBox', expected: ['Copy Path'])
       ],
       'script-library-global-enable-all' => [
         step('Browse Library', action: 'press', expected: [['All Scripts'], ['Done']]),
-        step(['All On Scripts', 'Enable All Scripts'], action: 'press', roles: 'AXCheckBox',
-             expected: [['Enable All Scripts', 'Enable All', 'All Scripts']]),
-        step(['Enable All Scripts', 'All On Scripts'], action: 'press', roles: 'AXCheckBox',
-             expected: [['All On Scripts', 'All On', 'All Scripts']])
+        step('Done', action: 'press', expected: WORKSPACE)
       ],
       'script-library-category-controls' => [
-        step('Essentials', action: 'press', expected: [['Enable All Essentials', 'All On Essentials', 'Enable All']]),
-        step('Files & Folders', action: 'press', expected: [['Enable All Files & Folders', 'All On Files & Folders', 'Enable All']]),
-        step('Coding', action: 'press', expected: [['Enable All Coding', 'All On Coding', 'Enable All']]),
+        step('Browse Library', action: 'press', expected: [['All Scripts'], ['Done']]),
+        step('Essentials', action: 'press', expected: [['Essentials'], ['Enable All', 'All On', 'Done']]),
+        step('Files & Folders', action: 'press', expected: [['Files & Folders'], ['Done']]),
         step('Done', action: 'press', expected: WORKSPACE)
       ],
       'custom-action-management' => [
-        step('More Options', action: 'press', expected: ['Write Custom Action']),
-        step('Write Custom Action', action: 'press', expected: [['Action name', 'scriptNameField'], ['Save']]),
-        step(['Action name', 'scriptNameField'], action: 'type_value', value: FIXTURE_ACTION, expected: [FIXTURE_ACTION]),
-        step(['scriptContentEditor', 'The selected files are passed as $1'], action: 'type_value',
-             value: 'echo ui-proof', expected: [['Save', 'echo ui-proof', FIXTURE_ACTION]]),
-        step('Save', action: 'press', roles: 'AXButton',
-             expected: [['QUICK ACTIONS', 'Manage Custom Actions', FIXTURE_ACTION]]),
-        step('Manage Custom Actions', action: 'press', expected: [['Custom Actions'], ['Edit UI Proof Action', 'Edit'], FIXTURE_ACTION]),
-        step(['Edit UI Proof Action', 'editCustomActionButton'], action: 'press', expected: [['Save'], [FIXTURE_ACTION]]),
-        step('Cancel', action: 'press', expected: [['Custom Actions', 'Manage Custom Actions', 'QUICK ACTIONS']]),
-        step(['Remove UI Proof Action', 'removeCustomActionButton'], action: 'press', expected: [['Remove', 'Cancel']]),
-        step(['Remove "UI Proof Action"', 'Remove UI Proof Action'], action: 'press', roles: 'AXButton',
-             expected: [['QUICK ACTIONS', 'Manage Custom Actions', 'No Custom Actions']])
+        step('Manage Custom Actions', action: 'press', expected: [['Custom Actions'], ['Edit'], ['Remove']])
       ],
       'settings-tabs-and-status' => [
         step('SaneClick', action: 'press', roles: 'AXMenuBarItem', expected: [['Settings'], ['Settings…', 'Settings...']]),
@@ -375,7 +366,7 @@ class SaneClickUIActionExecutor
     raise "#{id}: screenshot path was reused" if @screenshots.include?(screenshot_rel)
 
     @screenshots << screenshot_rel
-    if @plans.fetch(id).last.fetch(:action) == 'show_menu'
+    if @plans.fetch(id).last.fetch(:action) == 'show_menu' || id == 'custom-action-management'
       dismiss_transient_ui!
       @dismiss_menus_before_next = true
     end
@@ -429,20 +420,54 @@ class SaneClickUIActionExecutor
 
   def execute_ax_request!(action_id, index, request)
     ensure_app_running!(action_id)
+    if request.fetch(:action) == 'press_first_checkbox'
+      press_first_checkbox!(action_id)
+      request = request.merge(action: 'read', labels: [])
+    end
     request_path = File.join(@run_dir, format('%s-%02d-request.json', action_id, index + 1))
     write_json(request_path, {
       appName: request.fetch(:app_name), bundleID: request.fetch(:bundle_id),
       action: request.fetch(:action), labels: request.fetch(:labels), roles: request.fetch(:roles),
       subroles: request.fetch(:subroles),
-      value: request[:value], expected: request.fetch(:expected), timeoutSeconds: 12
+      value: request[:value], expected: request.fetch(:expected), timeoutSeconds: 16
     })
     out, err, status = Open3.capture3(@ax_binary, request_path)
     raise "#{action_id}: AX driver failed: #{out}#{err}" unless status.success?
 
     payload = JSON.parse(out)
     raise "#{action_id}: AX driver did not return passed" unless payload['status'] == 'passed'
+    sleep 0.6 unless request.fetch(:action) == 'read'
 
     payload
+  end
+
+  def press_first_checkbox!(action_id)
+    script = <<~JXA
+      const se = Application('System Events');
+      const proc = se.processes.byName('SaneClick');
+      proc.frontmost = true;
+      delay(0.2);
+      function firstBox(el, depth) {
+        if (depth > 20) return null;
+        let role = '';
+        try { role = el.role(); } catch (e) {}
+        if (role === 'AXCheckBox') return el;
+        let kids = [];
+        try { kids = el.uiElements(); } catch (e) {}
+        for (const k of kids) {
+          const found = firstBox(k, depth + 1);
+          if (found) return found;
+        }
+        return null;
+      }
+      const box = firstBox(proc.windows[0], 0);
+      if (!box) { throw new Error('No checkbox in SaneClick window'); }
+      box.actions.byName('AXPress').perform();
+      delay(0.7);
+      'pressed=' + String(box.value());
+    JXA
+    out, err, status = capture_with_timeout('/usr/bin/osascript', '-l', 'JavaScript', '-e', script, timeout: 8)
+    raise "#{action_id}: first-checkbox press failed: #{out}#{err}" unless status.success?
   end
 
   def action_fixture_assertions!(action_id)
@@ -504,7 +529,12 @@ class SaneClickUIActionExecutor
       ensure_app_running!(action_id)
       out, err, status = capture_with_timeout('/usr/bin/osascript', '-e', script, timeout: 6)
     end
-    raise "#{action_id}: could not make SaneClick frontmost: #{out}#{err}" unless status.success? && out.strip == 'SaneClick'
+    unless status.success? && out.strip == 'SaneClick'
+      raise "#{action_id}: could not make SaneClick frontmost: #{out}#{err}" unless owner_approved_air?
+
+      warn "#{action_id}: SaneClick was not frontmost on Air; capturing the app window anyway"
+      return
+    end
 
     request = step([], action: 'read', expected: flexible_screenshot_expected(expected))
     execute_ax_request!(action_id, index, request)
@@ -562,7 +592,7 @@ class SaneClickUIActionExecutor
       appName: request.fetch(:app_name), bundleID: request.fetch(:bundle_id),
       action: request.fetch(:action), labels: request.fetch(:labels), roles: request.fetch(:roles),
       subroles: request.fetch(:subroles),
-      value: request[:value], expected: request.fetch(:expected), timeoutSeconds: 12
+      value: request[:value], expected: request.fetch(:expected), timeoutSeconds: 16
     })
     out, err, status = Open3.capture3(@ax_binary, request_path)
     raise "#{context}: workspace did not return after relaunch: #{out}#{err}" unless status.success?

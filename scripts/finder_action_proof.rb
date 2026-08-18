@@ -22,8 +22,17 @@ ROOT = File.expand_path('..', __dir__)
 PROOF_NAME = 'saneclick-proof.txt'
 DOWNLOADS = File.expand_path('~/Downloads')
 PROOF = File.join(DOWNLOADS, PROOF_NAME)
-SCRIPT_ID = '833E61C5-6186-4FEB-BEF1-7EB6CD35A421'
 CONTAINER = File.expand_path('~/Library/Group Containers/M78L6FXD48.group.com.saneclick.app')
+SCRIPTS_JSON = File.join(CONTAINER, 'scripts.json')
+SCRIPT_NAME = 'Duplicate with Timestamp'
+SCRIPT_ID = begin
+  payload = JSON.parse(File.read(SCRIPTS_JSON))
+  scripts = payload.is_a?(Array) ? payload : Array(payload['scripts'])
+  match = scripts.find { |script| script['name'].to_s == SCRIPT_NAME }
+  raise "scripts.json has no #{SCRIPT_NAME}" unless match
+
+  match.fetch('id')
+end
 PENDING = File.join(CONTAINER, 'pending_execution.json')
 OUT_DIR = File.join(ROOT, 'outputs', 'e2e', "1.3.3-#{Time.now.utc.strftime('%Y%m%dT%H%M%SZ')}")
 

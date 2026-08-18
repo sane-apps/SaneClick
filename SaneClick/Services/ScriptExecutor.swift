@@ -295,8 +295,9 @@ final class ScriptExecutor: @unchecked Sendable {
             if license.isPro { return true }
             return ActionCatalog.isAvailableInBasic(script)
         #else
-            if license.hasExpiredProTrial { return false }
-            return license.isPro
+            // A fresh LicenseService may not have isPro yet. Block only after
+            // the 14-day trial has actually ended.
+            return !license.hasExpiredProTrial
         #endif
     }
 

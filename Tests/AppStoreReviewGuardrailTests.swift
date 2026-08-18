@@ -378,7 +378,7 @@ struct AppStoreReviewGuardrailTests {
             contentsOf: projectRoot.appendingPathComponent("SaneClick/SaneClickApp.swift"),
             encoding: .utf8
         )
-        #expect(executorSource.contains("if license.hasExpiredProTrial { return false }"))
+        #expect(executorSource.contains("return !license.hasExpiredProTrial"))
         #expect(executorSource.contains("WindowActionStorage.shared.showMainWindow()"))
         #expect(appSource.contains("Finder actions are off. Buy once to turn them back on."))
     }
