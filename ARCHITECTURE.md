@@ -112,15 +112,15 @@ stateDiagram-v2
 
 - Finder Sync extension must be enabled in System Settings.
 - Treat `pluginkit` as the source of truth when debugging extension enablement. `FIFinderSyncController.isExtensionEnabled` has returned false while the extension was enabled, so do not auto-open System Settings or mark setup broken from that API alone.
-- Script execution is local-only; no telemetry.
-- Update checks use Sparkle; only version metadata is transmitted.
+- Script execution runs on the Mac. Aggregate first-use/activation and update/license counts are disclosed in PRIVACY.md; do not describe the product as having no telemetry.
+- Update checks use Sparkle.
 
 ## Build and Release Truth
 
 - **Single source of truth**: `.saneprocess` in the project root.
 - **Build/test**: `./scripts/SaneMaster.rb verify` (no raw xcodebuild).
 - **Release**: `./scripts/SaneMaster.rb release` (delegates to SaneProcess `release.sh`).
-- **DMGs**: uploaded to Cloudflare R2 (not committed to GitHub).
+- **Signed ZIP archives**: uploaded to Cloudflare R2 (not committed to GitHub).
 - **Appcast**: Sparkle reads `SUFeedURL` from `SaneClick/Info.plist` (saneclick.com).
 - **App Store posture**: App Store builds should rely on monitored folders, security-scoped bookmarks, app groups, and Finder Sync entitlements. Avoid scripting/temp-file workarounds or external purchase/support donation surfaces in Store builds.
 
@@ -134,3 +134,11 @@ stateDiagram-v2
 - Finder Sync menu caching can make updates appear stale if script change signals fail.
 - App Group container access is required for consistent host/extension behavior.
 - Script execution relies on system tools (`/bin/bash`, `/usr/bin/osascript`, `/usr/bin/automator`).
+
+### Public guide claims | Updated: 2026-09-07 | TTL: 90d
+
+- Trace customer-facing image claims through ScriptExecutor.execute, AppStoreNativeAction.requiresNativeRuntime and AppStoreNativeActionExecutor+Media. Built-in image actions execute natively on direct and Store builds; retained sips text identifies catalog actions and does not describe their current runtime.
+- Remove Photo Info writes a unique _clean sibling. Originals retain their metadata. The writer omits source metadata dictionaries; the encoder may add technical fields. JPEG inputs produce JPEG and other accepted inputs PNG; orientation is baked into pixels. Re-encoding does not promise identical quality, color, size or an empty metadata container.
+- Existing AppStoreNativeActionMediaTests.removePhotoInfoDropsMetadata proves GPS/UserComment/camera make/model removal. Conversion tests and actual Finder JPEG proof cover separate conversion behavior. Do not turn this into a claim that every format and metadata field has been independently tested.
+- Apple's current [Finder Rename guide](https://support.apple.com/guide/mac-help/rename-files-folders-and-disks-on-mac-mchlp1144/mac) documents text replacement and numbered formats. The [Preview conversion guide](https://support.apple.com/guide/preview/convert-image-file-types-prvw1012/mac) explicitly supports selecting multiple sidebar images for export. The [location guide](https://support.apple.com/guide/preview/see-where-a-photo-was-taken-prvw19865/mac) documents Show Location Info. These primary sources replace unsupported negative comparisons in the old guides.
+- Keep guide cards, SEO metadata and article copy aligned. Describe the user's result and limits; avoid unsupported competitor limitations or promises that a successful batch notification proves every file changed.

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>How to Remove EXIF Data from Photos on Mac (GPS, Camera Info)</title>
-    <meta name="description" content="Remove EXIF data, GPS location, and camera info from photos on Mac. Compare Preview, Terminal exiftool, and SaneClick's one-click metadata remover.">
+    <meta name="description" content="Check photo location data and create cleaned copies with SaneClick on Mac. Learn what happens to originals, image quality, file formats, and metadata.">
     <meta name="keywords" content="remove exif data mac, strip gps from photo mac, remove metadata from image, remove location data photo mac, SaneClick">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -12,7 +12,7 @@
     <link rel="canonical" href="https://saneclick.com/how-to-remove-exif-data-photos-mac">
   <meta property="og:type" content="website">
   <meta property="og:title" content="How to Remove EXIF Data from Photos on Mac (GPS, Camera Info)">
-  <meta property="og:description" content="Remove EXIF data, GPS location, and camera info from photos on Mac. Compare Preview, Terminal exiftool, and SaneClick&#x27;s one-click metadata remover.">
+  <meta property="og:description" content="Check photo location data and create cleaned copies with SaneClick on Mac. Learn what happens to originals, image quality, file formats, and metadata.">
   <meta property="og:url" content="https://saneclick.com/how-to-remove-exif-data-photos-mac">
   <meta property="og:image" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
   <meta property="og:image:secure_url" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
@@ -23,7 +23,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://saneclick.com/how-to-remove-exif-data-photos-mac">
   <meta name="twitter:title" content="How to Remove EXIF Data from Photos on Mac (GPS, Camera Info)">
-  <meta name="twitter:description" content="Remove EXIF data, GPS location, and camera info from photos on Mac. Compare Preview, Terminal exiftool, and SaneClick&#x27;s one-click metadata remover.">
+  <meta name="twitter:description" content="Check photo location data and create cleaned copies with SaneClick on Mac. Learn what happens to originals, image quality, file formats, and metadata.">
   <meta name="twitter:image" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
   <meta name="twitter:image:alt" content="SaneClick preview card for Mac Finder context actions">
     <meta name="theme-color" content="#4f8ffa">
@@ -41,10 +41,10 @@
     "@context": "https://schema.org",
     "@type": "TechArticle",
     "headline": "How to Remove EXIF Data from Photos on Mac (GPS, Camera Info)",
-    "description": "Remove EXIF data, GPS location, and camera info from photos on Mac. Compare Preview, Terminal exiftool, and SaneClick's one-click metadata remover.",
+    "description": "Check photo location data and create cleaned copies with SaneClick on Mac. Learn what happens to originals, image quality, file formats, and metadata.",
     "url": "https://saneclick.com/how-to-remove-exif-data-photos-mac",
     "image": "https://saneclick.com/images/og-image-20260827.png?v=20260827-card",
-    "dateModified": "2026-06-16",
+    "dateModified": "2026-09-07",
     "author": {
       "@type": "Person",
       "name": "Mr. Sane"
@@ -140,6 +140,7 @@
         article h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 5vw, 2.75rem); line-height: 1.2; margin-bottom: 24px; letter-spacing: -0.02em; }
         article h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.5rem; margin: 48px 0 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; letter-spacing: -0.01em; }
         article p { margin-bottom: 24px; color: var(--text-secondary); }
+        article p a { color: var(--accent); text-underline-offset: 3px; }
 
         /* Comparison Cards */
         .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 40px 0; }
@@ -399,55 +400,37 @@
 
     <article class="container">
         <h1>How to Remove EXIF Data from Photos on Mac</h1>
-        <p>Every photo your iPhone takes embeds hidden metadata: GPS coordinates, camera model, lens settings, date, time, and more. When you share photos online, you're sharing your exact location with every viewer. Stripping this data before uploading protects your privacy.</p>
-
-        <p>Here are two ways to remove EXIF data on macOS: the manual approach and the right-click approach.</p>
-
+        <p>Photos can contain location, camera, and other identifying metadata. Before sharing a photo, check what the file contains and share a cleaned copy when you want to leave that information out.</p>
         <div class="comparison">
-            <!-- Option 1 -->
             <div class="option-card">
-                <h3>Option 1: The Hard Way (Terminal + exiftool)</h3>
-                <p>Powerful, but requires installation and command-line knowledge.</p>
+                <h3>Inspect the Photo First</h3>
+                <p>Preview can show a photo's stored location.</p>
                 <ul class="step-list">
-                    <li><span class="icon icon-num">1</span> <div>Install Homebrew (if not already installed)</div></li>
-                    <li><span class="icon icon-num">2</span> <div>Run <code>brew install exiftool</code></div></li>
-                    <li><span class="icon icon-num">3</span> <div>Open Terminal and navigate to your photos</div></li>
-                    <li><span class="icon icon-num">4</span> <div>Run <code>exiftool -all= photo.jpg</code> for each file</div></li>
-                    <li><span class="icon icon-num">5</span> <div>Or <code>exiftool -all= *.jpg</code> for a whole folder</div></li>
-                    <li><span class="icon icon-x">&#10007;</span> <div>Third-party tool &mdash; must install and maintain</div></li>
-                    <li><span class="icon icon-x">&#10007;</span> <div>No visual confirmation &mdash; trust the command worked</div></li>
+                    <li><span class="icon icon-num">1</span><div>Open the photo in Preview.</div></li>
+                    <li><span class="icon icon-num">2</span><div>Choose <strong>Tools &gt; Show Location Info</strong>. Apple notes that this is unavailable when the image has no location information.</div></li>
+                    <li><span class="icon icon-num">3</span><div>Check the exact file you plan to share, including any exported copy.</div></li>
                 </ul>
-                <p style="margin-top: 16px; font-size: 14px; color: var(--text-muted);"><em>Result: Works great if you're comfortable with Terminal. Most people aren't.</em></p>
+                <p><a href="https://support.apple.com/guide/preview/see-where-a-photo-was-taken-prvw19865/mac">Apple's photo-location guide</a></p>
             </div>
-
-            <!-- Option 2 -->
             <div class="option-card winner-card">
-                <h3>Option 2: The Sane Way (SaneClick)</h3>
-                <p>Right-click photos, strip metadata instantly.</p>
+                <h3>Create a Clean Copy with SaneClick</h3>
+                <p>Select photos in Finder and choose the enabled <strong>Remove Photo Info</strong> action.</p>
                 <ul class="step-list">
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Remove Photo Info:</strong> Strips EXIF, GPS, camera data in one click</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Batch support:</strong> Select dozens of photos, clean them all at once</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>No install needed:</strong> Uses macOS built-in <code>sips</code> &mdash; no Homebrew</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Smart filtering:</strong> Only appears for image files (JPG, PNG, HEIC, etc.)</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Notification:</strong> Confirms when metadata removal is complete</div></li>
+                    <li><span class="icon icon-check">&#10003;</span><div><strong>New copy:</strong> Creates a file such as photo_clean.jpg beside the original.</div></li>
+                    <li><span class="icon icon-check">&#10003;</span><div><strong>Personal metadata:</strong> Omits the source GPS, camera, and identifying EXIF fields when writing the copy.</div></li>
+                    <li><span class="icon icon-check">&#10003;</span><div><strong>Local processing:</strong> Uses macOS image frameworks without a separate image tool.</div></li>
+                    <li><span class="icon icon-check">&#10003;</span><div><strong>Batch selection:</strong> Process several selected photos in one action.</div></li>
                 </ul>
-                <div class="cta-box">
-                    <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="btn">Get SaneClick &mdash; $14.99</a>
-                </div>
+                <div class="cta-box"><a href="/" class="btn">See SaneClick</a></div>
             </div>
         </div>
-
-        <h2>What About Preview?</h2>
-        <p>macOS Preview can show some EXIF data (Tools > Show Inspector), but it has no built-in way to <em>remove</em> it. You can export the image to strip some metadata, but this changes the file format and quality settings. It's not a clean solution, and it doesn't handle batch operations at all.</p>
-
-        <h2>What Data Gets Removed?</h2>
-        <p>SaneClick's "Remove Photo Info" script re-encodes the image through macOS's <code>sips</code> engine, which strips all embedded metadata: GPS coordinates, camera make and model, lens info, ISO, shutter speed, date/time stamps, and any custom EXIF tags. The image quality and pixel dimensions stay the same.</p>
-
-        <h2>When Should You Strip EXIF Data?</h2>
-        <p>Before uploading photos to forums, marketplaces, social media (some platforms strip it automatically, many don't), or sending to strangers. If you sell products online, strip the EXIF from product photos so buyers don't see your home GPS coordinates in the file metadata.</p>
-
-        <h2>Conclusion</h2>
-        <p>If you're already a Terminal power user, <code>exiftool</code> is excellent. If you want to protect your privacy with a right-click instead of installing tools and typing commands, <strong>SaneClick</strong> makes EXIF removal as simple as it should be.</p>
+        <h2>Share the Cleaned Copy</h2>
+        <p><strong>The original is unchanged and still contains its original metadata.</strong> Share the new _clean file. If that name already exists, SaneClick chooses another name instead of replacing the existing file.</p>
+        <h2>What Changes in the Copy?</h2>
+        <p>SaneClick decodes the photo and writes a new image without copying the source metadata dictionaries. The encoder may still include basic technical fields such as pixel dimensions and color space. This is not a promise that the file contains no metadata at all.</p>
+        <p>JPEG sources produce JPEG copies; other supported inputs produce PNG copies. Orientation is applied to the pixels so the photo stays upright. Re-encoding can change quality, color, and file size. Keep the original, and inspect the cleaned image before sharing it.</p>
+        <h2>Check the Picture Too</h2>
+        <p>Removing file metadata does not hide information visible in the picture, such as an address, face, or document. Review both the image and its saved file before sharing.</p>
     </article>
 
     <footer>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>How to Convert Images on Mac with Right-Click (HEIC to JPEG, PNG)</title>
-    <meta name="description" content="Convert HEIC to JPEG, PNG to JPG, or batch convert images on Mac. Compare Automator workflows vs SaneClick's one-click right-click image converter.">
+    <meta name="description" content="Convert images on Mac with Preview or SaneClick. Compare batch export and Finder actions, preserve originals, and understand JPEG quality and output formats.">
     <meta name="keywords" content="convert heic to jpeg mac, batch convert images mac, convert png to jpg finder, image converter right-click mac, SaneClick">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -12,7 +12,7 @@
     <link rel="canonical" href="https://saneclick.com/how-to-convert-images-right-click-mac">
   <meta property="og:type" content="website">
   <meta property="og:title" content="How to Convert Images on Mac with Right-Click (HEIC to JPEG, PNG)">
-  <meta property="og:description" content="Convert HEIC to JPEG, PNG to JPG, or batch convert images on Mac. Compare Automator workflows vs SaneClick&#x27;s one-click right-click image converter.">
+  <meta property="og:description" content="Convert images on Mac with Preview or SaneClick. Compare batch export and Finder actions, preserve originals, and understand JPEG quality and output formats.">
   <meta property="og:url" content="https://saneclick.com/how-to-convert-images-right-click-mac">
   <meta property="og:image" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
   <meta property="og:image:secure_url" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
@@ -23,7 +23,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://saneclick.com/how-to-convert-images-right-click-mac">
   <meta name="twitter:title" content="How to Convert Images on Mac with Right-Click (HEIC to JPEG, PNG)">
-  <meta name="twitter:description" content="Convert HEIC to JPEG, PNG to JPG, or batch convert images on Mac. Compare Automator workflows vs SaneClick&#x27;s one-click right-click image converter.">
+  <meta name="twitter:description" content="Convert images on Mac with Preview or SaneClick. Compare batch export and Finder actions, preserve originals, and understand JPEG quality and output formats.">
   <meta name="twitter:image" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
   <meta name="twitter:image:alt" content="SaneClick preview card for Mac Finder context actions">
     <meta name="theme-color" content="#4f8ffa">
@@ -41,10 +41,10 @@
     "@context": "https://schema.org",
     "@type": "TechArticle",
     "headline": "How to Convert Images on Mac with Right-Click (HEIC to JPEG, PNG)",
-    "description": "Convert HEIC to JPEG, PNG to JPG, or batch convert images on Mac. Compare Automator workflows vs SaneClick's one-click right-click image converter.",
+    "description": "Convert images on Mac with Preview or SaneClick. Compare batch export and Finder actions, preserve originals, and understand JPEG quality and output formats.",
     "url": "https://saneclick.com/how-to-convert-images-right-click-mac",
     "image": "https://saneclick.com/images/og-image-20260827.png?v=20260827-card",
-    "dateModified": "2026-06-16",
+    "dateModified": "2026-09-07",
     "author": {
       "@type": "Person",
       "name": "Mr. Sane"
@@ -140,6 +140,7 @@
         article h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 5vw, 2.75rem); line-height: 1.2; margin-bottom: 24px; letter-spacing: -0.02em; }
         article h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.5rem; margin: 48px 0 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; letter-spacing: -0.01em; }
         article p { margin-bottom: 24px; color: var(--text-secondary); }
+        article p a { color: var(--accent); text-underline-offset: 3px; }
 
         /* Comparison Cards */
         .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 40px 0; }
@@ -399,52 +400,36 @@
 
     <article class="container">
         <h1>How to Convert Images on Mac with Right-Click</h1>
-        <p>You took photos on your iPhone and now have dozens of <code>.heic</code> files that nothing can open. Or you need to convert a batch of PNGs to JPEG for a website. Opening each file in Preview and exporting one at a time is painful.</p>
-
-        <p>Here are two ways to convert images on macOS: the complex Automator approach and the instant SaneClick approach.</p>
-
+        <p>Need JPEGs for a website or PNGs for another app? Preview can convert a batch for free. SaneClick puts common conversions directly in Finder's right-click menu.</p>
         <div class="comparison">
-            <!-- Option 1 -->
             <div class="option-card">
-                <h3>Option 1: The Hard Way (Automator)</h3>
-                <p>Free, built-in, but tedious to set up.</p>
+                <h3>Convert with Preview</h3>
+                <p>Choose the output format and quality when you export.</p>
                 <ul class="step-list">
-                    <li><span class="icon icon-num">1</span> <div>Open <strong>Automator</strong> and create a "Quick Action"</div></li>
-                    <li><span class="icon icon-num">2</span> <div>Set "Workflow receives" to "image files" in "Finder"</div></li>
-                    <li><span class="icon icon-num">3</span> <div>Drag in "Change Type of Images" action</div></li>
-                    <li><span class="icon icon-num">4</span> <div>Choose your target format (JPEG, PNG, etc.)</div></li>
-                    <li><span class="icon icon-num">5</span> <div>Decide if you want to copy or replace originals</div></li>
-                    <li><span class="icon icon-num">6</span> <div>Save, name it, and enable in System Settings > Extensions</div></li>
-                    <li><span class="icon icon-num">7</span> <div>Repeat the whole process for every other format you need</div></li>
+                    <li><span class="icon icon-num">1</span><div>Open the images together in one Preview window.</div></li>
+                    <li><span class="icon icon-num">2</span><div>Select the images in the sidebar.</div></li>
+                    <li><span class="icon icon-num">3</span><div>Choose <strong>File &gt; Export</strong>, then choose a format and destination.</div></li>
+                    <li><span class="icon icon-num">4</span><div>Adjust the available options, then save the converted files.</div></li>
                 </ul>
-                <p style="margin-top: 16px; font-size: 14px; color: var(--text-muted);"><em>Result: One workflow per format. No quality control. No batch feedback.</em></p>
+                <p><a href="https://support.apple.com/guide/preview/convert-image-file-types-prvw1012/mac">Apple's image conversion guide</a></p>
             </div>
-
-            <!-- Option 2 -->
             <div class="option-card winner-card">
-                <h3>Option 2: The Sane Way (SaneClick)</h3>
-                <p>Pre-built scripts for every conversion you need.</p>
+                <h3>Convert with SaneClick</h3>
+                <p>Select the images in Finder and choose an enabled SaneClick action.</p>
                 <ul class="step-list">
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>HEIC to JPEG:</strong> Right-click iPhone photos, convert instantly</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Convert to PNG:</strong> Any image to PNG with one click</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Convert to JPEG:</strong> Optimized at 85% quality by default</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Batch support:</strong> Select 100 files, convert all at once</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Smart filtering:</strong> Conversion options only appear for image files</div></li>
+                    <li><span class="icon icon-check">&#10003;</span><div><strong>HEIC to JPEG:</strong> Convert HEIC photos to JPEG.</div></li>
+                    <li><span class="icon icon-check">&#10003;</span><div><strong>Convert to PNG:</strong> Save supported images as PNG.</div></li>
+                    <li><span class="icon icon-check">&#10003;</span><div><strong>Convert to JPEG:</strong> Save supported images as JPEG using a preset quality setting.</div></li>
+                    <li><span class="icon icon-check">&#10003;</span><div><strong>Keep originals:</strong> Each conversion writes a new file beside the source.</div></li>
                 </ul>
-                <div class="cta-box">
-                    <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="btn">Get SaneClick &mdash; $14.99</a>
-                </div>
+                <div class="cta-box"><a href="/" class="btn">See SaneClick</a></div>
             </div>
         </div>
-
-        <h2>The Formats SaneClick Handles</h2>
-        <p>SaneClick's image scripts work with JPG, JPEG, PNG, HEIC, TIFF, GIF, BMP, and WebP. The <strong>"HEIC to JPEG"</strong> script targets iPhone photos specifically, while <strong>"Convert to PNG"</strong> and <strong>"Convert to JPEG"</strong> handle everything else. All conversions use macOS's built-in <code>sips</code> engine &mdash; no third-party tools required.</p>
-
-        <h2>Why Not Just Use Preview?</h2>
-        <p>Preview can export one image at a time: File > Export, pick format, pick quality, pick destination, click Save. Do that 50 times for a folder of iPhone photos and you'll understand the problem. SaneClick lets you select all files, right-click, and convert the entire batch in seconds.</p>
-
-        <h2>Conclusion</h2>
-        <p>If you convert one image a year, Preview works fine. If you regularly deal with HEIC files from your iPhone or need to batch convert images for the web, <strong>SaneClick</strong> turns a multi-step chore into a single right-click.</p>
+        <h2>Formats and Output</h2>
+        <p>SaneClick accepts JPG, JPEG, PNG, HEIC, HEIF, TIFF, TIF, GIF, BMP, and WebP files that macOS can decode. Conversion runs locally using Apple's image frameworks. No separate command-line image tool is needed.</p>
+        <p>The conversion creates a still image. For an animated GIF or a file containing several images, it uses the first image. JPEG conversion is lossy; keep the original if you need its original quality or metadata.</p>
+        <h2>Choose the Right Tool</h2>
+        <p>Preview is a good fit when you want to choose export settings. SaneClick suits repeated PNG or JPEG conversions from Finder without opening another image editor.</p>
     </article>
 
     <footer>

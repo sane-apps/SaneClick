@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How to Batch Rename Files on Mac (Finder, Terminal, and SaneClick)</title>
-    <meta name="description" content="Batch rename files on Mac using Finder's built-in tool, Terminal commands, or SaneClick's right-click rename scripts. Compare all three approaches.">
+    <title>How to Batch Rename Files on Mac (Finder and SaneClick)</title>
+    <meta name="description" content="Batch rename files on Mac with Finder or SaneClick. Replace spaces, add numbered names, or lowercase filenames, and learn how to handle name conflicts.">
     <meta name="keywords" content="batch rename files mac, rename multiple files finder mac, bulk rename mac, rename files terminal mac, SaneClick">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="canonical" href="https://saneclick.com/how-to-batch-rename-files-finder-mac">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="How to Batch Rename Files on Mac (Finder, Terminal, and SaneClick)">
-  <meta property="og:description" content="Batch rename files on Mac using Finder&#x27;s built-in tool, Terminal commands, or SaneClick&#x27;s right-click rename scripts. Compare all three approaches.">
+  <meta property="og:title" content="How to Batch Rename Files on Mac (Finder and SaneClick)">
+  <meta property="og:description" content="Batch rename files on Mac with Finder or SaneClick. Replace spaces, add numbered names, or lowercase filenames, and learn how to handle name conflicts.">
   <meta property="og:url" content="https://saneclick.com/how-to-batch-rename-files-finder-mac">
   <meta property="og:image" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
   <meta property="og:image:secure_url" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
@@ -22,8 +22,8 @@
   <meta property="og:image:alt" content="SaneClick preview card for Mac Finder context actions">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://saneclick.com/how-to-batch-rename-files-finder-mac">
-  <meta name="twitter:title" content="How to Batch Rename Files on Mac (Finder, Terminal, and SaneClick)">
-  <meta name="twitter:description" content="Batch rename files on Mac using Finder&#x27;s built-in tool, Terminal commands, or SaneClick&#x27;s right-click rename scripts. Compare all three approaches.">
+  <meta name="twitter:title" content="How to Batch Rename Files on Mac (Finder and SaneClick)">
+  <meta name="twitter:description" content="Batch rename files on Mac with Finder or SaneClick. Replace spaces, add numbered names, or lowercase filenames, and learn how to handle name conflicts.">
   <meta name="twitter:image" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
   <meta name="twitter:image:alt" content="SaneClick preview card for Mac Finder context actions">
     <meta name="theme-color" content="#4f8ffa">
@@ -40,11 +40,11 @@
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "How to Batch Rename Files on Mac (Finder, Terminal, and SaneClick)",
-    "description": "Batch rename files on Mac using Finder's built-in tool, Terminal commands, or SaneClick's right-click rename scripts. Compare all three approaches.",
+    "headline": "How to Batch Rename Files on Mac (Finder and SaneClick)",
+    "description": "Batch rename files on Mac with Finder or SaneClick. Replace spaces, add numbered names, or lowercase filenames, and learn how to handle name conflicts.",
     "url": "https://saneclick.com/how-to-batch-rename-files-finder-mac",
     "image": "https://saneclick.com/images/og-image-20260827.png?v=20260827-card",
-    "dateModified": "2026-06-16",
+    "dateModified": "2026-09-07",
     "author": {
       "@type": "Person",
       "name": "Mr. Sane"
@@ -140,6 +140,7 @@
         article h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 5vw, 2.75rem); line-height: 1.2; margin-bottom: 24px; letter-spacing: -0.02em; }
         article h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.5rem; margin: 48px 0 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; letter-spacing: -0.01em; }
         article p { margin-bottom: 24px; color: var(--text-secondary); }
+        article p a { color: var(--accent); text-underline-offset: 3px; }
 
         /* Comparison Cards */
         .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 40px 0; }
@@ -399,54 +400,34 @@
 
     <article class="container">
         <h1>How to Batch Rename Files on Mac</h1>
-        <p>You downloaded 200 photos named <code>IMG_4392.jpg</code> through <code>IMG_4591.jpg</code>. You need them named <code>001.jpg</code>, <code>002.jpg</code>, etc. Or maybe you just want every filename lowercase. Doing it one by one is not an option.</p>
-
-        <p>Here are three ways to batch rename files on macOS &mdash; from built-in to powerful.</p>
-
+        <p>Finder already handles batch text replacement and numbered names. SaneClick adds ready-made actions for common renaming jobs in the same right-click menu.</p>
         <div class="comparison">
-            <!-- Option 1 -->
             <div class="option-card">
-                <h3>Option 1: Finder Built-In Rename</h3>
-                <p>Free, no setup, but very limited.</p>
+                <h3>Use Finder's Rename</h3>
+                <p>Built into macOS, with no extra app to install.</p>
                 <ul class="step-list">
-                    <li><span class="icon icon-num">1</span> <div>Select files in Finder</div></li>
-                    <li><span class="icon icon-num">2</span> <div>Right-click > <strong>Rename...</strong></div></li>
-                    <li><span class="icon icon-num">3</span> <div>Choose "Replace Text", "Add Text", or "Format"</div></li>
-                    <li><span class="icon icon-x">&#10007;</span> <div>No lowercase conversion</div></li>
-                    <li><span class="icon icon-x">&#10007;</span> <div>No space-to-underscore replacement</div></li>
-                    <li><span class="icon icon-x">&#10007;</span> <div>No custom numbering format (001, 002...)</div></li>
-                    <li><span class="icon icon-x">&#10007;</span> <div>Limited to simple find-and-replace patterns</div></li>
+                    <li><span class="icon icon-num">1</span><div>Select your files in Finder, then right-click and choose <strong>Rename</strong>.</div></li>
+                    <li><span class="icon icon-num">2</span><div>Choose <strong>Replace Text</strong> to swap text, including spaces for underscores.</div></li>
+                    <li><span class="icon icon-num">3</span><div>Choose <strong>Add Text</strong> for a prefix or suffix, or <strong>Format</strong> for an index, counter, or date.</div></li>
+                    <li><span class="icon icon-num">4</span><div>Check the example name, then click <strong>Rename</strong>.</div></li>
                 </ul>
-                <p style="margin-top: 16px; font-size: 14px; color: var(--text-muted);"><em>Result: Works for basic text replacement. Anything else? You're stuck.</em></p>
+                <p><a href="https://support.apple.com/guide/mac-help/rename-files-folders-and-disks-on-mac-mchlp1144/mac">Apple's Finder renaming guide</a></p>
             </div>
-
-            <!-- Option 2 -->
             <div class="option-card winner-card">
-                <h3>Option 2: The Sane Way (SaneClick)</h3>
-                <p>Right-click rename scripts, ready to go.</p>
+                <h3>Use SaneClick's Actions</h3>
+                <p>Enable the actions you need, then select files and choose one from SaneClick's Finder menu.</p>
                 <ul class="step-list">
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Rename with Sequence:</strong> Files become 001, 002, 003...</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Lowercase Filenames:</strong> One click, all files lowercased</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Replace Spaces:</strong> Spaces become underscores instantly</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Batch support:</strong> Select any number of files</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Safe:</strong> Uses <code>mv -n</code> &mdash; never overwrites existing files</div></li>
+                    <li><span class="icon icon-check">&#10003;</span><div><strong>Rename with Sequence:</strong> Number files as 001, 002, 003, keeping their extensions.</div></li>
+                    <li><span class="icon icon-check">&#10003;</span><div><strong>Lowercase Filenames:</strong> Change names such as My Photo.PNG to my photo.png.</div></li>
+                    <li><span class="icon icon-check">&#10003;</span><div><strong>Replace Spaces with Underscores:</strong> Change my photo.jpg to my_photo.jpg.</div></li>
                 </ul>
-                <div class="cta-box">
-                    <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="btn">Get SaneClick &mdash; $14.99</a>
-                </div>
+                <div class="cta-box"><a href="/" class="btn">See SaneClick</a></div>
             </div>
         </div>
-
-        <h2>What About Terminal?</h2>
-        <p>You can rename files in Terminal with a <code>for</code> loop:</p>
-        <p><code>for f in *.jpg; do mv "$f" "${f// /_}"; done</code></p>
-        <p>This works, but one typo can rename or overwrite files permanently. There's no undo in Terminal. SaneClick's rename scripts use <code>mv -n</code> (no-clobber) so existing files are never overwritten, and you get a notification when the rename is done.</p>
-
-        <h2>SaneClick's Rename Scripts</h2>
-        <p><strong>Rename with Sequence</strong> numbers your files as <code>001.jpg</code>, <code>002.jpg</code>, <code>003.jpg</code> &mdash; preserving the original extension. <strong>Lowercase Filenames</strong> converts <code>My Photo.PNG</code> to <code>my photo.png</code>. <strong>Replace Spaces with Underscores</strong> turns <code>my vacation photo.jpg</code> into <code>my_vacation_photo.jpg</code>. All three work on any number of selected files.</p>
-
-        <h2>Conclusion</h2>
-        <p>Finder's built-in rename handles simple cases. Terminal is powerful but risky. If you want safe, fast batch renaming from a right-click menu &mdash; without memorizing shell commands &mdash; <strong>SaneClick</strong> has you covered.</p>
+        <h2>Check Names Before a Large Batch</h2>
+        <p>Renaming changes the selected files in place. Test a small selection first, especially when another file already has a name you want to use. The direct-download actions skip existing destinations rather than replace them, so a conflicting name can leave a file unchanged. Check the resulting filenames after the action.</p>
+        <h2>Choose the Shortest Route</h2>
+        <p>Use Finder when its Rename dialog covers the job. SaneClick is useful when you repeat the same action and want it ready in the context menu.</p>
     </article>
 
     <footer>

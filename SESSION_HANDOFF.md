@@ -1,5 +1,24 @@
 # Session Handoff — SaneClick
 
+## 2026-09-07 01:17 ET — Guide factual corrections ready to publish
+
+- Rewrote three existing guide articles (batch rename, image conversion and photo metadata) to describe real outcomes without unsupported negative comparisons. Updated guide cards, titles/descriptions/JSON-LD/dateModified and readable source-link styling. Kept existing layout.
+- Traced native execution through ScriptExecutor, AppStoreNativeAction and Media executor. Remove Photo Info writes a unique _clean sibling, leaves the original metadata intact, uses ImageIO rather than sips, and does not guarantee unchanged quality or zero technical metadata. Conversion creates a still image from the first frame and writes a new sibling. Current native media implementation dates to June29, before public1.3.3; existing197-test suite includes real GPS/UserComment/make/model removal and conversion fixtures.
+- Current Apple primary guides confirm Finder text replacement/numbered formats and Preview batch conversion. Links and lasting claim constraints are in ARCHITECTURE.md, which also replaces stale no-telemetry and DMG release wording. Public copy describes limitations without implying a new native feature.
+- Eight clean screenshots inspected: outputs/portfolio-guide-facts-final-20260907 (three articles desktop/375) and outputs/portfolio-guide-facts-20260907/guides-{desktop,375}. Each receipt records the visual verdict. Earlier article captures with default dark-blue source links are superseded.
+- Preview layout checks passed14 page/viewport cases. Shared SEO tests10/10 and95-page audit pass. Source edits match both machines; direct-main commit/push and canonical website deploy/live proof next. No native code, version, LS or permissions changes.
+- Separate remaining risks: exact native full-workflow release coverage remains open; direct rename scripts report completion even when mv -n skips name collisions, and sequence rename needs extensionless/conflict testing. Do not infer every batch item changed from its notification. Continue full portfolio audit.
+
+## 2026-09-07 01:00 ET — SaneClick website published and public proof passed
+
+- Commit 662e6552eb2533a40bfe3c34d55e540869281bf7 pushed directly to main with no new PR. Required pre-push native verification passed 197 tests in 22 suites; log apps/SaneClick/outputs/portfolio-web-layout-20260907/push.log. Air fast-forwarded after preserving its identical pending diff in stash portfolio-click-website-before-main-sync-20260907; both hosts reached the same clean source commit before this receipt update.
+- Canonical release.sh --website-only succeeded without Keychain prompts. Cloudflare Pages deployment https://20d02d90.saneclick-site.pages.dev serves saneclick.com. Appcast/manual download route verified at existing public 1.3.3; no native binary or LS upload was changed.
+- Public layout-live.json passed all 14 page/viewport assertions: H1 clear of nav, no horizontal page overflow, Donate destination and pink fill correct. Six guide HTML responses are byte-identical to source. Homepage becomes exactly identical after decoding Cloudflare's two email hrefs/one email span and removing its exact email-decode script; no other transform. See live-source-parity.json and deploy.log.
+- Actual desktop and 375px Donate clicks from the preview reached https://github.com/sponsors/MrSaneApps with the correct Sponsor title and account visible (donate-clicks.json). Final 14 inspected screenshots remain in the directories recorded below; these are private QA.
+- Shared SEO tooling files now match Air/Mini; tests 10/10 and local audit 95 pages pass. Their changes remain uncommitted in the existing SaneProcess portfolio branch alongside prior work; preserve and review that full branch before a direct-main integration.
+- Preview server PID55156 stopped deliberately after verification; earlier PID51190 also stopped. Both owned SSH sessions ended. No native QA app remains from this website lane. Signed-in Mini Brave session untouched.
+- Next: continue remaining SaneClick native eight-action workflow/fresh-install coverage and bump/release only after gates pass; audit guide factual copy against current native/shell behavior (Finder rename, Preview export, image/EXIF claims). Continue other portfolio runtime/iPad/release/LS/machine-sync lanes. Overall goal remains active, not complete.
+
 ## 2026-09-07 00:55 ET — Website defects fixed and verified; deploy pending
 
 - Corrected six live Donate anchors from product checkout to GitHub Sponsors, kept heart interiors pink, removed six zero-telemetry slogans contradicting disclosed aggregate counts, and removed the redundant blanket on-device comparison row/metadata wording.
