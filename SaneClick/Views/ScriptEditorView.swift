@@ -391,65 +391,12 @@ struct ScriptEditorView: View {
 
     #if !APP_STORE
         private func runBashTest(paths: [String]) async throws -> String {
-            let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/bin/bash")
-            process.arguments = ["-c", content] + paths
-            process.environment = ProcessInfo.processInfo.environment
-
-            let outputPipe = Pipe()
-            let errorPipe = Pipe()
-            process.standardOutput = outputPipe
-            process.standardError = errorPipe
-
-            try process.run()
-            process.waitUntilExit()
-
-            let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
-            let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
-
-            let output = String(data: outputData, encoding: .utf8) ?? ""
-            let errorOutput = String(data: errorData, encoding: .utf8) ?? ""
-
-            if process.terminationStatus != 0 {
-                throw NSError(domain: "SaneClick", code: Int(process.terminationStatus), userInfo: [
-                    NSLocalizedDescriptionKey: errorOutput.isEmpty ? "Script exited with code \(process.terminationStatus)" : errorOutput
-                ])
-            }
-
+            let output = try await ScriptExecutor.executeBash(content: content, paths: paths).get()
             return output.isEmpty ? "(No output)" : output
         }
 
         private func runAppleScriptTest(paths: [String]) async throws -> String {
-            let wrappedScript = """
-            on run argv
-                \(content)
-            end run
-            """
-
-            let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-            process.arguments = ["-e", wrappedScript] + paths
-
-            let outputPipe = Pipe()
-            let errorPipe = Pipe()
-            process.standardOutput = outputPipe
-            process.standardError = errorPipe
-
-            try process.run()
-            process.waitUntilExit()
-
-            let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
-            let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
-
-            let output = String(data: outputData, encoding: .utf8) ?? ""
-            let errorOutput = String(data: errorData, encoding: .utf8) ?? ""
-
-            if process.terminationStatus != 0 {
-                throw NSError(domain: "SaneClick", code: Int(process.terminationStatus), userInfo: [
-                    NSLocalizedDescriptionKey: errorOutput.isEmpty ? "AppleScript exited with code \(process.terminationStatus)" : errorOutput
-                ])
-            }
-
+            let output = try await ScriptExecutor.executeAppleScript(content: content, paths: paths).get()
             return output.isEmpty ? "(No output)" : output
         }
     #else
@@ -562,7 +509,7 @@ struct TestOutputView: View {
                     ScrollView {
                         Text(error)
                             .font(.system(.body, design: .monospaced))
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .textSelection(.enabled)
                     }

@@ -446,3 +446,9 @@ bugs hide in the content, which structural assertions never inspect. Required:
 - Review notes must point reviewers to the actual purchase entry points visible in the build.
 - App Store builds must not expose external purchase, GitHub Sponsors, crypto donation, or non-Store unlock paths.
 - If shared SaneUI About/license content changes, rerun `SaneMaster.rb appstore_preflight` before submission.
+
+## Script execution regression checks (2026-09-06)
+
+Editor Test and Finder actions share ScriptExecutor.executeBash and executeAppleScript. Bash supplies an argv0 placeholder so the first selected path remains $1. Both output pipes drain concurrently while the command runs; once it exits, a shared two-second deadline prevents descendants from holding the result open forever. Incomplete output is an explicit error. The deadline does not limit the command's running time or cap captured output.
+
+Run on the Mini: bash scripts/SaneMaster.rb monitor_tests --test SaneClickTests/ScriptExecutorTests --timeout 180. The 30-test receipt is outputs/monitor-tests/20260907T032343.491008Z-26533-2f96f927/receipt.json. The inherited-pipe regression failed against the prior implementation before passing with the fix. Mini GUI proof also exercised editor Test, result Close, editor Cancel and the Custom Actions Done button; see the current SESSION_HANDOFF.md and portfolio click-settings-visual receipts.

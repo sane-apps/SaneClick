@@ -173,6 +173,39 @@ struct ScriptExecutorTests {
         }
     }
 
+    @Test("Process runner does not wait for inherited background output pipes")
+    func processRunnerBoundsBackgroundPipeDrain() {
+        let start = Date()
+        let result = ScriptExecutor.runProcess(
+            executableURL: URL(fileURLWithPath: "/bin/bash"),
+            arguments: ["-c", "sleep 4 & printf done; exit 0"]
+        )
+        #expect(Date().timeIntervalSince(start) < 3)
+        switch result {
+        case .success:
+            Issue.record("Inherited open pipes must report incomplete output")
+        case let .failure(error):
+            #expect(error.localizedDescription.contains("background process"))
+        }
+    }
+
+    @Test("Shared Bash execution preserves the first selected path and literal arguments")
+    func sharedBashPreservesSelectedPaths() async throws {
+        let paths = ["/tmp/first file.txt", "/tmp/$(echo unwanted);second.txt"]
+        let output = try await ScriptExecutor.executeBash(
+            content: #"printf '%s\n' "$@""#, paths: paths
+        ).get()
+        #expect(output == paths.joined(separator: "\n") + "\n")
+    }
+
+    @Test("Shared AppleScript execution preserves selected arguments")
+    func sharedAppleScriptPreservesSelectedPaths() async throws {
+        let output = try await ScriptExecutor.executeAppleScript(
+            content: "return item 1 of argv", paths: ["/tmp/first file.txt"]
+        ).get()
+        #expect(output.trimmingCharacters(in: .whitespacesAndNewlines) == "/tmp/first file.txt")
+    }
+
     @Test("Process runner reports launch failures")
     func processRunnerReportsLaunchFailure() {
         let result = ScriptExecutor.runProcess(

@@ -345,9 +345,9 @@ final class ScriptExecutor: @unchecked Sendable {
             } else {
                 result = switch script.type {
                 case .bash:
-                    await executeBash(content: script.content, paths: paths)
+                    await Self.executeBash(content: script.content, paths: paths)
                 case .applescript:
-                    await executeAppleScript(content: script.content, paths: paths)
+                    await Self.executeAppleScript(content: script.content, paths: paths)
                 case .automator:
                     await executeAutomator(workflowPath: script.content, paths: paths)
                 }
@@ -582,8 +582,8 @@ final class ScriptExecutor: @unchecked Sendable {
                 }
             }
 
-            func finish() -> Data {
-                completion.wait()
+            func finish(before deadline: DispatchTime) -> Data? {
+                guard completion.wait(timeout: deadline) == .success else { return nil }
                 lock.lock()
                 defer { lock.unlock() }
                 return buffer
@@ -646,8 +646,18 @@ final class ScriptExecutor: @unchecked Sendable {
                 }
 
                 process.waitUntilExit()
-                let outputData = outputCollector.finish()
-                let errorData = errorCollector.finish()
+                // A background descendant can inherit either pipe after this command exits.
+                // Bound only the final drain, never the command's own running time.
+                let drainDeadline = DispatchTime.now() + .seconds(2)
+                guard let outputData = outputCollector.finish(before: drainDeadline),
+                      let errorData = errorCollector.finish(before: drainDeadline)
+                else {
+                    outputCollector.cancel()
+                    errorCollector.cancel()
+                    return .failure(.executionFailed(
+                        "A background process kept the command output open. Redirect its output and try again."
+                    ))
+                }
                 let output = String(data: outputData, encoding: .utf8) ?? ""
 
                 guard process.terminationStatus != 0 else {
@@ -670,14 +680,14 @@ final class ScriptExecutor: @unchecked Sendable {
             }
         }
 
-        private func executeBash(content: String, paths: [String]) async -> Result<String, ScriptError> {
+        static func executeBash(content: String, paths: [String]) async -> Result<String, ScriptError> {
             Self.runProcess(
                 executableURL: URL(fileURLWithPath: "/bin/bash"),
                 arguments: ["-c", content, "bash"] + paths
             )
         }
 
-        private func executeAppleScript(content: String, paths: [String]) async -> Result<String, ScriptError> {
+        static func executeAppleScript(content: String, paths: [String]) async -> Result<String, ScriptError> {
             let fullScript = """
             on run argv
                 \(content)

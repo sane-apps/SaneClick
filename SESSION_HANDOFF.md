@@ -1,5 +1,60 @@
 # Session Handoff — SaneClick
 
+## 2026-09-07 00:23 ET — Five real Finder categories verified; source ready for main
+
+- Actual Finder context-menu clicks passed one representative action in every category: Duplicate with Timestamp, Replace Spaces with Underscores, Convert to JPEG, Format JSON and Create SHA256 File. Byte/hash, rename, JSON-content and image-format/dimension assertions all passed. No IPC request was injected.
+- Ten clean inspected menu/result screenshots and hashes are recorded in infra/SaneProcess/outputs/portfolio-review-20260906/click-settings-visual/finder-action-verification.json on both machines. Private QA only. Disposable inputs/results moved from Downloads/saneclick-portfolio-agyztmt6 to finder-artifacts in that output directory; the fixture Finder window is closed.
+- Normal Quit stopped the signed runtime at2026-09-07T04:21:06.420063Z/app_exited; app36850/log36846/supervisor36845 are absent. Live capture ran before launch through the actual actions. The capture records system/app activity; action proof is the observed menu selection plus independently verified file results.
+- Full197-tests/22-suites pass and native source/config/test/doc hashes match Air/Mini. Reviewed native change is ready for a direct-main commit/push under owner authorization. No version bump or app release is claimed; complete the remaining eight-action workflow and release gates before publication.
+- SaneProcess native screenshot runner fix passed38 checks and actual open-menu capture. Production fix reuses restoreBundleID and skips focus changes when already frontmost. Updated SCREENSHOT_TOOLS.md supersedes old advice calling native GUI capture unreliable. These shared tooling changes remain uncommitted among prior portfolio changes.
+- Newly found website bug: docs/guides.html Donate links to app checkout. Audit sibling guide Donate anchors, correct to the established Sponsor destination and verify before website release. Existing pink-heart website changes remain outside the native source commit. AgentMemory bf6461db-80cc-424d-8aa8-97577266fe45 tracks this open issue.
+- Remaining portfolio work continues; this is neither full customer-workflow clearance nor overall completion.
+
+
+## 2026-09-07 00:06 ET — Full suite and first real Finder action passed
+
+- Full canonical SaneClick verification passed 197 tests in 22 suites, workflow 0e0948e97ebcc0e5a790ca70828270ea. First run failed only three expected-pin assertions in AppStoreReviewGuardrailTests; updated expected SaneUI revision to reviewed 60176f3 on both machines. Entitlement assertions unchanged. Logs: infra/SaneProcess/outputs/portfolio-review-20260906/click-settings-visual/release-suite{-final,}.log.
+- Signed runtime workflow 0cac366762f9e86e823d7ec113498e0e is ACTIVE; live log/receipt apps/SaneClick/outputs/runtime-logs/20260907T035034Z-20260906-36540-gv6zqt. Deadline04:50:34Z. Must normal-quit and verify owned log processes stop when finished.
+- Actual Finder menu Essentials > Duplicate with Timestamp clicked at04:04:53Z on disposable Downloads/saneclick-portfolio-agyztmt6/Example File.txt. Created Example File_20260907_000454.txt; bytes and SHA256638aa9bb72ac58f87324a7bf8c64524e86d51f6493118f9e7a8e010e01330f78 match original. Clean inspected private screenshots00-04-01(menu) and00-05-27(result).
+- Found screenshot GUI launcher stalling120s after successful capture because redundant Finder activate waits while Finder tracks an open menu. Existing restoreBundleID helper now returns immediately for already-frontmost process; default Finder focus reuses that helper. Mini38/38 GUI runner checks pass and canonical screenshot00-02-47 returned0 preserving menu. Two-line production fix + existing test expectation updated on Air/Mini. AgentMemory f5c174b2-46c7-4658-a572-daf20ebd7280.
+- Peekaboo AX tree omits Finder context-menu items. Inspected screenshots provide real coordinates. Use global foreground --no-auto-focus for click/move; automatic focus dismisses menu. Do not treat IPC helper as menu proof. Four category actions, full8-action coverage, version bump and release remain pending. No public release or LS change.
+
+
+## 2026-09-06 23:44 ET — Script runner and modal fixes verified
+
+- Fixed an inherited-output-pipe hang in ScriptExecutor. A regression failed against the previous code after waiting 4.034 seconds for a background child. The shared runner now allows two seconds to drain both pipes after the command exits, then reports incomplete output. Running-command duration and output-memory limits are unchanged.
+- Removed the editor's duplicate Bash/AppleScript runners. Editor Test now uses the same methods as Finder, drains large output concurrently and preserves the first selected path. Mini ScriptExecutorTests passed 30/30: outputs/monitor-tests/20260907T032343.491008Z-26533-2f96f927/receipt.json; workflow 665c2965af6aff30b0e7824dad9a693e.
+- Actual editor Test produced the expected background-output error and a successful selected-folder result. Result Close and editor Cancel worked. No custom action was saved or owner action executed.
+- Custom Actions lacked a visible close control, although Escape worked. Added native Done; its actual AXIdentifier closeCustomActionsButton click closed the sheet. Error text is now bright white on its red background. Import/Export subtitle is complete.
+- Final signed build/runtime workflow 37c70102cd90fc120f5c3d13fb0acad4 passed. Clean inspected screenshots: 23-38-03 (Done), 23-39-54 (expanded sidebar), 23-42-13 (final error); 23-35-06 proves successful editor output. All are private QA, under infra/SaneProcess/outputs/portfolio-review-20260906/click-settings-visual on both machines.
+- runner-and-modal-verification.json records source hashes, tests and visual verdicts. Five source/test files are identical on Air/Mini. Final runtime receipt outputs/runtime-logs/20260907T033652Z-20260906-30840-ejhaq6/receipt.json stopped at 2026-09-07T03:43:17.094240Z with app_exited; app and owned log processes are absent.
+- Shared AgentMemory fact 495992ce-c3f9-4c8a-8057-929534dd1773 records the fixes, superseding the initial pending bug. Full eight-action Finder workflow, release gates, version bump and public release remain open. These app changes are not yet committed or released. Broad portfolio goal remains active.
+
+## 2026-09-06 23:08 ET — GitHub defaults fixed; direct-main release pending CI
+
+- Owner explicitly requested correct default GitHub tokens on both machines and verified direct-main pushes instead of new PRs. Both default gh logins were refreshed with native gh auth login using already-approved cached credentials. Separate fresh gh api user calls with GH_TOKEN, GITHUB_TOKEN and GH_CONFIG_DIR removed returned MrSaneApps on both. No authorization prompt or security ACL change. Receipts: github-default-auth.json on each host, with the peer receipt copied as github-default-auth-mini.json on Air and github-default-auth-air.json on Mini under the portfolio output directory.
+- SaneClick caption is now corrected on both machines: complete 1 custom action text replaces the truncated redundant subtitle. Signed canonical workflow eeaf44dd11bfa17feff7bbc5b82f8944 passed build; clean Mini screenshot22:59:32 was inspected. Normal Quit ended its live log at03:00:40.107007Z/app_exited. Updated settings-visual-verification.json and screenshot are saved on both hosts. Full eight-action workflow and public release remain open.
+- SaneCite branch67339ce35e4bf88a0bf78150641243bc4973789f is clean and pushed. Previous722e605 full CI passed; latest CI34078513417 is in progress. Latest change reuses an already-published parser image by immutable digest, rejects malformed inventory and validates image source/manifest before Worker deployment. Twenty-one delivery tests passed, and the archived actual image passes the pre-deployment validator.
+- After exact latest-head full CI succeeds, push reviewed branch commits directly to main and observe canonical production deployment. PR8 already exists and should close when commits land. Target is safely dormant configuration, not customer activation. Source guard prevents status/selfcheck/old crons/dashboard warming from starting expensive work; campaign readiness still rejects dormant mode. No pricing, campaign or billing changes.
+- Historical parser mismatch cause remains uncertain: saved rollout completed23:06:59Z before failed health check23:07:19–23:08:23Z. New authenticated cheap health proof binds the serving Worker before expensive checks, addressing the previous missing evidence. Do not call the historical mismatch confirmed fixed or claim active parser/model quality from a dormant release.
+- Shared AgentMemory c4186f45-7c94-484a-af2b-e7252f2e76a5/revision1270 records credential and caption completion. Broad portfolio goal stays active; other native/iPad, LS and full machine reconciliation remain open.
+
+## 2026-09-06 22:20 ET — Settings proof saved; remaining main caption
+
+- Native license-sized workspace regression passed 1/1 after correcting the test to yield for SwiftUI mounting; original assertions remain intact. Canonical workflow 0ebdb354b8e09d40a18d817d6a184c0a. Initial synchronous fixture failed and is retained as evidence.
+- Final signed native workflow 098ba9054636292aa2d536e4a4391cb9 showed the main window at 1040x772 and after resize to 800x650. White counts and wrapped descriptions are visible. One custom-actions subtitle still truncates; shorten the redundant wording and inspect a fresh build before clearing that main view.
+- All five settings pages and scrolled General/About bottoms were inspected. Actual Refresh returned Extension Active; paid License was recognized; both Donate hearts are pink. Nine-image receipt and screenshots match both hosts at infra/SaneProcess/outputs/portfolio-review-20260906/click-settings-visual/settings-visual-verification.json.
+- Normal Quit ended final runtime capture at 2026-09-07T02:08:19.065827Z with app_exited. No Click test app/log remains active. Full Finder action coverage and public release are still open; current modified 1.3.3 must be version-bumped before release.
+
+## 2026-09-06 21:54 ET active SaneClick visual repair
+
+- Canonical shared60176f3 signed build initially reopened main at520x712 and visibly crushed action names/descriptions (private screenshot click-settings-visual/codex-shot-2026-09-06_21-43-12.png). Cause: LicenseGateView fits520px native canvas; ContentView lacked the existing shared workspace release. Added saneWindowContentSize1040x720,hugging:false and wrapped descriptions. Actual next signed workflowf8a1bed6dfcd64cacf11a50254c47a8d/main AX1040x772 and inspected21:48:12 shows complete descriptions. Live capture apps/SaneClick/outputs/runtime-logs/20260907T014713Z-20260906-95949-x7g3p1 remains active, deadline02:47:13Z; currentPID96195.
+- Three dependency pins and four settings scrollbars upgraded, folder paths wrap. Native General top/bottom inspected900x592; actual Refresh returned Extension Active; all five original monitored folders remain visible. Paid license recognized automatically at startup. No Finder restart, folder delete, action toggle or script execution performed.
+- Sidebar subtitle wrap/white counts prepared but not in current runtime. Actual NSWindow regression added to existing VisualVerificationRenderTests/workspaceReleasesLicenseSizedWindow; tests and final sidebar build/visual proof PENDING. Source edits match both machines. One intermediate edit assertion stopped before SettingsView because two row types own successGreen; corrected scoped CategoryRow edit after inspection. Backups and scoped manifests under click-settings-visual.
+- Launch guard stale messages wrongly instructed automatic TCC reset; five comment/message corrections applied on both machines while preserving existing host differences. Mini dispatcher tests20/20 passed in launch-guard-message-tests.log. No guard logic changed.
+- AgentMemory Hosts closure save timed out after300s; durability unconfirmed, no repeat save. Hosts closure handoffs and five-image receipts are saved on both machines. Need repair/verify memory service before claiming shared memory updated.
+- Sibling scan: SaneSync also swaps LicenseGateView into main scene and has no saneWindowContentSize call; inspect native sizing in that lane. Clip uses a separate gate window; Video/Sales have no LicenseGateView call. Portfolio remains active and incomplete.
+
 **Last updated:** 2026-08-18 18:23 EDT
 
 ## 2026-08-18 18:23 — 1.3.3 ready to publish
@@ -191,3 +246,15 @@ context-menu/capture path recorded above.
 - Direct 1.3.1 is the current public release.
 - Direct 1.3.0 unified image handling on the native non-destructive path.
 - App Store work remains a separate owner-gated lane.
+
+## 2026-09-03 - Website dirties classified and committed (Mini)
+
+- Read ~/AGENTS.md and SaneClick AGENTS.md first. Mini HEAD was 4daa323 (8/18, matches live 1.3.3 source).
+- Per-file verdicts, all coherent later website work, committed as 7c4e04e (not pushed):
+  - guides.html, 5 how-to pages, privacy.html: keep, og-image-20260827 + handle @MrSaneApps only.
+  - index.html: keep, same meta updates plus downloadUrl and trial CTAs 1.3.2 to 1.3.3 plus desktop-nav Donate button (sponsors/MrSaneApps replaces desktop trial CTA; mobile/hero/pricing trial CTAs kept).
+  - docs/404.html (new, minimal valid 404): keep.
+  - docs/images/og-image-20260827.png + docs/og-image.png (new, identical md5 f776e8e5, 1200x630 PNG; root copy is a scraper fallback): keep.
+  - docs/appcast.xml: shipped 8/18 publish state, left untouched (still dirty in tree by design).
+- Nothing reverted; no file looked accidental or broken.
+- release_preflight re-run read-only: RED (exit 1). Blockers: customer-UI receipt older than 12h plus missing outputs artifacts; local branch ahead of origin/main (unpushed 7c4e04e); upgrade-path proof receipt missing; live email worker serves 1.3.2 bundle build 1302 vs live appcast 1.3.3/1303; 1 uncommitted file (appcast.xml, by design); 10 pending customer emails. No deploy run: re-publish of identical source explicitly not wanted.

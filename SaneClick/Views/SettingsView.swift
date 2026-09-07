@@ -116,7 +116,7 @@ struct SettingsView: View {
     // MARK: - License Tab
 
     private var licenseTab: some View {
-        ScrollView(.vertical, showsIndicators: false) {
+        ScrollView(.vertical, showsIndicators: true) {
             VStack(alignment: .leading, spacing: 0) {
                 LicenseSettingsView(licenseService: licenseService, style: .panel)
                     .frame(maxWidth: 420, alignment: .leading)
@@ -131,7 +131,7 @@ struct SettingsView: View {
     // MARK: - General Tab
 
     private var generalTab: some View {
-        ScrollView(.vertical, showsIndicators: false) {
+        ScrollView(.vertical, showsIndicators: true) {
             VStack(alignment: .leading, spacing: 16) {
                 CompactSection(SaneClickSettingsCopy.rightClickMenuSectionTitle, icon: "cursorarrow.click.2", iconColor: SaneSettingsIconSemantic.content.color) {
                     CompactRow(SaneSettingsStrings.statusLabel, icon: extensionStatus.icon, iconColor: statusColor) {
@@ -204,7 +204,7 @@ struct SettingsView: View {
                                 Text(folder.path)
                                     .font(.system(size: 13, weight: .medium))
                                     .foregroundStyle(.white)
-                                    .lineLimit(1)
+                                    .fixedSize(horizontal: false, vertical: true)
                             }
                             .padding(.horizontal, 12)
                             .padding(.vertical, 10)
@@ -257,7 +257,7 @@ struct SettingsView: View {
     }
 
     private var visibilityTab: some View {
-        ScrollView(.vertical, showsIndicators: false) {
+        ScrollView(.vertical, showsIndicators: true) {
             VStack(alignment: .leading, spacing: 16) {
                 CompactSection(SaneClickSettingsCopy.appBehaviorSectionTitle, icon: "switch.2", iconColor: SaneSettingsIconSemantic.general.color) {
                     SaneLoginItemToggle()
@@ -295,7 +295,7 @@ struct SettingsView: View {
 
     #if !APP_STORE
         private var updatesTab: some View {
-            ScrollView(.vertical, showsIndicators: false) {
+            ScrollView(.vertical, showsIndicators: true) {
                 VStack(alignment: .leading, spacing: 16) {
                     CompactSection(SaneSettingsStrings.softwareUpdatesSectionTitle, icon: "arrow.triangle.2.circlepath", iconColor: .saneAccent) {
                         SaneSparkleRow(
@@ -442,6 +442,8 @@ struct SettingsView: View {
 }
 
 struct CustomActionsManagerView: View {
+    @Environment(\.dismiss) private var dismiss
+
     let scripts: [Script]
     let onToggle: (Script) -> Void
     let onEdit: (Script) -> Void
@@ -487,6 +489,13 @@ struct CustomActionsManagerView: View {
                 }
             }
             .navigationTitle("Custom Actions")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                        .keyboardShortcut(.cancelAction)
+                        .accessibilityIdentifier("closeCustomActionsButton")
+                }
+            }
         }
         .frame(minWidth: 540, minHeight: 420)
     }
@@ -516,6 +525,7 @@ struct QuickActionRow: View {
                     Text(subtitle)
                         .font(.system(size: 13))
                         .foregroundStyle(.white.opacity(0.9))
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
                 Spacer()
@@ -554,8 +564,6 @@ struct CategoryRow: View {
         }
     }
 
-    private let successGreen = Color(red: 0.13, green: 0.77, blue: 0.37)
-
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: category.icon)
@@ -575,7 +583,7 @@ struct CategoryRow: View {
                 } else {
                     Text("\(activeCount) active")
                         .font(.system(size: 13))
-                        .foregroundStyle(activeCount > 0 ? successGreen : .white.opacity(0.9))
+                        .foregroundStyle(.white)
                 }
             }
 
@@ -593,7 +601,7 @@ struct CategoryRow: View {
                 Text("\(totalCount)")
                     .font(.subheadline)
                     .fontWeight(.medium)
-                    .foregroundStyle(categoryColor)
+                    .foregroundStyle(.white)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
                     .background(categoryColor.opacity(0.15))

@@ -9,6 +9,40 @@ import Testing
 struct VisualVerificationRenderTests {
     private let outputDirectory = URL(fileURLWithPath: "/tmp/saneclick-visual-check", isDirectory: true)
 
+    @Test("Workspace releases a restored license-sized native window")
+    func workspaceReleasesLicenseSizedWindow() async throws {
+        let licenseService = LicenseService(
+            appName: "SaneClick",
+            checkoutURL: LicenseService.directCheckoutURL(appSlug: "saneclick"),
+            directCopy: LicenseService.DirectCopy.saneClick
+        )
+        let window = NSWindow(
+            contentRect: NSRect(origin: .zero, size: LicenseGateLayoutPolicy.frameSize),
+            styleMask: [.titled, .closable, .resizable],
+            backing: .buffered,
+            defer: false
+        )
+        window.isReleasedWhenClosed = false
+        defer { window.close() }
+        SaneWindowContentSync.hug(window, to: LicenseGateLayoutPolicy.frameSize)
+        window.contentViewController = NSHostingController(
+            rootView: ContentView(licenseService: licenseService)
+                .environment(ScriptStore.shared)
+                .environment(MonitoredFolderService.shared)
+                .preferredColorScheme(.dark)
+        )
+        window.makeKeyAndOrderFront(nil)
+        window.displayIfNeeded()
+        window.contentView?.layoutSubtreeIfNeeded()
+        let deadline = Date().addingTimeInterval(1)
+        while (window.contentView?.frame.width ?? 0) < 1040, Date() < deadline {
+            try await Task.sleep(for: .milliseconds(20))
+        }
+        #expect((window.contentView?.frame.width ?? 0) >= 1040)
+        #expect(window.minSize.width >= 800)
+        #expect(!window.styleMask.contains(.fullSizeContentView))
+    }
+
     @Test("Render settings and custom action surfaces")
     func renderSettingsAndCustomActionSurfaces() throws {
         try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: true)

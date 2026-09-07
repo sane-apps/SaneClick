@@ -30,6 +30,7 @@ struct ContentView: View {
             detailBackground
         }
         .navigationTitle("SaneClick")
+        .saneWindowContentSize(CGSize(width: 1040, height: 720), hugging: false)
         .sheet(isPresented: $showLibrary) {
             ScriptLibraryView(licenseService: licenseService)
                 .environment(scriptStore)
@@ -204,7 +205,7 @@ struct ContentView: View {
                         // Import / Export — Pro feature
                         QuickActionRow(
                             title: "Import / Export",
-                            subtitle: licenseService.isPro ? "Move actions between Macs" : "Purchase required to back up and share",
+                            subtitle: licenseService.isPro ? "Back up or move actions" : "Purchase required to back up and share",
                             icon: "square.and.arrow.up.on.square",
                             color: .saneAccent,
                             isLocked: !licenseService.isPro
@@ -312,14 +313,14 @@ struct ContentView: View {
                             }
                         }
 
-                        // Active count in green (success), total available
+                        // Active count and total available
                         HStack(spacing: 4) {
                             if isLocked {
                                 Text("\(libraryScripts.count) scripts included with SaneClick")
                                     .foregroundStyle(Color.white.opacity(0.9))
                             } else {
                                 Text("\(activeCount)")
-                                    .foregroundStyle(activeCount > 0 ? Color(red: 0.13, green: 0.77, blue: 0.37) : Color.white.opacity(0.9))
+                                    .foregroundStyle(.white)
                                 Text("of \(libraryScripts.count) enabled")
                                     .foregroundStyle(Color.white.opacity(0.9))
                             }
@@ -555,7 +556,7 @@ struct ContentView: View {
 
     private var customActionsSubtitle: String {
         let count = customScripts.count
-        return count == 1 ? "1 custom action to edit or remove" : "\(count) custom actions to edit or remove"
+        return count == 1 ? "1 custom action" : "\(count) custom actions"
     }
 
     private var emptyStateBody: String {
@@ -627,7 +628,7 @@ struct LibraryScriptRow: View {
                 Text(libraryScript.description)
                     .font(.system(size: 16))
                     .foregroundStyle(Color.white.opacity(0.9))
-                    .lineLimit(1)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             Spacer()
