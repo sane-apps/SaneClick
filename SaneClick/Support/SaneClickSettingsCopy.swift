@@ -11,7 +11,7 @@ enum SaneClickSettingsCopy {
         defaultValue: "Monitored Folders"
     )
 
-    static let monitoredFoldersEmptyStateHint = String(
+    static let monitoredFoldersHint = String(
         localized: "saneclick.settings.hint.monitored_folders_empty",
         defaultValue: "Choose the folders where SaneClick should appear in Finder. Finder Recents is a smart view, so add the folder that actually contains the files."
     )

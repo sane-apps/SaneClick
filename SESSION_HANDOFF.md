@@ -1,4 +1,35 @@
+## 2026-09-07 04:12 ET — Recents guidance and stale catalog fixed; runtime verified
+
+- Actual first signed build exposed a second cause: Localizable.xcstrings English overrides the fuller Swift defaultValue with stale first-sentence-only text. Updated the existing key across all11 locales, and rendered guidance unconditionally in Settings. Swift property renamed monitoredFoldersHint; localization key retained.
+- New signed runtime2ea7db3a4a4f4d8724f3774f2f0e7036 AX matches full English string with5folders. Inspected screenshots03:57:07 and04:09:55 prove full two-line hint and complete folder/Add Folder section without clipping. recents-hint-proof.json source hashes/limits; non-English visual review is still pending.
+- Native scrollbar increment-page AX button successfully scrolled to bottom; fresh AX value1 and screenshot prove outcome, avoiding the set-value receipt-error path.
+- Owner63 scripts/folders unchanged. Normal Quit stopped10392/logger10390/supervisor10389 at08:11:04Z/app_exited, receipt outputs/runtime-logs/20260907T075508Z-20260907-10248-50l6la/receipt.json. First runtime9121/log9118/supervisor9117 also stopped07:54:09Z.
+- Reviewed code/catalog diff and saved current Apple folder-guidance sources in ARCHITECTURE. Commit and canonical pre-push checks next, then direct main push/Air sync. Pending customer_ui_action_executor.rb containment remains separate; no full8-action or public release claim.
+
+## 2026-09-07 — Recents guidance fix building
+
+- Source change: existing monitored-folder guidance is unconditional, with shared divider; renamed Swift property monitoredFoldersHint, existing localization key/text unchanged. Empty and populated lists both retain help.
+- Canonical Mini signed test_mode --release --allow-keychain --no-logs --log-seconds3600 building; log outputs/customer-ui/portfolio-20260907/recents-hint-runtime.log, controller exec session57765. Read resulting workflow/runtime receipt and exact app/window identity before GUI work. No storage reset/fixture changes planned; compare owner-state-before after proof.
+- Verify fresh live Settings AX contains Recents guidance with five folders, inspect clean screenshot for readable full text; normal Quit then log-stop proof. Commit/push to main and Air sync after validation. Overall portfolio still ACTIVE. Cleanup guard repair is complete/live63tests; infra handoff has receipts.
+
+## 2026-09-07 03:35 ET — Fresh-folder proof complete except Recents guidance; owner state restored
+
+- Main remains2dfd511 on both machines; GitHub default auth freshly confirmed MrSaneApps with normal environment and token overrides unset. No new code commit/release this phase.
+- Missing monitored-folder JSON seeded expected five home folders. Settings full folders section, actual Downloads image Finder menu, Images submenu and deleted custom Copy Path absence verified in clean inspected screenshots03:23:03,03:29:58,03:31:05,03:32:14; fresh-install-workflow-proof.json records partial scope. Existing Recents guidance is hidden for populated folders (SettingsView186); fix required before Action8 clearance. AgentMemory14312990-dbd5-4c79-af21-78141b8c29e2.
+- ORIGINAL STORAGE RESTORED: original SHA5fbdb8777f51b37480d044b47f54c6cf5384567272e894396a701d1d28adffc7; all63 owner scripts and folders match original backups. Generated JSON and fixture archived under fresh-install-generated-monitored_folders.json and fresh-install-fixture. No Downloads fixture remains.
+- Normal Quit stopped98900/logger98898/supervisor98897 at07:33:27.869813Z (app_exited). Runtime09c36270cf286be27b74f9e14ed66193 receipt outputs/runtime-logs/20260907T071602Z-20260907-98853-qr4m66/receipt.json. Owned Finder window2966 closed; existing Brave65043 unhidden/active; no owned GUI runtime remains.
+- Caught ruby other-app-data consent during proof. Stuck nightly cleanup88766/88769/88771 stopped, lingering native prompt denied and screenshot03:27:09 proves gone. Attribution to nightly process is likely, not TCC-log proven. Shared infra handoff details unsafe legacy follow-up script and required active-work guard. No schedule or broad permission grants changed.
+- Next priority: repair unattended cleanup path before another run; then narrow Recents hint fix/runtime check and remaining complete customer workflows/entitlements. Unsafe legacy customer executor still blocked. Full portfolio goal, shared infra integration, releases and LS replacements remain ACTIVE.
+
 # Session Handoff — SaneClick
+
+## 2026-09-07 03:13 ET — SaneClick custom editor fix pushed and synced
+
+- Main2dfd5116666c0bc96c9163787fb38cbf0422cff1 independently confirmed on origin; Air fast-forwarded to same SHA. No PR. Canonical pre-push198 tests PASS, workflow1e3eb4f0f30393cbfcc263120619d04b; apps/SaneClick/outputs/customer-ui/portfolio-20260907/custom-cancel-push.log.
+- Existing-action Cancel is runtime verified: changed draft name and code, clicked Cancel, editor dismissed and saved action unchanged. Custom create/edit/disable/relaunch/re-enable/delete also exercised without changing63 owner records. Owner scripts/folders remain identical after full tests. Actual Finder-menu deletion read-back remains pending.
+- Six inspected private screenshots, exact source hash and scope limits in custom-workflow-proof.json. Runtime94691/logger94689/supervisor94688 stopped07:09:11Z. No test fixture or owned app remains. Air stash portfolio-click-cancel-before-main-sync-20260907 preserves superseded source/handoff; do not reapply.
+- Next SaneClick: fresh monitored-folder setup and actual Finder proof, remaining library categories/entitlement states/settings actions/editor-scroll visuals; replace dishonest legacy executor. Then versioned release/LS replacement. Overall portfolio goal and shared infra integration remain active.
+
 
 ## 2026-09-07 03:10 ET — Custom editor Cancel verified; fixture removed
 

@@ -154,17 +154,17 @@
     },
     "saneclick.settings.hint.monitored_folders_empty" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Wähle die Ordner aus, in denen SaneClick im Finder angezeigt werden soll." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Choose the folders where SaneClick should appear in Finder." } },
-        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Elige las carpetas donde SaneClick debe aparecer en Finder." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Choisissez les dossiers où SaneClick doit apparaître dans Finder." } },
-        "it" : { "stringUnit" : { "state" : "translated", "value" : "Scegli le cartelle in cui SaneClick deve apparire nel Finder." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Finder に SaneClick を表示するフォルダを選択します。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "Finder에서 SaneClick이 표시되어야 하는 폴더를 선택하세요." } },
-        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Kies de mappen waarin SaneClick in Finder moet verschijnen." } },
-        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Escolha as pastas em que o SaneClick deve aparecer no Finder." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "选择 SaneClick 应在 Finder 中显示的文件夹。" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "選擇 SaneClick 應在 Finder 中顯示的資料夾。" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Wähle die Ordner aus, in denen SaneClick im Finder angezeigt werden soll. Die Finder-Ansicht für zuletzt verwendete Dateien ist ein intelligenter Ordner. Füge den Ordner hinzu, in dem die Dateien tatsächlich gespeichert sind." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Choose the folders where SaneClick should appear in Finder. Finder Recents is a smart view, so add the folder that actually contains the files." } },
+        "es-419" : { "stringUnit" : { "state" : "translated", "value" : "Elige las carpetas donde SaneClick debe aparecer en Finder. La vista de archivos recientes de Finder es una vista inteligente; agrega la carpeta que realmente contiene los archivos." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Choisissez les dossiers où SaneClick doit apparaître dans Finder. La vue des fichiers récents du Finder est une vue intelligente. Ajoutez le dossier qui contient réellement les fichiers." } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Scegli le cartelle in cui SaneClick deve apparire nel Finder. La vista dei file recenti del Finder è una vista intelligente: aggiungi la cartella che contiene effettivamente i file." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Finder に SaneClick を表示するフォルダを選択します。Finder の最近使った項目はスマート表示です。ファイルが実際に保存されているフォルダを追加してください。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "Finder에서 SaneClick이 표시되어야 하는 폴더를 선택하세요. Finder의 최근 항목은 스마트 보기입니다. 파일이 실제로 저장된 폴더를 추가하세요." } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Kies de mappen waarin SaneClick in Finder moet verschijnen. De weergave van recente bestanden in Finder is een slimme weergave. Voeg de map toe waarin de bestanden daadwerkelijk staan." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Escolha as pastas em que o SaneClick deve aparecer no Finder. A visualização de arquivos recentes do Finder é uma visualização inteligente. Adicione a pasta que realmente contém os arquivos." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "选择 SaneClick 应在 Finder 中显示的文件夹。Finder 的最近使用项目是智能视图，请添加实际存放文件的文件夹。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "選擇 SaneClick 應在 Finder 中顯示的資料夾。Finder 的最近使用項目是智慧型顯示方式，請加入實際存放檔案的資料夾。" } }
       }
     },
     "saneclick.settings.label.active_actions" : {

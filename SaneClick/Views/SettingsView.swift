@@ -182,9 +182,10 @@ struct SettingsView: View {
                 }
 
                 CompactSection(SaneClickSettingsCopy.monitoredFoldersSectionTitle, icon: "folder.badge.gearshape", iconColor: SaneSettingsIconSemantic.content.color) {
-                    if monitoredFolderService.folders.isEmpty {
-                        readableHint(SaneClickSettingsCopy.monitoredFoldersEmptyStateHint)
-                    } else {
+                    readableHint(SaneClickSettingsCopy.monitoredFoldersHint)
+                    CompactDivider()
+
+                    if !monitoredFolderService.folders.isEmpty {
                         let folders = monitoredFolderService.folders
                         ForEach(Array(folders.enumerated()), id: \.element.id) { index, folder in
                             VStack(alignment: .leading, spacing: 6) {
