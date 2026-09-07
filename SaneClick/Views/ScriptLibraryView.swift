@@ -172,7 +172,7 @@ struct ScriptLibraryView: View {
             if showAllSection, !allScripts.isEmpty {
                 VStack(spacing: 8) {
                     ForEach(allScripts, id: \.name) { libraryScript in
-                        let installedScript = scriptStore.scripts.first { $0.name == libraryScript.name }
+                        let installedScript = installedLibraryScripts.first { $0.name == libraryScript.name }
                         let isEnabled = installedScript?.isEnabled ?? false
                         let categoryColor = colorForCategory(libraryScript.category)
 
@@ -373,7 +373,7 @@ struct ScriptLibraryView: View {
                 } else {
                     VStack(spacing: 8) {
                         ForEach(libraryScripts, id: \.name) { libraryScript in
-                            let installedScript = scriptStore.scripts.first { $0.name == libraryScript.name }
+                            let installedScript = installedLibraryScripts.first { $0.name == libraryScript.name }
                             let isEnabled = installedScript?.isEnabled ?? false
 
                             LibraryScriptRow(
@@ -432,6 +432,12 @@ struct ScriptLibraryView: View {
         }
     }
 
+    private var installedLibraryScripts: [Script] {
+        ScriptLibrary.availableCategories.flatMap {
+            ActionCatalog.libraryScripts(in: $0, from: scriptStore.scripts)
+        }
+    }
+
     private func enabledCount(for category: ScriptLibrary.ScriptCategory?) -> Int {
         let libraryScriptNames: Set<String> = if let category {
             Set(ScriptLibrary.availableScripts(for: category).map(\.name))
@@ -439,7 +445,7 @@ struct ScriptLibraryView: View {
             Set(actionableAllScripts.map(\.name))
         }
 
-        let enabledNames = Set(scriptStore.scripts.compactMap { script in
+        let enabledNames = Set(installedLibraryScripts.compactMap { script in
             libraryScriptNames.contains(script.name) && script.isEnabled
                 ? script.name
                 : nil

@@ -322,6 +322,22 @@ struct ActionCatalogTests {
         #expect(ActionCatalog.customScripts(from: [custom]) == [custom])
     }
 
+    @Test("Enabled same-name custom action does not enable a disabled library action")
+    func enabledCustomActionDoesNotEnableLibraryAction() throws {
+        let libraryScript = try #require(ScriptLibrary.universalScripts.first)
+        var builtIn = libraryScript.toScript()
+        builtIn.isEnabled = false
+        var custom = Script(name: libraryScript.name, content: "echo customer-owned")
+        custom.isEnabled = true
+
+        for scripts in [[custom, builtIn], [builtIn, custom]] {
+            let installed = ActionCatalog.libraryScripts(in: .universal, from: scripts)
+            #expect(installed == [builtIn])
+            #expect(installed.filter(\.isEnabled).isEmpty)
+            #expect(ActionCatalog.customScripts(from: scripts) == [custom])
+        }
+    }
+
     @Test("Legacy built-in records remain library actions after content updates")
     func legacyBuiltInRecordsRemainLibraryActionsAfterContentUpdates() throws {
         let libraryScript = try #require(ScriptLibrary.libraryScript(named: "Copy Path"))
