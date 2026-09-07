@@ -275,13 +275,12 @@ struct ScriptEditorView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        if existingScript == nil {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
-                    dismiss()
-                }
-                .accessibilityIdentifier("cancelButton")
+        ToolbarItem(placement: .cancellationAction) {
+            Button("Cancel") {
+                dismiss()
             }
+            .keyboardShortcut(.cancelAction)
+            .accessibilityIdentifier("cancelButton")
         }
 
         ToolbarItem(placement: .automatic) {

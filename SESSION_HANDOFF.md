@@ -1,5 +1,31 @@
 # Session Handoff — SaneClick
 
+## 2026-09-07 03:10 ET — Custom editor Cancel verified; fixture removed
+
+- Fixed existing-action editor's missing Cancel by removing the new-only condition and using native cancel keyboard shortcut. Actual signed runtime1a8c7af4bd84e398f386e7549dae94e5 shows Cancel; changed name/code draft then clicked it. Editor dismissed and stored record stayed unchanged. Escape shortcut itself was not exercised.
+- Actual custom creation, rename to built-in Copy Path, code edit, disable, relaunch persistence, re-enable and confirmed deletion passed. UUID724306D2-1592-40FD-A10C-D3BB2E7DA466 is removed. Original63 records and monitored folders match the original backups; built-in Copy Path never changed. No test script was executed.
+- Six clean screenshots inspected and source-bound assertions in outputs/customer-ui/portfolio-20260907/custom-workflow-proof.json. Includes missing-Cancel before, visible-Cancel draft after, named delete confirmation and final original-only manager. Full editor scrolling/code-area visual audit and Finder-menu deletion read-back remain open; this is not complete8-action clearance.
+- Normal Quit stopped app94691, logger94689, supervisor94688 at07:09:11Z/app_exited. Receipt outputs/runtime-logs/20260907T070007Z-20260907-94519-5210ed/receipt.json; no owned runtime left.
+- Customer action manifest now explicitly requires Cancel discarding unsaved name/code. Updated --plan parses, but unsafe executor --execute remains blocked pending replacement. Code/manifest match Air/Mini; commit/full pre-push/sync next, no versioned release or LS changes yet.
+
+
+## 2026-09-07 03:00 ET — Custom workflow active; missing edit Cancel fixed in source
+
+- Real custom-action creation, rename/code edit, and disable passed. Disposable record UUID724306D2-1592-40FD-A10C-D3BB2E7DA466 was created as Portfolio QA Action20260907, then edited to Copy Path with harmless printf portfolio-qa-v2 code. All63 original owner records unchanged. Current fixture is disabled; built-in Copy Path remains enabled. Saved records and AX/click transcripts are outputs/customer-ui/portfolio-20260907/custom-*.
+- Actual existing-action editor had no Cancel (confirmed AX and clean inspected screenshot02:56:23); new-action editor had Cancel. Root cause was existingScript==nil toolbar condition. Removed guard and added native cancel keyboard shortcut; customer action manifest now explicitly requires discarding unsaved name/code edits. Actual cancellation proof pending.
+- Prior signed runtime workflow3748e180b3ebf74f9a3286a3f94725ef app92138/log92136/supervisor92135 stopped06:58:29Z/app_exited. New canonical signed test_mode rebuilding, log custom-cancel-fixed-runtime.log; inspect completion and record new app/window/receipt before GUI work.
+- Do not overwrite owner storage. Next verify same-name custom edit and disabled state survived relaunch; reopen that fixture, modify draft fields and Cancel, verify persisted data unchanged; re-enable then delete ONLY UUID724306D2-1592-40FD-A10C-D3BB2E7DA466 using the real manager confirmation, compare originals, normal Quit and verify log stopped. Code and final proof/commit/sync pending. AgentMemorycb0bd3cd-16cb-45f6-906e-1e2c81b8d2c1.
+
+
+## 2026-09-07 02:40 ET — Library fix on main; both machines aligned
+
+- Direct-main push9e78189a77c34a10a3764be6b32337724c1a25b5 confirmed independently by git ls-remote. Pre-push canonical full198 tests/22 suites PASS, workflow78ddcaf88cd0a9b9cf0b9535229ee627; outputs/customer-ui/portfolio-20260907/library-fix-push.log. No PR created.
+- Air fast-forwarded to same main after recoverable path-scoped stash portfolio-click-library-before-main-sync-20260907. It contains superseded source/handoff only; do not reapply. Pending customer_ui_action_executor.rb guard remains on both machines. Shared SCREENSHOT_TOOLS.md sheet instructions synced, among existing infra dirties.
+- Owner scripts/folders still equal saved originals AFTER full suite. Signed runtime app81405/logger81403/supervisor81402 absent; stopped receipt and three inspected regression screenshots retained. No app or log run active from this lane.
+- Native view source SHA matches runtime-inspected source after pre-commit lint. Library bug fact36dffa04-2917-4d63-bf58-7136598a5284 supersedes original114b9b19 findings; code/runtime fixed, public versioned release still pending.
+- Next: replace legacy customer executor with real observed actions without reducing manifest scope; complete remaining library/category/custom CRUD/fresh-install/entitlement proof and settings safe actions, then versioned native release and LS replacement. Scroll tool sheet focus remains unverified; supported search AXSetValue path is documented. Continue broader portfolio goal; no full-workflow or portfolio completion claimed.
+
+
 ## 2026-09-07 02:38 ET — Library identity regression verified and owner state restored
 
 - Library counts and both category/All Scripts rows now reuse existing ActionCatalog classification, preserving same-name custom records and legacy/duplicate handling. Six focused tests pass, including enabled-custom/disabled-built-in in both input orders.

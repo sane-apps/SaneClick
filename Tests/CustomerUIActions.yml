@@ -174,9 +174,11 @@ actions:
   steps:
   - Open custom action management.
   - Create, edit, disable, re-enable, and delete a custom action.
+  - Edit an existing action, change its name and code, then click Cancel.
   - Create or import a custom action whose title matches a built-in action.
   assertions:
   - Custom action edits persist after relaunch.
+  - Cancel discards unsaved name and code changes without changing the stored action.
   - Built-in reconciliation does not overwrite same-title custom action content.
   - Deleted custom actions disappear from the menu.
   evidence:
@@ -205,9 +207,11 @@ actions:
   user_inputs:
   - Open custom action management.
   - Create, edit, disable, re-enable, and delete a custom action.
+  - Edit an existing action, change its name and code, then click Cancel.
   - Create or import a custom action whose title matches a built-in action.
   expected_outputs:
   - Custom action edits persist after relaunch.
+  - Cancel discards unsaved name and code changes without changing the stored action.
   - Built-in reconciliation does not overwrite same-title custom action content.
   - Deleted custom actions disappear from the menu.
 - id: settings-tabs-and-status
