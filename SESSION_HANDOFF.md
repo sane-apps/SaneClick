@@ -1,5 +1,22 @@
 # Session Handoff — SaneClick
 
+## 2026-09-07 01:47 ET — Workspace minimum verified in signed runtime
+
+- One-line native SwiftUI minimum passed the unchanged restored-license-window regression1/1. Signed workflowd5c07c3b6092d705ed7e3b790ca999e8 built and launched current source with a live log attached before launch.
+- Clean private screenshots01:43:54 (1040x772) and01:45:15 (800x552) in outputs/portfolio-guide-facts-final-20260907 were inspected: readable action descriptions, switches and sidebar; long lists scroll at the viewport boundary. A400x300 resize request was clamped to800x552; Peekaboo reported it did not reach the deliberately invalid requested size, and fresh AX read-back proved the expected minimum. Restored1040x772 before normal Quit.
+- Runtime log receipt outputs/runtime-logs/20260907T054232Z-20260907-67091-tu9gww/receipt.json stopped05:46:07Z/app_exited. App67269/log67266/supervisor67265 are absent. Python prompt-resolution screenshots01:36/01:38 are private permission evidence only.
+- Source commit/full pre-push suite/public guide deployment are next. No native version bump, ZIP release, LS change or full customer-workflow clearance claimed.
+
+
+## 2026-09-07 01:42 ET — Push gate found a real workspace minimum-size bug
+
+- Guide-copy commit3ad3edb remains local on Mini; origin/main and Air HEAD remain662e655. Pre-push failed only VisualVerificationRenderTests/workspaceReleasesLicenseSizedWindow: content expanded1040px but NSWindow.minSize.width was474 instead of800. Current failing log and xcresult: outputs/verify/20260907T053001.274269Z-63206-f60922cc/. The wrapper's advice to use test_output.txt was wrong; that file was from July.
+- NSHostingController defaults to standardBounds and updates window contentMinSize from SwiftUI (Apple docs https://developer.apple.com/documentation/swiftui/nshostingcontroller/sizingoptions, verified with installed SDK). ContentView lacked a SwiftUI minimum. One native .frame(minWidth:800,minHeight:500) now expresses the same workspace minimum as the shared window helper; source matches both machines. Existing regression unchanged and passed1/1, workflow4f4faad84f7b75262918b0daac32603f, outputs/monitor-tests/20260907T054044.561720Z-65784-53854eb1/receipt.json. Signed runtime/visual and full pre-push verification pending.
+- First focused command selected zero tests because Swift Testing's exact selector needs trailing parentheses; monitor_tests correctly rejected it. The app's scripts/SaneMaster.rb is a shell wrapper, so invoke directly, not via ruby. Preserve both failure logs in portfolio-guide-facts-final-20260907.
+- Private clean Mini screenshot01:36 showed a Python local-network prompt. Native Allow clicked under owner standing authorization; screenshot01:38 confirms prompt gone. This is consent read-back, not a fresh Python network-feature test. Signed-in Mini Brave preserved. Preview PID60504 is absent. Air guard renewed until17:41Z without changing lock/logout preferences.
+- Broader goal remains active. Do not call native release or guides deployed until remaining proof succeeds.
+
+
 ## 2026-09-07 01:17 ET — Guide factual corrections ready to publish
 
 - Rewrote three existing guide articles (batch rename, image conversion and photo metadata) to describe real outcomes without unsupported negative comparisons. Updated guide cards, titles/descriptions/JSON-LD/dateModified and readable source-link styling. Kept existing layout.

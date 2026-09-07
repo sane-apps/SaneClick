@@ -29,6 +29,7 @@ struct ContentView: View {
         } detail: {
             detailBackground
         }
+        .frame(minWidth: 800, minHeight: 500)
         .navigationTitle("SaneClick")
         .saneWindowContentSize(CGSize(width: 1040, height: 720), hugging: false)
         .sheet(isPresented: $showLibrary) {
