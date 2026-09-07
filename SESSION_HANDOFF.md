@@ -1,5 +1,22 @@
 # Session Handoff — SaneClick
 
+## 2026-09-07 00:55 ET — Website defects fixed and verified; deploy pending
+
+- Corrected six live Donate anchors from product checkout to GitHub Sponsors, kept heart interiors pink, removed six zero-telemetry slogans contradicting disclosed aggregate counts, and removed the redundant blanket on-device comparison row/metadata wording.
+- Five guide titles were hidden behind fixed navigation. A real Mini browser regression failed headingTop 0 < navBottom 88.84. Existing article.container selectors now preserve vertical padding; mobile top spacing accommodates wrapped navigation. Fourteen desktop/mobile layout checks pass, including no horizontal page overflow and correct Donate URL/pink fill.
+- Fourteen clean final page/viewport images inspected: outputs/portfolio-web-layout-20260907 (five guides and homepage at desktop/375, reduced motion) plus outputs/portfolio-web-final-20260907/guides-{desktop,375}. Each receipt records the actual visual verdict. Old guide captures with clipped titles are superseded. Homepage scroll animations hide offscreen content in full-page no-preference captures; reduced-motion captures show it. Mobile comparison tables scroll inside containers.
+- Runnable check and before/after JSON: outputs/portfolio-web-final-20260907/check-layout.cjs and layout-{before,after}.json. Shared SEO audit passed 10 tests and 95 pages across its eight configured sites. It now catches Donate links aimed at SaneApps /buy routes and accepts the configured SaneScan social-card.png while rejecting paths outside the site. The two shared audit files match Air/Mini.
+- This is scoped link/layout/privacy-copy verification, not a full factual clearance of historical guide and competitor claims. Guide wording about Finder rename, Preview batch export and sips metadata removal needs a source/current-runtime content audit. Native release and broader portfolio work remain pending.
+- Website commit/push/deploy and live read-back remain next. No native artifact or LS upload changed.
+
+## 2026-09-07 00:27 ET — Native fixes pushed; Air and Mini source aligned
+
+- Direct-main push succeeded: SaneClick2ecc816bc22ff827e31e0b0a8f6e7fa66e27ba04. Remote refs/heads/main independently read back at that SHA. No PR created. Git pre-push ran the canonical full suite again:197 tests/22 suites PASS, workflow c612944566bcd38c5c9e5e739e4476e7, outputs/verify/20260907T042332.348342Z-48907-c4de2050/01-test.log.
+- Pre-commit lint removed one extra blank line in VisualVerificationRenderTests; pre-push tested the committed result. The 12 committed files include shared SaneUI pins, native fixes/tests and documentation. Seven website files remain uncommitted.
+- Air fast-forwarded from580316e throughd0bd558 to2ecc816. Preserved previous Air work in recoverable stash6a718ed40f70dd51bf02909ea5652e379692c4a9 (portfolio-click-before-main-sync-20260907). Reapplied its website-only patch and brought the new header heart to the same pink as Mini. All19 touched files had identical SHA256 on both hosts after sync.
+- Five Finder category actions and stopped runtime are recorded in finder-action-verification.json. Existing broad workflow/release tasks and guide Donate-link repair remain open. Source push is not an app or website release.
+
+
 ## 2026-09-07 00:23 ET — Five real Finder categories verified; source ready for main
 
 - Actual Finder context-menu clicks passed one representative action in every category: Duplicate with Timestamp, Replace Spaces with Underscores, Convert to JPEG, Format JSON and Create SHA256 File. Byte/hash, rename, JSON-content and image-format/dimension assertions all passed. No IPC request was injected.

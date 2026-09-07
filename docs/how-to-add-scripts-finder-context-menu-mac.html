@@ -136,7 +136,7 @@
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px var(--accent-glow); filter: brightness(1.05); }
 
         /* Article */
-        article { padding-top: 120px; padding-bottom: 80px; }
+        article.container { padding-top: 120px; padding-bottom: 80px; }
         article h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 5vw, 2.75rem); line-height: 1.2; margin-bottom: 24px; letter-spacing: -0.02em; }
         article h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.5rem; margin: 48px 0 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; letter-spacing: -0.01em; }
         article p { margin-bottom: 24px; color: var(--text-secondary); }
@@ -234,7 +234,7 @@
         .footer-copy { color: var(--text-secondary); font-size: 0.95rem; }
 
         @media (max-width: 768px) {
-            article { padding-top: 100px; }
+            article.container { padding-top: 140px; }
             .footer-links { flex-direction: column; gap: 12px; align-items: center; }
         }
     
@@ -389,8 +389,8 @@
             </a>
             <div class="nav-links">
                 <a href="/guides.html">&larr; All Guides</a>
-                <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="btn-primary" style="padding: 10px 20px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444" stroke="#ffffff" stroke-width="1.5" style="margin-right: 6px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <a href="https://github.com/sponsors/MrSaneApps" class="btn-primary" style="padding: 10px 20px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#ea4aaa" stroke="#ffffff" stroke-width="1.5" style="margin-right: 6px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                     Donate
                 </a>
             </div>
@@ -448,7 +448,6 @@
     <footer>
         <div class="container">
             <p style="font-style: italic; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 20px; opacity: 0.85;">"For God has not given us a spirit of fear, but of power, love, and a sound mind." &mdash; 2 Timothy 1:7</p>
-            <p class="footer-privacy"><strong>0% Telemetry</strong>. <strong>0% Spying</strong>. <strong>100% On-Device</strong>.</p>
             <div class="footer-links">
                 <a href="/">Home</a>
                 <a href="/guides.html">Guides</a>
