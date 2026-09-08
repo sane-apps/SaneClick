@@ -17,7 +17,7 @@ packages:
     from: 2.9.4
   SaneUI:
     url: https://github.com/sane-apps/SaneUI.git
-    revision: 60176f30007e0f931195785aa769e4ef5172f7ee
+    revision: cefaf8c4a99999f6a21d81f3fb6a6e6662115d55
 
 settings:
   DEAD_CODE_STRIPPING: YES
@@ -120,8 +120,8 @@ targets:
         PRODUCT_NAME: SaneClick
         PRODUCT_BUNDLE_IDENTIFIER: com.saneclick.SaneClick
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        MARKETING_VERSION: "1.3.3"
-        CURRENT_PROJECT_VERSION: "1303"
+        MARKETING_VERSION: "1.3.4"
+        CURRENT_PROJECT_VERSION: "1304"
         ENABLE_PREVIEWS: YES
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
@@ -182,8 +182,8 @@ targets:
         INFOPLIST_KEY_AppStoreProductID: com.saneclick.app.pro.actions.v4
         PRODUCT_NAME: SaneClick
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        MARKETING_VERSION: "1.3.3"
-        CURRENT_PROJECT_VERSION: "1303"
+        MARKETING_VERSION: "1.3.4"
+        CURRENT_PROJECT_VERSION: "1304"
         ENABLE_PREVIEWS: YES
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
@@ -247,8 +247,8 @@ targets:
         INFOPLIST_FILE: SaneClickExtension/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.saneclick.SaneClick.FinderSync
         PRODUCT_NAME: SaneClickExtension
-        MARKETING_VERSION: "1.3.3"
-        CURRENT_PROJECT_VERSION: "1303"
+        MARKETING_VERSION: "1.3.4"
+        CURRENT_PROJECT_VERSION: "1304"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
         MACOSX_DEPLOYMENT_TARGET: "14.0"

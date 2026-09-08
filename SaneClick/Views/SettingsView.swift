@@ -599,7 +599,7 @@ struct CategoryRow: View {
                 }
                 .foregroundStyle(Color.saneAccent)
             } else {
-                Text("\(totalCount)")
+                Text("\(activeCount)")
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundStyle(.white)
@@ -607,6 +607,7 @@ struct CategoryRow: View {
                     .padding(.vertical, 3)
                     .background(categoryColor.opacity(0.15))
                     .clipShape(Capsule())
+                    .accessibilityLabel("\(activeCount) of \(totalCount) enabled")
             }
         }
         .padding(.vertical, 4)

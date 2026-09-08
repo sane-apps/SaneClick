@@ -6,7 +6,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sane-apps/SaneUI.git",
       "state" : {
-        "revision" : "60176f30007e0f931195785aa769e4ef5172f7ee"
+        "revision" : "cefaf8c4a99999f6a21d81f3fb6a6e6662115d55"
       }
     },
     {

@@ -303,7 +303,12 @@ struct SaneClickApp: App {
                 LicenseGateView(
                     licenseService: licenseService,
                     appIcon: "cursorarrow.click.2",
-                    expiredDetail: "Finder actions are off. Buy once to turn them back on."
+                    expiredDetail: "Finder actions are off. Buy once to turn them back on.",
+                    sinceTrialUpdates: [
+                        "Sidebar counts match how many actions are on",
+                        "Cancel unsaved custom-action edits",
+                        "Finder folder guidance stays visible"
+                    ]
                 )
                     .preferredColorScheme(.dark)
                     .onAppear {

@@ -11,7 +11,7 @@ private final class MenuActionTarget: NSObject {
 
 @MainActor
 struct AppStoreReviewGuardrailTests {
-    private let everythingBundleSaneUIRevision = "60176f30007e0f931195785aa769e4ef5172f7ee"
+    private let everythingBundleSaneUIRevision = "cefaf8c4a99999f6a21d81f3fb6a6e6662115d55"
 
     @Test("Everything Bundle entitlement uses the pinned SaneUI policy")
     func everythingBundleEntitlementUsesPinnedSaneUIPolicy() throws {
@@ -381,6 +381,26 @@ struct AppStoreReviewGuardrailTests {
         #expect(executorSource.contains("return !license.hasExpiredProTrial"))
         #expect(executorSource.contains("WindowActionStorage.shared.showMainWindow()"))
         #expect(appSource.contains("Finder actions are off. Buy once to turn them back on."))
+        #expect(appSource.contains("Sidebar counts match how many actions are on"))
+        #expect(appSource.contains("Cancel unsaved custom-action edits"))
+        #expect(appSource.contains("Finder folder guidance stays visible"))
+        #expect(appSource.contains("sinceTrialUpdates:"))
+    }
+
+    @Test("Sidebar category badge shows enabled count, not the library total")
+    func sidebarBadgeShowsEnabledCount() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let rowSource = try String(
+            contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/SettingsView.swift"),
+            encoding: .utf8
+        )
+        let badgeStart = try #require(rowSource.range(of: "struct CategoryRow"))
+        let badge = String(rowSource[badgeStart.lowerBound...])
+        #expect(badge.contains("Text(\"\\(activeCount)\")"))
+        #expect(badge.contains("accessibilityLabel(\"\\(activeCount) of \\(totalCount) enabled\")"))
+        #expect(badge.contains("Text(\"\\(totalCount)\")") == false)
     }
 
     @Test("Enable All and row switches have spoken names")
