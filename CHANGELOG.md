@@ -10,8 +10,8 @@ Fixes the sidebar count badge so it shows how many actions are on, not
 the library total. Turning Enable All off no longer leaves a stale 14
 next to 0 active. Also keeps Finder folder guidance on screen after you
 add folders, lets you cancel unsaved custom-action edits, keeps same-name
-custom actions on their own on/off state, and lists what shipped since
-the trial.
+custom actions on their own on/off state, keeps a paid unlock in place
+after an update, and lists what shipped since the trial.
 
 ## [1.3.3] - 2026-08-18
 
