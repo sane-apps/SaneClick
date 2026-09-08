@@ -11,7 +11,7 @@ private final class MenuActionTarget: NSObject {
 
 @MainActor
 struct AppStoreReviewGuardrailTests {
-    private let everythingBundleSaneUIRevision = "cefaf8c4a99999f6a21d81f3fb6a6e6662115d55"
+    private let everythingBundleSaneUIRevision = "cd766fdb5f7b75e03ba69a38fca330a4554f00b1"
 
     @Test("Everything Bundle entitlement uses the pinned SaneUI policy")
     func everythingBundleEntitlementUsesPinnedSaneUIPolicy() throws {
