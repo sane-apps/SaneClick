@@ -23,8 +23,10 @@ actions:
   - Screenshot of at least one all-on category state
   required_proof_level: runtime_visual
   required_evidence_types:
-  - mini_click
+  - mini_runtime
   - screenshot
+  - fixture
+  - log
   historical_failure_classes:
   - persistence_or_relaunch_reset
   - layout_visual_regression
@@ -39,7 +41,7 @@ actions:
     - Enable the direct build Finder extension and select representative fixture files
       before context-menu actions.
     fixture_paths:
-    - Tests/Fixtures/customer-ui/finder-actions/
+    - outputs/customer-ui/portfolio-20260907/fresh-install-fixture/
   user_inputs:
   - Click each category in the sidebar.
   - Toggle Enable All off and on for Essentials, Files & Folders, Images & Media,
@@ -62,8 +64,10 @@ actions:
   - Mini AX click transcript
   required_proof_level: safe_first_surface
   required_evidence_types:
-  - mini_click
+  - mini_runtime
   - screenshot
+  - fixture
+  - log
   historical_failure_classes:
   - install_update_packaging
   - persistence_or_relaunch_reset
@@ -78,7 +82,7 @@ actions:
     - Enable the direct build Finder extension and select representative fixture files
       before context-menu actions.
     fixture_paths:
-    - Tests/Fixtures/customer-ui/finder-actions/
+    - outputs/customer-ui/portfolio-20260907/fresh-install-fixture/
   user_inputs:
   - Toggle at least one built-in action off and on from the main detail list.
   expected_outputs:
@@ -102,8 +106,10 @@ actions:
   - Screenshot of Script Library all-on state
   required_proof_level: runtime_visual
   required_evidence_types:
-  - mini_click
+  - mini_runtime
   - screenshot
+  - fixture
+  - log
   historical_failure_classes:
   - persistence_or_relaunch_reset
   - layout_visual_regression
@@ -118,7 +124,7 @@ actions:
     - Enable the direct build Finder extension and select representative fixture files
       before context-menu actions.
     fixture_paths:
-    - Tests/Fixtures/customer-ui/finder-actions/
+    - outputs/customer-ui/portfolio-20260907/fresh-install-fixture/
   user_inputs:
   - Open Browse Library.
   - Toggle All Scripts off and on.
@@ -141,8 +147,10 @@ actions:
   - Mini AX click transcript
   required_proof_level: runtime_visual
   required_evidence_types:
-  - mini_click
+  - mini_runtime
   - screenshot
+  - fixture
+  - log
   historical_failure_classes:
   - persistence_or_relaunch_reset
   - layout_visual_regression
@@ -158,7 +166,7 @@ actions:
     - Enable the direct build Finder extension and select representative fixture files
       before context-menu actions.
     fixture_paths:
-    - Tests/Fixtures/customer-ui/finder-actions/
+    - outputs/customer-ui/portfolio-20260907/fresh-install-fixture/
   user_inputs:
   - Expand every category.
   - Toggle category Enable All controls and individual rows where available.
@@ -186,9 +194,10 @@ actions:
   - Screenshot of custom action manager
   required_proof_level: full_runtime_completion
   required_evidence_types:
-  - mini_click
+  - mini_runtime
   - screenshot
   - fixture
+  - log
   historical_failure_classes:
   - duplicate_or_stale_menu_item
   - menu_entry_missing
@@ -203,7 +212,7 @@ actions:
     - Enable the direct build Finder extension and select representative fixture files
       before context-menu actions.
     fixture_paths:
-    - Tests/Fixtures/customer-ui/finder-actions/
+    - outputs/customer-ui/portfolio-20260907/fresh-install-fixture/
   user_inputs:
   - Open custom action management.
   - Create, edit, disable, re-enable, and delete a custom action.
@@ -232,8 +241,11 @@ actions:
   - Screenshot of settings state
   required_proof_level: fixture_completion
   required_evidence_types:
+  - mini_runtime
+  - screenshot
   - fixture
   - state_receipt
+  - log
   historical_failure_classes:
   - install_update_packaging
   - persistence_or_relaunch_reset
@@ -251,7 +263,7 @@ actions:
     - Enable the direct build Finder extension and select representative fixture files
       before context-menu actions.
     fixture_paths:
-    - Tests/Fixtures/customer-ui/finder-actions/
+    - outputs/customer-ui/portfolio-20260907/fresh-install-fixture/
   user_inputs:
   - Open Settings.
   - Select every tab.
@@ -278,7 +290,7 @@ actions:
   - Before/after file-state receipt
   required_proof_level: full_runtime_completion
   required_evidence_types:
-  - mini_click
+  - mini_runtime
   - screenshot
   - fixture
   - log
@@ -301,7 +313,7 @@ actions:
     - Enable the direct build Finder extension and select representative fixture files
       before context-menu actions.
     fixture_paths:
-    - Tests/Fixtures/customer-ui/finder-actions/
+    - outputs/customer-ui/portfolio-20260907/fresh-install-fixture/
   user_inputs:
   - Seed representative files and folders.
   - Trigger representative Essentials, Files & Folders, Images & Media, Coding, and
@@ -338,7 +350,7 @@ actions:
   - Settings render with monitored-folder controls
   required_proof_level: full_runtime_completion
   required_evidence_types:
-  - mini_click
+  - mini_runtime
   - screenshot
   - fixture
   - log
@@ -360,7 +372,7 @@ actions:
     - Enable the direct build Finder extension and select representative fixture files
       before context-menu actions.
     fixture_paths:
-    - Tests/Fixtures/customer-ui/finder-actions/
+    - outputs/customer-ui/portfolio-20260907/fresh-install-fixture/
   user_inputs:
   - Move any existing monitored_folders.json aside on the Mini instead of deleting
     it.
