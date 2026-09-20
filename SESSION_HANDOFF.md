@@ -24,7 +24,13 @@
   proof refresh, 3x help-wanted). Zero user complaints pending.
 - Pre-publish roll at deploy: push commits, tag v1.3.5, roll appcast + index.html + _redirects
   + Homebrew cask 1.3.4 -> 1.3.5, publish 1.3.5 artifact.
-- Next: critic review -> verdict -> clearance token -> deploy authorization checkpoint.
+- Critic 7/7 done (f3dfc0c), 202/202 tests: badge Checking... state, [S] pgrep fix,
+  gated App-init snapshot, crash-regression guardrail. Release rebuilt + re-verified
+  (badge Active, Finder E2E again green). Synthesis: /tmp/ship_critic_outputs/summary.md.
+- Direct release_preflight PASS (exit 0) on final code. Receipts re-signed post-fix.
+- Deploy constraint: release.sh MUST pass --skip-appstore (comment-only deferral
+  does not stop a store-submit attempt). Clearance target=dmg.
+- Next: checkpoint (owner decisions D1-D7) -> verdict -> clearance token -> deploy.
 
 ## 2026-09-07 04:12 ET — Recents guidance and stale catalog fixed; runtime verified
 
