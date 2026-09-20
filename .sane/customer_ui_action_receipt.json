@@ -2,9 +2,9 @@
   "app": "SaneClick",
   "status": "passed",
   "host": "Stephans-Mac-mini.local",
-  "generated_at": "2026-09-09T15:05:30Z",
+  "generated_at": "2026-09-20T21:00:12Z",
   "manifest_sha256": "b9b292d620c6ee4e304ce15acecb414fda37b7cb29e5a4cb9945a550873a6f52",
-  "source_fingerprint": "a56bad6a08568f2f16efe8bc98ee6272f9bc61ed2c5d529dee102fe17f77c9aa",
+  "source_fingerprint": "d63c7f85f7df6ea410ebe77ed911e102b938d0b390ffbfbe2803affe565b234c",
   "tested_action_ids": [
     "main-category-enable-all",
     "main-individual-action-toggle",
@@ -42,10 +42,10 @@
           "Toggle Enable All off and on for Essentials, Files & Folders, Images & Media, Coding, and Advanced."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json",
+          "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json",
           "outputs/customer-ui/content-all-actions.png",
           "outputs/customer-ui/portfolio-20260907/fresh-install-fixture/example.png",
-          "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         ]
       },
       "evidence": [
@@ -68,7 +68,7 @@
         {
           "type": "mini_runtime",
           "detail": "Observed Mini runtime metadata for main-category-enable-all",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json"
         },
         {
           "type": "screenshot",
@@ -83,7 +83,7 @@
         {
           "type": "log",
           "detail": "Runtime log for main-category-enable-all",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         }
       ]
     },
@@ -111,10 +111,10 @@
           "Toggle at least one built-in action off and on from the main detail list."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json",
+          "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json",
           "outputs/customer-ui/main-individual-action.png",
           "outputs/customer-ui/portfolio-20260907/fresh-install-fixture/example.png",
-          "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         ]
       },
       "evidence": [
@@ -137,7 +137,7 @@
         {
           "type": "mini_runtime",
           "detail": "Observed Mini runtime metadata for main-individual-action-toggle",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json"
         },
         {
           "type": "screenshot",
@@ -152,7 +152,7 @@
         {
           "type": "log",
           "detail": "Runtime log for main-individual-action-toggle",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         }
       ]
     },
@@ -182,10 +182,10 @@
           "Toggle All Scripts off and on."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json",
+          "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json",
           "outputs/customer-ui/library-all-actions.png",
           "outputs/customer-ui/portfolio-20260907/fresh-install-fixture/example.png",
-          "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         ]
       },
       "evidence": [
@@ -208,7 +208,7 @@
         {
           "type": "mini_runtime",
           "detail": "Observed Mini runtime metadata for script-library-global-enable-all",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json"
         },
         {
           "type": "screenshot",
@@ -223,7 +223,7 @@
         {
           "type": "log",
           "detail": "Runtime log for script-library-global-enable-all",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         }
       ]
     },
@@ -253,10 +253,10 @@
           "Toggle category Enable All controls and individual rows where available."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json",
+          "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json",
           "outputs/customer-ui/library-category-controls.png",
           "outputs/customer-ui/portfolio-20260907/fresh-install-fixture/example.png",
-          "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         ]
       },
       "evidence": [
@@ -279,7 +279,7 @@
         {
           "type": "mini_runtime",
           "detail": "Observed Mini runtime metadata for script-library-category-controls",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json"
         },
         {
           "type": "screenshot",
@@ -294,7 +294,7 @@
         {
           "type": "log",
           "detail": "Runtime log for script-library-category-controls",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         }
       ]
     },
@@ -329,10 +329,10 @@
           "Create or import a custom action whose title matches a built-in action."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json",
+          "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json",
           "outputs/customer-ui/custom-action-editor.png",
           "outputs/customer-ui/portfolio-20260907/fresh-install-fixture/example.png",
-          "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         ]
       },
       "evidence": [
@@ -359,7 +359,7 @@
         {
           "type": "mini_runtime",
           "detail": "Observed Mini runtime metadata for custom-action-management",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json"
         },
         {
           "type": "screenshot",
@@ -374,7 +374,7 @@
         {
           "type": "log",
           "detail": "Runtime log for custom-action-management",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         },
         {
           "type": "safe_scope",
@@ -411,11 +411,11 @@
           "Exercise License, Updates, About, Report a Bug, and Quit access points where non-destructive."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json",
+          "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json",
           "outputs/customer-ui/settings-fresh-direct-monitored-folders.png",
           "outputs/customer-ui/portfolio-20260907/fresh-install-fixture/example.png",
-          "outputs/customer-ui/sweep-20260909T150530Z/state-receipt.json",
-          "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "outputs/customer-ui/sweep-20260920T210012Z/state-receipt.json",
+          "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         ]
       },
       "evidence": [
@@ -442,7 +442,7 @@
         {
           "type": "mini_runtime",
           "detail": "Observed Mini runtime metadata for settings-tabs-and-status",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json"
         },
         {
           "type": "screenshot",
@@ -457,12 +457,12 @@
         {
           "type": "state_receipt",
           "detail": "Observed structured state receipt for settings-tabs-and-status",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/state-receipt.json"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/state-receipt.json"
         },
         {
           "type": "log",
           "detail": "Runtime log for settings-tabs-and-status",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         }
       ]
     },
@@ -492,10 +492,10 @@
           "Trigger representative Essentials, Files & Folders, Images & Media, Coding, and Advanced actions."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json",
+          "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json",
           "outputs/customer-ui/finder-menu-image-file.png",
           "outputs/customer-ui/portfolio-20260907/fresh-install-fixture/example.png",
-          "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         ]
       },
       "evidence": [
@@ -522,7 +522,7 @@
         {
           "type": "mini_runtime",
           "detail": "Observed Mini runtime metadata for finder-menu-action-execution",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json"
         },
         {
           "type": "screenshot",
@@ -537,7 +537,7 @@
         {
           "type": "log",
           "detail": "Runtime log for finder-menu-action-execution",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         },
         {
           "type": "safe_scope",
@@ -575,10 +575,10 @@
           "Open Settings and verify monitored-folder controls are visible in the direct build."
         ],
         "artifacts": [
-          "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json",
+          "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json",
           "outputs/customer-ui/fresh-direct-downloads-menu.png",
           "outputs/customer-ui/portfolio-20260907/fresh-install-fixture/example.png",
-          "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         ]
       },
       "evidence": [
@@ -605,7 +605,7 @@
         {
           "type": "mini_runtime",
           "detail": "Observed Mini runtime metadata for fresh-direct-install-finder-availability",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json"
         },
         {
           "type": "screenshot",
@@ -620,7 +620,7 @@
         {
           "type": "log",
           "detail": "Runtime log for fresh-direct-install-finder-availability",
-          "path": "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+          "path": "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
         },
         {
           "type": "safe_scope",
@@ -653,10 +653,10 @@
       "screenshot=fresh-direct-install-finder-availability=outputs/customer-ui/fresh-direct-downloads-menu.png sha256=98319fafcdb2"
     ],
     "artifacts": {
-      "mini_runtime": "outputs/customer-ui/sweep-20260909T150530Z/mini-runtime-evidence.json",
-      "fixture": "outputs/customer-ui/sweep-20260909T150530Z/fixture-state.json",
-      "state_receipt": "outputs/customer-ui/sweep-20260909T150530Z/state-receipt.json",
-      "runtime_log": "outputs/customer-ui/sweep-20260909T150530Z/customer-action-runtime.log"
+      "mini_runtime": "outputs/customer-ui/sweep-20260920T210012Z/mini-runtime-evidence.json",
+      "fixture": "outputs/customer-ui/sweep-20260920T210012Z/fixture-state.json",
+      "state_receipt": "outputs/customer-ui/sweep-20260920T210012Z/state-receipt.json",
+      "runtime_log": "outputs/customer-ui/sweep-20260920T210012Z/customer-action-runtime.log"
     },
     "blocked_completion_notes": {
       "custom-action-management": "Create/edit/delete custom actions are covered by source/test guards and visual fixtures; this sweep does not mutate live customer custom-action storage.",
