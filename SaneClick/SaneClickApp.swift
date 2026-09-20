@@ -271,10 +271,14 @@ struct SaneClickApp: App {
         )
     #endif
     @State private var showWelcomeGate: Bool
-    // Built once at launch: make() runs blocking pluginkit/pgrep checks, which
-    // must never execute inside Scene/body evaluation (runloop re-entrancy
-    // crashes the AttributeGraph). No graph exists yet during App init.
-    private let welcomePermissionConfig = SaneClickWelcomePermission.make()
+    // Built once at launch when the welcome gate can show: make() runs blocking
+    // pluginkit/pgrep checks, which must never execute inside Scene/body evaluation
+    // (runloop re-entrancy crashes the AttributeGraph). No graph exists yet during
+    // App init. Returning users get a cheap placeholder the sheet never reads.
+    private let welcomePermissionConfig: WelcomeGatePermissionConfig =
+        WelcomeGateState.initialPresentation()
+            ? SaneClickWelcomePermission.make()
+            : WelcomeGatePermissionConfig(title: "Finder Extension", bullets: [])
 
     init() {
         if WelcomeGateState.hasSeenWelcome() {

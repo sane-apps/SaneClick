@@ -751,13 +751,14 @@ struct AppPreferencesTests {
 
     @Test("Pro upsell counts match their library categories")
     func proUpsellCountsMatchLibrary() {
-        let pairs: [(ProFeature, ScriptLibrary.ScriptCategory)] = [
-            (.codingScripts, .developer),
-            (.imageScripts, .designer),
-            (.advancedScripts, .powerUser),
-            (.organizationScripts, .organization)
+        let pairs: [(ProFeature, ScriptLibrary.ScriptCategory, String)] = [
+            (.codingScripts, .developer, "Coding"),
+            (.imageScripts, .designer, "Images & Media"),
+            (.advancedScripts, .powerUser, "Advanced"),
+            (.organizationScripts, .organization, "Files & Folders")
         ]
-        for (feature, category) in pairs {
+        for (feature, category, categoryName) in pairs {
+            #expect(category.rawValue == categoryName, "Pairing drifted for \(feature.rawValue)")
             let expected = ScriptLibrary.scripts(for: category).count
             let leadingNumber = Int(feature.featureDescription.prefix { $0.isNumber })
             #expect(

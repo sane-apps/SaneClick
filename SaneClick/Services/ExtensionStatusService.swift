@@ -44,6 +44,12 @@ enum ExtensionStatusService {
         return parsePluginKitEnabled(output)
     }
 
+    /// pgrep pattern for the extension process. The bracket form matches
+    /// "SaneClickExtension" in other processes' command lines but never matches
+    /// the pgrep process itself, so concurrent refreshes cannot report each
+    /// other as a running extension.
+    static let runningProcessPattern = "[S]aneClickExtension"
+
     /// Check if the extension process is currently running
     static func isExtensionRunning() -> Bool {
         #if !APP_STORE
@@ -51,7 +57,7 @@ enum ExtensionStatusService {
             let pipe = Pipe()
 
             process.executableURL = URL(fileURLWithPath: "/usr/bin/pgrep")
-            process.arguments = ["-f", "SaneClickExtension"]
+            process.arguments = ["-f", runningProcessPattern]
             process.standardOutput = pipe
             process.standardError = pipe
 

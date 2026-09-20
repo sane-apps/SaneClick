@@ -124,6 +124,44 @@ struct ExtensionStatusTests {
         #endif
     }
 
+    @Test("Running-process pattern matches the extension but never pgrep itself")
+    func runningProcessPatternNeverSelfMatches() throws {
+        let pattern = ExtensionStatusService.runningProcessPattern
+        #expect(
+            pattern.contains("SaneClickExtension") == false,
+            "Pattern must not contain the literal target or concurrent pgrep runs match each other"
+        )
+        let regex = try NSRegularExpression(pattern: pattern)
+        let appexCommandLine =
+            "/Applications/SaneClick.app/Contents/PlugIns/SaneClickExtension.appex/Contents/MacOS/SaneClickExtension"
+        let matches = regex.numberOfMatches(
+            in: appexCommandLine,
+            range: NSRange(appexCommandLine.startIndex..., in: appexCommandLine)
+        )
+        #expect(matches >= 1, "Pattern must still match the real extension process")
+    }
+
+    @Test("Blocking status check never runs inside view evaluation")
+    func statusCheckNeverRunsInViewEvaluation() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let settingsSource = try String(
+            contentsOf: projectRoot.appendingPathComponent("SaneClick/Views/SettingsView.swift"),
+            encoding: .utf8
+        )
+        let appSource = try String(
+            contentsOf: projectRoot.appendingPathComponent("SaneClick/SaneClickApp.swift"),
+            encoding: .utf8
+        )
+        #expect(settingsSource.contains("@State private var extensionStatus: ExtensionStatus = .disabled"))
+        #expect(settingsSource.contains("@State private var extensionStatus = ExtensionStatusService.checkStatus()") == false)
+        #expect(appSource.contains("private let welcomePermissionConfig: WelcomeGatePermissionConfig"))
+        #expect(appSource.contains("WelcomeGateState.initialPresentation()"))
+        #expect(appSource.contains("permissionConfig: welcomePermissionConfig"))
+        #expect(appSource.contains("permissionConfig: SaneClickWelcomePermission.make()") == false)
+    }
+
     // MARK: - ScriptExecutionResult Tests
 
     @Test("ScriptExecutionResult success factory works")

@@ -121,6 +121,11 @@ enum SaneClickSettingsCopy {
         defaultValue: "Refreshing..."
     )
 
+    static let checkingStatusBadgeText = String(
+        localized: "saneclick.settings.badge.checking",
+        defaultValue: "Checking..."
+    )
+
     static let refreshHelp = String(
         localized: "saneclick.settings.help.refresh",
         defaultValue: "Refresh the Finder extension status"

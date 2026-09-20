@@ -80,7 +80,8 @@ struct SettingsView: View {
     // re-entrant update (AttributeGraph precondition crash). The onAppear /
     // scene-phase refresh below corrects this placeholder off-evaluation.
     @State private var extensionStatus: ExtensionStatus = .disabled
-    @State private var isCheckingStatus = false
+    @State private var isCheckingStatus = true
+    @State private var hasLoadedStatus = false
     @State private var selectedTab: Tab?
 
     init(licenseService: LicenseService, initialTab: Tab? = .general) {
@@ -138,8 +139,8 @@ struct SettingsView: View {
         ScrollView(.vertical, showsIndicators: true) {
             VStack(alignment: .leading, spacing: 16) {
                 CompactSection(SaneClickSettingsCopy.rightClickMenuSectionTitle, icon: "cursorarrow.click.2", iconColor: SaneSettingsIconSemantic.content.color) {
-                    CompactRow(SaneSettingsStrings.statusLabel, icon: extensionStatus.icon, iconColor: statusColor) {
-                        StatusBadge(extensionStatus.statusText, color: statusColor)
+                    CompactRow(SaneSettingsStrings.statusLabel, icon: displayedStatusIcon, iconColor: displayedStatusColor) {
+                        StatusBadge(displayedStatusText, color: displayedStatusColor)
                     }
 
                     CompactDivider()
@@ -434,12 +435,29 @@ struct SettingsView: View {
         }
     }
 
+    /// True only before the first status check completes: the badge shows a
+    /// neutral loading state instead of asserting the .disabled placeholder.
+    private var isShowingStatusPlaceholder: Bool { isCheckingStatus && !hasLoadedStatus }
+
+    private var displayedStatusText: String {
+        isShowingStatusPlaceholder ? SaneClickSettingsCopy.checkingStatusBadgeText : extensionStatus.statusText
+    }
+
+    private var displayedStatusColor: Color {
+        isShowingStatusPlaceholder ? .gray : statusColor
+    }
+
+    private var displayedStatusIcon: String {
+        isShowingStatusPlaceholder ? "hourglass" : extensionStatus.icon
+    }
+
     private func refreshExtensionStatus() {
         isCheckingStatus = true
         DispatchQueue.global(qos: .userInitiated).async {
             let status = ExtensionStatusService.checkStatus()
             DispatchQueue.main.async {
                 extensionStatus = status
+                hasLoadedStatus = true
                 isCheckingStatus = false
             }
         }
