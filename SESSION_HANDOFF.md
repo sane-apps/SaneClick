@@ -1,3 +1,31 @@
+# Session Handoff — SaneClick
+
+## 2026-09-20 — 1.3.5 direct-lane release (ship pipeline in progress)
+
+- 1.3.5 fixes a launch-time AttributeGraph crash: ExtensionStatusService check moved out of
+  @State init/Scene body to async refresh + App init (commits 3945cf3, d74bc7b). Version
+  1.3.5/1305 in project.yml + pbxproj + CHANGELOG.
+- Verify-app 2026-09-20 (Mini, Release build): About shows 1.3.5, Extension Active, live
+  Finder E2E (Essentials > Copy Filename wrote bare filename to clipboard). 200/200 tests
+  pass (incl. new Pro-upsell-count regression test). Screenshots: outputs/verify-app-1.3.5/.
+- Direct release_preflight PASS (exit 0). Customer UI sweep + upgrade-path proof fresh.
+- Owner decisions 2026-09-20: (1) fix-then-ship App Store blockers attempt -> /support page
+  created + deployed (200), receipt committed; (2) Donate-strings blocker has no small fix
+  (shared SaneUI x 8 apps; SwiftPM forbids dual-target, traits are project-level) -> ship
+  DIRECT-DOWNLOAD ONLY for 1.3.5, App Store submission deferred. appstore.enabled stays true
+  (gate enforced); .saneprocess carries the dated deferral note. Clearance will be target=dmg.
+- Docs audit: 15/15 perspectives run, summary in /tmp/ship_docsaudit_outputs/summary.md.
+  Fix pass applied: ProFeature counts (15/12/9), SECURITY/PRIVACY/privacy.html accuracy,
+  README/CONTRIBUTING/AGENTS.md/DEVELOPMENT.md/CHANGELOG corrections, /support linked from
+  site nav/footers + redeployed. Product calls left for owner: free-tier story contradiction,
+  onboarding brand-framework gaps, forced-dark/⌘O, setup-speed claims.
+- GitHub: closed stale SaneClick#11 (1.3.3 proof, superseded) and SaneHosts#10 (Sept 9 sweep
+  passed all 11 actions). 6 open org-wide remain, all intentional trackers (roadmap, rollout,
+  proof refresh, 3x help-wanted). Zero user complaints pending.
+- Pre-publish roll at deploy: push commits, tag v1.3.5, roll appcast + index.html + _redirects
+  + Homebrew cask 1.3.4 -> 1.3.5, publish 1.3.5 artifact.
+- Next: critic review -> verdict -> clearance token -> deploy authorization checkpoint.
+
 ## 2026-09-07 04:12 ET — Recents guidance and stale catalog fixed; runtime verified
 
 - Actual first signed build exposed a second cause: Localizable.xcstrings English overrides the fuller Swift defaultValue with stale first-sentence-only text. Updated the existing key across all11 locales, and rendered guidance unconditionally in Settings. Swift property renamed monitoredFoldersHint; localization key retained.
@@ -20,8 +48,6 @@
 - Normal Quit stopped98900/logger98898/supervisor98897 at07:33:27.869813Z (app_exited). Runtime09c36270cf286be27b74f9e14ed66193 receipt outputs/runtime-logs/20260907T071602Z-20260907-98853-qr4m66/receipt.json. Owned Finder window2966 closed; existing Brave65043 unhidden/active; no owned GUI runtime remains.
 - Caught ruby other-app-data consent during proof. Stuck nightly cleanup88766/88769/88771 stopped, lingering native prompt denied and screenshot03:27:09 proves gone. Attribution to nightly process is likely, not TCC-log proven. Shared infra handoff details unsafe legacy follow-up script and required active-work guard. No schedule or broad permission grants changed.
 - Next priority: repair unattended cleanup path before another run; then narrow Recents hint fix/runtime check and remaining complete customer workflows/entitlements. Unsafe legacy customer executor still blocked. Full portfolio goal, shared infra integration, releases and LS replacements remain ACTIVE.
-
-# Session Handoff — SaneClick
 
 ## 2026-09-07 03:13 ET — SaneClick custom editor fix pushed and synced
 

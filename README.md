@@ -26,7 +26,7 @@ macOS has Services and Folder Actions, but they require Automator knowledge or A
 
 ### Why Alternatives Fail You
 
-The "easy" solutions cost $10-15, require subscriptions, or haven't been updated since 2019. Some are abandonware. Others are overkill.
+The "easy" solutions cost up to $60, rent features by subscription, or haven't been updated since 2019. Some are abandonware. Others are overkill.
 
 ---
 
@@ -60,7 +60,7 @@ Finder actions process selected files on your Mac. SaneClick does not upload fil
 | **One-Click Install** | Toggle actions on/off instantly |
 | **Custom Scripts** | Write Bash, AppleScript, or Automator workflows |
 | **Test Before Save** | Run scripts on real files with output preview before committing |
-| **Import/Export** | Share scripts as JSON (skip duplicates, update existing, or replace all) |
+| **Import/Export** | Share scripts as JSON (Skip duplicates or Replace duplicates — same-name matches only, the library is never wiped) |
 | **Menu Bar Quick Access** | Status bar icon for quick settings, Finder restart, and updates |
 | **Extension Status Monitor** | Color-coded status (green/orange/red) with one-click Finder restart |
 | **App Visibility** | Show/hide the menu bar icon or Dock icon while always keeping one entry point visible |
@@ -94,8 +94,8 @@ cd SaneClick
 # Build + test (preferred)
 ./scripts/SaneMaster.rb verify
 
-# Launch
-./scripts/SaneMaster.rb launch
+# Launch with logs (builds, installs, streams the app log)
+./scripts/SaneMaster.rb test_mode
 ```
 SaneMaster runs XcodeGen when needed; only run `xcodegen generate` manually if you add files and want to refresh immediately.
 
@@ -106,7 +106,7 @@ On first launch, follow the setup screen to enable the Finder extension, then st
 ### Enable the Extension
 
 1. Open SaneClick
-2. Go to **System Settings > Privacy & Security > Extensions > Finder**
+2. Go to **System Settings > Privacy & Security > Extensions > Added Extensions > Finder** (or click **Manage Finder Extension** inside SaneClick Settings to jump there)
 3. Enable **SaneClick**
 
 ### Troubleshooting
@@ -115,6 +115,8 @@ Check extension status in **Settings > General**:
 - **Green** = Active and working
 - **Orange** = Enabled but Finder needs restart (use the "Restart Finder" button)
 - **Red** = Disabled — enable in System Settings
+
+Library toggles do nothing until Settings > General shows Extension Active — check the badge first when actions don't appear in Finder.
 
 ---
 
@@ -144,12 +146,16 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for the full system overview and state ma
 ```
 SaneClick/
 ├── SaneClick/              # Host app (settings UI)
+│   ├── SaneClickApp.swift    # App entry
 │   ├── Models/              # Script, Category models
 │   ├── Services/            # ScriptExecutor, ScriptStore
 │   ├── Views/               # SwiftUI views
-│   └── Theme/               # Brand colors
+│   ├── Resources/           # Script library data
+│   ├── Theme/               # Brand colors
+│   └── Support/             # Helpers
 ├── SaneClickExtension/     # Finder Sync Extension
 │   └── FinderSync.swift     # Context menu provider
+├── Shared/                  # Host/extension shared code
 ├── Tests/                   # Unit tests
 └── docs/                    # Website
 ```
@@ -197,7 +203,9 @@ Before opening a PR:
 
 Stars help SaneClick stay visible to people looking for a maintained Finder utility.
 
-- 🐛 [Report a Bug](https://github.com/sane-apps/SaneClick/issues/new?template=bug_report.md)
+- 📖 [Support & FAQ](https://saneclick.com/support) — setup help, troubleshooting, system requirements
+- 🐛 Fastest bug report: **Settings > About > Report a Bug** inside the app (attaches diagnostics automatically — extension status, action counts, settings)
+- 🐛 [Report a Bug](https://github.com/sane-apps/SaneClick/issues/new?template=bug_report.md) (include your extension status from Settings > General)
 - 💡 [Request a Feature](https://github.com/sane-apps/SaneClick/issues/new?template=feature_request.md)
 
 ---

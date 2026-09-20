@@ -2,7 +2,7 @@
 
 > [README](README.md) · [ARCHITECTURE](ARCHITECTURE.md) · [DEVELOPMENT](DEVELOPMENT.md) · [PRIVACY](PRIVACY.md) · [SECURITY](SECURITY.md)
 
-**Version 1.0** | Last updated: 2026-02-02
+**Version 1.0** | Last updated: 2026-09-20
 
 > **SINGLE SOURCE OF TRUTH** for all Developers and AI Agents.
 
@@ -39,7 +39,7 @@ Real failures from past sessions. Don't repeat them.
 | **Guessed API** | Assumed API exists. It doesn't. 20 min wasted. | `verify_api` first |
 | **Skipped xcodegen** | Created file, "file not found" for 20 minutes | `xcodegen generate` after new files |
 | **Kept guessing** | Same error 4 times. Finally checked apple-docs MCP. | Stop at 2, investigate |
-| **Deleted "unused" file** | Periphery said unused, but ServiceContainer needed it | Grep before delete |
+| **Deleted "unused" file** | Periphery said unused, but a hidden runtime consumer needed it (`ServiceContainer`, since removed — lesson stands) | Grep before delete |
 | **Extension not loading** | Changed extension target but didn't rebuild host app | Rebuild both targets |
 | **Finder menu stale** | Cached menu items from previous session | Don't cache menus - rebuild on each `menu(for:)` call |
 | **App Group mismatch** | Extension couldn't read shared data | Verify `M78L6FXD48.group.com.saneclick.app` in both targets |
@@ -138,7 +138,7 @@ killall SaneClick 2>/dev/null || true
 
 ### #8: BUG FOUND? WRITE IT DOWN
 
-✅ DO: Document bugs in TodoWrite immediately
+✅ DO: Document bugs in your client's task list immediately (Claude: TodoWrite; other clients: their todo/tracking tool)
 ❌ DON'T: Try to remember bugs or skip documentation
 
 ### #9: NEW FILE? GEN THAT PILE
@@ -193,13 +193,13 @@ This is the standard protocol for investigating problems. Used by Rule #3, Circu
 
 | Tool | Purpose | When to Use |
 |------|---------|-------------|
-| **Task agents** | Explore codebase, analyze patterns | "Where is X used?", "How does Y work?" |
+| **Subagents** (Claude: Task agents; Codex: spawn_agent) | Explore codebase, analyze patterns | "Where is X used?", "How does Y work?" |
 | **apple-docs MCP** | Verify Apple APIs exist and usage | Any Apple framework API, especially FIFinderSync |
 | **context7 MCP** | Library documentation | Third-party packages |
-| **WebSearch/WebFetch** | Solutions, patterns, best practices | Error messages, architectural questions |
+| **Web search/fetch** (Claude: WebSearch/WebFetch; Codex: web_search) | Solutions, patterns, best practices | Error messages, architectural questions |
 | **Grep/Glob/Read** | Local investigation | Find similar patterns, check implementations |
 | **AgentMemory** | Shared bug patterns and architecture decisions | "Have we seen this before?" |
-| **RESEARCH.md** | Project-specific API research | Finder Sync Extension API, state machine |
+| **ARCHITECTURE.md + SESSION_HANDOFF.md** | Project-specific API research | Finder Sync Extension API, state machine |
 
 ### Research Output → Plan
 
@@ -253,7 +253,7 @@ CIRCUIT BREAKER TRIPS
 │     - What API am I misusing?               │
 │     - Has this bug pattern happened before? │
 │     - What does the documentation say?      │
-│     - Check RESEARCH.md for Finder Sync     │
+│     - Check ARCHITECTURE.md for Finder Sync │
 ├─────────────────────────────────────────────┤
 │  3. PRESENT SOP-COMPLIANT PLAN              │
 │     - State which rules apply               │
@@ -330,17 +330,19 @@ Approve?
 ```
 SaneClick/
 ├── SaneClick/              # Host app (settings UI)
-│   ├── App/                 # App entry, AppDelegate
+│   ├── SaneClickApp.swift   # App entry (no AppDelegate)
 │   ├── Models/              # Script, Category models
 │   ├── Services/            # ScriptExecutor, ScriptStore
-│   └── Views/               # SwiftUI views
+│   ├── Views/               # SwiftUI views
+│   ├── Resources/           # Script library data
+│   └── Support/             # Helpers
 ├── SaneClickExtension/     # Finder Sync Extension (CRITICAL)
 │   ├── FinderSync.swift     # FIFinderSync subclass
 │   └── Info.plist           # Extension config
+├── Shared/                  # Host/extension shared code
 ├── Tests/                   # Unit tests
-├── Resources/               # Assets, entitlements
+├── Resources/               # Assets (DMG icon)
 ├── docs/                    # Cloudflare Pages, appcast
-├── RESEARCH.md              # All research + state machine
 ├── project.yml              # XcodeGen config
 └── CLAUDE.md                # Quick reference
 ```
@@ -436,7 +438,7 @@ bugs hide in the content, which structural assertions never inspect. Required:
 ## Session Start Checklist
 
 1. Run `./scripts/SaneMaster.rb bootstrap` (if available) or `./scripts/SaneMaster.rb doctor`
-2. Read `RESEARCH.md` if unfamiliar with Finder Sync API
+2. Read `ARCHITECTURE.md` if unfamiliar with Finder Sync API
 3. Search AgentMemory with `mcp__agentmemory__memory_smart_search query: "SaneClick"`
 4. Kill stale processes: `killall SaneClick 2>/dev/null || true`
 5. Use subagents for heavy work, verify their output

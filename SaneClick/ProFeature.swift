@@ -17,9 +17,9 @@ enum ProFeature: String, ProFeatureDescribing, CaseIterable {
     var featureDescription: String {
         switch self {
         case .codingScripts: "12 developer tools for coding workflows"
-        case .imageScripts: "10 scripts for image resizing, conversion, and editing"
-        case .advancedScripts: "10 power tools for compression, hashing, and system tasks"
-        case .organizationScripts: "8 scripts for sorting, renaming, and file management"
+        case .imageScripts: "15 scripts for image resizing, conversion, and editing"
+        case .advancedScripts: "12 power tools for compression, hashing, and system tasks"
+        case .organizationScripts: "9 scripts for sorting, renaming, and file management"
         case .scriptEditor: "Create your own custom Finder scripts"
         case .importExport: "Share and back up your script collection"
         }

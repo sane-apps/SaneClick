@@ -22,8 +22,8 @@ cd SaneClick
 # Build + test (preferred)
 ./scripts/SaneMaster.rb verify
 
-# Launch
-./scripts/SaneMaster.rb launch
+# Launch with logs (builds, installs, streams the app log)
+./scripts/SaneMaster.rb test_mode
 ```
 
 ---
@@ -54,7 +54,7 @@ SaneClick/
 ## Coding Standards
 
 ### Swift
-- **Swift 5.9+** features encouraged
+- **Swift 6.0** with strict concurrency (`SWIFT_STRICT_CONCURRENCY: complete`); Swift Testing for new tests
 - **@Observable** instead of @StateObject
 - **Swift Testing** framework for tests
 
@@ -84,8 +84,8 @@ SaneClick/
 
 ## Testing the Extension
 
-1. Build and run with `./scripts/SaneMaster.rb launch`
-2. Enable the extension: System Settings > Privacy & Security > Extensions > Finder
+1. Build and run with `./scripts/SaneMaster.rb test_mode`
+2. Enable the extension: System Settings > Privacy & Security > Extensions > Added Extensions > Finder
 3. Create a test script in SaneClick
 4. Right-click a file in Finder to verify
 

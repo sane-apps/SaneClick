@@ -12,15 +12,19 @@
 
 ### App Sandbox
 SaneClick uses a Finder Extension architecture:
-- Main app is sandboxed
+- Direct-download build is **not** sandboxed (required: it runs user-authored
+  Finder scripts and updates via Sparkle outside the sandbox)
+- Mac App Store build **is** sandboxed (`SaneClick-AppStore.entitlements`)
 - Finder extension has limited entitlements
-- Scripts execute in user context (not elevated)
+- Scripts execute in user context (not elevated), with no helpers and no
+  elevated privileges
 
 ### Script Execution
 SaneClick runs user-defined scripts on files:
 - Scripts run with the user's permissions
 - No elevated privileges are used
-- Scripts have access to files selected in Finder
+- Scripts run with the user's full file access; the Finder selection only
+  determines which paths are passed in
 
 ### Code Signing
 - Signed with Developer ID: MrSaneApps (M78L6FXD48)
@@ -30,7 +34,8 @@ SaneClick runs user-defined scripts on files:
 ### Data Security
 - Scripts are stored locally in app container
 - No cloud sync or remote storage
-- No credentials or tokens stored
+- License keys are stored in Keychain; no passwords, tokens, or keys in
+  UserDefaults or plaintext files
 
 ## Reporting a Vulnerability
 
@@ -63,7 +68,7 @@ Security researchers who report valid vulnerabilities will be:
 ## Security Best Practices for Users
 
 1. **Download from official sources only**
-   - saneapps.com
+   - saneclick.com
 
 2. **Verify code signature**
    ```bash

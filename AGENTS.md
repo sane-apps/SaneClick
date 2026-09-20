@@ -24,9 +24,9 @@ Product roster (canonical): macOS = SaneHosts, SaneClip, SaneClick, SaneSales, S
 
 | Path | Purpose |
 |------|---------|
-| `SaneClick/App/` | App entry, AppDelegate |
+| `SaneClick/SaneClickApp.swift` | App entry (SwiftUI App lifecycle, no AppDelegate) |
 | `SaneClick/Models/` | Script, Category models |
-| `SaneClick/Services/` | ScriptExecutor, ConfigStore/ScriptStore |
+| `SaneClick/Services/` | ScriptExecutor, ScriptStore |
 | `SaneClick/Views/` | SwiftUI settings UI (ContentView is the main surface) |
 | `SaneClickExtension/` | Finder Sync Extension (`FinderSync.swift`, extension `Info.plist`) |
 | `Tests/` | Unit tests |
@@ -43,7 +43,7 @@ Product roster (canonical): macOS = SaneHosts, SaneClip, SaneClick, SaneSales, S
 
 ## Build, Test, Release (Mini-first)
 
-- Canonical route: run `ruby scripts/SaneMaster.rb verify` on the Mac Mini (build + tests).
+- Canonical route: run `./scripts/SaneMaster.rb verify` on the Mac Mini (build + tests).
 - Local Xcode builds on the Air are an explicitly-approved fallback only.
 - Release: `bash ~/SaneApps/infra/SaneProcess/scripts/release.sh --project <path> --full` (ships ZIPs).
 
@@ -54,5 +54,5 @@ All interactive elements need accessibility identifiers (e.g. `.accessibilityIde
 ## Research & Memory
 
 - Past bugs/learnings: agentmemory `memory_recall` / `memory_smart_search` + Claude file memory.
-- Apple frameworks: `apple-docs` MCP. Library docs: `plugin:context7:context7` (resolve-library-id → query-docs). GitHub search: `gh` CLI.
+- Apple frameworks: `apple-docs` MCP. Library docs: `plugin:context7:context7` (Claude lane only; resolve-library-id → query-docs) or `gh` CLI. GitHub search: `gh` CLI.
 - RAM/process hygiene: follow the RAM-discipline rule in `~/AGENTS.md` (never bulk-kill agent processes).

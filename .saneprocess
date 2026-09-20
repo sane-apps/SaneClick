@@ -109,6 +109,9 @@ appstore:
   # with no crypto / external-unlock / license-key / Sparkle paths. Metadata, reviewer notes, What's New,
   # and the IAP block below are submission-ready. With enabled: true, verify/preflight run App Store
   # readiness checks (screenshots etc.); appstore_submit performs the build/sign/upload/submit-for-review.
+  # 2026-09-20 owner decision: the 1.3.5 App Store SUBMISSION is deferred (direct-download only this
+  # release); the lane flag stays true so the gate keeps enforcing readiness. Blocker: shared-SaneUI
+  # donation strings trip the compiled-artifact audit — needs a SaneUI donate-extraction migration.
   app_id: "6759330868"
   product_id: "com.saneclick.app.pro.actions.v4"
   scheme: SaneClick-AppStore

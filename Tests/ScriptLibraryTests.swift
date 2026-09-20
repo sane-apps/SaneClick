@@ -749,6 +749,24 @@ struct AppPreferencesTests {
         #expect(AppPreferences.showDockIcon == false)
     }
 
+    @Test("Pro upsell counts match their library categories")
+    func proUpsellCountsMatchLibrary() {
+        let pairs: [(ProFeature, ScriptLibrary.ScriptCategory)] = [
+            (.codingScripts, .developer),
+            (.imageScripts, .designer),
+            (.advancedScripts, .powerUser),
+            (.organizationScripts, .organization)
+        ]
+        for (feature, category) in pairs {
+            let expected = ScriptLibrary.scripts(for: category).count
+            let leadingNumber = Int(feature.featureDescription.prefix { $0.isNumber })
+            #expect(
+                leadingNumber == expected,
+                "\(feature.rawValue) claims \(leadingNumber ?? -1) but \(category.rawValue) holds \(expected)"
+            )
+        }
+    }
+
     private func restore(_ value: Any?, forKey key: String) {
         if let value {
             UserDefaults.standard.set(value, forKey: key)

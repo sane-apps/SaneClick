@@ -2,7 +2,7 @@
 
 > [README](README.md) · [ARCHITECTURE](ARCHITECTURE.md) · [DEVELOPMENT](DEVELOPMENT.md) · [PRIVACY](PRIVACY.md) · [SECURITY](SECURITY.md)
 
-**Last updated: July 27, 2026**
+**Last updated: September 20, 2026**
 
 SaneClick is built to keep your files, scripts, and automations on your Mac. This page explains what stays local, when the app uses the network, and why.
 
@@ -35,6 +35,7 @@ SaneClick uses the network only when:
 
 - It checks for app updates, if update checks are enabled
 - It sends privacy-preserving aggregate app counts, such as trial or licensed launches, purchase flow, license activation, app version, build, and update status
+- It validates your license key with Lemon Squeezy when you activate, and rechecks periodically afterward (the app keeps working offline for up to 30 days between checks)
 
 Your files and script contents are not sent to SaneApps.
 
@@ -54,6 +55,7 @@ Your files and script contents are not sent to SaneApps.
 SaneClick uses:
 
 - **Sparkle** for update checks
+- **Lemon Squeezy** to validate license keys on activation and recheck them periodically
 - **SaneApps distribution service** for privacy-preserving aggregate app counts
 - **Cloudflare Web Analytics** on public website pages for cookie-free aggregate traffic stats, such as page views and referrers
 
