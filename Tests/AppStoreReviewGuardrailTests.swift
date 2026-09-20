@@ -381,6 +381,7 @@ struct AppStoreReviewGuardrailTests {
         #expect(executorSource.contains("return !license.hasExpiredProTrial"))
         #expect(executorSource.contains("WindowActionStorage.shared.showMainWindow()"))
         #expect(appSource.contains("Finder actions are off. Buy once to turn them back on."))
+        #expect(appSource.contains("First launch and Settings stay stable"))
         #expect(appSource.contains("Sidebar counts match how many actions are on"))
         #expect(appSource.contains("Cancel unsaved custom-action edits"))
         #expect(appSource.contains("Finder folder guidance stays visible"))

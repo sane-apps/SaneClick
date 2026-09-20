@@ -4,6 +4,12 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.3.5] - 2026-09-20
+
+Fixes a launch-time crash that could abort the app while Settings or the
+welcome screen was first drawn. Extension status now loads in the
+background instead of blocking the interface.
+
 ## [1.3.4] - 2026-09-08
 
 Fixes the sidebar count badge so it shows how many actions are on, not

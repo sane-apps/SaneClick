@@ -309,6 +309,7 @@ struct SaneClickApp: App {
                     appIcon: "cursorarrow.click.2",
                     expiredDetail: "Finder actions are off. Buy once to turn them back on.",
                     sinceTrialUpdates: [
+                        "First launch and Settings stay stable",
                         "Sidebar counts match how many actions are on",
                         "Cancel unsaved custom-action edits",
                         "Finder folder guidance stays visible"
