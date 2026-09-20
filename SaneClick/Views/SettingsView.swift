@@ -75,7 +75,11 @@ struct SettingsView: View {
         SaneClickSharedDefaults.foldersInRightClickMenuKey,
         store: SaneClickSharedDefaults.userDefaults
     ) private var foldersInRightClickMenu = true
-    @State private var extensionStatus = ExtensionStatusService.checkStatus()
+    // Never call the blocking extension check here: @State initial values evaluate
+    // lazily inside graph updates, and waitUntilExit pumps the runloop into a
+    // re-entrant update (AttributeGraph precondition crash). The onAppear /
+    // scene-phase refresh below corrects this placeholder off-evaluation.
+    @State private var extensionStatus: ExtensionStatus = .disabled
     @State private var isCheckingStatus = false
     @State private var selectedTab: Tab?
 

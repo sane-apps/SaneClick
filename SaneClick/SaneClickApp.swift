@@ -271,6 +271,10 @@ struct SaneClickApp: App {
         )
     #endif
     @State private var showWelcomeGate: Bool
+    // Built once at launch: make() runs blocking pluginkit/pgrep checks, which
+    // must never execute inside Scene/body evaluation (runloop re-entrancy
+    // crashes the AttributeGraph). No graph exists yet during App init.
+    private let welcomePermissionConfig = SaneClickWelcomePermission.make()
 
     init() {
         if WelcomeGateState.hasSeenWelcome() {
@@ -324,7 +328,7 @@ struct SaneClickApp: App {
                             proFeatures: SaneClickWelcomeCopy.proFeatures,
                             freeTierPrice: SaneClickWelcomeCopy.basicPrice,
                             proTierPriceOverride: SaneClickWelcomeCopy.proPrice,
-                            permissionConfig: SaneClickWelcomePermission.make(),
+                            permissionConfig: welcomePermissionConfig,
                             licenseService: licenseService
                         )
                         .preferredColorScheme(.dark)
