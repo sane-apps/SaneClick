@@ -28,11 +28,12 @@
   gated App-init snapshot, crash-regression guardrail. Release rebuilt + re-verified
   (badge Active, Finder E2E again green). Synthesis: /tmp/ship_critic_outputs/summary.md.
 - Direct release_preflight PASS (exit 0) on final code. Receipts re-signed post-fix.
-- Deploy constraint corrected: NO --skip-appstore flag or appstore_submit command
-  exists in this SaneMaster lane; `release` is direct-only (build/sign/notarize/
-  package/deploy) and cannot submit to the Store. The deferral is structural.
-  The .saneprocess comment naming appstore_submit refers to a planned/legacy
-  command. Clearance target=dmg.
+- Deploy constraint corrected (2026-09-21): release.sh HAS --skip-appstore, and
+  SaneProcess ships standalone scripts/appstore_submit.rb (ASC submission helper).
+  Neither was run for 1.3.5: the direct release executed appstore_preflight (a
+  check, failed on shared-SaneUI donation strings) but never submission -
+  verified in release log. ASC untouched; deferral held in practice; `release` is direct-only (build/sign/notarize/
+  package/deploy). Clearance target=dmg.
 - Owner checkpoint: free-tier contradiction -> FIX COPY NOW + DEPLOY direct 1.3.5.
   Welcome Basic price split per lane (Store keeps Free, direct reads Free for
   14 days) + regression test. 203/203 tests. Receipts re-signed, preflight PASS.
@@ -45,8 +46,9 @@
 ## Verdict (2026-09-20): SHIP — SaneClick 1.3.5 direct-download (target=dmg)
 
 - Scope: direct-download only. App Store 1.3.5 submission deferred by owner
-  (shared-SaneUI donation strings; needs extraction migration). No store-submit
-  command exists, so the deferral is structural.
+  (shared-SaneUI donation strings; needs extraction migration). Standalone
+  scripts/appstore_submit.rb exists but was not run; the direct release never
+  touched ASC.
 - Evidence: 203/203 tests; direct release_preflight PASS exit 0 (receipt
   ba6551c5a8e8cd66a3ddf3c589fa8e10, 4 benign warnings); fresh customer UI sweep
   + upgrade-path proof; 15/15 docs audit + 7/7 critic with all CERTAIN/HIGH
