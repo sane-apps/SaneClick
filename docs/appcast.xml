@@ -2,7 +2,27 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
   <channel>
     <title>SaneClick Changelog</title>
-                        <item>
+                                <item>
+            <title>1.3.5</title>
+            <link>https://saneclick.com/download</link>
+            <pubDate>Sun, 20 Sep 2026 20:30:46 -0400</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description>
+                <![CDATA[
+                <h2>What's New</h2>
+                <ul>
+                <li>Fixes a crash that could quit the app on first launch or when opening Settings. The Pro upgrade screen now shows the correct number of actions in each category. Adds a dedicated Support page on saneclick.com with setup help and FAQ.</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.3.5.zip"
+                       sparkle:version="1305"
+                       sparkle:shortVersionString="1.3.5"
+                       length="2787031"
+                       type="application/octet-stream"
+                       sparkle:edSignature="pd/l8VxyIAP2osL/ZO0chRk0YG2wxpm1pij78cXX5PnMkN58KFLCFsBDx3M7VwupJT0JYkzBnqEc4HVYIx+QBg=="/>
+        </item>
+<item>
             <title>1.3.4</title>
             <link>https://saneclick.com/download</link>
             <pubDate>Wed, 09 Sep 2026 11:22:20 -0400</pubDate>
