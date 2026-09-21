@@ -72,6 +72,17 @@
 - verdict: SHIP
 - date: 2026-09-20
 
+## Deploy 2026-09-20 (in progress, 2 human steps left)
+
+- Published: tag v1.3.5 + GitHub release + asset; dist 1.3.5 zip (200, 2.8MB);
+  appcast + site live at 1.3.5; Homebrew cask 1.3.5 verified live. Air/Mini
+  reconciled at 98f61c0 (pushed + pulled).
+- Staged: SaneClick-1.3.5.zip SHA-verified in ~/Desktop/LemonSqueezy-Uploads/.
+- Left: (1) owner swaps the LS dashboard file (variant 1262366, product
+  800495) — dashboard-only, no API; (2) owner typed approval for release.sh
+  --skip-appstore (deferred lane; interactive TTY gate), then rerun
+  --post-release-checks-only to close the release as complete.
+
 ## 2026-09-07 04:12 ET — Recents guidance and stale catalog fixed; runtime verified
 
 - Actual first signed build exposed a second cause: Localizable.xcstrings English overrides the fuller Swift defaultValue with stale first-sentence-only text. Updated the existing key across all11 locales, and rendered guidance unconditionally in Settings. Swift property renamed monitoredFoldersHint; localization key retained.
