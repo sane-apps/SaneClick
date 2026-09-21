@@ -30,7 +30,14 @@
 - Direct release_preflight PASS (exit 0) on final code. Receipts re-signed post-fix.
 - Deploy constraint: release.sh MUST pass --skip-appstore (comment-only deferral
   does not stop a store-submit attempt). Clearance target=dmg.
-- Next: checkpoint (owner decisions D1-D7) -> verdict -> clearance token -> deploy.
+- Owner checkpoint: free-tier contradiction -> FIX COPY NOW + DEPLOY direct 1.3.5.
+  Welcome Basic price split per lane (Store keeps Free, direct reads Free for
+  14 days) + regression test. 203/203 tests. Receipts re-signed, preflight PASS.
+- Welcome-gate harness note: forcing hasSeenWelcome=NO on this Mini shows no
+  gate (auto markSeen) on BOTH 1.3.4 and 1.3.5 -> environmental (profile license
+  state), NOT a 1.3.5 regression. Gated App-init snapshot proven exact by
+  predicate analysis (sheet can only read the config when make() ran).
+- Next: verdict -> clearance token -> deploy.
 
 ## 2026-09-07 04:12 ET — Recents guidance and stale catalog fixed; runtime verified
 
