@@ -28,8 +28,11 @@
   gated App-init snapshot, crash-regression guardrail. Release rebuilt + re-verified
   (badge Active, Finder E2E again green). Synthesis: /tmp/ship_critic_outputs/summary.md.
 - Direct release_preflight PASS (exit 0) on final code. Receipts re-signed post-fix.
-- Deploy constraint: release.sh MUST pass --skip-appstore (comment-only deferral
-  does not stop a store-submit attempt). Clearance target=dmg.
+- Deploy constraint corrected: NO --skip-appstore flag or appstore_submit command
+  exists in this SaneMaster lane; `release` is direct-only (build/sign/notarize/
+  package/deploy) and cannot submit to the Store. The deferral is structural.
+  The .saneprocess comment naming appstore_submit refers to a planned/legacy
+  command. Clearance target=dmg.
 - Owner checkpoint: free-tier contradiction -> FIX COPY NOW + DEPLOY direct 1.3.5.
   Welcome Basic price split per lane (Store keeps Free, direct reads Free for
   14 days) + regression test. 203/203 tests. Receipts re-signed, preflight PASS.
