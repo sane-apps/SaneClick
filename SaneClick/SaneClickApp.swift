@@ -493,7 +493,16 @@ enum SaneClickWelcomePermission {
 }
 
 enum SaneClickWelcomeCopy {
-    static let basicPrice = "Free"
+    // App Store basics are free forever (ActionCatalog.isAvailableInBasic); direct
+    // builds stop all actions when the trial ends, so the direct label must not
+    // promise a permanent free tier.
+    static let basicPrice: String = {
+        #if APP_STORE
+            "Free"
+        #else
+            "Free for 14 days"
+        #endif
+    }()
     static let proPrice: String = {
         #if APP_STORE
             "$9.99 once"

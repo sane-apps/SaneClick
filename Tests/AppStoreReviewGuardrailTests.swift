@@ -528,4 +528,14 @@ struct AppStoreReviewGuardrailTests {
         #expect(contentSource.contains("\\(ScriptLibrary.availableAllScripts.count) ready-to-use actions"))
         #expect(contentSource.contains("50+ ready-to-use actions") == false)
     }
+
+    @Test("Direct welcome never promises a permanent free tier")
+    func directWelcomeNeverPromisesFreeTier() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let appSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/SaneClickApp.swift"), encoding: .utf8)
+        #expect(appSource.contains("static let basicPrice = \"Free\"") == false)
+        #expect(appSource.contains("\"Free for 14 days\""))
+    }
 }

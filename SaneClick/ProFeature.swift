@@ -1,7 +1,8 @@
 import SaneUI
 
 /// Pro features for SaneClick's freemium model.
-/// Free tier: Essentials (`.universal`) scripts only.
+/// App Store: free-forever basics (ActionCatalog.isAvailableInBasic), Pro unlocks all.
+/// Direct: 14-day trial of everything, then buy once (no free tier after expiry).
 /// Pro tier: all script categories, custom editor, and import/export.
 enum ProFeature: String, ProFeatureDescribing, CaseIterable {
     case codingScripts = "Coding Scripts"
