@@ -42,6 +42,36 @@
   predicate analysis (sheet can only read the config when make() ran).
 - Next: verdict -> clearance token -> deploy.
 
+## Verdict (2026-09-20): SHIP — SaneClick 1.3.5 direct-download (target=dmg)
+
+- Scope: direct-download only. App Store 1.3.5 submission deferred by owner
+  (shared-SaneUI donation strings; needs extraction migration). No store-submit
+  command exists, so the deferral is structural.
+- Evidence: 203/203 tests; direct release_preflight PASS exit 0 (receipt
+  ba6551c5a8e8cd66a3ddf3c589fa8e10, 4 benign warnings); fresh customer UI sweep
+  + upgrade-path proof; 15/15 docs audit + 7/7 critic with all CERTAIN/HIGH
+  findings fixed or recorded; Release E2E twice (About 1.3.5, Extension Active,
+  Finder Copy Filename clipboard-verified); /support live 200 and linked.
+- Residual risks: waitUntilExit hangs (rare, pre-existing); unknown-vs-disabled
+  collapse silent; evening release 8-18hr discovery window; 20 unread customer
+  emails (support triage separate).
+- Follow-ups: timeout machinery, SaneUI donate extraction + store-lane revival
+  (incl. upsell-count split), onboarding framework, free-tier model note (copy
+  fixed), dark-mode/⌘O confirmation, setup-speed claims, 404 saneapps link.
+
+## Clearance SANEMASTER_CLEARANCE-SaneClick-1.3.5-dmg
+
+- clearance: SANEMASTER_CLEARANCE-SaneClick-1.3.5-dmg
+- target: [dmg]
+- version: 1.3.5 (1305)
+- source: 28664b3f451c40529d0bd219dd8cfbde49ed404c (worktree clean, will push at deploy)
+- preflight: direct release_preflight PASS exit 0, receipt ba6551c5a8e8cd66a3ddf3c589fa8e10
+- checks: 203/203 tests; customer UI sweep receipt accepted; upgrade-path proof
+  passed; docs audit 15/15; critic 7/7 (0 CERTAIN-critical; all HIGH fixed);
+  verify-app Release E2E x2 with screenshots; App Store lane red-by-decision
+- verdict: SHIP
+- date: 2026-09-20
+
 ## 2026-09-07 04:12 ET — Recents guidance and stale catalog fixed; runtime verified
 
 - Actual first signed build exposed a second cause: Localizable.xcstrings English overrides the fuller Swift defaultValue with stale first-sentence-only text. Updated the existing key across all11 locales, and rendered guidance unconditionally in Settings. Swift property renamed monitoredFoldersHint; localization key retained.
