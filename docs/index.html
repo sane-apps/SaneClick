@@ -90,6 +90,71 @@
     }
     </script>
 
+    <!-- Structured Data - FAQ (keep in sync with the visible FAQ section) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much does SaneClick cost?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The download from saneclick.com includes every feature free for 14 days, with no credit card. After the trial it's $14.99 once. There's no subscription. SaneClick is also part of the SaneApps Everything Bundle ($49.99 once)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the Mac App Store version the same as the download?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not quite. The Mac App Store version is free with 13 built-in Finder actions, and the SaneClick Pro Access in-app purchase ($9.99) adds 24 more, including text recognition, PDF tools, image conversion and resizing, batch rename and file hashing. The download from saneclick.com includes all 62 actions and the custom script editor."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which Macs does SaneClick work on?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "SaneClick needs macOS 14 Sonoma or later on an Apple silicon Mac. It doesn't run on Intel Macs."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I add SaneClick actions to my right-click menu?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Open SaneClick and turn on its Finder extension in System Settings > Privacy & Security > Extensions > Added Extensions > Finder. The Manage Finder Extension button in SaneClick's settings takes you there. Then open Browse Library, switch on the actions you want, and use Manage Folders to choose where they appear in Finder."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why don't SaneClick actions show up when I right-click?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Check Settings > General in SaneClick. Green means the extension is active. Orange means Finder needs a restart, which the Restart Finder button does for you. Red means the extension is turned off in System Settings. Actions also appear only in the folders you chose and only for file types they work on."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I run my own scripts from the Finder right-click menu?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, in the version from saneclick.com. Choose Write Custom Action, pick Bash, AppleScript or Automator, set which files it applies to, and use Test to run it on real files and preview the output before you save. You can import and export your actions as JSON."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does SaneClick upload my files?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Your files and script contents stay on your Mac and aren't sent to SaneApps. The app goes online only to check for updates, validate a license key, and send aggregate counts such as app version, which never include your files."
+        }
+      }
+    ]
+}
+    </script>
     <style>
         :root {
             --bg-primary: #08080c;
@@ -600,6 +665,29 @@
             color: var(--text-secondary);
             font-size: 0.95rem;
             line-height: 1.6;
+        }
+
+        /* Homepage FAQ (matches FAQPage JSON-LD word for word) */
+        .faq-section { padding: 80px 0; border-top: 1px solid var(--border-subtle); }
+        .faq-list { max-width: 760px; margin: 0 auto; }
+        .home-faq {
+            margin-top: 14px;
+            text-align: left;
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 16px 18px;
+        }
+        .home-faq summary {
+            cursor: pointer;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        .home-faq p {
+            margin: 10px 0 0;
+            color: var(--text-secondary);
+            font-size: 0.98rem;
+            line-height: 1.7;
         }
 
         /* Footer */
@@ -1219,6 +1307,42 @@
             <p class="reveal" style="color: var(--text-muted); font-size: 0.9rem; max-width: 700px; margin: 0 auto; padding: 20px 24px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; line-height: 1.6;">
                 <strong style="color: var(--text-secondary);">Tip:</strong> Import opens a small window where you choose the JSON file. It keeps the flow fast and reliable.
             </p>
+        </div>
+    </section>
+
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <h2 class="section-title reveal">Questions People Ask</h2>
+            <div class="faq-list reveal">
+                <details class="home-faq">
+                    <summary>How much does SaneClick cost?</summary>
+                    <p>The download from saneclick.com includes every feature free for 14 days, with no credit card. After the trial it's $14.99 once. There's no subscription. SaneClick is also part of the SaneApps Everything Bundle ($49.99 once).</p>
+                </details>
+                <details class="home-faq">
+                    <summary>Is the Mac App Store version the same as the download?</summary>
+                    <p>Not quite. The Mac App Store version is free with 13 built-in Finder actions, and the SaneClick Pro Access in-app purchase ($9.99) adds 24 more, including text recognition, PDF tools, image conversion and resizing, batch rename and file hashing. The download from saneclick.com includes all 62 actions and the custom script editor.</p>
+                </details>
+                <details class="home-faq">
+                    <summary>Which Macs does SaneClick work on?</summary>
+                    <p>SaneClick needs macOS 14 Sonoma or later on an Apple silicon Mac. It doesn't run on Intel Macs.</p>
+                </details>
+                <details class="home-faq">
+                    <summary>How do I add SaneClick actions to my right-click menu?</summary>
+                    <p>Open SaneClick and turn on its Finder extension in System Settings &gt; Privacy &amp; Security &gt; Extensions &gt; Added Extensions &gt; Finder. The Manage Finder Extension button in SaneClick's settings takes you there. Then open Browse Library, switch on the actions you want, and use Manage Folders to choose where they appear in Finder.</p>
+                </details>
+                <details class="home-faq">
+                    <summary>Why don't SaneClick actions show up when I right-click?</summary>
+                    <p>Check Settings &gt; General in SaneClick. Green means the extension is active. Orange means Finder needs a restart, which the Restart Finder button does for you. Red means the extension is turned off in System Settings. Actions also appear only in the folders you chose and only for file types they work on.</p>
+                </details>
+                <details class="home-faq">
+                    <summary>Can I run my own scripts from the Finder right-click menu?</summary>
+                    <p>Yes, in the version from saneclick.com. Choose Write Custom Action, pick Bash, AppleScript or Automator, set which files it applies to, and use Test to run it on real files and preview the output before you save. You can import and export your actions as JSON.</p>
+                </details>
+                <details class="home-faq">
+                    <summary>Does SaneClick upload my files?</summary>
+                    <p>No. Your files and script contents stay on your Mac and aren't sent to SaneApps. The app goes online only to check for updates, validate a license key, and send aggregate counts such as app version, which never include your files.</p>
+                </details>
+            </div>
         </div>
     </section>
 
