@@ -1,0 +1,23 @@
+# SaneClick
+
+> SaneClick adds 62 actions to the Mac Finder right-click menu: copy text out of an image (OCR), convert HEIC and other images, merge and split PDFs, resize, batch rename, remove photo metadata, open in VS Code, and run your own scripts. Everything runs on your Mac. $14.99 once after a 14-day trial. macOS 14 or later, Apple silicon. Made by SaneApps.
+
+## Facts
+- Current version: 1.3.5
+- Price: $14.99 one-time after a free 14-day trial. No subscription. Also in the SaneApps Bundle ($49.99 once).
+- Requirements: macOS 14.0 or later, Apple silicon (arm64) only
+- Privacy: Finder actions process files on your Mac. SaneClick does not upload file contents.
+- Source code: public on GitHub (github.com/sane-apps/SaneClick), PolyForm Shield licence.
+- Compared on saneclick.com with iBoysoft MagicMenu, Service Station and FilePane (prices checked on each company's page, June 2026).
+
+## Pages
+- Home: https://saneclick.com/
+- Guides: https://saneclick.com/guides
+- Add scripts to the Finder context menu: https://saneclick.com/how-to-add-scripts-finder-context-menu-mac
+- Batch rename files in Finder: https://saneclick.com/how-to-batch-rename-files-finder-mac
+- Convert images from the right-click menu: https://saneclick.com/how-to-convert-images-right-click-mac
+- Open files in VS Code from Finder: https://saneclick.com/how-to-open-files-in-vscode-from-finder-mac
+- Remove EXIF data from photos: https://saneclick.com/how-to-remove-exif-data-photos-mac
+- Support: https://saneclick.com/support
+- Source: https://github.com/sane-apps/SaneClick
+- Contact: hi@saneapps.com
