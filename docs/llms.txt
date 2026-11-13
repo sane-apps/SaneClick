@@ -16,6 +16,7 @@
 - Guides: https://saneclick.com/guides
 - Add scripts to the Finder context menu: https://saneclick.com/how-to-add-scripts-finder-context-menu-mac
 - Batch rename files in Finder: https://saneclick.com/how-to-batch-rename-files-finder-mac
+- Copy text from an image in Finder: https://saneclick.com/how-to-copy-text-from-image-finder-mac
 - Convert images from the right-click menu: https://saneclick.com/how-to-convert-images-right-click-mac
 - Open files in VS Code from Finder: https://saneclick.com/how-to-open-files-in-vscode-from-finder-mac
 - Remove EXIF data from photos: https://saneclick.com/how-to-remove-exif-data-photos-mac
