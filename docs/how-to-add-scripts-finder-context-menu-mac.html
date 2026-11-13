@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>How to Add Scripts to Mac Right-Click Menu</title>
-    <meta name="description" content="Learn how to run Bash, Python, or AppleScript files directly from the Finder context menu. A comparison of Automator Service vs SaneClick.">
+    <meta name="description" content="Run shell scripts, AppleScript or Automator workflows from the Finder right-click menu. Compare an Automator Quick Action with a SaneClick custom action.">
     <meta name="keywords" content="Mac right-click script, Finder context menu script, Automator quick action, macOS shell script Finder, custom right-click menu Mac, SaneClick">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -12,7 +12,7 @@
     <link rel="canonical" href="https://saneclick.com/how-to-add-scripts-finder-context-menu-mac">
   <meta property="og:type" content="website">
   <meta property="og:title" content="How to Add Scripts to Mac Right-Click Menu">
-  <meta property="og:description" content="Learn how to run Bash, Python, or AppleScript files directly from the Finder context menu. A comparison of Automator Service vs SaneClick.">
+  <meta property="og:description" content="Run shell scripts, AppleScript or Automator workflows from the Finder right-click menu. Compare an Automator Quick Action with a SaneClick custom action.">
   <meta property="og:url" content="https://saneclick.com/how-to-add-scripts-finder-context-menu-mac">
   <meta property="og:image" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
   <meta property="og:image:secure_url" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
@@ -23,7 +23,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://saneclick.com/how-to-add-scripts-finder-context-menu-mac">
   <meta name="twitter:title" content="How to Add Scripts to Mac Right-Click Menu">
-  <meta name="twitter:description" content="Learn how to run Bash, Python, or AppleScript files directly from the Finder context menu. A comparison of Automator Service vs SaneClick.">
+  <meta name="twitter:description" content="Run shell scripts, AppleScript or Automator workflows from the Finder right-click menu. Compare an Automator Quick Action with a SaneClick custom action.">
   <meta name="twitter:image" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
   <meta name="twitter:image:alt" content="SaneClick preview card for Mac Finder context actions">
     <meta name="theme-color" content="#4f8ffa">
@@ -41,10 +41,10 @@
     "@context": "https://schema.org",
     "@type": "TechArticle",
     "headline": "How to Add Scripts to Mac Right-Click Menu",
-    "description": "Learn how to run Bash, Python, or AppleScript files directly from the Finder context menu. A comparison of Automator Service vs SaneClick.",
+    "description": "Run shell scripts, AppleScript or Automator workflows from the Finder right-click menu. Compare an Automator Quick Action with a SaneClick custom action.",
     "url": "https://saneclick.com/how-to-add-scripts-finder-context-menu-mac",
     "image": "https://saneclick.com/images/og-image-20260827.png?v=20260827-card",
-    "dateModified": "2026-06-16",
+    "dateModified": "2026-11-12",
     "author": {
       "@type": "Person",
       "name": "Mr. Sane"
@@ -56,6 +56,64 @@
     },
     "mainEntityOfPage": "https://saneclick.com/how-to-add-scripts-finder-context-menu-mac"
   }
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I run a Python script from the right-click menu?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Make a shell custom action that calls it, such as python3 ~/scripts/tidy.py \"$@\", if python3 is installed. SaneClick passes each selected file as its own argument."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I test an action before it goes in the menu?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. In the custom action editor, click Test to run a shell or AppleScript action on files you choose and see its output before you save. Test isn't available for Automator workflows."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are custom scripts in the Mac App Store version?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Custom actions are only in the download from saneclick.com. The Mac App Store version has built-in actions only."
+      }
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "SaneClick",
+      "item": "https://saneclick.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://saneclick.com/guides"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Add Custom Scripts to Mac Right-Click Menu",
+      "item": "https://saneclick.com/how-to-add-scripts-finder-context-menu-mac"
+    }
+  ]
+}
   </script>
 
 
@@ -376,6 +434,9 @@
     @view-transition { navigation: auto; }
 
 
+        .faq h3 { margin-top: 28px; margin-bottom: 8px; font-size: 1.1rem; }
+        .related { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+        .related a { color: var(--accent); text-decoration: none; padding: 10px 16px; border: 1px solid var(--border); border-radius: 10px; font-size: 0.95rem; }
     </style>
 </head>
 <body>
@@ -416,9 +477,9 @@
                     <li><span class="icon icon-num">5</span> <div>Change "Pass input" to "as arguments"</div></li>
                     <li><span class="icon icon-num">6</span> <div>Paste your script code (hope you handle spaces in filenames correctly!)</div></li>
                     <li><span class="icon icon-num">7</span> <div>Save it with a specific name</div></li>
-                    <li><span class="icon icon-num">8</span> <div>Go to System Settings > Privacy > Extensions to enable it</div></li>
+                    <li><span class="icon icon-num">8</span> <div>Find it in the right-click menu under Quick Actions (More &gt; Customize shows or hides it)</div></li>
                 </ul>
-                <p style="margin-top: 16px; font-size: 14px; color: var(--text-muted);"><em>Result: A slow, buried menu item that often fails silently.</em></p>
+                <p style="margin-top: 16px; font-size: 14px; color: var(--text-muted);"><em>Result: one item inside the Quick Actions submenu. Every change means reopening Automator.</em></p>
             </div>
 
             <!-- Option 2 -->
@@ -426,23 +487,41 @@
                 <h3>Option 2: The Sane Way (SaneClick)</h3>
                 <p>Fast, robust, designed for developers.</p>
                 <ul class="step-list">
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Click "+"</strong> and paste your script</div></li>
+                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Write Custom Action</strong> (under More Options) and paste your script</div></li>
                     <li><span class="icon icon-check">&#10003;</span> <div><strong>Instant access</strong> in right-click menu</div></li>
                     <li><span class="icon icon-check">&#10003;</span> <div><strong>Smart filters:</strong> Only show for specific file types (e.g. .jpg, .ts)</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Safe Execution:</strong> Handles file paths properly automatically</div></li>
-                    <li><span class="icon icon-check">&#10003;</span> <div><strong>No Subscriptions:</strong> One-time $14.99 payment</div></li>
+                    <li><span class="icon icon-check">&#10003;</span> <div><strong>Paths as arguments:</strong> each selected item arrives as its own argument, so <code>"$@"</code> keeps names with spaces intact</div></li>
+                    <li><span class="icon icon-check">&#10003;</span> <div><strong>No Subscription:</strong> $14.99 once after a 14-day trial</div></li>
                 </ul>
                 <div class="cta-box">
                     <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="btn">Get SaneClick &mdash; $14.99</a>
                 </div>
+                <p style="margin-top: 12px; font-size: 0.9rem; color: var(--text-muted); text-align: center;">Or <a href="https://saneclick.com/#pricing" style="color: var(--accent);">start the 14-day trial</a>. No credit card. macOS 14 or later on Apple silicon.</p>
             </div>
         </div>
 
-        <h2>Why Automator Fails for Power Users</h2>
-        <p>Automator is powerful, but it wasn't built for speed. "Quick Actions" are often slow to load, and debugging them is a nightmare. If your script fails, nothing happens. SaneClick gives you instant feedback and output logs.</p>
+        <h2>Where Automator Gets Slow</h2>
+        <p>Automator works, but it wasn't built for quick edits. Each change means opening the workflow in Automator again. In SaneClick, the Test button runs a shell or AppleScript action on the files you pick and shows the output before you save. After that, each action can copy its result, show it in a window, or post it as a notification.</p>
 
         <h2>Conclusion</h2>
         <p>If you have one script you use once a month, Automator is fine. If you live in your file system and want a fast, customized workflow, <strong>SaneClick</strong> is the tool you've been waiting for.</p>
+
+        <section class="faq">
+        <h2>Questions</h2>
+        <h3>Can I run a Python script from the right-click menu?</h3>
+        <p>Yes. Make a shell custom action that calls it, such as <code>python3 ~/scripts/tidy.py "$@"</code>, if python3 is installed. SaneClick passes each selected file as its own argument.</p>
+        <h3>Can I test an action before it goes in the menu?</h3>
+        <p>Yes. In the custom action editor, click Test to run a shell or AppleScript action on files you choose and see its output before you save. Test isn't available for Automator workflows.</p>
+        <h3>Are custom scripts in the Mac App Store version?</h3>
+        <p>No. Custom actions are only in the download from saneclick.com. The Mac App Store version has built-in actions only.</p>
+        </section>
+
+        <h2>Related guides</h2>
+        <div class="related">
+            <a href="how-to-open-files-in-vscode-from-finder-mac.html">Open files in VS Code</a>
+            <a href="how-to-batch-rename-files-finder-mac.html">Batch rename files</a>
+            <a href="service-station-magicmenu-alternative-mac.html">MagicMenu and Service Station compared</a>
+        </div>
     </article>
 
     <footer>
@@ -450,7 +529,7 @@
             <p style="font-style: italic; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 20px; opacity: 0.85;">"For God has not given us a spirit of fear, but of power, love, and a sound mind." &mdash; 2 Timothy 1:7</p>
             <div class="footer-links">
                 <a href="/">Home</a>
-                <a href="/guides.html">Guides</a>
+                <a href="/guides.html">All Guides</a>
                 <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
                 <a href="/privacy.html">Privacy</a>
                 <a href="https://github.com/sane-apps/SaneClick/issues/new?template=bug_report.md">Help</a>

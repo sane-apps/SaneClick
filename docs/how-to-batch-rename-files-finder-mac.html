@@ -44,7 +44,7 @@
     "description": "Batch rename files on Mac with Finder or SaneClick. Replace spaces, add numbered names, or lowercase filenames, and learn how to handle name conflicts.",
     "url": "https://saneclick.com/how-to-batch-rename-files-finder-mac",
     "image": "https://saneclick.com/images/og-image-20260827.png?v=20260827-card",
-    "dateModified": "2026-09-07",
+    "dateModified": "2026-11-12",
     "author": {
       "@type": "Person",
       "name": "Mr. Sane"
@@ -56,6 +56,64 @@
     },
     "mainEntityOfPage": "https://saneclick.com/how-to-batch-rename-files-finder-mac"
   }
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does SaneClick ask before renaming files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, by default. Rename with Sequence, Lowercase Filenames and Replace Spaces with Underscores ask before they run. You can turn that off for each action."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if a new name is already taken?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In the download version, that file is skipped and keeps its old name, so nothing is replaced. Check the names after a large batch."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can Finder number files without another app?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Select the files, right-click, choose Rename, then pick Format to add an index, counter or date."
+      }
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "SaneClick",
+      "item": "https://saneclick.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://saneclick.com/guides"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Batch Rename Files on Mac",
+      "item": "https://saneclick.com/how-to-batch-rename-files-finder-mac"
+    }
+  ]
+}
   </script>
 
 
@@ -377,6 +435,9 @@
     @view-transition { navigation: auto; }
 
 
+        .faq h3 { margin-top: 28px; margin-bottom: 8px; font-size: 1.1rem; }
+        .related { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+        .related a { color: var(--accent); text-decoration: none; padding: 10px 16px; border: 1px solid var(--border); border-radius: 10px; font-size: 0.95rem; }
     </style>
 </head>
 <body>
@@ -422,12 +483,30 @@
                     <li><span class="icon icon-check">&#10003;</span><div><strong>Replace Spaces with Underscores:</strong> Change my photo.jpg to my_photo.jpg.</div></li>
                 </ul>
                 <div class="cta-box"><a href="/" class="btn">See SaneClick</a></div>
+                <p style="margin-top: 12px; font-size: 0.9rem; color: var(--text-muted); text-align: center;">Or <a href="https://saneclick.com/#pricing" style="color: var(--accent);">start the 14-day trial</a>. No credit card. macOS 14 or later on Apple silicon.</p>
             </div>
         </div>
         <h2>Check Names Before a Large Batch</h2>
         <p>Renaming changes the selected files in place. Test a small selection first, especially when another file already has a name you want to use. The direct-download actions skip existing destinations rather than replace them, so a conflicting name can leave a file unchanged. Check the resulting filenames after the action.</p>
         <h2>Choose the Shortest Route</h2>
         <p>Use Finder when its Rename dialog covers the job. SaneClick is useful when you repeat the same action and want it ready in the context menu.</p>
+
+        <section class="faq">
+        <h2>Questions</h2>
+        <h3>Does SaneClick ask before renaming files?</h3>
+        <p>Yes, by default. Rename with Sequence, Lowercase Filenames and Replace Spaces with Underscores ask before they run. You can turn that off for each action.</p>
+        <h3>What happens if a new name is already taken?</h3>
+        <p>In the download version, that file is skipped and keeps its old name, so nothing is replaced. Check the names after a large batch.</p>
+        <h3>Can Finder number files without another app?</h3>
+        <p>Yes. Select the files, right-click, choose Rename, then pick Format to add an index, counter or date.</p>
+        </section>
+
+        <h2>Related guides</h2>
+        <div class="related">
+            <a href="how-to-convert-images-right-click-mac.html">Convert HEIC to JPEG</a>
+            <a href="how-to-remove-exif-data-photos-mac.html">Remove photo location data</a>
+            <a href="how-to-add-scripts-finder-context-menu-mac.html">Add scripts to the right-click menu</a>
+        </div>
     </article>
 
     <footer>
@@ -435,7 +514,7 @@
             <p style="font-style: italic; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 20px; opacity: 0.85;">"For God has not given us a spirit of fear, but of power, love, and a sound mind." &mdash; 2 Timothy 1:7</p>
             <div class="footer-links">
                 <a href="/">Home</a>
-                <a href="/guides.html">Guides</a>
+                <a href="/guides.html">All Guides</a>
                 <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
                 <a href="/privacy.html">Privacy</a>
                 <a href="https://github.com/sane-apps/SaneClick/issues/new?template=bug_report.md">Help</a>

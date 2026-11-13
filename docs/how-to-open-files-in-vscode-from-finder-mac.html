@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>How to Open Files in VS Code from Finder on Mac</title>
-    <meta name="description" content="Open folders and files in VS Code, Cursor, or Xcode directly from Finder's right-click menu. Compare shell aliases, Automator, and SaneClick.">
+    <meta name="description" content="Open files and folders in VS Code, Cursor or Xcode from the Finder right-click menu. Compare the code command, Automator and SaneClick.">
     <meta name="keywords" content="open folder in vscode mac, open in vscode from finder, open in cursor from finder, right-click open in editor mac, SaneClick">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -12,7 +12,7 @@
     <link rel="canonical" href="https://saneclick.com/how-to-open-files-in-vscode-from-finder-mac">
   <meta property="og:type" content="website">
   <meta property="og:title" content="How to Open Files in VS Code from Finder on Mac">
-  <meta property="og:description" content="Open folders and files in VS Code, Cursor, or Xcode directly from Finder&#x27;s right-click menu. Compare shell aliases, Automator, and SaneClick.">
+  <meta property="og:description" content="Open files and folders in VS Code, Cursor or Xcode from the Finder right-click menu. Compare the code command, Automator and SaneClick.">
   <meta property="og:url" content="https://saneclick.com/how-to-open-files-in-vscode-from-finder-mac">
   <meta property="og:image" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
   <meta property="og:image:secure_url" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
@@ -23,7 +23,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://saneclick.com/how-to-open-files-in-vscode-from-finder-mac">
   <meta name="twitter:title" content="How to Open Files in VS Code from Finder on Mac">
-  <meta name="twitter:description" content="Open folders and files in VS Code, Cursor, or Xcode directly from Finder&#x27;s right-click menu. Compare shell aliases, Automator, and SaneClick.">
+  <meta name="twitter:description" content="Open files and folders in VS Code, Cursor or Xcode from the Finder right-click menu. Compare the code command, Automator and SaneClick.">
   <meta name="twitter:image" content="https://saneclick.com/images/og-image-20260827.png?v=20260827-card">
   <meta name="twitter:image:alt" content="SaneClick preview card for Mac Finder context actions">
     <meta name="theme-color" content="#4f8ffa">
@@ -41,10 +41,10 @@
     "@context": "https://schema.org",
     "@type": "TechArticle",
     "headline": "How to Open Files in VS Code from Finder on Mac",
-    "description": "Open folders and files in VS Code, Cursor, or Xcode directly from Finder's right-click menu. Compare shell aliases, Automator, and SaneClick.",
+    "description": "Open files and folders in VS Code, Cursor or Xcode from the Finder right-click menu. Compare the code command, Automator and SaneClick.",
     "url": "https://saneclick.com/how-to-open-files-in-vscode-from-finder-mac",
     "image": "https://saneclick.com/images/og-image-20260827.png?v=20260827-card",
-    "dateModified": "2026-06-16",
+    "dateModified": "2026-11-12",
     "author": {
       "@type": "Person",
       "name": "Mr. Sane"
@@ -56,6 +56,64 @@
     },
     "mainEntityOfPage": "https://saneclick.com/how-to-open-files-in-vscode-from-finder-mac"
   }
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Do I need the code command for Open in VS Code?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The action runs code with the items you selected. In VS Code, open the Command Palette and run Shell Command: Install 'code' command in PATH. Open in Cursor needs Cursor's cursor command in the same way."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why doesn't Open in Xcode show for every file?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It only appears for .swift, .xcodeproj, .xcworkspace and .playground items, so the menu stays short."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I open several files at once?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Select them in Finder and choose the action. SaneClick passes every selected item to the editor in one go."
+      }
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "SaneClick",
+      "item": "https://saneclick.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://saneclick.com/guides"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Open Files in VS Code from Finder on Mac",
+      "item": "https://saneclick.com/how-to-open-files-in-vscode-from-finder-mac"
+    }
+  ]
+}
   </script>
 
 
@@ -376,6 +434,9 @@
     @view-transition { navigation: auto; }
 
 
+        .faq h3 { margin-top: 28px; margin-bottom: 8px; font-size: 1.1rem; }
+        .related { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+        .related a { color: var(--accent); text-decoration: none; padding: 10px 16px; border: 1px solid var(--border); border-radius: 10px; font-size: 0.95rem; }
     </style>
 </head>
 <body>
@@ -415,10 +476,10 @@
                     <li><span class="icon icon-num">4</span> <div>Set "Pass input" to "as arguments"</div></li>
                     <li><span class="icon icon-num">5</span> <div>Type <code>code "$@"</code> as the script</div></li>
                     <li><span class="icon icon-num">6</span> <div>Save as "Open in VS Code"</div></li>
-                    <li><span class="icon icon-num">7</span> <div>Enable in System Settings > Extensions</div></li>
+                    <li><span class="icon icon-num">7</span> <div>Find it in the right-click menu under Quick Actions (More &gt; Customize shows or hides it)</div></li>
                     <li><span class="icon icon-x">&#10007;</span> <div>Repeat entire process for Cursor, Xcode, etc.</div></li>
                 </ul>
-                <p style="margin-top: 16px; font-size: 14px; color: var(--text-muted);"><em>Result: Slow Quick Actions buried in a submenu. One per editor.</em></p>
+                <p style="margin-top: 16px; font-size: 14px; color: var(--text-muted);"><em>Result: one Quick Action per editor, inside a submenu.</em></p>
             </div>
 
             <!-- Option 2 -->
@@ -435,6 +496,7 @@
                 <div class="cta-box">
                     <a href="https://go.saneapps.com/buy/saneclick?ref=website" class="btn">Get SaneClick &mdash; $14.99</a>
                 </div>
+                <p style="margin-top: 12px; font-size: 0.9rem; color: var(--text-muted); text-align: center;">Or <a href="https://saneclick.com/#pricing" style="color: var(--accent);">start the 14-day trial</a>. No credit card. macOS 14 or later on Apple silicon.</p>
             </div>
         </div>
 
@@ -446,6 +508,23 @@
 
         <h2>Conclusion</h2>
         <p>If you use one editor and don't mind Terminal, the <code>code</code> command is fine. If you switch between VS Code, Cursor, and Xcode and want instant right-click access from Finder, <strong>SaneClick</strong> gives you all three out of the box.</p>
+
+        <section class="faq">
+        <h2>Questions</h2>
+        <h3>Do I need the code command for Open in VS Code?</h3>
+        <p>Yes. The action runs <code>code</code> with the items you selected. In VS Code, open the Command Palette and run Shell Command: Install 'code' command in PATH. Open in Cursor needs Cursor's <code>cursor</code> command in the same way.</p>
+        <h3>Why doesn't Open in Xcode show for every file?</h3>
+        <p>It only appears for .swift, .xcodeproj, .xcworkspace and .playground items, so the menu stays short.</p>
+        <h3>Can I open several files at once?</h3>
+        <p>Yes. Select them in Finder and choose the action. SaneClick passes every selected item to the editor in one go.</p>
+        </section>
+
+        <h2>Related guides</h2>
+        <div class="related">
+            <a href="how-to-add-scripts-finder-context-menu-mac.html">Add scripts to the right-click menu</a>
+            <a href="how-to-batch-rename-files-finder-mac.html">Batch rename files</a>
+            <a href="service-station-magicmenu-alternative-mac.html">MagicMenu and Service Station compared</a>
+        </div>
     </article>
 
     <footer>
@@ -453,7 +532,7 @@
             <p style="font-style: italic; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 20px; opacity: 0.85;">"For God has not given us a spirit of fear, but of power, love, and a sound mind." &mdash; 2 Timothy 1:7</p>
             <div class="footer-links">
                 <a href="/">Home</a>
-                <a href="/guides.html">Guides</a>
+                <a href="/guides.html">All Guides</a>
                 <a href="https://github.com/sane-apps/SaneClick">GitHub</a>
                 <a href="/privacy.html">Privacy</a>
                 <a href="https://github.com/sane-apps/SaneClick/issues/new?template=bug_report.md">Help</a>
