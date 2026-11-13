@@ -4,7 +4,7 @@
 
 ## Facts
 - Current version: 1.3.5
-- Price: $14.99 one-time after a free 14-day trial. No subscription. Also in the SaneApps Bundle ($49.99 once).
+- Price: $14.99 one-time after a free 14-day trial. No subscription. Also in the SaneApps Bundle ($34.99 once).
 - Requirements: macOS 14.0 or later, Apple silicon (arm64) only
 - Mac App Store version: free with 13 built-in actions; SaneClick Pro Access ($9.99 in-app purchase) adds 24 more. Custom scripts are only in the direct download.
 - Privacy: Finder actions process files on your Mac. SaneClick does not upload file contents.
