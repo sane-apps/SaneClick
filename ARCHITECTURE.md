@@ -122,6 +122,7 @@ stateDiagram-v2
 - **Release**: `./scripts/SaneMaster.rb release` (delegates to SaneProcess `release.sh`).
 - **Signed ZIP archives**: uploaded to Cloudflare R2 (not committed to GitHub).
 - **Appcast**: Sparkle reads `SUFeedURL` from `SaneClick/Info.plist` (saneclick.com).
+- **Direct license keys**: checked by the SaneApps license server (`license.saneapps.com`, from 1.3.6) through shared SaneUI `LicenseService`. A server problem (no answer, an error page, a 5xx reply) keeps a paid copy unlocked.
 - **App Store posture**: App Store builds should rely on monitored folders, security-scoped bookmarks, app groups, and Finder Sync entitlements. Avoid scripting/temp-file workarounds or external purchase/support donation surfaces in Store builds.
 
 ## Testing Strategy

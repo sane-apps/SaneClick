@@ -11,7 +11,7 @@ private final class MenuActionTarget: NSObject {
 
 @MainActor
 struct AppStoreReviewGuardrailTests {
-    private let everythingBundleSaneUIRevision = "cd766fdb5f7b75e03ba69a38fca330a4554f00b1"
+    private let everythingBundleSaneUIRevision = "48121e0b93c26caa09e70f597a080d59afa2a2c5"
 
     @Test("Everything Bundle entitlement uses the pinned SaneUI policy")
     func everythingBundleEntitlementUsesPinnedSaneUIPolicy() throws {
@@ -448,6 +448,39 @@ struct AppStoreReviewGuardrailTests {
         #expect(directSupportSource.contains("alternateEntryLabel: \"Enter License Key\""))
         #expect(directSupportSource.contains("accessManagementLabel: \"Deactivate License\""))
         #expect(directSupportSource.contains("static let standard = SaneAppMover.Prompt("))
+    }
+
+    @Test("Direct build supplies the Donate copy the About screen shows")
+    func directBuildSuppliesDonateSupportCopy() throws {
+        #if !APP_STORE && !SETAPP
+            SaneDirectSupportCopy.current = nil
+            SaneClickDirectSupport.install()
+
+            let copy = try #require(SaneDirectSupportCopy.current)
+            #expect(copy.aboutRowTitle == "Donate")
+            #expect(copy.buttonTitle == "Donate")
+            #expect(copy.buttonHelp == "Donate on GitHub Sponsors")
+            #expect(copy.accessibilityLabel == "Donate")
+            #expect(copy.destinationURL.absoluteString == "https://github.com/sponsors/MrSaneApps")
+        #endif
+    }
+
+    @Test("Direct launch installs the Donate copy before anything else")
+    func directLaunchInstallsDonateSupportCopy() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let appSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/SaneClickApp.swift"), encoding: .utf8)
+        let directSupportSource = try String(contentsOf: projectRoot.appendingPathComponent("SaneClick/DirectDistributionSupport.swift"), encoding: .utf8)
+        let afterLaunch = appSource.components(separatedBy: "func applicationDidFinishLaunching").dropFirst().first ?? ""
+        let launchBody = afterLaunch.components(separatedBy: "\n    func ").first ?? ""
+        let guardAt = try #require(launchBody.range(of: "#if !APP_STORE && !SETAPP"))
+        let installAt = try #require(launchBody.range(of: "SaneClickDirectSupport.install()"))
+        let moverAt = try #require(launchBody.range(of: "SaneAppMover.moveToApplicationsFolderIfNeeded"))
+
+        #expect(guardAt.lowerBound < installAt.lowerBound)
+        #expect(installAt.lowerBound < moverAt.lowerBound)
+        #expect(directSupportSource.hasPrefix("#if os(macOS) && !APP_STORE && !SETAPP"))
     }
 
     @Test("Customer body descriptions use readable type")

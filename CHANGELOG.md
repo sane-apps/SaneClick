@@ -4,6 +4,11 @@ All notable changes to SaneClick are documented here.
 
 ---
 
+## [1.3.6] - 2026-11-18
+
+License checks are more reliable. A problem on the license server can no
+longer lock an app you paid for.
+
 ## [1.3.5] - 2026-09-20
 
 Fixes a launch-time crash that could abort the app while Settings or the

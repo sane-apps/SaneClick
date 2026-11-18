@@ -127,6 +127,9 @@ final class WindowActionStorage {
 class SaneClickAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_: Notification) {
         NSApp.appearance = NSAppearance(named: .darkAqua)
+        #if !APP_STORE && !SETAPP
+            SaneClickDirectSupport.install()
+        #endif
         #if !DEBUG && !APP_STORE
             if SaneAppMover.moveToApplicationsFolderIfNeeded(prompt: SaneClickInstallPrompt.standard) { return }
         #endif

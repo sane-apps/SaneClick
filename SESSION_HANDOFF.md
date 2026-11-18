@@ -1,5 +1,12 @@
 # Session Handoff — SaneClick
 
+## 2026-11-17 9:35 PM ET (Claude helper, Mini) — 1.3.6 in progress: license checks move to the SaneApps license server
+
+- Goal: one direct-download update, 1.3.6 (build 1306). Only change: shared library SaneUI pin `cd766fd` -> `48121e0` (the app asks license.saneapps.com whether a key is valid; a server problem no longer locks a paid copy), plus `SaneClickDirectSupport.install()` so the About screen keeps its Donate row, two tests, CHANGELOG, one ARCHITECTURE.md line.
+- State at this note: edits are in the working tree, not committed. Unit tests passed 205 of 205 (`outputs/license-server-proof-20261117/verify-1.txt`). The signed 1.3.6 build is waiting for the Mini's shared build lock.
+- Mini state before I started: SaneClick was not installed. Its settings held the test tooling's placeholder license (not a real key). Backup of settings and action files: `outputs/license-server-proof-20261117/state-backup/`. I installed the released 1.3.5 from the live download to take "before" screenshots (`00a`, `00b`, `00c` in that folder).
+- Proof files, scripts and logs: `outputs/license-server-proof-20261117/`.
+
 ## 2026-09-20 — 1.3.5 direct-lane release (ship pipeline in progress)
 
 - 1.3.5 fixes a launch-time AttributeGraph crash: ExtensionStatusService check moved out of
