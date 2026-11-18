@@ -1,5 +1,11 @@
 # Session Handoff — SaneClick
 
+## 2026-11-18 4:45 PM ET (Claude helper, Mini) — after the release: sweep rule, keychain access, clearance wording
+
+- Customer UI sweep rule (`1c6387c`, pushed): the runner now refuses only when two or more SaneClick copies run. SaneMaster's customer_ui_sweep launches exactly one before the runner, and the runner never launches or drives the app. This replaces `cfff0e1` (quit the launched copy), matches SaneHosts' runner, and comes with `scripts/customer_ui_action_sweep_instance_test.rb` (0 or 1 allowed, 2 refused; 2 runs, 4 assertions pass). The runner now runs only when executed directly so the test can load it. Sweep rerun from the Air passed with the released app in place (`outputs/license-server-proof-20261117/customer-ui-sweep-air-5.log`); its receipt is committed (`519e329`).
+- Login keychain access granted on this Mini: during the loop retest the app raised two macOS prompts for the `com.saneclick.SaneClick` items (`license_key`, `last_validation`). Both were answered with the stored admin password and **Always Allow** for the test build. Those two items were then deleted by Deactivate, so no item with that access remains, but the next person should know the grant was given.
+- Ship clearance: the clearance file written on the Air before the release recorded the owner's 17 Nov words ("yes to both, keep going"). The coordinating session later supplied the owner's 18 Nov words that also cover finishing this release: "Review anything outstanding and finish any pending work. Especially make sure the transition from lemon squeezy to Stripe has been completed." The release had already run on the 17 Nov record.
+
 ## 2026-11-18 4:35 PM ET (Claude helper, Mini) — direct 1.3.6 is LIVE (licence checks go to license.saneapps.com)
 
 - Released: direct download 1.3.6 (build 1306). Tag `v1.3.6` at `e85464f`; origin/main `d823f08` after the release's two metadata commits. App Store and Setapp untouched (App Store lane skipped by flag). Buy links unchanged (still Lemon Squeezy).
