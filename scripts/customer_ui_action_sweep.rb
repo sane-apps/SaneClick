@@ -140,9 +140,22 @@ class SaneClickCustomerUIActionSweep
     raise "must run on the Mini; current host=#{host.inspect} user=#{user.inspect}"
   end
 
+  # SaneMaster's customer_ui_sweep launches the app first so its visual precheck can take a
+  # screenshot; this runner works from source guards and saved screenshots and must not run
+  # beside a live copy. Quit that copy the normal way, then refuse if it is still running.
   def refuse_competing_instances!
-    count = `pgrep -x SaneClick 2>/dev/null`.lines.map(&:strip).reject(&:empty?).length
+    if running_instance_count.positive?
+      system('/usr/bin/osascript', '-e', 'tell application "SaneClick" to quit', out: File::NULL, err: File::NULL)
+      deadline = Time.now + 15
+      sleep 0.5 while running_instance_count.positive? && Time.now < deadline
+      @transcript << "quit_running_instance_before_sweep=#{running_instance_count.zero?}"
+    end
+    count = running_instance_count
     raise "SaneClick already running (#{count}); stop it before customer UI sweep" if count.positive?
+  end
+
+  def running_instance_count
+    `pgrep -x SaneClick 2>/dev/null`.lines.map(&:strip).reject(&:empty?).length
   end
 
   def read_manifest
