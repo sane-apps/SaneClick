@@ -2,7 +2,27 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
   <channel>
     <title>SaneClick Changelog</title>
-                                <item>
+                                        <item>
+            <title>1.3.6</title>
+            <link>https://saneclick.com/download</link>
+            <pubDate>Wed, 18 Nov 2026 16:25:03 -0500</pubDate>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description>
+                <![CDATA[
+                <h2>What's New</h2>
+                <ul>
+                <li>License checks are more reliable. A problem on the license server can no longer lock an app you paid for.</li>
+                </ul>
+                ]]>
+            </description>
+            <enclosure url="https://dist.saneclick.com/updates/SaneClick-1.3.6.zip"
+                       sparkle:version="1306"
+                       sparkle:shortVersionString="1.3.6"
+                       length="2795843"
+                       type="application/octet-stream"
+                       sparkle:edSignature="oj6lkmlPmVrp7Qc1PhiDVzgt85vTD7UUtCZ4Anpmy630Cvoz6pGphUOKriUO4BHJ5gN9Csyt2nonTVOAs72sAA=="/>
+        </item>
+<item>
             <title>1.3.5</title>
             <link>https://saneclick.com/download</link>
             <pubDate>Sun, 20 Sep 2026 20:30:46 -0400</pubDate>
